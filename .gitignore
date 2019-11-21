@@ -1,0 +1,3 @@
+# Ignore everything but the .cpp files (for C++ projects, to avoid tracking the executables).
+algo/*
+!algo/*.cpp
