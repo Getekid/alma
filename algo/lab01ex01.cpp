@@ -5,7 +5,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-class rentCar
+class roadtrip
 {
     public:
       // Input.
@@ -15,34 +15,32 @@ class rentCar
       int ts, cs, tf, cf;
       void getInput();
       // Helper.
-      float getFuelDistanceMinTime(int, int);
+      int getFuelDistanceMinTime(int, int);
       bool carIsValid(array<int, 2>);
       // Output.
       int minRent = -1;
       int caclulateMinRent();
 };
 
-void rentCar::getInput()
+void roadtrip::getInput()
 {
     // Get the first line of data.
-    cout << "Type the # of cars, stations, city distance and the time available.\n";
-    cin >> numCars;
-    cin >> numStations;
-    cin >> dist;
-    cin >> time;
+    // cout << "Type the # of cars, stations, city distance and the time available.\n";
+    cin >> numCars >> numStations >> dist >> time;
 
     // Get the car data.
     for (size_t i = 0; i < numCars; i++)
     {
-        cout << "Type the renting cost and fuel capacity of car " << i+1 << "\n";
+        // cout << "Type the renting cost and fuel capacity of car " << i+1 << "\n";
         array<int, 2> specs;
-        cin >> specs[0];
-        cin >> specs[1];
+        cin >> specs[0] >> specs[1];
         cars.push(specs);
     }
 
     // Get the station distance data.
-    cout << "Type the distance of each station.\n";
+    // To make the algorithm simpler, We will calculate the data as if
+    // the trip was from the town of Choice to the town of Sorting.
+    // cout << "Type the distance of each station.\n";
     int distance;
     for (size_t i = 0; i < numStations; i++)
     {
@@ -55,18 +53,15 @@ void rentCar::getInput()
     stationDist.insert(stationDist.end(), dist);
 
     // Get the time and fuel cost data.
-    cout << "Type the time and fuel costs of the economic and spor functionality respectively\n";
-    cin >> ts;
-    cin >> cs;
-    cin >> tf;
-    cin >> cf;
+    // cout << "Type the time and fuel costs of the economic and spor functionality respectively\n";
+    cin >> ts >> cs >> tf >> cf;
 }
 
-float rentCar::getFuelDistanceMinTime(int fuel, int distance)
+int roadtrip::getFuelDistanceMinTime(int fuel, int distance)
 {
     // Calcullate the minimum distance x in economic functionality.
     // If x is bigger than the distance then the car cannot cross, return -1.
-    float x = (float)(distance * cf - fuel)/(cf - cs);
+    unsigned long long int x = (distance * cf - fuel)/(cf - cs);
     x = (x < 0) ? 0 : x;
     if (x > distance)
     {
@@ -78,10 +73,10 @@ float rentCar::getFuelDistanceMinTime(int fuel, int distance)
     }
 }
 
-bool rentCar::carIsValid(array<int, 2> car)
+bool roadtrip::carIsValid(array<int, 2> car)
 {
     int distMoved = 0;
-    float timePassed = 0;
+    int timePassed = 0;
     // We added the final destination distance in the stationDist
     // vector so we iterate until numStations + 1.
     for (size_t i = 0; i < numStations + 1; i++)
@@ -104,7 +99,7 @@ bool rentCar::carIsValid(array<int, 2> car)
     return true;
 }
 
-int rentCar::caclulateMinRent()
+int roadtrip::caclulateMinRent()
 {
     int fuelFail = 0;
     int minRentLocal = 1000000000;
@@ -146,9 +141,9 @@ int rentCar::caclulateMinRent()
 
 int main()
 {
-    rentCar rc;
-    rc.getInput();
-    cout << rc.caclulateMinRent() << "\n";
+    roadtrip rt;
+    rt.getInput();
+    cout << rt.caclulateMinRent() << "\n";
 
     return 0;
 }
