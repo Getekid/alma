@@ -18,8 +18,4 @@ do
     else
         echo "ERROR: Input $i does NOT return the expected output! Output: $output"
     fi
-    if (( $i >= 10 ));
-    then
-        exit 2
-    fi
 done

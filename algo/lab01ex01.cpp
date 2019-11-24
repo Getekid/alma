@@ -61,7 +61,7 @@ int roadtrip::getFuelDistanceMinTime(int fuel, int distance)
 {
     // Calcullate the minimum distance x in economic functionality.
     // If x is bigger than the distance then the car cannot cross, return -1.
-    unsigned long long int x = (distance * cf - fuel)/(cf - cs);
+    int x = (distance * cf - fuel)/(cf - cs);
     x = (x < 0) ? 0 : x;
     if (x > distance)
     {
