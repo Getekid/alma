@@ -3,6 +3,7 @@
 #include <array>
 #include <vector>
 #include <bits/stdc++.h>
+#include <algorithm>
 using namespace std;
 
 class roadtrip
@@ -15,6 +16,7 @@ class roadtrip
       int ts, cs, tf, cf;
       void getInput();
       // Helper.
+      vector<int> stationDistDiff; // A vector to store the diff distance between the stations.
       int getFuelDistanceMinTime(int, int);
       bool carIsValid(array<int, 2>);
       // Output.
@@ -47,10 +49,18 @@ void roadtrip::getInput()
         cin >> distance;
         stationDist.insert(stationDist.end(), distance);
     }
+
     // Sort the vector to put the destinations in order.
     sort(stationDist.begin(), stationDist.end());
     // Add the final destination distance as a last element.
     stationDist.insert(stationDist.end(), dist);
+    // Build the diff distance vector.
+    stationDistDiff.insert(stationDistDiff.end(), stationDist[0]);
+    for (int i = 1; i < numStations + 1; i++)
+    {
+        stationDistDiff.insert(stationDistDiff.end(), stationDist[i] - stationDist[i - 1]);
+    }
+    sort(stationDistDiff.begin(), stationDistDiff.end(), greater <>());
 
     // Get the time and fuel cost data.
     // cout << "Type the time and fuel costs of the economic and spor functionality respectively\n";
@@ -59,9 +69,20 @@ void roadtrip::getInput()
 
 int roadtrip::getFuelDistanceMinTime(int fuel, int distance)
 {
+    int distXcf = distance * cf;
+    int distXcs = distance * cs;
+    if (distXcf < fuel)
+    {
+        return distance * tf;
+    }
+    if (distXcs > fuel)
+    {
+        return -1;
+    }
+
     // Calcullate the minimum distance x in economic functionality.
     // If x is bigger than the distance then the car cannot cross, return -1.
-    int x = (distance * cf - fuel)/(cf - cs);
+    int x = (distXcf - fuel)/(cf - cs);
     x = (x < 0) ? 0 : x;
     if (x > distance)
     {
@@ -75,17 +96,28 @@ int roadtrip::getFuelDistanceMinTime(int fuel, int distance)
 
 bool roadtrip::carIsValid(array<int, 2> car)
 {
-    int distMoved = 0;
     int timePassed = 0;
+    int pastResult[2] = {0, 0}; // A variable to avoid calculating again the same distances.
     // We added the final destination distance in the stationDist
     // vector so we iterate until numStations + 1.
     for (size_t i = 0; i < numStations + 1; i++)
     {
-        int distToStation = stationDist[i] - distMoved;
-        int timeNeeded = getFuelDistanceMinTime(car[1], distToStation);
-        if (timeNeeded < 0)
+        int timeNeeded;
+        // int distToStation = stationDist[i] - distMoved;
+        int distToStation = stationDistDiff[i];
+        if (pastResult[0] == distToStation)
         {
-            return false;
+            timeNeeded = pastResult[1];
+        }
+        else
+        {
+            timeNeeded = getFuelDistanceMinTime(car[1], distToStation);
+            if (timeNeeded < 0)
+            {
+                return false;
+            }
+            pastResult[0] = distToStation;
+            pastResult[1] = timeNeeded;
         }
 
         timePassed += timeNeeded;
@@ -93,7 +125,6 @@ bool roadtrip::carIsValid(array<int, 2> car)
         {
             return false;
         }
-        distMoved = stationDist[i];
     }
 
     return true;
@@ -102,6 +133,7 @@ bool roadtrip::carIsValid(array<int, 2> car)
 int roadtrip::caclulateMinRent()
 {
     int fuelFail = 0;
+    unsigned long int fuelSuccess = dist * cf;
     int minRentLocal = 1000000000;
     bool hasValidCar = false;
     while(!cars.empty())
@@ -118,12 +150,16 @@ int roadtrip::caclulateMinRent()
             continue;
         }
         
-        if (carIsValid(car))
+        if (car[1] >= fuelSuccess || carIsValid(car))
         {
             hasValidCar = true;
             if (minRentLocal > car[0])
             {
                 minRentLocal = car[0];
+            }
+            if (fuelSuccess > car[1])
+            {
+                fuelSuccess = car[1];
             }
         }
         else
