@@ -3,7 +3,6 @@
 #include <array>
 #include <vector>
 #include <bits/stdc++.h>
-#include <algorithm>
 using namespace std;
 
 class roadtrip
@@ -18,6 +17,7 @@ class roadtrip
       // Helper.
       int fuelMin = 0, fuelMax = 0;
       vector<int> stationDistDiff; // A vector to store the diff distance between the stations.
+      map<int, bool> fuelStatus; // A helper map to store the status for each fuel value.
       int getFuelDistanceMinTime(int, int);
       bool fuelIsValid(int);
       int calculateMinFuelSuccess(int, int);
@@ -64,7 +64,6 @@ void roadtrip::getInput()
     {
         stationDistDiff.insert(stationDistDiff.end(), stationDist[i] - stationDist[i - 1]);
     }
-    sort(stationDistDiff.begin(), stationDistDiff.end(), greater <>());
 
     // Get the time and fuel cost data.
     // cout << "Type the time and fuel costs of the economic and spor functionality respectively\n";
@@ -100,6 +99,10 @@ int roadtrip::getFuelDistanceMinTime(int fuel, int distance)
 
 bool roadtrip::fuelIsValid(int fuel)
 {
+    if (fuelStatus.count(fuel) == 1)
+    {
+        return fuelStatus[fuel];
+    }
     int timePassed = 0;
     int pastResult[2] = {0, 0}; // A variable to avoid calculating again the same distances.
     // We added the final destination distance in the stationDist
@@ -117,6 +120,7 @@ bool roadtrip::fuelIsValid(int fuel)
             timeNeeded = getFuelDistanceMinTime(fuel, distToStation);
             if (timeNeeded < 0)
             {
+                fuelStatus.insert({ fuel, 0 });
                 return false;
             }
             pastResult[0] = distToStation;
@@ -126,10 +130,12 @@ bool roadtrip::fuelIsValid(int fuel)
         timePassed += timeNeeded;
         if (timePassed > time)
         {
+            fuelStatus.insert({ fuel, 0 });
             return false;
         }
     }
 
+    fuelStatus.insert({ fuel, 1 });
     return true;
 }
 
