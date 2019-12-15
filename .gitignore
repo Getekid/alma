@@ -1,3 +1,8 @@
-# Ignore everything but the .cpp files (for C++ projects, to avoid tracking the executables).
+# Ignore everything in order to include only the desired file extensions.
 algo/*
+
+# Inlcude the .cpp files.
 !algo/*.cpp
+
+# Include the .tex files.
+!algo/*.tex
