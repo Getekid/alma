@@ -6,8 +6,15 @@ using namespace std;
 
 int find(int parent[], int i)
 {
-    while (parent[i] != -1)
+    int p;
+    while (parent[i] != -1) {
+        p = parent[i];
+        // Check the parent and assign its parent for this node
+        // to avoid future recursions.
+        if (parent[p] != -1)
+            parent[i] = parent[p];
         i = parent[i];
+    }
     return i;
 }
 
@@ -16,15 +23,15 @@ int find(int parent[], int i)
  * @see https://www.geeksforgeeks.org/union-find/
  */
 // A utility function to do union of two subsets
-void Union(int parent[], int x, int y)
-{
-    int xset = find(parent, x);
-    int yset = find(parent, y);
-    if(xset != yset)
-    {
-        parent[xset] = yset;
-    }
-}
+//void Union(int parent[], int x, int y)
+//{
+//    int xset = find(parent, x);
+//    int yset = find(parent, y);
+//    if(xset != yset)
+//    {
+//        parent[xset] = yset;
+//    }
+//}
 
 class distances {
 public:
