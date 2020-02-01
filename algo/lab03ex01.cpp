@@ -4,24 +4,21 @@
 
 using namespace std;
 
+/*
+ * Union/Find algorithm (with Path Compression) by GeeksforGeeks.
+ * @see https://www.geeksforgeeks.org/union-find/
+ * @see https://www.geeksforgeeks.org/union-find-algorithm-set-2-union-by-rank/
+ */
+// A utility function to find set of an element i
+// (uses path compression technique)
 int find(int parent[], int i)
 {
-    int p;
-    while (parent[i] != -1) {
-        p = parent[i];
-        // Check the parent and assign its parent for this node
-        // to avoid future recursions.
-        if (parent[p] != -1)
-            parent[i] = parent[p];
-        i = parent[i];
-    }
-    return i;
-}
+    // find root and make root as parent of i (path compression)
+    if (parent[i] != i)
+        parent[i] = find(parent, parent[i]);
 
-/*
- * Union algorithm by GeeksforGeeks.
- * @see https://www.geeksforgeeks.org/union-find/
- */
+    return parent[i];
+}
 // A utility function to do union of two subsets
 //void Union(int parent[], int x, int y)
 //{
@@ -39,7 +36,7 @@ public:
     distances();
     pair<int, int> *edges;
     map<int, int> *mst;
-    int *spEdges;
+    unsigned int *spEdges;
     // Helper functions and variables.
     int *parent;
     int *ufSubsets;
@@ -55,7 +52,7 @@ distances::distances() {
 
     edges = new pair<int, int>[M];
     mst = new map<int, int>[N];
-    spEdges = new int[M];
+    spEdges = new unsigned int[M];
     parent = new int[N];
     ufSubsets = new int[N];
     for (int m = 0; m < M; m++) {
@@ -64,7 +61,7 @@ distances::distances() {
         edges[c] = make_pair(a, b);
     }
     for (int n = 0; n < N; n++)
-        ufSubsets[n] = -1;
+        ufSubsets[n] = n;
 }
 
 bool distances::hasCycle(pair<int, int> *candEdge) {
@@ -119,7 +116,7 @@ vector<int> distances::dfs_init(int s) {
 void distances::printBinarySPs() {
     bool startPrint = false;
     for (int i = 0; i < M-1; i++) {
-        int edge = spEdges[i];
+        unsigned int edge = spEdges[i];
         spEdges[i] = edge % 2;
         spEdges[i+1] += (edge / 2);
     }
@@ -129,7 +126,7 @@ void distances::printBinarySPs() {
         startPrint = true;
         string binEdge;
         while (spEdges[M-1] >= 2) {
-            binEdge += to_string(spEdges[M-1] % 2);
+            binEdge = to_string(spEdges[M-1] % 2) + binEdge;
             spEdges[M-1] = spEdges[M-1] / 2;
         }
         cout << spEdges[M-1] << binEdge;
