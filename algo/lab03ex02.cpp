@@ -10,11 +10,10 @@ public:
     unsigned long long int **BinC;
     map<pair<int, int>, pair<int, int>> pCrossings;
     map<pair<int, int>, vector<pair<int, int>>> G;
-    unsigned long long int * pCrossAvoid;
+    map<pair<int, int>, unsigned long long int*> paths;
     submarine();
-//    void usePilotCrossing(pair<pair<int, int>, pair<int, int>>);
-    unsigned long long int dfs(pair<int, int>, bool);
-    unsigned long long int dfs_init();
+    void dfs(pair<int, int>, bool);
+    void dfs_init();
     unsigned long long int calculateMaxPaths();
 };
 
@@ -36,6 +35,8 @@ submarine::submarine() {
         for (auto & pCrossing : pCrossings) {
             if (pCrossing.first.first <= s.first && pCrossing.first.second <= s.second)
                 G[s].push_back(pCrossing.first);
+            else if (pCrossing.first.first >= s.first && pCrossing.first.second >= s.second)
+                G[pCrossing.first].push_back(s);
         }
         pCrossings[s] = e;
     }
@@ -54,54 +55,78 @@ submarine::submarine() {
                 BinC[n][m] = BinC[n][m - 1] + BinC[n - 1][m];
         }
     }
-
-    // Build the number of paths excluded for each pilot crossing.
-    pCrossAvoid = new unsigned long long int[N];
-    int c = 0;
-    for (auto & pCrossing : pCrossings) {
-        int x = pCrossing.first.first;
-        int y = pCrossing.first.second;
-        pCrossAvoid[c] = BinC[x][y] * BinC[N-1 - x][M-1 - y];
-        c++;
-    }
 }
 
-//void usePilotCrossing(pair<pair<int, int>, pair<int, int>>* pCrossing);
-
-unsigned long long int submarine::dfs(pair<int, int> s, bool sign) {
-    unsigned long long int paths = 0;
+void submarine::dfs(pair<int, int> s, bool forProfit) {
     for (pair<int, int> child : G[s]) {
-        unsigned long long int edge = BinC[s.first - child.first][s.second - child.second];
-        // We switch the bool value for the sign to change in each level.
-        if (child.first != 0 && child.second != 0)
-            edge = (-1) * edge * dfs(child, !sign);
-        // Add or subtract the paths depending on the sign.
-        if (sign)
-            paths += edge;
-        else
-            paths = paths - edge;
+        if (!paths[child])
+            paths[child] = new unsigned long long int[X+1];
+        unsigned long long int pathUncrossed = BinC[s.first - child.first][s.second - child.second];
+        if (s.first == N-1 && s.second == M-1) {
+            for (int x = 0; x <= X; x++)
+                paths[child][x] = pathUncrossed;
+            dfs(child, false);
+            continue;
+        }
+        if (X == 0 && child.first == 0 && child.second == 0) {
+            if (!forProfit)
+                paths[child][0] += paths[s][0] * pathUncrossed;
+            else
+                paths[child][0] -= paths[s][0] * pathUncrossed;
+            continue;
+        }
+        paths[child][0] = paths[s][0] * pathUncrossed;
+        if (X == 0) {
+            dfs(child, !forProfit);
+            continue;
+        }
+
+        // Check for cases where X > 0;
+        pair<int, int> e = pCrossings[s];
+        if (e.first >= child.first && e.second >= child.second) {
+            unsigned long long int pathCrossed = pathUncrossed - BinC[e.first - child.first][e.second - child.second];
+            for (int x = 1; x <= X; x++) {
+                unsigned long long int uncrossed = paths[s][x] * pathUncrossed;
+                unsigned long long int crossed = paths[s][x-1] * pathCrossed;
+                unsigned long long int maxPath = min(uncrossed, crossed);
+                if (x == X && child.first == 0 && child.second == 0)
+                    if (!forProfit)
+                        paths[child][x] += maxPath;
+                    else
+                        paths[child][x] -= maxPath;
+                else
+                    paths[child][x] = maxPath;
+            }
+        } else {
+            for (int x = 1; x <= X; x++) {
+                paths[child][x] = paths[s][x] * pathUncrossed;
+            }
+        }
+        if (child.first != 0 || child.second != 0)
+            dfs(child, !forProfit);
     }
-    return paths;
 }
 
-unsigned long long int submarine::dfs_init() {
-    return dfs(make_pair(N-1, M-1), true);
+void submarine::dfs_init() {
+    pair<int, int> startBox(N-1, M-1);
+    paths[startBox] = new unsigned long long int[X+1];
+    for (int x = 0; x <= X; x++)
+        paths[startBox][x] = 1;
+    dfs(startBox, false);
 }
 
 unsigned long long int submarine::calculateMaxPaths() {
-    for (int k = 0; k < K; k++){
-//        pair<pair<int, int>, pair<int, int>> minPCB = getMaxPilotCrossingBase();
-//        usePilotCrossing(minPCB);
-    }
-    unsigned long long int maxPaths = BinC[N-1][M-1] - dfs_init();
-    return (maxPaths % 1000000103);
+    dfs_init();
+    if (!paths[make_pair(0, 0)])
+        return BinC[N-1][M-1];
+    return ((BinC[N-1][M-1] - paths[make_pair(0, 0)][X]) % 1000000103);
 }
 
 int main() {
     submarine sm;
     cout << sm.calculateMaxPaths() << endl;
 
-//    // Print stuff.
+//    // Helper code to print stuff.
 //    int k = 0;
 //    for (auto & pCrossing : sm.pCrossings) {
 //        cout << "Pilot crossing " << k << ": ";
@@ -110,17 +135,31 @@ int main() {
 //        cout << endl;
 //        k++;
 //    }
-//    for (int n = 0; n < sm.N; n++)
-//        for (int m = 0; m < sm.M; m++)
-//            cout << "BinC(" << n << ", " << m << ") = " << sm.BinC[n][m] << endl;
+//    for (int n = 0; n < sm.N; n++) {
+//        for (int m = 0; m < sm.M; m++) {
+//            pair<int, int> node(n, m);
+//            if (sm.pCrossings[node].first)
+//                cout << "X";
+//            else
+//                cout << ".";
+//        }
+//        cout << endl;
+//        cout << "BinC(" << n << ", " << m << ") = " << sm.BinC[n][m] << endl;
+//    }
 //
-//    for (int k = 0; k < sm.K; k++)
-//        cout << "Pilot crossing " << k << " avoids " << sm.pCrossAvoid[k] << endl;
 //    cout << "Checking Graph" << endl;
 //    for (auto & nodes : sm.G) {
 //        cout << "Box (" << nodes.first.first << ", " << nodes.first.second << ") goes to" << endl;
 //        for (auto & boxes : nodes.second)
 //            cout << "(" << boxes.first << ", " << boxes.second << "), ";
+//        cout << endl;
+//    }
+//    cout << "Checking paths." << endl;
+//    for (auto & nodes : sm.paths) {
+//        cout << "Box (" << nodes.first.first << ", " << nodes.first.second << ") has with exceptions" << endl;
+//        for (int x = 0; x <= sm.X; x++) {
+//            cout << nodes.second[x] << " - ";
+//        }
 //        cout << endl;
 //    }
 
