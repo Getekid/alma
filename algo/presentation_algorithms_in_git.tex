@@ -1,0 +1,248 @@
+% -*- mode: LaTeX; coding: utf-8 -*-
+% Typeset with: XeLaTeX
+
+\documentclass{beamer}
+\usetheme{Madrid}
+\centering
+
+% Greek fonts
+\RequirePackage[cm-default]{fontspec}
+\defaultfontfeatures{Mapping=tex-text}
+  % you may want to try: {FreeSerif} or {Times New Roman}
+\setmainfont{Liberation Serif}
+  % you may want to try: {FreeSans} or {Arial}
+\setsansfont[Scale=MatchLowercase]{Liberation Sans}
+  % you may want to try: {FreeMono} or {Courier New}
+\setmonofont[Scale=MatchLowercase]{Liberation Mono}
+
+% Main document
+\begin{document}
+\title{Algorithms in Git}
+\author{Thomas Pappas}
+%\date{4 March 2020}
+\maketitle
+
+% These three lines create an automatically generated table of contents.
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+\begin{frame}
+  \begin{block}{Disclaimer}
+    This presentation contains a simplified, for introductory purposes, representation of how the Git framwork functions.
+    The actual models of a Git repo, commit, branch etc. are more complex than described here.
+    For more info check the references.
+  \end{block}
+\end{frame}
+
+\section{What is Git?}
+
+\begin{frame}{What is Git?}
+  \begin{block}{Git is a decentralised VCS}
+    \begin{itemize}
+    \item Version Control System (VCS)
+      \begin{itemize}
+        \item tracks and keeps a history of changes in a directory tree of text files\\(code in most cases)
+        \item facilitates collaborative development
+        \item allows sharing code
+        \item versioning
+        \item etc.
+      \end{itemize}
+    \item Decentralised: Every user has a full copy of the repository (repo)
+    \item Created by Linus Torvalds in 2005 for development of the Linux kernel
+  \end{itemize}
+  \end{block}
+\end{frame}
+
+\subsection{Git commits}
+
+\begin{frame}{Git commits}
+  \begin{block}{What are Commits?}
+    Commits are the basic units of a Git repo.
+    It contains information about
+    \begin{itemize}
+      \item Hash (for unique identification)
+      \item For each file, two file states $a$ (before) and $b$ (after) to track changed
+      \begin{itemize}
+        \item Name
+        \item Lines (in blobs)
+        \item Meta-data
+      \end{itemize}
+      \item Commit message
+      \item Meta-data (author, commiter, date)
+      \item Parent(s) commit hash
+    \end{itemize}
+    A Git commit captures the full state of the file directory tree the moment the commit was created.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Git commits}
+  \begin{block}{Diff blobs}
+    When viewing a diff, a "blob" is the file section where the line changes are shown. For the two file state $a$ and $b$ the following are shown:
+    \begin{itemize}
+      \item line start and length (for the blob size)
+      \item lines "removed" from $a$ to $b$ appended with "$-$"
+      \item lines "added" from $a$ to $b$ appended with "$+$"
+    \end{itemize}
+  \end{block}
+  \begin{block}{Commits as Nodes}
+    We can thus see the Git repo as a graph with the commits as its nodes. A commit without a parent commit hash is called a "root" commit. 
+  \end{block}
+\end{frame}
+
+% TODO: Add an example
+%\begin{frame}{Git commit Example}
+
+%\end{frame}
+
+\subsection{Branches}
+
+\begin{frame}{Git branches}
+  \begin{block}{What are Branches?}
+    Branches are "pointers" to commits. In practice, though, a branch is the subgraph that has all the ancestor commits of that commit.
+  \end{block}
+  \begin{block}{Some properties}
+    \begin{itemize}
+      \item One commit can belong to multiple branches
+      \item The Git repo keeps a "current" branch in a HEAD variable
+      \item When a commit is created, the branch's "tip" becomes that commit
+      \item Benefit: Branches can facilitate independent feature development
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\section{Merging branches}
+
+\begin{frame}{Merging branches}
+  \begin{block}{What is a Merge?}
+    Incorporates changes from the named commits (since the time their histories diverged from the current branch) into the current branch.
+  \end{block}
+  \begin{block}{(Common) Merge types}
+    \begin{itemize}
+      \item Fast Forward Merge
+      \item 3-way Merge
+    \end{itemize}
+  \end{block}
+  \begin{block}{Fast Forward Merge}
+    Trivial case where the tip commit in the current branch is an ancestor of the named commit. Simply move the tip of the current branch to the named commit.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Merging branches}
+  \begin{block}{3-way Merge: Algorithm}
+    Given I currently am at "branchA" and I merge with "branchB", or in other words: Given the hashes of the two commits A and B on the branches' tips.
+    \begin{itemize}
+      \item Find a merge base C, the best common ancestor of commits A and B (LCA)
+      \item Create a diff $D_A$ with the combined commits from C to A\\(and $D_B$ from C to B respectively)
+      \item For each changed file, compare the blocks between the two diffs:
+      \begin{itemize}
+        \item If they apply changes to different blocks of the file, apply all changes
+        \item If they apply changes to the same block and the change is the same, apply that change
+        \item If they apply changes to the same block and the change is NOT the same, return a conflict
+      \end{itemize}
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\section{Constructing the Git Commit Graph}
+
+\begin{frame}{Constructing the Git Commit Graph}
+  \begin{block}{Topological Order}
+    In order to construct the Git Commit Graph we need to have the commits in an order when no commit will appear after its parent, ie. in topological order.
+  \end{block}
+\end{frame}
+\begin{frame}[fragile]
+  \frametitle{Constructing the Git Commit Graph}
+  \begin{block}{Kahn's algorithm, Kahn, Arthur B. (1962)}
+    \begin{verbatim}
+    L ← Empty list that will contain the sorted elements
+    S ← Set of all nodes with no incoming edge
+
+    while S is non-empty do
+        remove a node n from S
+        add n to tail of L
+        for each node m with an edge e from n to m do
+            remove edge e from the graph
+            if m has no other incoming edges then
+                insert m into S
+
+    if graph has edges then
+        return error   (graph has at least one cycle)
+    else
+        return L   (a topologically sorted order)
+    \end{verbatim}
+  \end{block}
+\end{frame}
+\begin{frame}{Constructing the Git Commit Graph}
+  \begin{block}{Topological Sorting in Git}
+    The standard algorithm for topological sorting is Kahn’s Algorithm.
+    \begin{itemize}
+      \item We first initialise $S$ with the 1 node: the current branch tip commit
+      \item We consider the graph with the edges inverted (since we want to start from a graph leaf)
+    \end{itemize}
+    The basic way this algorithm works is by walking the commit graph in two passes:
+    \begin{enumerate}
+      \item The first pass computes the “in-degree” of each commit: how many commits have this commit as a parent? (This in-degree only cares about commits reachable from our starting position.)
+      \item Walk the commit graph by selecting a commit with in-degree zero and decrementing the in-degree of its parents.
+    \end{enumerate}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Constructing the Git Commit Graph}
+  \begin{block}{Generation Numbers}
+    We define the generation number of a commit as follows:
+    \begin{itemize}
+      \item If a commit has no parents, then its generation number is 1
+      \item Otherwise, the generation number is the maximum generation number of its parents $+1$
+    \end{itemize}
+    Can be easily implemented using $DFS$.\\
+    Note that the generation numbers of a commit and its parent can have a big difference.
+  \end{block}
+  \begin{block}{Property}
+    Suppose A and B are commits with generation numbers gen(A) and gen(B). If gen(A) < gen(B) then A cannot reach B.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Constructing the Git Commit Graph}
+  \begin{block}{Generation Number usages}
+    Improvements in algorithms for
+    \begin{itemize}
+      \item “Can X Reach Y?” Questions
+      \item Merge-Base Questions
+      \item Topological Sorting
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Constructing the Git Commit Graph}
+  \begin{block}{Practical issue with the Topological Sorting}
+    In practice, when viewing the branch history, we only need the last few commits.
+    The problem is, we need to walk the entire graph in order to guarantee the in-degree of a commit is zero ($\mathcal{O}(m+n)$).
+  \end{block}
+  \begin{block}{Generation Numbers to the rescue}
+    The trick is to keep two commit walks going at the same time.
+    One walk is in charge of computing in-degrees while the other is for walking the commits in topological order. Then the following applies:
+    \begin{itemize}
+      \item For each visited commit, store its Generation Number (in a priority queue)
+      \item The in-degree walk only needs to advance when the topological order walk considers a commit for the next selection
+      \item The in-degree walk advances by selecting a commit of maximum generation number
+    \end{itemize}
+    This way we can detect in constant time if we need to advance that walk.
+  \end{block}
+\end{frame}
+
+\section{References}
+
+\begin{frame}{References}
+  \begin{itemize}
+    \item \href{https://www.oreilly.com/library/view/version-control-with/9781449345037/ch04.html}{Version Control with Git, 2nd Edition\\Chapter 4: Basic Git Concepts} (O'Reilly)
+    \item \href{https://git-scm.com/docs/git-merge}{git-merge} (Git documentation)
+    \item \href{https://git-scm.com/docs/git-merge-base}{git-merge-base} (Git documentation)
+    \item \href{https://stackoverflow.com/questions/14961255/how-does-git-merge-work-in-details}{Stack Overflow question: How does 'git merge' work in details?}
+    \item \href{https://www.atlassian.com/git/tutorials/using-branches/git-merge}{Atlassian Git Tutorial: Git Merge}
+    \item \href{https://devblogs.microsoft.com/devops/supercharging-the-git-commit-graph-iii-generations/}{Supercharging the Git Commit Graph III: Generations and Graph Algorithms} (Azure DevOps Blog)
+    \item Kahn, Arthur B. (1962), "Topological sorting of large networks", Communications of the ACM, 5 (11): 558–562, doi:\href{https://doi.org/10.1145\%2F368996.369025}{10.1145/368996.369025}.
+  \end{itemize}
+\end{frame}
+
+\end{document}
