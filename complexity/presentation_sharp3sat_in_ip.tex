@@ -1,0 +1,97 @@
+% -*- mode: LaTeX; coding: utf-8 -*-
+% Typeset with: XeLaTeX
+
+\documentclass{beamer}
+\usetheme{Madrid}
+\centering
+
+% Greek fonts
+\RequirePackage[cm-default]{fontspec}
+\defaultfontfeatures{Mapping=tex-text}
+  % you may want to try: {FreeSerif} or {Times New Roman}
+\setmainfont{Liberation Serif}
+  % you may want to try: {FreeSans} or {Arial}
+\setsansfont[Scale=MatchLowercase]{Liberation Sans}
+  % you may want to try: {FreeMono} or {Courier New}
+\setmonofont[Scale=MatchLowercase]{Liberation Mono}
+
+
+% Main document
+\begin{document}
+\title{\#3SAT $\in$ IP (Proof sketch)}
+\author{Thomas Pappas}
+%\date{4 March 2020}
+\maketitle
+
+% These three lines create an automatically generated table of contents.
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+\section{Constructing the boolean polynomial}
+
+\begin{frame}{Constructing the "boolean" polynomial}
+  \begin{block}{Technique by Example}
+    Let $\phi = (\neg x_1 \vee x_2 \vee x_3) \wedge (x_1 \vee x_2 \vee \neg x_3).$\\
+    We consider a polynomial $q(x_1,x_2,x_3)$ such that if $(x_1^\prime,x_2^\prime,x_3^\prime)$ is a truth assignment for $\phi$ then $q(x_1^\prime,x_2^\prime,x_3^\prime)=1$ and $=0$ otherwise.
+    For the example $\phi$ we get
+    $$q(x_1,x_2,x_3)=[1-x_1(1-x_2)(1-x_3)][1-(1-x_1)(1-x_2)x_3]$$
+    $$deg(q) \leq 3m$$
+  \end{block}
+  \begin{block}{Equivalence}
+    We see that $\phi \in \#3SAT$ for a constant $K$ iff
+    $$\sum_{b_1=0}^1 \sum_{b_2=0}^1 \sum_{b_3=0}^1 q(b_1,b_2,b_3) = K$$
+  \end{block}
+\end{frame}
+
+\begin{frame}{Constructing the single variable "boolean" polynomial}
+  \begin{block}{To avoid exponential computations}
+    Since the $n$ variables and $m$ clauses could cause exponential calculatios, we observe that given a large enough prime number $p$
+    $$\sum_{b_1=0}^1 \sum_{b_2=0}^1 \sum_{b_3=0}^1 q(b_1,b_2,b_3) = K$$ iff $$\sum_{b_1=0}^1 \sum_{b_2=0}^1 \sum_{b_3=0}^1 q(b_1,b_2,b_3) = K modp$$
+  \end{block}
+  \begin{block}{But why a prime number?}
+    By selecting a prime number for this task, we achieve that the resulting ring is a field.
+  \end{block}
+\end{frame}
+
+\section{Constructing the single variable boolean polynomial}
+
+\begin{frame}{Constructing the single variable "boolean" polynomial}
+  \begin{block}{}
+    Now consider the following single variable polynomial
+    $$r(X_1) = \sum_{b_2=0}^1 \sum_{b_3=0}^1 q(x_1,b_2,b_3)$$
+    $$deg(r) \leq 3m$$
+    It follows that $r(0)+r(1)=K$.
+  \end{block}
+\end{frame}
+
+\section{Prover-Verifier Interaction}
+
+\begin{frame}{Prover-Verifier Interaction}
+  \begin{block}{}
+    For a Prover $P$ and a Verifier $V$:
+    \begin{itemize}
+      \item $P$ and $V$ both construct the polynomial $q$
+      \item $P$ sends a prime number $p$ of $2n$ bits
+      \item $P$ sends the $r(X_1)$ to $V$
+      \item $V$ starts the verification
+        \begin{itemize}
+          \item if $r(0)+r(1)=K modp$ then check if $r(\alpha) = q(\alpha,b_2,b_3) modp$ for an $\alpha \neq 0,1$ and accept/reject accordingly with probability of success $\frac{3m}{2^{2n}}$
+          \item if $r(0)+r(1)\neq K modp$ then reject
+        \end{itemize}
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\section{References}
+
+\begin{frame}{References}
+  \begin{itemize}
+    \item LUND, C., FORTNOW, L., KARLOFF, H., AND NISAN, N. 
+      \href{https://users.cs.fiu.edu/~giri/teach/5420/f01/LundIPS.pdf}{Algebraic methods for interactive proof systems},
+      In Proceedings of 31st Symposium on Fottndations of Computer Science (EEE, New York, 1990, pp. 2-90)
+    \item \href{https://www.youtube.com/watch?v=yS9WrISP_Ug&list=PLm3J0oaFux3YL5vLXpzOyJiLtqLp6dCW2&index=26}{Undergrad Complexity at CMU - Lecture 25: Interactive Proofs: IP=PSPACE}
+  \end{itemize}
+\end{frame}
+
+\end{document}
