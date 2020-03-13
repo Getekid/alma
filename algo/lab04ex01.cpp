@@ -41,6 +41,7 @@ class MinHeap
     pair<long, long> *harr; // pointer to array of elements in heap
     long capacity; // maximum possible size of min heap
     long heap_size; // Current number of elements in min heap
+    long *vector_key;
 public:
     // Constructor
     MinHeap(long capacity);
@@ -81,6 +82,7 @@ MinHeap::MinHeap(long cap)
     heap_size = 0;
     capacity = cap;
     harr = new pair<long, long>[cap];
+    vector_key = new long[cap];
 }
 
 // Inserts a new key 'k'
@@ -97,10 +99,12 @@ void MinHeap::insertKey(long k, long l)
     long i = heap_size - 1;
     harr[i].first = k;
     harr[i].second = l;
+    vector_key[k] = i;
 
     // Fix the min heap property if it is violated
     while (i != 0 && harr[parent(i)].second > harr[i].second)
     {
+        swap(&vector_key[harr[i].first], &vector_key[harr[parent(i)].first]);
         swap(&harr[i].first, &harr[parent(i)].first);
         swap(&harr[i].second, &harr[parent(i)].second);
         i = parent(i);
@@ -114,6 +118,7 @@ void MinHeap::decreaseKey(long i, long new_val)
     harr[i].second = new_val;
     while (i != 0 && harr[parent(i)].second > harr[i].second)
     {
+        swap(&vector_key[harr[i].first], &vector_key[harr[parent(i)].first]);
         swap(&harr[i].first, &harr[parent(i)].first);
         swap(&harr[i].second, &harr[parent(i)].second);
         i = parent(i);
@@ -133,6 +138,7 @@ pair<long, long> MinHeap::extractMin()
 
     // Store the minimum value, and remove it from heap
     pair<long, long> root = harr[0];
+    vector_key[harr[heap_size-1].first] = 0;
     harr[0] = harr[heap_size-1];
     heap_size--;
     MinHeapify(0);
@@ -142,10 +148,7 @@ pair<long, long> MinHeap::extractMin()
 
 long MinHeap::getIndex(long k)
 {
-    long i = 0;
-    while (harr[i].first != k)
-        i++;
-    return i;
+    return vector_key[k];
 }
 
 
@@ -170,6 +173,7 @@ void MinHeap::MinHeapify(long i)
         smallest = r;
     if (smallest != i)
     {
+        swap(&vector_key[harr[i].first], &vector_key[harr[smallest].first]);
         swap(&harr[i].first, &harr[smallest].first);
         swap(&harr[i].second, &harr[smallest].second);
         MinHeapify(smallest);
