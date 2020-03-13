@@ -237,7 +237,7 @@ racing::racing() {
 
 void racing::calculateShortestGasStation() {
     // Dijkstra
-    bool isSpt[N]{false};
+    bool *isSpt = new bool[N]{false};
 
     for (int i = 0; i < N; i++) {
         long u = dijkstraHeap->extractMin().first;
@@ -261,7 +261,7 @@ void racing::calculateShortestGasStation() {
 
 unsigned long long int racing::calculateMinRouteTime() {
     long minTime = 0;
-    bool isUsed[N]{false};
+    bool *isUsed = new bool[N]{false};
 
     for (int k = 1; k < K; k++)
         minTime += cityNetwork[raceRoute[k-1]][raceRoute[k]];
