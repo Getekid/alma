@@ -196,12 +196,14 @@ class racing {
 public:
     long N, M, K, L, B;
     long *raceRoute;
+    bool *isRaceRoute;
     map<long, long> *cityNetwork;
     long *shortestGasStation;
     MinHeap *dijkstraHeap;
+    long minTime = 0;
     racing();
     void calculateShortestGasStation();
-    unsigned long long int calculateMinRouteTime();
+    long calculateMinRouteTime();
 };
 
 racing::racing() {
@@ -217,9 +219,13 @@ racing::racing() {
 
     // Get the race route.
     raceRoute = new long[K];
+    isRaceRoute = new bool[N]{false};
     for (int k = 0; k < K; k++) {
         long city = readLong();
         raceRoute[k] = city - 1;
+        // Ignore the first and the last cities as we won't refill from there.
+        if (k != 0 && k != K-1)
+            isRaceRoute[city-1] = true;
     }
 
     // Initialise the shortest gas station array.
@@ -242,12 +248,20 @@ racing::racing() {
 void racing::calculateShortestGasStation() {
     // Dijkstra
     bool *isSpt = new bool[N]{false};
+    long l = 0;
 
     for (int i = 0; i < N; i++) {
         long u = dijkstraHeap->extractMin().first;
         isSpt[u] = true;
         if (u == -1)
             break;
+
+        // Add the time of the first L cities that are in the race
+        // since the smallest ones will come out of the heap first.
+        if (l < L && isRaceRoute[u]) {
+            minTime += shortestGasStation[u];
+            l++;
+        }
 
         for (auto & streetTo : cityNetwork[u]) {
             long v = streetTo.first;
@@ -263,27 +277,9 @@ void racing::calculateShortestGasStation() {
     }
 }
 
-unsigned long long int racing::calculateMinRouteTime() {
-    long minTime = 0;
-    bool *isUsed = new bool[N]{false};
-
+long racing::calculateMinRouteTime() {
     for (int k = 1; k < K; k++)
         minTime += cityNetwork[raceRoute[k-1]][raceRoute[k]];
-    // TODO: Could improve by using a heap.
-    for (int l = 0; l < L; l++) {
-        long min = numeric_limits<long>::max();
-        long minCity = 0;
-        for (int k = 1; k < K-1; k++) {
-            if (isUsed[raceRoute[k]])
-                continue;
-            if (shortestGasStation[raceRoute[k]] < min) {
-                min = shortestGasStation[raceRoute[k]];
-                minCity = raceRoute[k];
-            }
-        }
-        isUsed[minCity] = true;
-        minTime += min;
-    }
 
     return minTime;
 }
