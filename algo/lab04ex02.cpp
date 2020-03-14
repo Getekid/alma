@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <queue>
 
 using namespace std;
 
@@ -61,23 +62,31 @@ int ring::getMaxPath() {
     for (int k = 0; k < K; k++) {
         maxPathOut[k] = getMaxSide(k, countries[k][0]);
         // Helper code to print stuff. - Still to make Debug work...
-//        cout << "Planet: " << k << " - Max Side Path: " << pathSide << endl;
+//        cout << "Planet: " << k << " - Max Side Path: " << maxPathOut[k] << endl;
     }
     int maxPathInterSolar = 0;
     // First get the max path in the range [0, K-1].
     int maxPathRange = 0;
+    priority_queue<int> maxPathHeap;
     for (int k = 1; k < K-1; k++) {
         int dist = (k < K / 2) ? K - k : k;
         int maxPath = maxPathOut[0] + dist + maxPathOut[k];
-        if (maxPathRange < maxPath)
-            maxPathRange = maxPath;
+        maxPathHeap.push(maxPath);
     }
+    if (maxPathRange < maxPathHeap.top())
+        maxPathRange = maxPathHeap.top();
     if (maxPathInterSolar < maxPathRange)
         maxPathInterSolar = maxPathRange;
+
     // Now use that range to cycle through the max of the rest of the ranges.
     for (int k = 1; k < K; k++) {
         // For range [a, b] get the range [a+1, b].
-        maxPathRange = maxPathRange - 1 + (maxPathOut[k] - maxPathOut[k-1]);
+        // In the case where the next node is holding the current max value, take the next one.
+        if (maxPathRange == maxPathOut[k-1] + (K-1) + maxPathOut[k]) {
+            maxPathHeap.pop();
+            maxPathRange = maxPathHeap.top();
+        } else
+            maxPathRange = maxPathRange - 1 + (maxPathOut[k] - maxPathOut[k-1]);
         // For range [a, b] get the range [a, b+1].
         int maxPathEdge = maxPathOut[k] + (K-1) + maxPathOut[k-1];
         if (maxPathRange < maxPathEdge)
