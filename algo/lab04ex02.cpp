@@ -6,7 +6,7 @@ using namespace std;
 class ring {
 public:
     int K;
-    int maxPathInner = 0;
+    int maxPathInternational = 0;
     vector<vector<int>> *countries;
     ring();
     int getMaxSide(int k, vector<int> root);
@@ -32,7 +32,8 @@ ring::ring() {
 
 int ring::getMaxSide(int k, vector<int> root) {
     // Helper code to print stuff. - Still to make Debug work...
-    // cout << "Children(" << root.size() << "): " << (root.empty() ? 0 : root[0]) << ", " << ((root.size() == 2) ? root[1] : 0) << endl;
+//    cout << "Children(" << root.size() << "): " << (root.empty() ? 0 : root[0]) << ", " << ((root.size() == 2) ? root[1] : 0) << endl;
+
     // At each step, also check for the combined path (aka the inner planet path.
     int degree, degreeLeft, degreeRight;
     switch (root.size()) {
@@ -40,14 +41,14 @@ int ring::getMaxSide(int k, vector<int> root) {
             return 0;
         case 1:
             degree = getMaxSide(k, countries[k][root[0]]) + 1;
-            if (maxPathInner < degree)
-                maxPathInner = degree;
+            if (maxPathInternational < degree)
+                maxPathInternational = degree;
             return degree;
         case 2:
             degreeLeft = getMaxSide(k, countries[k][root[0]]) + 1;
             degreeRight = getMaxSide(k, countries[k][root[1]]) + 1;
-            if (maxPathInner < degreeLeft + degreeRight)
-                maxPathInner = degreeLeft + degreeRight;
+            if (maxPathInternational < degreeLeft + degreeRight)
+                maxPathInternational = degreeLeft + degreeRight;
             return max(degreeLeft, degreeRight);
     }
 
@@ -55,15 +56,23 @@ int ring::getMaxSide(int k, vector<int> root) {
 }
 
 int ring::getMaxPath() {
-    int maxPathSide = 0;
+    int *maxPathOut = new int[K];
     for (int k = 0; k < K; k++) {
-        int pathSide = getMaxSide(k, countries[k][0]);
-        if (maxPathSide < pathSide)
-            maxPathSide = pathSide;
+        maxPathOut[k] = getMaxSide(k, countries[k][0]);
         // Helper code to print stuff. - Still to make Debug work...
-        // cout << "Planet: " << k << " - Max Side Path: " << pathSide << endl;
+//        cout << "Planet: " << k << " - Max Side Path: " << pathSide << endl;
     }
-    return max(maxPathInner, maxPathSide);
+    int maxPathInterSolar = 0;
+    for (int k = 0; k < K; k++)
+        for (int p = 0; p < K; p++) {
+            if (p == k)
+                continue;
+            int dist = (k-p < 0) ? K + (k-p) : k-p;
+            int maxPath = maxPathOut[k] + dist + maxPathOut[p];
+            if (maxPathInterSolar < maxPath)
+                maxPathInterSolar = maxPath;
+        }
+    return max(maxPathInternational, maxPathInterSolar);
 }
 
 int main() {
