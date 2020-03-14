@@ -8,6 +8,7 @@ public:
     int K;
     int maxPathInternational = 0;
     vector<vector<int>> *countries;
+    int *maxPathOut;
     ring();
     int getMaxSide(int k, vector<int> root);
     int getMaxPath();
@@ -56,22 +57,34 @@ int ring::getMaxSide(int k, vector<int> root) {
 }
 
 int ring::getMaxPath() {
-    int *maxPathOut = new int[K];
+    maxPathOut = new int[K];
     for (int k = 0; k < K; k++) {
         maxPathOut[k] = getMaxSide(k, countries[k][0]);
         // Helper code to print stuff. - Still to make Debug work...
 //        cout << "Planet: " << k << " - Max Side Path: " << pathSide << endl;
     }
     int maxPathInterSolar = 0;
-    for (int k = 0; k < K; k++)
-        for (int p = 0; p < K; p++) {
-            if (p == k)
-                continue;
-            int dist = (k-p < 0) ? K + (k-p) : k-p;
-            int maxPath = maxPathOut[k] + dist + maxPathOut[p];
-            if (maxPathInterSolar < maxPath)
-                maxPathInterSolar = maxPath;
-        }
+    // First get the max path in the range [0, K-1].
+    int maxPathRange = 0;
+    for (int k = 1; k < K-1; k++) {
+        int dist = (k < K / 2) ? K - k : k;
+        int maxPath = maxPathOut[0] + dist + maxPathOut[k];
+        if (maxPathRange < maxPath)
+            maxPathRange = maxPath;
+    }
+    if (maxPathInterSolar < maxPathRange)
+        maxPathInterSolar = maxPathRange;
+    // Now use that range to cycle through the max of the rest of the ranges.
+    for (int k = 1; k < K; k++) {
+        // For range [a, b] get the range [a+1, b].
+        maxPathRange = maxPathRange - 1 + (maxPathOut[k] - maxPathOut[k-1]);
+        // For range [a, b] get the range [a, b+1].
+        int maxPathEdge = maxPathOut[k] + (K-1) + maxPathOut[k-1];
+        if (maxPathRange < maxPathEdge)
+            maxPathRange = maxPathEdge;
+        if (maxPathInterSolar < maxPathRange)
+            maxPathInterSolar = maxPathRange;
+    }
     return max(maxPathInternational, maxPathInterSolar);
 }
 
