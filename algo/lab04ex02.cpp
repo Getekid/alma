@@ -23,6 +23,10 @@ ring::ring() {
         cin >> countryLength;
         vector<int> singleton;
         countries[k].push_back(singleton);
+        if (countryLength == 1) {
+            int dummyCity;
+            cin >> dummyCity;
+        }
         for (int country = 1; country < countryLength; country++) {
             countries[k].push_back(singleton);
             int parent;
@@ -68,8 +72,8 @@ int ring::getMaxPath() {
     // First get the max path in the range [0, K-1].
     int maxPathRange = 0;
     priority_queue<int> maxPathHeap;
-    for (int k = 1; k < K-1; k++) {
-        int dist = (k < K / 2) ? K - k : k;
+    for (int k = 1; k < K; k++) {
+        int dist = (k <= K / 2) ? K - k : k;
         int maxPath = maxPathOut[0] + dist + maxPathOut[k];
         maxPathHeap.push(maxPath);
     }
@@ -80,15 +84,23 @@ int ring::getMaxPath() {
 
     // Now use that range to cycle through the max of the rest of the ranges.
     for (int k = 1; k < K; k++) {
-        // For range [a, b] get the range [a+1, b].
+        // Step 1: For range [a, b] get the range [a+1, b].
         // In the case where the next node is holding the current max value, take the next one.
         if (maxPathRange == maxPathOut[k-1] + (K-1) + maxPathOut[k]) {
             maxPathHeap.pop();
             maxPathRange = maxPathHeap.top();
         } else
             maxPathRange = maxPathRange - 1 + (maxPathOut[k] - maxPathOut[k-1]);
-        // For range [a, b] get the range [a, b+1].
-        int maxPathEdge = maxPathOut[k] + (K-1) + maxPathOut[k-1];
+        // The first K/2 elements might have increased more than the current max so we check them.
+        int kAcross = (k + K/2 - 1) % (K-1);
+        for (int l = 1; l <= kAcross; l++) {
+            if (maxPathRange < maxPathOut[k] + (K-l) + maxPathOut[(k+l)%K]) {
+                maxPathRange = maxPathOut[k] + (K-l) + maxPathOut[(k+l)%K];
+            }
+        }
+
+        // Step 2: For range [a, b] get the range [a, b+1].
+        int maxPathEdge = maxPathOut[k-1] + (K-1) + maxPathOut[k];
         if (maxPathRange < maxPathEdge)
             maxPathRange = maxPathEdge;
         if (maxPathInterSolar < maxPathRange)
