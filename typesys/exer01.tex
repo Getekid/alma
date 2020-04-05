@@ -1,0 +1,174 @@
+% -*- mode: LaTeX; coding: utf-8 -*-
+% Typeset with: XeLaTeX
+
+\documentclass[a4paper,11pt]{article}
+\usepackage{a4wide}
+
+% Greek fonts
+\RequirePackage[cm-default]{fontspec}
+\defaultfontfeatures{Mapping=tex-text}
+  % you may want to try: {FreeSerif} or {Times New Roman}
+\setmainfont{Liberation Serif}
+  % you may want to try: {FreeSans} or {Arial}
+\setsansfont[Scale=MatchLowercase]{Liberation Sans}
+  % you may want to try: {FreeMono} or {Courier New}
+\setmonofont[Scale=MatchLowercase]{Liberation Mono}
+
+% More packages and macros
+\usepackage[inference]{semantic}
+
+\newcommand\nlambda[1]{\ensuremath{\lambda #1.\,}}
+\newcommand\nred{\ensuremath{\longrightarrow}}
+
+% Main document
+\begin{document}
+\title{1η Σειρά Ασκήσεων}
+\author{Θωμάς Παππάς}
+\date{28 Δεκεμβρίου 2019}
+\maketitle
+
+\section{Λάμβδα λογισμός χωρίς τύπους}
+
+
+\subsection*{Άσκηση 1.1  Αναπαράσταση λιστών}
+
+Αρχικά παρατηρούμε ότι μια λίστα $t$, πχ με $3$ στοιχεία $[x, y, z]$ είναι της μορφής
+$$t = \nlambda{c} \nlambda{n} c x (c y (c z n))$$
+
+\subsubsection*{nil}
+Για την αναπαράσταση του \verb|nil| θα θέλουμε η συνάρτηση $c$ να μην εφαρμοστεί καθόλου οπότε παίρνουμε
+$$\verb|nil| = \nlambda{c} \nlambda{n} n$$
+το οποίο και είναι το ίδιο "pun" με το \verb|false| στα Church booleans και το $c_0$ στα Church numerals.
+
+\subsubsection*{cons}
+Για να προσθέσουμε ένα στοιχείο $h$ σε μια λίστα $t$, τότε αρκεί να καλέσουμε τη συνάρτηση $c$ της $t$ με τη λίστα $t$ και το στοιχείο $h$. Δηλαδή
+$$\verb|cons| = \nlambda{t} \nlambda{h} \nlambda{c} \nlambda{n} c\ h\ (t\ c\ n)$$
+
+\subsubsection*{isnil}
+Για την υλοποίηση του \verb|isnil| θα χρησιμοποιήσουμε ένα ανάλογο κόλπο με αυτό του \verb|iszro| για τα Church numerals. Η συνάρτηση θα πρέπει να επιστρέφει \verb|true| όταν η συνάρτηση \verb|c| δεν τρέξει καθόλου, και \verb|false| όταν τρέξει έστω και μία φορά.
+$$\verb|isnil| = \nlambda{t} t\ (\nlambda{x} \nlambda{y} \verb|false|)\ \verb|true|$$
+
+\subsubsection*{head}
+Εδώ για να πάρουμε το πρώτο στοιχείο του πίνακα, αρκεί να εφαρμόσουμε τη συνάρτηση $c= \verb|true|$ στη λίστα (με αδιάφορο το \verb|n|, εδώ θα βάλουμε τυχαία \verb|false|) και αυτή θα επιστρέψει το πρώτο της στοιχείο.
+$$\verb|head| = \nlambda{t} t\ \verb|true|\ \verb|false|$$
+Ερώτηση (TODO): Εδώ αυτό λειτουργεί διότι δεν είμαστε σε typed λ-calculus, σωστά; Διαφορετικά (όπως στη Haskell) για \verb|n| θα πρέπει να δώσουμε ένα στοιχείο στον ίδιο τύπο με τον τύπο των στοιχείων της λίστας.
+
+\subsubsection*{tail}
+Όπως συμβουλεύει και η υπόδειξη στην άσκηση, θα θεωρήσουμε μια συνάρτηση που θα φτιάχνει ζευγάρια (\verb|pair|) λιστών τα οποία θα αυξάνονται κατά ένα κάθε φορά (με κάθε κλήση της συνάρτησης στη λίστα), και στο τέλος θα πάρω το πρώτο στοιχείο του \verb|pair| όπου θα βρίσκεται η λίστα της προηγούμενης κλήσης της συνάρτησης. Δηλαδή έχουμε:
+\[\verb|nn = pair nil nil|\]
+\[\verb|cc| = \nlambda{x} \nlambda{p} \verb|pair (snd p) (cons x (snd p))|\]
+και οπότε
+\[\verb|tail| = \nlambda{t} \verb|fst (t cc nn)|\]
+
+
+\subsection*{Άσκηση 1.2 Λίστες και σταθερά σημεία}
+
+Για να φτιάξουμε τη συνάρτηση \verb|sumarise| που αθροίζει τα στοιχεία μιας λίστας \verb|t|, αρκεί να γράψουμε μια αναδρομική συνάρτηση που να το υπολογίζει και να χρησιμοποιήσουμε τη συνάρτηση \verb|fix| για να την υλοποιήσουμε. Οπότε αν
+\[\verb|s| = \nlambda{sum} \nlambda{t} \verb|if isnil t then c|_0\verb| else plus (head t) (sum (tail t))|\]
+τότε έχουμε
+\[\verb|summary| = \verb|fix s|\]
+
+TODO: Να δείξω και το πώς δουλεύει η λούπα ή το παραπάνω αρκεί;
+
+
+\subsection*{Άσκηση 1.3 Διαφορετικές στρατηγικές αποτίμησης}
+Οι κανόνες αποτίμησης του Figure 5-3 στη σελίδα 72 του βιβλίου του Pierce θα πρέπει να προσαρμοστούν ως εξής για την κάθε στρατηγική που θα επιλέξουμε:
+
+
+Ερώτηση (TODO): "values are possible results for our evaluation", οπότε δεν χρειάζεται να αλλάξουμε τον ορισμό των values για να επιτρέψουμε αποτιμήσεις στα λ-abstractions, σωστά;\\
+Αν όχι τότε αλλάζω τα values ως εξής: $\verb|v := |\nlambda{x} \verb|v|$
+
+\subsubsection*{full beta reduction}
+Εδώ αρκεί να προσθέσουμε τους εξής κανόνες
+\[
+  \inference[E-APP3: ]{%
+    t_2 \nred t'_2
+  }{%
+    t_1 t_2 \nred t_1 t'_2
+  }
+\]
+\[
+  \inference[E-APP4: ]{%
+    t_1 \nred t'_1
+  }{%
+    \nlambda{x} t_1 \nred \nlambda{x} t'_1
+  }
+\]
+και μπορούμε μετά να αφαιρέσουμε τον \verb|E-APP2| δεδομένου ότι ο δεύτερος κανόνας από τους παραπάνω καλύπτει και την περίπτωση $\verb|v|_1\verb|t|_1$.
+
+\subsubsection*{normal-order}
+Εδώ θα χρειαστούμε πάλι τον \verb|E-APP3| αλλά μετά θα πρέπει να αφαιρέσουμε τον \verb|E-APP2| έτσι ώστε να απαγορεύσουμε αποτιμήσεις από τα δεξιά.
+
+\subsubsection*{lazy evaluation}
+Εδώ (λογικά) θα αρκεί να προσθέσουμε στους κανόνες του Figure 5-3 το \verb|E-APP4| και είμαστε έτοιμοι.
+
+
+\subsection*{Άσκηση 1.4 Μέγιστος κοινός διαιρέτης}
+
+\begin{verbatim}
+/* Exer01-1.4 OCaml implementation. */
+
+fix = lambda f.(lambda x.f (lambda y.x x y)) (lambda x.f (lambda y.x x y));
+
+/* Recurcive function for subtracting two numerals. */
+subr = lambda sub.lambda m.lambda n.if iszero n then m else sub (pred m) (pred n);
+sub = fix subr;
+
+/* Recurcive function MOD of two numerals. */
+modr = lambda mod.lambda m.lambda n.if iszero (sub m n) then
+  (if iszero (sub n m) then 0 else m) else mod (sub m n) n;
+mod = fix modr;
+
+/* The GCD function! */
+gcdr = lambda gcd.lambda m.lambda n.if iszero n then m else gcd n (mod m n);
+gcd = fix gcdr;
+
+/* Print the examples. */
+gcd 24 42;
+gcd 42 17;
+gcd 714 630;
+gcd 85 204;
+\end{verbatim}
+
+\section{Απλοί τύποι}
+
+\subsection*{Άσκηση 1.5 Subject expansion}
+
+\subsubsection*{1. Γλώσσα αριθμητικών εκφράσεων}
+Για τη γλώσσα των αριθμητικών εκφράσεων ΔΕΝ ισχύει το Subject expansion.
+Αν θέσουμε
+$$t = \verb|if true then 0 else false|$$
+$$t^\prime = \verb|0|$$
+τότε βλέπουμε ότι $t \nred t^\prime$ με $t^\prime:\verb|Bool|$ ενώ το $t$ δεν είναι well-typed.
+
+\subsubsection*{2. $\lambda$-λογισμός με απλούς τύπους}
+Αρχικά παρατηρούμε ότι αν ο $t$ είναι well-typed τότε παίρνουμε το ζητούμενο, αφού αν $\Gamma \vdash t:T^\prime$ με $T^\prime \neq T$ τότε από το Preservation theorem παίρνουμε ότι $\Gamma \vdash t^\prime:T^\prime$ το οποίο είναι άτοπο.
+Αρκεί λοιπόν να δείξουμε ότι όλοι οι όροι του συναρτισιακού $\lambda$-λογισμού είναι well-typed.
+
+Προφανώς ο $t$ δεν γίνεται να είναι value εφόσον τότε δεν υπάρχει κάποιο $t^\prime$ τέτοιο ώστε $t\nred t^\prime$.
+Εάν τώρα ο $t$ είναι κάποιος base term του $\Gamma$ (που δεν περιέχει conditional expressions) τότε είτε $t:\verb|Bool|$ είτε $t:\verb|Nat|$ και άρα είναι well-typed.
+Αυτό διότι οποιοσδήποτε άλλος ill-typed όρος (πχ. \verb|succ false|) πάλι δεν μπορεί να γίνει evaluate σε κάποιο $t^\prime$.
+
+\vspace{5mm}
+
+Question: Τι context έχουμε εδώ;
+
+\vspace{5mm}
+
+Για την περίπτωση που $t$ είναι application term της μορφής $t_1 t_2$, θα δείξουμε το ζητούμενο με επαγωγή. Έστω λοιπόν ότι το Subject expansion ισχύει για κάθε υποόρο του $t$, δηλαδή και για για τα $t_1,t_2$.
+
+Αν για το evaluation χρησιμοποιήσαμε τον κανόνα \textsc{E-App1} τότε υπάρχει ένα $t_1^\prime$ τέτοιο ώστε $t^\prime=t_1^\prime t_2$ και άρα από το Inversion lemma (3) παίρνουμε ότι υπάρχει τύπος $T_{11}$ τέτοιος ώστε\\$\Gamma \vdash t_1^\prime:T_{11} \rightarrow T$ και $\Gamma \vdash t_2:T_{11}$.
+Από τον πρώτο κανόνα και την επαγωγική υπόθεση παίρνουμε ότι $\Gamma \vdash t_1:T_{11}$ και άρα (αφού $\Gamma \vdash t_2:T_{11}$ και χρησιμοποιώντας τον \textsc{T-App}) έχουμε $\Gamma \vdash t:T$.
+
+Ομοίως για την περίπτωση που για το evaluation χρησιμοποιήσαμε τον κανόνα \textsc{E-App2}.
+
+Έστω τώρα ότι για το evaluation χρησιμοποιήσαμε τον κανόνα \textsc{E-AppAbs}, δηλαδή $t_1 = \lambda x:T_{11}.t_{12}$ και $t_2$ είναι value με $\Gamma \vdash t_2:T_{11}$.
+Τότε θα πρέπει $\Gamma \vdash t_{12}:T$ αφού έχουμε ότι $t^\prime = [x \mapsto t_2]t_{12}$ και $\Gamma \vdash t^\prime:T$, και άρα αν ο $t{12}$ έχει άλλο τύπο ή δεν είναι well-typed τότε φτάνουμε σε άτοπο. Οπότε έχουμε $\Gamma \vdash t_1:T_{11} \rightarrow T, t_2:T_{11}$ και από τον \textsc{E-App1} παίρνουμε $\Gamma \vdash T$.
+
+\vspace{5mm}
+
+Άρα σε κάθε περίπτωση το Subject expansion ισχύει.
+
+\subsection*{Άσκηση 1.6 Κατάσταση σφάλματος}
+
+\end{document}
