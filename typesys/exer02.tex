@@ -1,0 +1,61 @@
+% -*- mode: LaTeX; coding: utf-8 -*-
+% Typeset with: XeLaTeX
+
+\documentclass[a4paper,11pt]{article}
+\usepackage{a4wide}
+
+% Greek fonts
+\RequirePackage[cm-default]{fontspec}
+\defaultfontfeatures{Mapping=tex-text}
+  % you may want to try: {FreeSerif} or {Times New Roman}
+\setmainfont{Liberation Serif}
+  % you may want to try: {FreeSans} or {Arial}
+\setsansfont[Scale=MatchLowercase]{Liberation Sans}
+  % you may want to try: {FreeMono} or {Courier New}
+\setmonofont[Scale=MatchLowercase]{Liberation Mono}
+
+% More packages and macros
+\usepackage[inference]{semantic}
+
+\newcommand\nlambda[1]{\ensuremath{\lambda #1.\,}}
+\newcommand\nred{\ensuremath{\longrightarrow}}
+
+% Main document
+\begin{document}
+\title{2η Σειρά Ασκήσεων}
+\author{Θωμάς Παππάς}
+\date{12 Ιανουαρίου 2020}
+\maketitle
+
+\section{Επεκτάσεις}
+
+
+\subsection*{Άσκηση 2.1  Ascription}
+
+\subsubsection*{(1)}
+Θέτουμε λοιπόν την derived form του \verb|Ascription| ως εξής: ένας όρος $t\verb| as |T$ μπορεί να γραφτεί ως $(\lambda x:T.x)t$.
+Θα δείξουμε τώρα ότι οι κανόνες evaluation και typing στα δύο type systems είναι ισοδύναμα.
+Προφανώς αν ο όρος $t$ δεν είναι τύπου $T$ τότε ο typechecker θα επιστρέψει error και στις δύο περιπτώσεις.
+
+Εστω λοιπόν $\lambda^E, \lambda^I, e$ η εξωτερική γλώσσα (με το \verb|Ascription|), η εσωτερική γλώσσα (το simply typed $\lambda$-calculus) και την elaboration function που μετατρέπει τους ascription όρους στην derived form τους.
+Παρατηρούμε ότι (επαγωγική υπόθεση)
+\begin{itemize}
+  \item Αν $t = v_1\verb| as |T$, όπου $v_1$ value τότε
+    \begin{itemize}
+      \item $t = v_1\verb| as |T \nred_E v_1$
+      \item $e(t) = (\lambda x:T.x)v_1 \nred_I v_1$
+    \end{itemize}
+  \item Αν $t = t_1\verb| as |T$ με $t_1 \nred_E t_1^\prime$ για κάποιους όρους $t_1,t_1^\prime$ που ΔΕΝ περιέχουν ascription (άρα και $t_1 \nred_I t_1^\prime$) τότε
+    \begin{itemize}
+      \item $t \nred_E t^\prime$ όπου $t^\prime = t_1^\prime\verb| as |T$ (από τον \textsc{E-Ascribe1})
+      \item $e(t) = (\lambda x:T.x)t_1 \nred_I (\lambda x:T.x)t_1^\prime = e(t^\prime)$
+    \end{itemize}
+\end{itemize}
+Και άρα για έναν τυχαίο τύπο $t$ μπορούμε με τα παραπάνω να κάνουμε επαγωγή στους υποτύπους του και να πάρουμε ότι $t \nred_E t^\prime$ iff $e(t) \nred_I e(t^\prime)$.
+
+Επίσης βλέπουμε ότι $\Gamma \vdash^E t:T$ ανν $\Gamma \vdash^I e(t):T$ αφού $\Gamma \vdash^I (\lambda x:T.x): T \rightarrow T$, και άρα το \verb|Ascription| είναι derived form.
+
+\subsubsection*{(2)}
+Με τον κανόνα \textsc{E-AscribeEager} το \verb|Ascription| ΔΕΝ μπορεί να είναι derived form από τον simply $\lambda$-calculus. Αυτό διότι αν θέσουμε οποιοδήποτε όρο που να συμπεριλαμβάνει τον $t$ τότε θα πρέπει να κάνουμε πρώτα αυτόν evaluate με τον $t$ χωρίς να έχει γίνει ο ίδιος evaluate, το οποίο δεν υπάρχει σε κάποιο υπάρχον evaluation rule, και άρα θα έχουμε μια καινούργια συμπεριφορά στο type system μας.
+
+\end{document}
