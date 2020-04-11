@@ -38,7 +38,7 @@ $$t = \nlambda{c} \nlambda{n} c x (c y (c z n))$$
 \subsubsection*{nil}
 Για την αναπαράσταση του \verb|nil| θα θέλουμε η συνάρτηση $c$ να μην εφαρμοστεί καθόλου οπότε παίρνουμε
 $$\verb|nil| = \nlambda{c} \nlambda{n} n$$
-το οποίο και είναι το ίδιο "pun" με το \verb|false| στα Church booleans και το $c_0$ στα Church numerals.
+το οποίο και είναι το ίδιο ``pun'' με το \verb|false| στα Church booleans και το $c_0$ στα Church numerals.
 
 \subsubsection*{cons}
 Για να προσθέσουμε ένα στοιχείο $h$ σε μια λίστα $t$, τότε αρκεί να καλέσουμε τη συνάρτηση $c$ της $t$ με τη λίστα $t$ και το στοιχείο $h$. Δηλαδή
@@ -51,7 +51,6 @@ $$\verb|isnil| = \nlambda{t} t\ (\nlambda{x} \nlambda{y} \verb|false|)\ \verb|tr
 \subsubsection*{head}
 Εδώ για να πάρουμε το πρώτο στοιχείο του πίνακα, αρκεί να εφαρμόσουμε τη συνάρτηση $c= \verb|true|$ στη λίστα (με αδιάφορο το \verb|n|, εδώ θα βάλουμε τυχαία \verb|false|) και αυτή θα επιστρέψει το πρώτο της στοιχείο.
 $$\verb|head| = \nlambda{t} t\ \verb|true|\ \verb|false|$$
-Ερώτηση (TODO): Εδώ αυτό λειτουργεί διότι δεν είμαστε σε typed λ-calculus, σωστά; Διαφορετικά (όπως στη Haskell) για \verb|n| θα πρέπει να δώσουμε ένα στοιχείο στον ίδιο τύπο με τον τύπο των στοιχείων της λίστας.
 
 \subsubsection*{tail}
 Όπως συμβουλεύει και η υπόδειξη στην άσκηση, θα θεωρήσουμε μια συνάρτηση που θα φτιάχνει ζευγάρια (\verb|pair|) λιστών τα οποία θα αυξάνονται κατά ένα κάθε φορά (με κάθε κλήση της συνάρτησης στη λίστα), και στο τέλος θα πάρω το πρώτο στοιχείο του \verb|pair| όπου θα βρίσκεται η λίστα της προηγούμενης κλήσης της συνάρτησης. Δηλαδή έχουμε:
@@ -68,39 +67,46 @@ $$\verb|head| = \nlambda{t} t\ \verb|true|\ \verb|false|$$
 τότε έχουμε
 \[\verb|summary| = \verb|fix s|\]
 
-TODO: Να δείξω και το πώς δουλεύει η λούπα ή το παραπάνω αρκεί;
-
 
 \subsection*{Άσκηση 1.3 Διαφορετικές στρατηγικές αποτίμησης}
 Οι κανόνες αποτίμησης του Figure 5-3 στη σελίδα 72 του βιβλίου του Pierce θα πρέπει να προσαρμοστούν ως εξής για την κάθε στρατηγική που θα επιλέξουμε:
 
-
-Ερώτηση (TODO): "values are possible results for our evaluation", οπότε δεν χρειάζεται να αλλάξουμε τον ορισμό των values για να επιτρέψουμε αποτιμήσεις στα λ-abstractions, σωστά;\\
-Αν όχι τότε αλλάζω τα values ως εξής: $\verb|v := |\nlambda{x} \verb|v|$
-
 \subsubsection*{full beta reduction}
-Εδώ αρκεί να προσθέσουμε τους εξής κανόνες
+Αρχικά θα κρατήσουμε τον \textsc{E-App1} θα αντικαταστήσουμε τους \textsc{E-App2} και \textsc{E-AppAbs} με πιο τους πιο γενικούς κανόνες
 \[
-  \inference[E-APP3: ]{%
+  \inference[\textsc{E-App2-Gen}: ]{%
     t_2 \nred t'_2
   }{%
     t_1 t_2 \nred t_1 t'_2
   }
 \]
 \[
-  \inference[E-APP4: ]{%
+  \textsc{E-AppAbs-Gen}: (\nlambda{x} t_{12}) t_2 \nred [x \mapsto t_2] t_{12}
+\]
+και τέλος θα επιτρέψουμε τις αποτιμήσεις μέσα στα abstractions.
+\[
+  \inference[\textsc{E-App3}: ]{%
     t_1 \nred t'_1
   }{%
     \nlambda{x} t_1 \nred \nlambda{x} t'_1
   }
 \]
-και μπορούμε μετά να αφαιρέσουμε τον \verb|E-APP2| δεδομένου ότι ο δεύτερος κανόνας από τους παραπάνω καλύπτει και την περίπτωση $\verb|v|_1\verb|t|_1$.
+Επίσης λόγω του \textsc{E-App3} θα πρέπει να περιορίσουμε τα values στα abstractions που επιστρέφουν όρους με είτε μόνο μεταβλητές είτε values είτε ένα συνδιασμό των δύο.
+Αν θέσουμε ως $\verb|t|_{\verb|v|}$ έναν τέτοιο όρο τότε έχουμε
+\[
+  \verb|v| := \nlambda{x} \verb|t|_{\verb|v|}
+\]
+% Question: Το από πάνω δεν ορίζει αυστηρά το "είτε μόνο μεταβλητές είτε values είτε ένα συνδιασμό των δύο"; Μάλλον όχι...
 
 \subsubsection*{normal-order}
-Εδώ θα χρειαστούμε πάλι τον \verb|E-APP3| αλλά μετά θα πρέπει να αφαιρέσουμε τον \verb|E-APP2| έτσι ώστε να απαγορεύσουμε αποτιμήσεις από τα δεξιά.
+Εδώ θα κρατήσουμε τους κανόνες \textsc{E-App1} και \textsc{E-App2} αλλά θα αντικαταστήσουμε τον \textsc{E-AppAbs} με τον ``αντίστροφο'' (σχετικά με το ποιος όρος πρέπει να είναι value και ποιος όχι)
+\[
+  \textsc{E-AppAbs-Rev}: (\nlambda{x} \verb|v|_{12}) t_2 \nred [x \mapsto t_2] \verb|v|_{12}
+\]
+και τέλος θα πάρουμε και τον \textsc{E-App3} και τον ορισμό των values από το προηγούμενο ερώτημα ώστε να επιτρέψουμε αποτιμήσεις μέσα στα abstractions.
 
-\subsubsection*{lazy evaluation}
-Εδώ (λογικά) θα αρκεί να προσθέσουμε στους κανόνες του Figure 5-3 το \verb|E-APP4| και είμαστε έτοιμοι.
+\subsubsection*{lazy evaluation (call by name)}
+Ομοίως με το προηγούμενο χωρίς τον \textsc{E-App3}, οπότε κρατάμε μόνο τους κανόνες \textsc{E-App1}, \textsc{E-App2} και \textsc{E-AppAbs-Rev} καθώς και τον αρχικό ορισμό για τα values (από το Figure 5-3).
 
 
 \subsection*{Άσκηση 1.4 Μέγιστος κοινός διαιρέτης}
@@ -130,6 +136,8 @@ gcd 714 630;
 gcd 85 204;
 \end{verbatim}
 
+\pagebreak
+
 \section{Απλοί τύποι}
 
 \subsection*{Άσκηση 1.5 Subject expansion}
@@ -138,37 +146,184 @@ gcd 85 204;
 Για τη γλώσσα των αριθμητικών εκφράσεων ΔΕΝ ισχύει το Subject expansion.
 Αν θέσουμε
 $$t = \verb|if true then 0 else false|$$
-$$t^\prime = \verb|0|$$
-τότε βλέπουμε ότι $t \nred t^\prime$ με $t^\prime:\verb|Bool|$ ενώ το $t$ δεν είναι well-typed.
+$$t' = \verb|0|$$
+τότε βλέπουμε ότι $t \nred t'$ με $t':\verb|Bool|$ ενώ το $t$ δεν είναι well-typed.
 
 \subsubsection*{2. $\lambda$-λογισμός με απλούς τύπους}
-Αρχικά παρατηρούμε ότι αν ο $t$ είναι well-typed τότε παίρνουμε το ζητούμενο, αφού αν $\Gamma \vdash t:T^\prime$ με $T^\prime \neq T$ τότε από το Preservation theorem παίρνουμε ότι $\Gamma \vdash t^\prime:T^\prime$ το οποίο είναι άτοπο.
+Αρχικά παρατηρούμε ότι αν ο $t$ είναι well-typed τότε παίρνουμε το ζητούμενο, αφού αν $\Gamma \vdash t:T'$ με $T' \neq T$ τότε από το Preservation theorem παίρνουμε ότι $\Gamma \vdash t':T'$ το οποίο είναι άτοπο.
 Αρκεί λοιπόν να δείξουμε ότι όλοι οι όροι του συναρτισιακού $\lambda$-λογισμού είναι well-typed.
 
-Προφανώς ο $t$ δεν γίνεται να είναι value εφόσον τότε δεν υπάρχει κάποιο $t^\prime$ τέτοιο ώστε $t\nred t^\prime$.
+Προφανώς ο $t$ δεν γίνεται να είναι value εφόσον τότε δεν υπάρχει κάποιο $t'$ τέτοιο ώστε $t\nred t'$.
 Εάν τώρα ο $t$ είναι κάποιος base term του $\Gamma$ (που δεν περιέχει conditional expressions) τότε είτε $t:\verb|Bool|$ είτε $t:\verb|Nat|$ και άρα είναι well-typed.
-Αυτό διότι οποιοσδήποτε άλλος ill-typed όρος (πχ. \verb|succ false|) πάλι δεν μπορεί να γίνει evaluate σε κάποιο $t^\prime$.
+Αυτό διότι οποιοσδήποτε άλλος ill-typed όρος (πχ. \verb|succ false|) πάλι δεν μπορεί να γίνει evaluate σε κάποιο $t'$.
 
 \vspace{5mm}
 
-Question: Τι context έχουμε εδώ;
+Για την περίπτωση που $t$ είναι application term της μορφής $t_1 t_2$, θα δείξουμε το ζητούμενο με επαγωγή.
+Έστω λοιπόν ότι το Subject expansion ισχύει για κάθε υποόρο του $t$, δηλαδή και για τα $t_1,t_2$.
 
-\vspace{5mm}
-
-Για την περίπτωση που $t$ είναι application term της μορφής $t_1 t_2$, θα δείξουμε το ζητούμενο με επαγωγή. Έστω λοιπόν ότι το Subject expansion ισχύει για κάθε υποόρο του $t$, δηλαδή και για για τα $t_1,t_2$.
-
-Αν για το evaluation χρησιμοποιήσαμε τον κανόνα \textsc{E-App1} τότε υπάρχει ένα $t_1^\prime$ τέτοιο ώστε $t^\prime=t_1^\prime t_2$ και άρα από το Inversion lemma (3) παίρνουμε ότι υπάρχει τύπος $T_{11}$ τέτοιος ώστε\\$\Gamma \vdash t_1^\prime:T_{11} \rightarrow T$ και $\Gamma \vdash t_2:T_{11}$.
+Αν για το evaluation χρησιμοποιήσαμε τον κανόνα \textsc{E-App1} τότε υπάρχει ένα $t_1'$ τέτοιο ώστε $t'=t_1' t_2$ και άρα από το Inversion lemma (3) παίρνουμε ότι υπάρχει τύπος $T_{11}$ τέτοιος ώστε\\$\Gamma \vdash t_1':T_{11} \rightarrow T$ και $\Gamma \vdash t_2:T_{11}$.
 Από τον πρώτο κανόνα και την επαγωγική υπόθεση παίρνουμε ότι $\Gamma \vdash t_1:T_{11}$ και άρα (αφού $\Gamma \vdash t_2:T_{11}$ και χρησιμοποιώντας τον \textsc{T-App}) έχουμε $\Gamma \vdash t:T$.
 
 Ομοίως για την περίπτωση που για το evaluation χρησιμοποιήσαμε τον κανόνα \textsc{E-App2}.
 
 Έστω τώρα ότι για το evaluation χρησιμοποιήσαμε τον κανόνα \textsc{E-AppAbs}, δηλαδή $t_1 = \lambda x:T_{11}.t_{12}$ και $t_2$ είναι value με $\Gamma \vdash t_2:T_{11}$.
-Τότε θα πρέπει $\Gamma \vdash t_{12}:T$ αφού έχουμε ότι $t^\prime = [x \mapsto t_2]t_{12}$ και $\Gamma \vdash t^\prime:T$, και άρα αν ο $t{12}$ έχει άλλο τύπο ή δεν είναι well-typed τότε φτάνουμε σε άτοπο. Οπότε έχουμε $\Gamma \vdash t_1:T_{11} \rightarrow T, t_2:T_{11}$ και από τον \textsc{E-App1} παίρνουμε $\Gamma \vdash T$.
+Τότε θα πρέπει $\Gamma \vdash t_{12}:T$ αφού έχουμε ότι $t' = [x \mapsto t_2]t_{12}$ και $\Gamma \vdash t':T$, και άρα αν ο $t_{12}$ έχει άλλο τύπο ή δεν είναι well-typed τότε φτάνουμε σε άτοπο. Οπότε έχουμε $\Gamma \vdash t_1:T_{11} \rightarrow T, t_2:T_{11}$ και από τον \textsc{T-App1} παίρνουμε $\Gamma \vdash t:T$.
 
 \vspace{5mm}
 
 Άρα σε κάθε περίπτωση το Subject expansion ισχύει.
 
 \subsection*{Άσκηση 1.6 Κατάσταση σφάλματος}
+
+\subsubsection*{Περιγραφή της γλώσσας}
+Για τη γλώσσα που προκύπτει από το συνδυασμό της απλής αριθμητικής και του $\lambda$-λογισμού με απλούς τύπους, θα επεκτείνουμε τους ορισμούς στα Figures 8.2 και 9.1 του βιβλίου.
+
+\pagebreak
+
+\paragraph*{Σύνταξη}:
+Επεκτείνουμε τους όρους (terms), values και Types αντίστοιχα ως εξής
+
+\verb|t ::=|
+
+\begin{tabular}{l r}
+  \verb|wrong| & \textit{constant wrong}
+\end{tabular}
+
+\verb|v ::=|
+
+\begin{tabular}{l r}
+  \verb|wrong| & \textit{wrong value}
+\end{tabular}
+
+\verb|Τ ::=|
+
+\begin{tabular}{l r}
+  \verb|Wrong| & \textit{wrong type}
+\end{tabular}
+
+\paragraph*{Λειτουργική Σημασιολογία}:
+\[
+  \verb|if 0 then | t_1 \verb| else | t_2 \nred \verb|wrong|
+\]
+\[
+  \verb|if (succ | t_1 \verb|) then | t_2 \verb| else | t_3 \nred \verb|wrong|
+\]
+\[
+  \verb|if (pred | t_1 \verb|) then | t_2 \verb| else | t_3 \nred \verb|wrong|
+\]
+\[
+  \verb|if (| \nlambda{x} t_1 \verb|) then | t_2 \verb| else | t_3 \nred \verb|wrong|
+\]
+\[
+  \verb|if wrong then | t_1 \verb| else | t_2 \nred \verb|wrong|
+\]
+\[
+  \verb|succ true| \nred \verb|wrong|, \;
+  \verb|pred true| \nred \verb|wrong|, \;
+  \verb|iszero true| \nred \verb|wrong|
+\]
+\[
+  \verb|succ false| \nred \verb|wrong|, \;
+  \verb|pred false| \nred \verb|wrong|, \;
+  \verb|iszero false| \nred \verb|wrong|
+\]
+\[
+  \verb|succ(| \nlambda{x} t \verb|)| \nred \verb|wrong|, \;
+  \verb|pred(| \nlambda{x} t \verb|)| \nred \verb|wrong|, \;
+  \verb|iszero(| \nlambda{x} t \verb|)| \nred \verb|wrong|
+\]
+\[
+  \verb|succ wrong| \nred \verb|wrong|, \;
+  \verb|pred wrong| \nred \verb|wrong|, \;
+  \verb|iszero wrong| \nred \verb|wrong|
+\]
+
+\paragraph*{Σύστημα Τύπων}:
+\[
+  \inference{
+    \Gamma \vdash t_1:\texttt{Nat} & \Gamma \vdash t_2:T_1 & \Gamma \vdash t_3:T_2
+  }{
+    \Gamma \vdash \texttt{if } t_1 \texttt{ then } t_2 \texttt{ else } t_3: \texttt{Wrong}
+  }
+\]
+\[
+  \inference{
+    \Gamma \vdash t_1:T_{11} \rightarrow T_{12} & \Gamma \vdash t_2:T_1 & \Gamma \vdash t_3:T_2
+  }{
+    \Gamma \vdash \texttt{if } t_1 \texttt{ then } t_2 \texttt{ else } t_3: \texttt{Wrong}
+  }
+\]
+\[
+  \inference{
+    \Gamma \vdash t_1:\texttt{Wrong} & \Gamma \vdash t_2:T_1 & \Gamma \vdash t_3:T_2
+  }{
+    \Gamma \vdash \texttt{if } t_1 \texttt{ then } t_2 \texttt{ else } t_3: \texttt{Wrong}
+  }
+\]
+\[
+  \inference{
+    \Gamma \vdash t_1:\texttt{Bool}
+  }{
+    \Gamma \vdash \texttt{succ } t_1: \texttt{Wrong}
+  },
+  \inference{
+    \Gamma \vdash t_1:\texttt{Bool}
+  }{
+    \Gamma \vdash \texttt{pred } t_1: \texttt{Wrong}
+  },
+  \inference{
+    \Gamma \vdash t_1:\texttt{Bool}
+  }{
+    \Gamma \vdash \texttt{iszero } t_1: \texttt{Wrong}
+  }
+\]
+\[
+  \inference{
+    \Gamma \vdash t_1:T_{11} \rightarrow T_{12}
+  }{
+    \Gamma \vdash \texttt{succ } t_1: \texttt{Wrong}
+  },
+  \inference{
+    \Gamma \vdash t_1:T_{11} \rightarrow T_{12}
+  }{
+    \Gamma \vdash \texttt{pred } t_1: \texttt{Wrong}
+  },
+  \inference{
+    \Gamma \vdash t_1:T_{11} \rightarrow T_{12}
+  }{
+    \Gamma \vdash \texttt{iszero } t_1: \texttt{Wrong}
+  }
+\]
+\[
+  \inference{
+    \Gamma \vdash t_1:\texttt{Wrong}
+  }{
+    \Gamma \vdash \texttt{succ } t_1: \texttt{Wrong}
+  },
+  \inference{
+    \Gamma \vdash t_1:\texttt{Wrong}
+  }{
+    \Gamma \vdash \texttt{pred } t_1: \texttt{Wrong}
+  },
+  \inference{
+    \Gamma \vdash t_1:\texttt{Wrong}
+  }{
+    \Gamma \vdash \texttt{iszero } t_1: \texttt{Wrong}
+  }
+\]
+\[
+  \inference{
+    \Gamma \vdash t_1:T_{11} \rightarrow T_{12} & \Gamma \vdash t_2:T_2, T_{11} \neq T_2
+  }{
+    \Gamma \vdash t_1 t_2: \texttt{Wrong}
+  }
+\]
+
+\subsubsection*{Type Safety}
+Με τους παραπάνω κανόνες καταλήγουμε σε ένα σύστημα όπου δεν υπάρχουν ``stuck'' όροι, και άρα η ιδιότητα \textit{Progress} δεν μας προσφέρει κάτι. Ο ορισμός του \textit{Preservation} τώρα μπορεί να προσαρμοστεί ως εξής
+\begin{center}
+ \textit{Preservation:} Ένας όρος που ΔΕΝ έχει type \verb|Wrong| και κάνει ένα evaluation βήμα, τότε και ο όρος που θα επιστραφεί επίσης ΔΕΝ θα έχει type \verb|Wrong|
+\end{center}
 
 \end{document}
