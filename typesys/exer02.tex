@@ -16,6 +16,11 @@
 
 % More packages and macros
 \usepackage[inference]{semantic}
+\usepackage{listings}% http://ctan.org/pkg/listings
+\lstset{
+  basicstyle=\ttfamily,
+  mathescape
+}
 
 \newcommand\nlambda[1]{\ensuremath{\lambda #1.\,}}
 \newcommand\nred{\ensuremath{\longrightarrow}}
@@ -33,7 +38,7 @@
 \subsection*{Άσκηση 2.1  Ascription}
 
 \subsubsection*{(1)}
-Θέτουμε λοιπόν την derived form του \verb|Ascription| ως εξής: ένας όρος $t\verb| as |T$ μπορεί να γραφτεί ως $(\lambda x:T.x)t$.
+Θέτουμε λοιπόν την derived form του \verb|Ascription| ως εξής: ένας όρος $t\verb| as |T$ μπορεί να γραφτεί ως $(\nlambda{x:T} x)t$.
 Θα δείξουμε τώρα ότι οι κανόνες evaluation και typing στα δύο type systems είναι ισοδύναμα.
 Προφανώς αν ο όρος $t$ δεν είναι τύπου $T$ τότε ο typechecker θα επιστρέψει error και στις δύο περιπτώσεις.
 
@@ -43,19 +48,77 @@
   \item Αν $t = v_1\verb| as |T$, όπου $v_1$ value τότε
     \begin{itemize}
       \item $t = v_1\verb| as |T \nred_E v_1$
-      \item $e(t) = (\lambda x:T.x)v_1 \nred_I v_1$
+      \item $e(t) = (\nlambda{x:T} x)v_1 \nred_I v_1$
     \end{itemize}
-  \item Αν $t = t_1\verb| as |T$ με $t_1 \nred_E t_1^\prime$ για κάποιους όρους $t_1,t_1^\prime$ που ΔΕΝ περιέχουν ascription (άρα και $t_1 \nred_I t_1^\prime$) τότε
+  \item Αν $t = t_1\verb| as |T$ με $t_1 \nred_E t_1'$ για κάποιους όρους $t_1,t_1'$ που ΔΕΝ περιέχουν ascription (άρα και $t_1 \nred_I t_1'$) τότε
     \begin{itemize}
-      \item $t \nred_E t^\prime$ όπου $t^\prime = t_1^\prime\verb| as |T$ (από τον \textsc{E-Ascribe1})
-      \item $e(t) = (\lambda x:T.x)t_1 \nred_I (\lambda x:T.x)t_1^\prime = e(t^\prime)$
+      \item $t \nred_E t'$ όπου $t' = t_1'\verb| as |T$ (από τον \textsc{E-Ascribe1})
+      \item $e(t) = (\nlambda{x:T} x)t_1 \nred_I (\nlambda{x:T} x)t_1' = e(t')$
     \end{itemize}
 \end{itemize}
-Και άρα για έναν τυχαίο τύπο $t$ μπορούμε με τα παραπάνω να κάνουμε επαγωγή στους υποτύπους του και να πάρουμε ότι $t \nred_E t^\prime$ iff $e(t) \nred_I e(t^\prime)$.
+Και άρα για έναν τυχαίο τύπο $t$ μπορούμε με τα παραπάνω να κάνουμε επαγωγή στους υποτύπους του και να πάρουμε ότι $t \nred_E t'$ iff $e(t) \nred_I e(t')$.
 
-Επίσης βλέπουμε ότι $\Gamma \vdash^E t:T$ ανν $\Gamma \vdash^I e(t):T$ αφού $\Gamma \vdash^I (\lambda x:T.x): T \rightarrow T$, και άρα το \verb|Ascription| είναι derived form.
+Επίσης βλέπουμε ότι $\Gamma \vdash^E t:T$ ανν $\Gamma \vdash^I e(t):T$ αφού $\Gamma \vdash^I (\nlambda{x:T} x): T \rightarrow T$, και άρα το \verb|Ascription| είναι derived form.
 
 \subsubsection*{(2)}
-Με τον κανόνα \textsc{E-AscribeEager} το \verb|Ascription| ΔΕΝ μπορεί να είναι derived form από τον simply $\lambda$-calculus. Αυτό διότι αν θέσουμε οποιοδήποτε όρο που να συμπεριλαμβάνει τον $t$ τότε θα πρέπει να κάνουμε πρώτα αυτόν evaluate με τον $t$ χωρίς να έχει γίνει ο ίδιος evaluate, το οποίο δεν υπάρχει σε κάποιο υπάρχον evaluation rule, και άρα θα έχουμε μια καινούργια συμπεριφορά στο type system μας.
+Με τον κανόνα \textsc{E-AscribeEager} το \verb|Ascription| ΔΕΝ μπορεί να είναι derived form από τον simply $\lambda$-calculus.
+Αυτό διότι αν θέσουμε οποιοδήποτε όρο που να συμπεριλαμβάνει τον $t$ τότε θα πρέπει να κάνουμε πρώτα αυτόν evaluate με τον $t$ χωρίς να έχει γίνει ο ίδιος evaluate, το οποίο δεν υπάρχει σε κάποιο υπάρχον evaluation rule, και άρα θα έχουμε μια καινούργια συμπεριφορά στο type system μας.
+
+
+\subsection*{Άσκηση 2.2  Αθροίσματα και λογικές τιμές}
+
+Ορίζουμε τους όρους \verb|true|, \verb|false| και \verb|if| ως εξής:
+\begin{itemize}
+  \item $\verb|true| := \verb|inl unit as Unit+Unit|$
+  \item $\verb|false| := \verb|inr unit as Unit+Unit|$
+  \item $\verb|if | t_1 \verb| then | t_2 \verb| else | t_3 := \verb|case | t_1 \verb| as Unit+Unit of inl | x \Rightarrow t_2 | \verb|inr | x \Rightarrow t_3$
+\end{itemize}
+Όπου στην περίπτωση του \verb|case| θα πρέπει οι μεταβλητές να είναι ελεύθερες σε σχέση με τις μεταβλητές των $t_2$ και $t_3$, δηλαδή $x \notin FV(t_2), x \notin FV(t_3)$, το οποίο και πετυχαίνουμε με τα κατάλληλα renames στις μεταβλητές.
+
+
+\section{Αναφορές}
+
+\subsection*{Άσκηση 2.3 Τελεστής σταθερού σημείου}
+
+Κοιτάζοντας τις ασκήσεις 13.1.2, σελ. 158, και 13.5.8, σελ. 169 του βιβλίου βλέπουμε ότι μπορούμε να λύσουμε την τελευταία ως εξής (ελεγμένη και στην OCaml):
+\begin{lstlisting}
+  factorial = $\nlambda{n:Nat}$
+    let $f =$ ref $(\nlambda{m:Nat} 0)$ in
+      $f$ := $(\nlambda{m:Nat}$ if iszero $m$ then $1$ else times $(!f \; ($pred $m)) \; m)$; $!f \; n$
+\end{lstlisting}
+Παρόλα αυτά αυτός ο όρος δεν μπορεί να γενικευθεί για κάθε τύπο $T_1 \rightarrow T_2$ διότι για τον $T_2$ θα πρέπει να δώσουμε μια τυχαία αρχική τιμή (πχ. στο παραπάνω βάλαμε το $0$ για να αρχικοποιήσουμε την $f:Ref \; Nat \rightarrow Nat$).
+Θα μπορούσαμε να ορίσουμε πχ. την FixBool ως εξής:
+\begin{lstlisting}
+  fixBool = $\nlambda{f:(T_1 \rightarrow Bool) \rightarrow (T_1 \rightarrow Bool)} \nlambda{x:T_1}$
+    let $r =$ ref $(\nlambda{y:T_1}$ true $)$ in
+      $r$ := $(\nlambda{y:T_1} f \; !r \; y)$; $!r \; x$
+\end{lstlisting}
+
+\subsubsection*{Συνάρτηση even}
+
+Με το παραπάνω η υλοποίηση της συνάρτησης \verb|even| (στην OCaml) θα είναι ως εξής:
+\begin{verbatim}
+/* Exer02-2.3 OCaml implementation. */
+
+fixNatBool = lambda f:(Nat->Bool)->(Nat->Bool). lambda x:Nat.
+  let r = ref (lambda y:Nat. true) in
+    (lambda u:Unit. !r x) (r := (lambda y:Nat. f (!r) y));
+
+evenr = lambda ie:Nat->Bool. lambda n:Nat.
+  if iszero n then true
+    else if iszero (pred n) then false
+    else ie (pred (pred n));
+
+even = fixNatBool evenr;
+\end{verbatim}
+
+\subsection*{Άσκηση 2.4  Μοναδικότητα τύπων μνήμης}
+
+Παρατηρούμε ότι στην περίπτωση που έχουμε κύκλους τότε υπάρχουν παραπάνω από ένας τρόπος να έχουμε well typed όρους.
+Οπότε θα πάρουμε ένα context $\Gamma$ στο οποίο υπάρχει ο όρος \\ $\Gamma \vdash t = \nlambda{x:Nat} (!l) \; x$ και το store $\mu$ όπου $\mu = (l \rightarrow t)$.
+Τότε στη συνέχεια μπορούμε να πάρουμε τα εξής δύο stores $\Sigma_1, \Sigma_2$ στα οποία:
+\[ \Sigma_1(l) = Nat \rightarrow Nat \]
+\[ \Sigma_2(l) = Nat \rightarrow Bool \]
+και για τα οποία βλέπουμε ότι $\Gamma \; | \; \Sigma_1 \vdash \mu$ και $\Gamma \; | \; \Sigma_2 \vdash \mu$ ταυτόχρονα.
 
 \end{document}
