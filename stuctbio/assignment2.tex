@@ -46,15 +46,18 @@ Using the USCF Chimera software and after superimposing the the 6FAT and 1UWC pr
 \end{figure}
 
 % Reply log: RMSD between 20 pruned atom pairs is 1.037 angstroms; (across all 234 pairs: 22.983)
-The c-RMSD as calculated by Chimera after superposition is $1.037$ \AA
+The c-RMSD as calculated by Chimera after superposition is
+\begin{itemize}
+  \item $1.037$ \AA \; between 20 pruned atom pairs
+  \item $22.983$ \AA \; across all 234 pairs
+\end{itemize}
 
-\section*{b}
-
-How to calculate the c-RMSD between two structures of different length? Homology? Alignment?
+%\section*{b}
+%How to calculate the c-RMSD between two structures of different length? Homology? Alignment?
 
 \section*{c}
 
-We take the coodinates for each residue's backbone atoms from the \verb|.pdb| file and we calculate the Caley-Menger (border) matrix $B$. We get:
+We will take the coodinates for each residue's backbone atoms from the \verb|6FAT.pdb| file and we'll calculate the Caley-Menger (border) matrix $B$. We get:
 
 \begin{small}
   \[B =\]
@@ -74,15 +77,12 @@ We take the coodinates for each residue's backbone atoms from the \verb|.pdb| fi
 
 \section*{d}
 
-By running the Python code \verb|numpy.linalg.matrix_rank(B)| we verify that the $rank(B) = 5$
-
-
-
-Now in order to calculate the Gram matrix $G$, use the formula
+By running the Python code for $B$ \verb|numpy.linalg.matrix_rank(B)| we verify that $rank(B) = 5$.\\
+Now in order to calculate the Gram matrix $G$, we will use the formula
 \[
   G[i,j] := \frac{d_{i0}^2 - d_{ij}^2 + d_{j0}^2}{2}
 \]
-and while we can use the $B$ matrix for $\frac{d_{ij}^2}{2}$, in order to calculate $d_{i0}, d_{j0}$ we'll need to use the original coordinates. We therefore get
+and while we can use the $B$ matrix to get $\frac{d_{ij}^2}{2}$, in order to calculate $d_{i0}$ and $d_{j0}$ we'll need to use the original coordinates. We therefore get:
 \begin{footnotesize}
   \[G =\]
   \[
@@ -100,7 +100,7 @@ and while we can use the $B$ matrix for $\frac{d_{ij}^2}{2}$, in order to calcul
   \]
 \end{footnotesize}
 
-and by using SVD we get the new coordinates
+and by using SVD we get the new coordinates:
 \begin{center}
   \[
     \begin{pmatrix}
@@ -121,19 +121,41 @@ thus achieving a c-RMSD with the initial coordinates (over all atoms) of $3.3799
 
 \vspace{5mm}
 
-\textit{Note: Intuitively it seems it would make more sense to calculate $G$ using only the values from $B$. However when taking $d_{i0} = 1$ the c-RMSD becomes $\sim 5$.}
+%\textit{Note: Intuitively it seems it would make more sense to calculate $G$ using only the values from $B$. However when taking $d_{i0} = 1$ the c-RMSD becomes $\sim 5$.}
 
 \section*{e}
 
 We implement the perturbation by increasing all values in $B$ by a percentage.
-Then we recalculate $G$, run SVD to get the $U$ and $\Sigma$ values, take the $S$ to be the $(3 \times 3)$ diagonal array with the three greatest values from $\Sigma$, and check the c-RMSD between the original cooredinates and the points from $\sqrt{S}U^T$.
+Then we recalculate $G$, run SVD to get the $U$ and $\Sigma$ values, take $S$ to be the $(3 \times 3)$ diagonal array with the three greatest values from $\Sigma$, and then check the c-RMSD between the original cooredinates and the points from $\sqrt{S}U^T$.
 
-The algorithm tried multiple points between $100\%$ and $200\%$ and then run again in the space where the c-RMSD would go over $1$. The conclusion was the the max percentage of perturbation for c-RMSD to be $< 1$ is $88.61\%$.
+The algorithm tried 100 points between $1\%$ and $100\%$ (with a step of $1\%$) which was the incease applied to all values of $B$, and then run again for 10 more points in the space where the c-RMSD would go over $1$ to increase accuracy.
+
+The conclusion was the max percentage of perturbation for c-RMSD to be less than $R = 1$ is around $88.61\%$.
 
 \section*{f}
 
 Here for calculating the c-RMSD we will take only the distances that are less than a number $T$.
-For the rest of the points we will assume that the distance is $0$ in order for it not to affect the final result.
+For the rest of the points we will assume that the distance is $0$.
 We will also keep $R = 1$ \AA.
+
+\begin{center}
+  \begin{tabular}{ ||c|c|| }
+    \hline
+    $T$ & c-RMSD\\
+    \hline \hline
+    30 & 4.848773458134514\\
+    20 & 1.2941487875701954\\
+    15 & 5.004258253300996\\
+    10 & 5.243758773056963\\
+    5 & 1.360263291246221\\
+    4 & 1.3621607241108677\\
+    3 & 1.3643224342718143\\
+    2 & 1.15262288363306\\
+    1 & 0.2292140768425968\\
+    \hline
+  \end{tabular}
+\end{center}
+
+And therefore for $T = 1$ we get the c-RMSD to be less than $R = 1$ \AA.
 
 \end{document}

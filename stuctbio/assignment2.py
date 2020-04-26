@@ -31,6 +31,18 @@ def gram(x, dist):
     return g
 
 
+# Calculate the Gram matrix G from a set of coordinates and a distant matrix.
+def gram_cutoff(x, dist, t):
+    g = np.full((9, 9), 0.0)
+    d = 0
+    for i in range(9):
+        for j in range(9):
+            if dist[i + 1, j + 1] > t:
+                d = dist[i + 1, j + 1]
+            g[i, j] = (np.linalg.norm(x[i]) ** 2 + np.linalg.norm(x[j]) ** 2) / 2 - d
+    return g
+
+
 def get_three_max(array):
     a = np.sort(array)
     return np.array([a[-1], a[-2], a[-3]])
@@ -86,3 +98,11 @@ for pert in np.linspace(0.0, 1.0, 101):
     new_coord = np.sqrt(np.diag(s)) @ vh[:3, :]
     print('For perturbation ', pert, ' we get c-RMSD: ', c_rmsd(coord, new_coord.transpose()))
 # c-RMSD < 1 is achieved for max perturbation ~88,61%.
+
+# Exercise F
+for T in [30, 20, 15, 10, 5, 4, 3, 2, 1]:
+    G = gram_cutoff(coord, B, T)
+    v, sigma, vh = np.linalg.svd(G)
+    s = get_three_max(sigma)
+    new_coord = np.sqrt(np.diag(s)) @ vh[:3, :]
+    print('For cutoff ', T, ' we get c-RMSD: ', c_rmsd(coord, new_coord.transpose()))
