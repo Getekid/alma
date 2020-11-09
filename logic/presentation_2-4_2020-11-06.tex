@@ -1,0 +1,453 @@
+% -*- mode: LaTeX; coding: utf-8 -*-
+% Typeset with: XeLaTeX
+
+\documentclass{beamer}
+\mode<presentation>
+{
+  \usetheme[progressbar=foot,numbering=fraction,background=light]{metropolis} 
+  \usecolortheme{default} % or try albatross, beaver, crane, ...
+  \usefonttheme{default}  % or try serif, structurebold, ...
+  \setbeamertemplate{navigation symbols}{}
+  \setbeamertemplate{caption}[numbered]
+  %\setbeamertemplate{frame footer}{My custom footer}
+}
+\centering
+
+% Greek fonts
+\usepackage{fontspec}
+%\RequirePackage[cm-default]{fontspec}
+\defaultfontfeatures{Mapping=tex-text}
+  % you may want to try: {FreeSerif} or {Times New Roman}
+%\setmainfont{Liberation Serif}
+  % you may want to try: {FreeSans} or {Arial}
+\setsansfont[Scale=MatchLowercase]{Liberation Sans}
+  % you may want to try: {FreeMono} or {Courier New}
+\setmonofont[Scale=MatchLowercase]{Liberation Mono}
+
+\usepackage{graphicx}
+\graphicspath{ {./figures/} }
+\usepackage{hyperref,xcolor}
+\newcommand{\link}[2]{\href{#1}{\textcolor{blue}{\underline{#2}}}}
+
+% Main document
+\begin{document}
+\title{Κατηγορηματικός Λογισμός}
+\subtitle{Μαθηματική Λογική}
+\author{Θωμάς Παππάς}
+\date{Παρασκευή 6 Νοεμβρίου 2020}
+\maketitle
+
+\begin{frame}{Agenda}
+  \tableofcontents[hideallsubsections]
+  %\tableofcontents
+\end{frame}
+
+%\AtBeginSection{}
+
+\section{Τυπικές αποδείξεις και Μεταθεωρήματα}
+
+\subsection{Κανόνας $T$}
+
+\begin{frame}{Κανόνας $T$}
+  Αν $\Gamma \vdash \alpha_1, \ldots, \Gamma \vdash \alpha_n$ και $\{\alpha_1, \ldots, \alpha_n\} \models^{\textrm{T}\Sigma} \beta$, τότε $\Gamma \vdash \beta$.
+  \begin{block}{Απόδειξη}
+    Ο τύπος $\alpha_1 \rightarrow \cdots \rightarrow \alpha_n \rightarrow \beta$ είναι ταυτολογία και άρα Λογικό Αξίωμα.
+    Εφαρμόζουμε Modus Ponens $n$ φορές.
+  \end{block}
+\end{frame}
+
+\subsection{Μεταθεώρημα Συναγωγής}
+
+\begin{frame}{Μεταθεώρημα Συναγωγής}
+  Αν $\Gamma ; \gamma \vdash \phi$ τότε $\Gamma \vdash (\gamma \rightarrow \phi)$.\\
+  \begin{small}Το αντίστροφο είναι το Modus Ponens\end{small}
+  \begin{block}{1η Απόδειξη}
+    Έχουμε ότι $\Gamma ; \gamma \vdash \phi$
+    \begin{itemize}
+      \item[] ανν $(\Gamma ; \gamma) \cup \Lambda \models^{\textrm{T}\Sigma} \phi$
+      \item[] ανν $\Gamma \cup \Lambda \models^{\textrm{T}\Sigma} (\gamma \rightarrow \phi)$
+      \item[] ανν $\Gamma \vdash (\gamma \rightarrow \phi)$
+    \end{itemize}
+  \end{block}
+\end{frame}
+\begin{frame}{Μεταθεώρημα Συναγωγής}
+  Αν $\Gamma ; \gamma \vdash \phi$ τότε $\Gamma \vdash (\gamma \rightarrow \phi)$.
+  \begin{block}{2η Απόδειξη}
+    Θα δείξουμε με επαγωγή ότι για κάθε $\phi$ θεώρημα του $\Gamma ; \gamma$, ο τύπος $(\gamma \rightarrow \phi)$ είναι επίσης θεώρημα του $\Gamma$
+    \begin{itemize}
+      \item Περίπτωση 1: $\phi = \gamma$. Τότε προφανώς $\vdash (\gamma \rightarrow \phi)$
+      \item Περίπτωση 2: $\phi$ λογικό αξίωμα ή μέλος του $\Gamma$.
+        Τότε $\Gamma \vdash \phi$ και αφού $\phi \models^{\textrm{T}\Sigma} (\gamma \rightarrow \phi)$ τότε από τον κανόνα $T$ παίρνουμε $\Gamma \vdash (\gamma \rightarrow \phi)$.
+      \item Περίπτωση 3: $\phi$ είναι από Modus Ponens στις $\psi$ και $(\psi \rightarrow \phi)$.\\
+        Από επαγωγική υπόθεση $\Gamma \vdash (\gamma \rightarrow \psi)$ και $\Gamma \vdash (\gamma \rightarrow (\psi \rightarrow \phi))$.\\
+        Τέλος, εφόσον $\{\gamma \rightarrow \psi, \gamma \rightarrow (\psi \rightarrow \phi)\} \models^{\textrm{T}\Sigma} \gamma \rightarrow \phi$ τότε από τον κανόνα $T$ παίρνουμε $\Gamma \vdash (\gamma \rightarrow \phi)$
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\subsection{Μεταθεώρημα Αντιθετοαναστροφής}
+
+\begin{frame}{Μεταθεώρημα Αντιθετοαναστροφής}
+  $\Gamma ; \phi \vdash \neg\psi$ ανν $\Gamma ; \psi \vdash \neg\phi$
+  \begin{block}{Απόδειξη}
+    \begin{itemize}
+      \item[] $\Gamma ; \phi \vdash \neg\psi$ ανν $\Gamma \vdash \phi \rightarrow \neg\psi$ από το Μεταθεώρημα Συναγωγής
+      \item[] ανν $\Gamma \vdash \psi \rightarrow \neg\phi$ από τον κανόνα $T$, αφού $\{\phi \rightarrow \neg\psi\} \models^{\textrm{T}\Sigma} (\psi \rightarrow \neg\phi)$
+      \item[] ανν $\Gamma ; \psi \vdash \neg\phi$ από Modus Ponens
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\subsection{Μεταθεώρημα εις άτοπον απαγωγής}
+
+\begin{frame}{Μεταθεώρημα εις άτοπον απαγωγής}
+  \begin{block}{Ορισμός}
+    Ένα σύνολο από τύπους $\Sigma$ θα λέγεται \textit{αντιφατικό} ανν για κάποιο τύπο $\beta$  ισχύει ότι $\Sigma \vdash \beta$ και $\Sigma \vdash \neg\beta$
+  \end{block}
+  
+  \begin{block}{Μεταθεώρημα εις άτοπον απαγωγής}
+    Αν $\Gamma ; \phi$ είναι αντιφατικό τότε $\Gamma \vdash \neg\phi$.
+  \end{block}
+  
+  \begin{block}{Απόδειξη}
+    Αφού $\Gamma ; \phi$ αντιφατικό τότε υπάρχει τύπος $\beta$ τέτοιος ώστε $\Sigma \vdash \beta$ και $\Sigma \vdash \neg\beta$.\\
+    Απο Μεταθεώρημα Συναγωγής παίρνουμε $\Gamma \vdash (\phi \rightarrow \beta)$ και $\Gamma \vdash (\phi \rightarrow \neg\beta)$\\
+    Επίσης $\{\phi \rightarrow \beta, \phi \rightarrow \neg\beta\} \models^{\textrm{T}\Sigma} \neg\phi$ και άρα από τον κανόνα $T$ παίρνουμε $\Gamma \vdash \neg\phi$.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Παράδειγμα}
+  \begin{block}{}
+    Θα δείξουμε ότι $\vdash \exists x \forall y \phi \rightarrow \forall y \exists x \phi$.
+    \begin{itemize}
+      \item[] από Μεταθεώρημα Συναγωγής, αρκεί ν.δ.ο. $\exists x \forall y \phi \vdash \forall y \exists x \phi$
+      \item[] από Μεταθεώρημα Γενίκευσης, αρκεί ν.δ.ο. $\exists x \forall y \phi \vdash \exists x \phi$
+      \item[] ισοδύναμα, αρκεί ν.δ.ο. $\neg\forall x \neg\forall y \phi \vdash \neg\forall x \neg\phi$
+      \item[] από το Μεταθεώρημα Αντιθετοαναστροφής, αρκεί ν.δ.ο. $\forall x \neg\phi \vdash \forall x \neg\forall y \phi$
+      \item[] από το Μεταθεώρημα Γενίκευσης, αρκεί ν.δ.ο. $\forall x \neg\phi \vdash \neg\forall y \phi$
+      \item[] από το Μεταθεώρημα της εις άτοπον απαγωγής, αρκεί ν.δ.ο. το $\{\forall x \neg\phi, \forall y \phi\}$ είναι αντιφατικό
+      \begin{itemize}
+        \item $\forall x \neg\phi \vdash \neg\phi$ από το Αξίωμα 2 και Modus Ponens
+        \item $\forall y \phi \vdash \phi$ για τον ίδιο λόγο
+      \end{itemize}
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\section{Στρατηγικές Τυπικών Αποδείξεων και Παραδείγματα}
+
+\begin{frame}{Στρατηγικές Τυπικών Αποδείξεων}
+  \begin{block}{}
+    Θα δούμε στρατηγικές για να κατασκευάζουμε τυπικές αποδείξεις προτάσεων.
+  \end{block}
+  \begin{block}{}
+    Αν ένας τύπος $\phi$ είναι της μορφής
+    \begin{itemize}
+      \item $(\psi \rightarrow \theta)$, τότε αρκεί ν.δ.ο. $\Gamma ; \psi \vdash \theta$
+      \item $\forall x \psi$
+        \begin{itemize}
+          \item Αν η $x$ δεν εμφανίζεται ελεύθερη στον $\psi$ τότε αρκεί ν.δ.ο. $\Gamma \vdash \psi$
+          \item Διαφορετικά, θα υπάρχει πάντα μια μεταβλητή $y$ τέτοια ώστε $\Gamma \vdash \forall y \psi_y^x$ και $\forall y \psi_y^x \vdash \forall x \psi$
+        \end{itemize}
+      \item άρνησης ενός τύπου της μορφής
+        \begin{itemize}
+          \item $\neg(\psi \rightarrow \theta)$, τότε αρκεί ν.δ.ο. $\Gamma \vdash \psi$ και $\Gamma \vdash \neg\theta$
+          \item $\neg\neg\psi$, τότε αρκεί ν.δ.ο. $\Gamma \vdash \psi$
+          \item $\neg\forall x \; \psi$, τότε αρκεί ν.δ.ο. $\Gamma \vdash \neg\psi_t^x$ όπου $t$ όρος.
+            \begin{itemize}
+              \item Όχι πάντα δυνατό, πχ. $\Gamma = \emptyset, \psi = \neg(Px \rightarrow \forall y Py)$.
+          \item (Στο παραπάνω έχουμε $\neg\forall x \; \psi = \exists x (Px \rightarrow \forall y Py)$).
+            \end{itemize}
+        \end{itemize}
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Παράδειγμα 1}
+  \begin{block}{}
+    Αν η $x$ δεν εμφανίζεται ελεύθερη στον $\alpha$ τότε
+    \[
+      \vdash (\alpha \rightarrow \forall x \beta) \leftrightarrow \forall x (\alpha \rightarrow \beta)
+    \]
+    Για να το αποδείξω αρκεί ν.δ.ο. (από κανόνα $T$)
+    \[
+      \vdash (\alpha \rightarrow \forall x \beta) \rightarrow \forall x (\alpha \rightarrow \beta)
+    \]
+    και
+    \[
+      \vdash \forall x (\alpha \rightarrow \beta) \rightarrow (\alpha \rightarrow \forall x \beta)
+    \]
+  \end{block}
+\end{frame}
+
+\begin{frame}{Παράδειγμα 1}
+  \begin{block}{}
+    \[
+      \vdash (\alpha \rightarrow \forall x \beta) \rightarrow \forall x (\alpha \rightarrow \beta)
+    \]
+    Για την πρώτη περίπτωση, αρκεί ν.δ.ο.
+    \begin{itemize}
+      \item $\{\alpha \rightarrow \forall x \beta\} \vdash \forall x (\alpha \rightarrow \beta)$ (Μεταθεώρημα Συναγωγής)
+      \item $\{\alpha \rightarrow \forall x \beta\} \vdash (\alpha \rightarrow \beta)$ (Μεταθεώρημα Γενίκευσης)
+      \item $\{\alpha \rightarrow \forall x \beta, \alpha\} \vdash \beta$ (Μεταθεώρημα Συναγωγής)
+    \end{itemize}
+    Το οποίο ισχύει αφού $\{\alpha \rightarrow \forall x \beta, \alpha\} \vdash \forall x \beta$ (MP)\\
+    και επίσης $(\forall x \beta \rightarrow \beta)$ είναι αξίωμα.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Παράδειγμα 1}
+  \begin{block}{}
+    \[
+      \vdash \forall x (\alpha \rightarrow \beta) \rightarrow (\alpha \rightarrow \forall x \beta)
+    \]
+    Για τη δεύτερη περίπτωση, αρκεί ν.δ.ο.
+    \begin{itemize}
+      \item $\{\forall x (\alpha \rightarrow \beta)\} \vdash (\alpha \rightarrow \forall x \beta)$ (Μεταθεώρημα Συναγωγής)
+      \item $\{\forall x (\alpha \rightarrow \beta), \alpha\} \vdash \forall x \beta$ (Μεταθεώρημα Συναγωγής)
+      \item $\{\forall x (\alpha \rightarrow \beta), \alpha\} \vdash \beta$ (Μεταθεώρημα Γενίκευσης)
+    \end{itemize}
+    το οποίο ισχύει αφού $\forall x (\alpha \rightarrow \beta) \rightarrow (\alpha \rightarrow \beta)$ λογικό αξίωμα και άρα
+    \[
+      \{\forall x (\alpha \rightarrow \beta), \alpha\} \vdash (\alpha \rightarrow \beta)
+    \]
+    και με άλλο ένα Modus Ponens παίρνουμε το ζητούμενο.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Συντομογραφίες (συμβολισμός)}
+  \begin{block}{}
+    Οι τύποι θα τοποθετούνται σε μια αριθμημένη λίστα, ο καθένας με μια αιτιολογήση ως προς το πώς προέκυψε
+    \begin{itemize}
+      \item Αξ 1: Λογικό Αξίωμα 1
+      \item $1,2$·$T$: κανόνας $T$ στους τύπους των γραμμών $1,2$
+      \item $1,2$·MP: Μodus Ponens στους τύπους των γραμμών $1,2$
+      \item $1$·γεν: Μεταθεώρημα Γενίκευσης στον τύπο της γραμμής $1$
+      \item $1$·γεν$^2$: Μεταθεώρημα Γενίκευσης 2 φορές στον τύπο της γραμμής $1$
+      \item $1$·συναγ: Μεταθεώρημα Συναγωγής στον τύπο της γραμμής $1$
+      \item $1$·ΑΣΑ: Μεταθεώρημα Απαγωγής Σε Άτοπο στον τύπο της γραμμής $1$
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Παράδειγμα 2}
+  \begin{block}{}
+  Δείξτε ότι
+    \[
+      \forall x \forall y (x = y \rightarrow y = x)
+    \]
+  \end{block}
+  \begin{block}{Απόδειξη}
+    \begin{itemize}
+      \item[1.] $\vdash x = y \rightarrow x = x \rightarrow y = x$, Αξ 6
+      \item[2.] $\vdash x = x$, Αξ 5
+      \item[3.] $\vdash x = y \rightarrow y = x$, $1,2;T$
+      \item[4.] $\vdash \forall x \forall y (x = y \rightarrow y = x)$, $3;$γεν$^2$
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Παράδειγμα 3}
+  \begin{block}{}
+  Δείξτε ότι
+    \[
+      \vdash x = y \rightarrow \forall z \; Pxz \rightarrow \forall z \; Pyz
+    \]
+  \end{block}
+  \begin{block}{Απόδειξη}
+    \begin{itemize}
+      \item[1.] $\vdash x = y \rightarrow (Pxz \rightarrow Pyz)$, Αξ 6
+      \item[2.] $\vdash \forall z \; Pxz \rightarrow Pxz$, Αξ 2
+      \item[3.] $\vdash x = y \rightarrow (\forall z \; Pxz \rightarrow Pyz)$, $1,2;T$
+      \item[4.] $\{x = y, \forall z \; Pxz\} \vdash Pyz$, $3$·MP$^2$
+      \item[5.] $\{x = y, \forall z \; Pxz\} \vdash \forall z Pyz$, $4$·γεν$^2$
+      \item[6.] $\vdash x = y \rightarrow \forall z \; Pxz \rightarrow \forall z \; Pyz$, $5$·συναγ$^2$
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Παράδειγμα 4}
+  \begin{block}{}
+  Έστω $f$ μια διμελής συνάρτηση. Τότε
+    \[
+      \vdash \forall x_1 \forall x_2 \forall y_1 \forall y_2 (x_1 = y_1 \rightarrow x_2 = y_2 \rightarrow fx_1x_2 = fy_1y_2)
+    \]
+  \end{block}
+  \begin{block}{Απόδειξη}
+    \begin{itemize}
+      \item[1.] $\vdash x_1 = y_1 \rightarrow fx_1x_2 = fx_1x_2 \rightarrow fx_1x_2 = fy_1x_2$, Αξ 6
+      \item[2.] $\vdash x_2 = y_2 \rightarrow fx_1x_2 = fy_1x_2 \rightarrow fx_1x_2 = fy_1y_2$, Αξ 6
+      \item[3.] $\vdash fx_1x_2 = fx_1x_2$, Αξ 5
+      \item[4.] $\vdash (x_1 = y_1 \rightarrow x_2 = y_2 \rightarrow fx_1x_2 = fy_1y_2)$, $1,2,3$·$T$
+      \item[5.] $\vdash \forall x_1 \forall x_2 \forall y_1 \forall y_2 (x_1 = y_1 \rightarrow x_2 = y_2 \rightarrow fx_1x_2 = fy_1y_2)$, $1,2,3$·γεν$^4$
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Μεταθεώρημα Γενίκευσης Σταθερών}
+  \begin{block}{}
+    Έστω $\Gamma \vdash \phi$ και $c$ μια σταθερά που δεν εμφανίζεται στο $\Gamma$. Τότε υπάρχει μεταβλητή $y$ που δεν εμφανίζεται στον $\phi$ τέτοια ώστε $\Gamma \vdash \forall y \; \phi_y^c$.\\
+    Επιπλέον, υπάρχει τυπική απόδειξη του $\forall y \; \phi_y^c$ από το $\Gamma$ στην οποία η $c$ δεν εμφανίζεται.
+  \end{block}
+  \begin{block}{Απόδειξη}
+    Έστω $\langle \alpha_0, \ldots, \alpha_n \rangle$ τυπική απόδειξη του $\phi$ από το $\Gamma$. (άρα $\alpha_n= \phi$)\\
+    Έστω $y$ μεταβλητή που δεν εμφανίζεται σε κανένα από τα $\alpha_i$.\\
+    Ισχυριζόμαστε ότι η
+    \begin{equation}
+      \label{q-def}
+      \langle(\alpha_0)_y^c, \ldots, (\alpha_n)_y^c \rangle
+    \end{equation}
+    είναι τυπική απόδειξη της $\phi_y^c$ στο $\Gamma$
+  \end{block}
+\end{frame}
+
+\begin{frame}{Μεταθεώρημα Γενίκευσης Σταθερών}
+  \begin{block}{Απόδειξη (συν.)}
+  Θα χρησιμοιήσουμε επαγωγή
+  \begin{itemize}
+    \item Περίπτωση 1: $\alpha_k \in \Gamma$. Τότε $(\alpha_k)_y^c = \alpha_k$
+    \item Περίπτωση 2: $\alpha_k$ Λογικό Αξίωμα. Τότε και $(\alpha_k)_y^c$ Λογικό Αξίωμα
+    \item Περίπτωση 3: $\alpha_k$ είναι από MP στις $\alpha_i$ και $\alpha_j$, για $i,j \leq k$\\
+      και όπου $\alpha_j = (\alpha_i \rightarrow \alpha_k)$.\\
+      Βλέπουμε ότι $(\alpha_j)_y^c = (\alpha_i \rightarrow \alpha_k)_y^c = ((\alpha_i)_y^c \rightarrow (\alpha_k)_y^c)$.\\
+      Η $(\alpha_k)_y^c$ προκύπτει από MP στις $(\alpha_i)_y^c$ και $(\alpha_j)_y^c$.
+  \end{itemize}
+  Άρα η \eqref{q-def} είναι τυπική απόδειξη της $\phi_y^c$.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Μεταθεώρημα Γενίκευσης Σταθερών}
+  \begin{block}{Απόδειξη (συν.)}
+  \end{block}
+  \begin{block}{}
+    Έστω $\Phi$ το (πεπερασμένο) υποσύνολο του $\Gamma$ το οποίο χρησιμοποιήθηκε στην \eqref{q-def}. Τότε η \eqref{q-def} είναι τυπική απόδειξη της $\phi_y^c$ από το $\Phi$ στο οποίο η $y$ δεν εμφανίζεται. Από το Μεταθεώρημα Γενίκευσης παίρνουμε $\Phi \vdash \forall y \; \phi_y^c$.
+  \end{block}
+  \begin{block}{}
+  Επιπλέον, υπάρχει τυπική απόδειξη της $\forall y \; \phi_y^c$ από το $\Phi$ όπου η $c$ δεν εμφανίζεται, διότι στην απόδειξη του Μεταθεωρήματος Γενίκευσης δεν εισάγαμε κάποιο νέο σύμβολο.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Πόρισμα 1}
+  \begin{block}{}
+    Έστω $\Gamma \vdash \phi_c^x$ όπου η $c$ δεν εμφανίζεται στο $\Gamma$ ή στον $\phi$.\\
+    Τότε $\Gamma \vdash \forall x \; \phi$ και υπάρχει τυπική απόδειξη από το $\Gamma$ όπου η $c$ δεν εμφανίζεται.
+  \end{block}
+  \begin{block}{Απόδειξη}
+    Εφόσον $\Gamma \vdash \phi_c^x$, από το Μεταθεώρημα Γενίκευσης Σταθερών παίρνουμε $\Gamma \vdash \forall y \; (\phi_c^x)_y^c$. Αλλά αφού η $c$ δεν εμφανίζεται στον $\phi$ τότε
+    \[
+      (\phi_c^x)_y^c = \phi_y^x
+    \]
+    Άρα αρκεί ν.δ.ο. $\forall y \; \phi_y^x \vdash \forall x \; \phi$.\\
+    Από το Λογικό Αξίωμα 3 παίρνουμε $\forall y \; \phi_y^x \rightarrow (\phi_y^x)_x^y$.\\
+    Όμως $(\phi_y^x)_x^y = \phi$ και άρα παίρνουμε το ζητούμενο.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Πόρισμα 2 (Κανόνας EI)}
+  \begin{block}{}
+    Έστω σταθερά $c$ που δεν εμφανίζεται στους $\phi, \psi$ ή στο $\Gamma$ και ότι $\Gamma ; \phi_c^x \vdash \psi$.\\
+    Τότε $\Gamma ; \exists x \; \phi \vdash \psi$ και υπάρχει τυπική απόδειξη της $\psi$ από το $\Gamma$ όπου η $c$ δεν εμφανίζεται.
+  \end{block}
+  \begin{block}{Απόδειξη}
+    Από το Μεταθεώρημα Αντιθετοαναστροφής παίρνουμε $\Gamma ; \neg\psi \vdash \neg\phi_c^x$.\\
+    Από το Πόρισμα 1 παίρνουμε $\Gamma ; \neg\psi \vdash \forall x \; \neg\phi$\\
+    Από το Μεταθεώρημα Αντιθετοαναστροφής παίρνουμε $\Gamma ; \neg(\forall x \; \neg\phi) \vdash \psi$ από το οποίο και καταλήγουμε στο $\Gamma ; \exists x \; \phi \vdash \psi$.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Παράδειγμα 5}
+  \begin{block}{}
+    Δείξτε ότι
+    \[
+      \vdash \exists x \forall y \; \phi \rightarrow \forall y \exists x \; \phi
+    \]
+  \end{block}
+  \begin{block}{Απόδειξη}
+    Αρκεί ν.δ.ο.
+    \begin{itemize}
+      \item $\exists x \forall y \; \phi \vdash \forall y \exists x \; \phi$ (Μεταθεώρημα Συναγωγής)
+      \item $\forall y \; \phi_c^x \vdash \forall y \exists x \; \phi$ (Κανόνας EI)
+      \item $\forall y \; \phi_c^x \vdash \exists x \; \phi$ (Μεταθεώρημα Γενίκευσης)
+      \item $\phi_c^x \vdash \exists x \; \phi$ (εφόσον $\forall y \; \phi_c^x \vdash \phi_c^x$)
+      \item $\forall x \; \neg\phi \vdash \neg\phi_c^x$ (Μεταθεώρημα Αντιθετοαναστροφής)
+    \end{itemize}
+    το οποίο και προκύπτει από Modus Ponens στον $(\forall x \; \neg\phi \rightarrow (\neg\phi)_c^x)$\\
+    (Λογικό Αξίωμα 2).
+  \end{block}
+\end{frame}
+
+\section{Αλφαβητικές Παραλλαγές}
+
+\begin{frame}{Μεταθεώρημα Ύπαρξης Αλφαβητικών Παραλλαγών}
+  \begin{block}{}
+    Έστω τύπος $\phi$, όρος $t$ και μεταβλητή $x$.\\
+    Τότε μπορούμε να βρούμε έναν τύπο $\phi^\prime$ που διαφέρει από τον $\phi$ μόνο στην επιλογή των ποσοδεικτών, τέτοιο ώστε
+    \begin{itemize}
+      \item[(a)] $\phi \vdash \phi^\prime$ και $\phi^\prime \vdash \phi$
+      \item[(b)] $t$ είναι αντικαταστάσιμος στον $\phi^\prime$
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Μεταθεώρημα Ύπαρξης Αλφαβητικών Variants}
+  \begin{block}{Απόδειξη}
+  %\end{block}
+  %\begin{block}{}
+    Σταθεροποιούμε τα $t,x$ και κατασκευάζουμε τον $\phi^\prime$ αναδρομικά:
+    \begin{itemize}
+      \item Αν $\phi$ ατομικός τύπος, τότε $\phi^\prime = \phi$
+      \item $(\neg\phi)^\prime = (\neg\phi^\prime)$
+      \item $(\phi \rightarrow \psi)^\prime = (\phi^\prime \rightarrow \psi^\prime)$
+    \end{itemize}
+    Για την περίπτωση $(\forall y \; \phi)^\prime$ επιλέγουμε μεταβλητή $z$ που δεν εμφανίζεται στα $\phi^\prime, t, x$. Ορίζουμε $(\forall y \; \phi)^\prime = \forall z (\phi^\prime)_z^y$.\\
+    Από επαγωγική υπόθεση έχουμε ότι $t$ αντικαταστάσιμος για τη $x$ στον $\phi^\prime$ και αφού $x \neq z$ τότε $t$ αντικαταστάσιμος για τη $x$ στον $(\phi^\prime)_z^y$. Άρα το (b) ισχύει.
+  \end{block}
+  \begin{block}{}
+    Μένει ν.δ.ο. ισχύει και το (a) για την περίπτωση $(\forall y \; \phi)^\prime$, δηλαδή\\
+    $\forall y \; \phi \vdash \forall z (\phi^\prime)_z^y$ και $\forall z (\phi^\prime)_z^y \vdash \forall y \; \phi$.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Μεταθεώρημα Ύπαρξης Αλφαβητικών Variants}
+  \begin{block}{Απόδειξη (συν.)}
+    Για το πρώτο έχουμε
+    \begin{itemize}
+      \item[1.] $\phi \vdash \phi^\prime$ από επαγωγική υπόθεση και άρα $\forall y \; \phi \vdash \forall y \; \phi^\prime$
+      \item[2.] $\forall y \; \phi^\prime \vdash (\phi^\prime)_z^y$ από Αξ 2 αφού η $z$ δεν εμφανίζεται στον $\phi^\prime$
+      \item[3.] $\forall y \; \phi^\prime \vdash \forall z (\phi^\prime)_z^y$ από το Μεταθεώρημα Γενίκευσης στον $2$
+      \item[4.] $\forall y \; \phi \vdash \forall z (\phi^\prime)_z^y$ από $1,3$
+    \end{itemize}
+    Για το δεύτερο έχουμε
+    \begin{itemize}
+      \item[1.] $\forall z (\phi^\prime)_z^y \vdash ((\phi^\prime)_z^y)_y^z$ από Αξ 2 ενώ επίσης $((\phi^\prime)_z^y)_y^z = \phi^\prime$
+      \item[2.] $\phi^\prime \vdash \phi$ από επαγωγική υπόθεση
+      \item[3.] $\forall z (\phi^\prime)_z^y \vdash \phi$ από $1,2$
+      \item[4.] $\forall z (\phi^\prime)_z^y \vdash \forall y \; \phi$ από Μεταθεώρημα Γενίκευσης στον $3$
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\section{Ισότητα}
+
+\begin{frame}{Ισότητα}
+  \begin{block}{}
+    Εδώ κάποιες ισότητες που θα χρειαστούμε αργότερα:
+    \begin{itemize}
+      \item Eq1: $\vdash \forall x \; x = x$
+      \item Eq2: $\vdash \forall x \forall y (x = y \rightarrow y = x)$
+      \item Eq3: $\vdash \forall x \forall y \forall z (x = y \rightarrow y = z \rightarrow x = z)$
+      \item Eq4: $\vdash \forall x_1 \forall x_2 \forall y_1 \forall y_2 (x_1 = y_1 \rightarrow x_2 = y_2 \rightarrow Px_1x_2 = Py_1y_2)$
+        \begin{itemize}
+          \item $P$ διμελές κατηγορηματικό σύμβολο
+          \item ομοίως για $n$-μελή κατηγορηματικά σύμβολα
+        \end{itemize}
+      \item Eq5: $\vdash \forall x_1 \forall x_2 \forall y_1 \forall y_2 (x_1 = y_1 \rightarrow x_2 = y_2 \rightarrow fx_1x_2 = fy_1y_2)$
+        \begin{itemize}
+          \item $f$ διμελής συνάρτηση
+          \item ομοίως για $n$-μελείς συναρτήσεις
+        \end{itemize}
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\end{document}
