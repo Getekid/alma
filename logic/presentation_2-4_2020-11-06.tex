@@ -100,12 +100,12 @@
 
 \subsection{Μεταθεώρημα εις άτοπον απαγωγής}
 
-\begin{frame}{Μεταθεώρημα εις άτοπον απαγωγής}
+\begin{frame}{Μεταθεώρημα Απαγωγής σε άτοπο}
   \begin{block}{Ορισμός}
     Ένα σύνολο από τύπους $\Sigma$ θα λέγεται \textit{αντιφατικό} ανν για κάποιο τύπο $\beta$  ισχύει ότι $\Sigma \vdash \beta$ και $\Sigma \vdash \neg\beta$
   \end{block}
   
-  \begin{block}{Μεταθεώρημα εις άτοπον απαγωγής}
+  \begin{block}{Μεταθεώρημα Απαγωγής σε άτοπο}
     Αν $\Gamma ; \phi$ είναι αντιφατικό τότε $\Gamma \vdash \neg\phi$.
   \end{block}
   
@@ -125,7 +125,7 @@
       \item[] ισοδύναμα, αρκεί ν.δ.ο. $\neg\forall x \neg\forall y \phi \vdash \neg\forall x \neg\phi$
       \item[] από το Μεταθεώρημα Αντιθετοαναστροφής, αρκεί ν.δ.ο. $\forall x \neg\phi \vdash \forall x \neg\forall y \phi$
       \item[] από το Μεταθεώρημα Γενίκευσης, αρκεί ν.δ.ο. $\forall x \neg\phi \vdash \neg\forall y \phi$
-      \item[] από το Μεταθεώρημα της εις άτοπον απαγωγής, αρκεί ν.δ.ο. το $\{\forall x \neg\phi, \forall y \phi\}$ είναι αντιφατικό
+      \item[] από το Μεταθεώρημα Απαγωγής σε άτοπο, αρκεί ν.δ.ο. το $\{\forall x \neg\phi, \forall y \phi\}$ είναι αντιφατικό
       \begin{itemize}
         \item $\forall x \neg\phi \vdash \neg\phi$ από το Αξίωμα 2 και Modus Ponens
         \item $\forall y \phi \vdash \phi$ για τον ίδιο λόγο
@@ -155,11 +155,29 @@
           \item $\neg\neg\psi$, τότε αρκεί ν.δ.ο. $\Gamma \vdash \psi$
           \item $\neg\forall x \; \psi$, τότε αρκεί ν.δ.ο. $\Gamma \vdash \neg\psi_t^x$ όπου $t$ όρος.
             \begin{itemize}
-              \item Όχι πάντα δυνατό, πχ. $\Gamma = \emptyset, \psi = \neg(Px \rightarrow \forall y Py)$.
-          \item (Στο παραπάνω έχουμε $\neg\forall x \; \psi = \exists x (Px \rightarrow \forall y Py)$).
+              \item Όχι πάντα δυνατό, πχ. $\Gamma = \emptyset, \psi = \neg(Px \rightarrow \forall y Py)$.\\
+              (Άρα $\phi = \neg\forall x \; \psi = \exists x (Px \rightarrow \forall y Py)$)
             \end{itemize}
         \end{itemize}
     \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}{Αντιπαράδειγμα $\neg\forall x \; \psi$ (Drinker's principle)}
+  \begin{block}{}
+  Δείξτε ότι
+  \[
+    \vdash \exists x (Px \rightarrow \forall y Py)
+  \]
+  \end{block}
+  \begin{block}{Απόδειξη}
+    \begin{enumerate}
+      \item $\forall x Px \vdash \exists x (Px \rightarrow \forall y Py)$, $T$ αφού $\forall x Px \models^{\textrm{T}\Sigma} \exists x (Px \rightarrow \forall y Py)$
+      \item $\neg\forall x Px \vdash \exists x (Px \rightarrow \forall y Py)$, $T$ αφού $\neg\forall x Px \models^{\textrm{T}\Sigma} \exists x (Px \rightarrow \forall y Py)$
+      \item $\neg\exists x (Px \rightarrow \forall y Py) \vdash \neg\forall x Px$ (Μεταθεώρημα Αντ. στο $1$)
+      \item $\neg\exists x (Px \rightarrow \forall y Py) \vdash \forall x Px$ (Μεταθεώρημα Αντ. στο $2$)
+    \end{enumerate}
+    Άρα $\{\neg\exists x (Px \rightarrow \forall y Py)\}$ αντιφατικό λόγω $3,4$ και από το Μεταθεώρημα της Απαγωγής σε άτοπο παίρνουμε το ζητούμενο.
   \end{block}
 \end{frame}
 
@@ -238,12 +256,12 @@
     \]
   \end{block}
   \begin{block}{Απόδειξη}
-    \begin{itemize}
-      \item[1.] $\vdash x = y \rightarrow x = x \rightarrow y = x$, Αξ 6
-      \item[2.] $\vdash x = x$, Αξ 5
-      \item[3.] $\vdash x = y \rightarrow y = x$, $1,2;T$
-      \item[4.] $\vdash \forall x \forall y (x = y \rightarrow y = x)$, $3;$γεν$^2$
-    \end{itemize}
+    \begin{enumerate}
+      \item $\vdash x = y \rightarrow x = x \rightarrow y = x$, Αξ 6
+      \item $\vdash x = x$, Αξ 5
+      \item $\vdash x = y \rightarrow y = x$, $1,2;T$
+      \item $\vdash \forall x \forall y (x = y \rightarrow y = x)$, $3;$γεν$^2$
+    \end{enumerate}
   \end{block}
 \end{frame}
 
@@ -255,14 +273,14 @@
     \]
   \end{block}
   \begin{block}{Απόδειξη}
-    \begin{itemize}
-      \item[1.] $\vdash x = y \rightarrow (Pxz \rightarrow Pyz)$, Αξ 6
-      \item[2.] $\vdash \forall z \; Pxz \rightarrow Pxz$, Αξ 2
-      \item[3.] $\vdash x = y \rightarrow (\forall z \; Pxz \rightarrow Pyz)$, $1,2;T$
-      \item[4.] $\{x = y, \forall z \; Pxz\} \vdash Pyz$, $3$·MP$^2$
-      \item[5.] $\{x = y, \forall z \; Pxz\} \vdash \forall z Pyz$, $4$·γεν$^2$
-      \item[6.] $\vdash x = y \rightarrow \forall z \; Pxz \rightarrow \forall z \; Pyz$, $5$·συναγ$^2$
-    \end{itemize}
+    \begin{enumerate}
+      \item $\vdash x = y \rightarrow (Pxz \rightarrow Pyz)$, Αξ 6
+      \item $\vdash \forall z \; Pxz \rightarrow Pxz$, Αξ 2
+      \item $\vdash x = y \rightarrow (\forall z \; Pxz \rightarrow Pyz)$, $1,2;T$
+      \item $\{x = y, \forall z \; Pxz\} \vdash Pyz$, $3$·MP$^2$
+      \item $\{x = y, \forall z \; Pxz\} \vdash \forall z Pyz$, $4$·γεν$^2$
+      \item $\vdash x = y \rightarrow \forall z \; Pxz \rightarrow \forall z \; Pyz$, $5$·συναγ$^2$
+    \end{enumerate}
   \end{block}
 \end{frame}
 
@@ -274,13 +292,13 @@
     \]
   \end{block}
   \begin{block}{Απόδειξη}
-    \begin{itemize}
-      \item[1.] $\vdash x_1 = y_1 \rightarrow fx_1x_2 = fx_1x_2 \rightarrow fx_1x_2 = fy_1x_2$, Αξ 6
-      \item[2.] $\vdash x_2 = y_2 \rightarrow fx_1x_2 = fy_1x_2 \rightarrow fx_1x_2 = fy_1y_2$, Αξ 6
-      \item[3.] $\vdash fx_1x_2 = fx_1x_2$, Αξ 5
-      \item[4.] $\vdash (x_1 = y_1 \rightarrow x_2 = y_2 \rightarrow fx_1x_2 = fy_1y_2)$, $1,2,3$·$T$
-      \item[5.] $\vdash \forall x_1 \forall x_2 \forall y_1 \forall y_2 (x_1 = y_1 \rightarrow x_2 = y_2 \rightarrow fx_1x_2 = fy_1y_2)$, $1,2,3$·γεν$^4$
-    \end{itemize}
+    \begin{enumerate}
+      \item $\vdash x_1 = y_1 \rightarrow fx_1x_2 = fx_1x_2 \rightarrow fx_1x_2 = fy_1x_2$, Αξ 6
+      \item $\vdash x_2 = y_2 \rightarrow fx_1x_2 = fy_1x_2 \rightarrow fx_1x_2 = fy_1y_2$, Αξ 6
+      \item $\vdash fx_1x_2 = fx_1x_2$, Αξ 5
+      \item $\vdash (x_1 = y_1 \rightarrow x_2 = y_2 \rightarrow fx_1x_2 = fy_1y_2)$, $1,2,3$·$T$
+      \item $\vdash \forall x_1 \forall x_2 \forall y_1 \forall y_2 (x_1 = y_1 \rightarrow x_2 = y_2 \rightarrow fx_1x_2 = fy_1y_2)$, $1,2,3$·γεν$^4$
+    \end{enumerate}
   \end{block}
 \end{frame}
 
@@ -373,80 +391,6 @@
     \end{itemize}
     το οποίο και προκύπτει από Modus Ponens στον $(\forall x \; \neg\phi \rightarrow (\neg\phi)_c^x)$\\
     (Λογικό Αξίωμα 2).
-  \end{block}
-\end{frame}
-
-\section{Αλφαβητικές Παραλλαγές}
-
-\begin{frame}{Μεταθεώρημα Ύπαρξης Αλφαβητικών Παραλλαγών}
-  \begin{block}{}
-    Έστω τύπος $\phi$, όρος $t$ και μεταβλητή $x$.\\
-    Τότε μπορούμε να βρούμε έναν τύπο $\phi^\prime$ που διαφέρει από τον $\phi$ μόνο στην επιλογή των ποσοδεικτών, τέτοιο ώστε
-    \begin{itemize}
-      \item[(a)] $\phi \vdash \phi^\prime$ και $\phi^\prime \vdash \phi$
-      \item[(b)] $t$ είναι αντικαταστάσιμος στον $\phi^\prime$
-    \end{itemize}
-  \end{block}
-\end{frame}
-
-\begin{frame}{Μεταθεώρημα Ύπαρξης Αλφαβητικών Variants}
-  \begin{block}{Απόδειξη}
-  %\end{block}
-  %\begin{block}{}
-    Σταθεροποιούμε τα $t,x$ και κατασκευάζουμε τον $\phi^\prime$ αναδρομικά:
-    \begin{itemize}
-      \item Αν $\phi$ ατομικός τύπος, τότε $\phi^\prime = \phi$
-      \item $(\neg\phi)^\prime = (\neg\phi^\prime)$
-      \item $(\phi \rightarrow \psi)^\prime = (\phi^\prime \rightarrow \psi^\prime)$
-    \end{itemize}
-    Για την περίπτωση $(\forall y \; \phi)^\prime$ επιλέγουμε μεταβλητή $z$ που δεν εμφανίζεται στα $\phi^\prime, t, x$. Ορίζουμε $(\forall y \; \phi)^\prime = \forall z (\phi^\prime)_z^y$.\\
-    Από επαγωγική υπόθεση έχουμε ότι $t$ αντικαταστάσιμος για τη $x$ στον $\phi^\prime$ και αφού $x \neq z$ τότε $t$ αντικαταστάσιμος για τη $x$ στον $(\phi^\prime)_z^y$. Άρα το (b) ισχύει.
-  \end{block}
-  \begin{block}{}
-    Μένει ν.δ.ο. ισχύει και το (a) για την περίπτωση $(\forall y \; \phi)^\prime$, δηλαδή\\
-    $\forall y \; \phi \vdash \forall z (\phi^\prime)_z^y$ και $\forall z (\phi^\prime)_z^y \vdash \forall y \; \phi$.
-  \end{block}
-\end{frame}
-
-\begin{frame}{Μεταθεώρημα Ύπαρξης Αλφαβητικών Variants}
-  \begin{block}{Απόδειξη (συν.)}
-    Για το πρώτο έχουμε
-    \begin{itemize}
-      \item[1.] $\phi \vdash \phi^\prime$ από επαγωγική υπόθεση και άρα $\forall y \; \phi \vdash \forall y \; \phi^\prime$
-      \item[2.] $\forall y \; \phi^\prime \vdash (\phi^\prime)_z^y$ από Αξ 2 αφού η $z$ δεν εμφανίζεται στον $\phi^\prime$
-      \item[3.] $\forall y \; \phi^\prime \vdash \forall z (\phi^\prime)_z^y$ από το Μεταθεώρημα Γενίκευσης στον $2$
-      \item[4.] $\forall y \; \phi \vdash \forall z (\phi^\prime)_z^y$ από $1,3$
-    \end{itemize}
-    Για το δεύτερο έχουμε
-    \begin{itemize}
-      \item[1.] $\forall z (\phi^\prime)_z^y \vdash ((\phi^\prime)_z^y)_y^z$ από Αξ 2 ενώ επίσης $((\phi^\prime)_z^y)_y^z = \phi^\prime$
-      \item[2.] $\phi^\prime \vdash \phi$ από επαγωγική υπόθεση
-      \item[3.] $\forall z (\phi^\prime)_z^y \vdash \phi$ από $1,2$
-      \item[4.] $\forall z (\phi^\prime)_z^y \vdash \forall y \; \phi$ από Μεταθεώρημα Γενίκευσης στον $3$
-    \end{itemize}
-  \end{block}
-\end{frame}
-
-\section{Ισότητα}
-
-\begin{frame}{Ισότητα}
-  \begin{block}{}
-    Εδώ κάποιες ισότητες που θα χρειαστούμε αργότερα:
-    \begin{itemize}
-      \item Eq1: $\vdash \forall x \; x = x$
-      \item Eq2: $\vdash \forall x \forall y (x = y \rightarrow y = x)$
-      \item Eq3: $\vdash \forall x \forall y \forall z (x = y \rightarrow y = z \rightarrow x = z)$
-      \item Eq4: $\vdash \forall x_1 \forall x_2 \forall y_1 \forall y_2 (x_1 = y_1 \rightarrow x_2 = y_2 \rightarrow Px_1x_2 = Py_1y_2)$
-        \begin{itemize}
-          \item $P$ διμελές κατηγορηματικό σύμβολο
-          \item ομοίως για $n$-μελή κατηγορηματικά σύμβολα
-        \end{itemize}
-      \item Eq5: $\vdash \forall x_1 \forall x_2 \forall y_1 \forall y_2 (x_1 = y_1 \rightarrow x_2 = y_2 \rightarrow fx_1x_2 = fy_1y_2)$
-        \begin{itemize}
-          \item $f$ διμελής συνάρτηση
-          \item ομοίως για $n$-μελείς συναρτήσεις
-        \end{itemize}
-    \end{itemize}
   \end{block}
 \end{frame}
 
