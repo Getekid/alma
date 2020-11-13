@@ -28,6 +28,7 @@
 \graphicspath{ {./figures/} }
 \usepackage{hyperref,xcolor}
 \newcommand{\link}[2]{\href{#1}{\textcolor{blue}{\underline{#2}}}}
+\usepackage{soul}
 
 % Main document
 \begin{document}
@@ -163,21 +164,32 @@
   \end{block}
 \end{frame}
 
-\begin{frame}{Αντιπαράδειγμα $\neg\forall x \; \psi$ (Drinker's principle)}
+\begin{frame}{Αντιπαράδειγμα $\neg\forall x \psi$ (Drinker's principle)}
   \begin{block}{}
   Δείξτε ότι
   \[
     \vdash \exists x (Px \rightarrow \forall y Py)
   \]
   \end{block}
-  \begin{block}{Απόδειξη}
+  \begin{block}{Απόδειξη (ελλειπής)}
     \begin{enumerate}
-      \item $\forall x Px \vdash \exists x (Px \rightarrow \forall y Py)$, $T$ αφού $\forall x Px \models^{\textrm{T}\Sigma} \exists x (Px \rightarrow \forall y Py)$
-      \item $\neg\forall x Px \vdash \exists x (Px \rightarrow \forall y Py)$, $T$ αφού $\neg\forall x Px \models^{\textrm{T}\Sigma} \exists x (Px \rightarrow \forall y Py)$
+      \item $\forall x Px \vdash \exists x (Px \rightarrow \forall y Py)$, \st{$T$ αφού $\forall x Px \models^{\textrm{T}\Sigma} \exists x (Px \rightarrow \forall y Py)$}
+      \item $\neg\forall x Px \vdash \exists x (Px \rightarrow \forall y Py)$, \st{$T$ αφού $\neg\forall x Px \models^{\textrm{T}\Sigma} \exists x (Px \rightarrow \forall y Py)$}
       \item $\neg\exists x (Px \rightarrow \forall y Py) \vdash \neg\forall x Px$ (Μεταθεώρημα Αντ. στο $1$)
       \item $\neg\exists x (Px \rightarrow \forall y Py) \vdash \forall x Px$ (Μεταθεώρημα Αντ. στο $2$)
     \end{enumerate}
     Άρα $\{\neg\exists x (Px \rightarrow \forall y Py)\}$ αντιφατικό λόγω $3,4$ και από το Μεταθεώρημα της Απαγωγής σε άτοπο παίρνουμε το ζητούμενο.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Αντιπαράδειγμα $\neg\forall x \psi$ (Drinker's principle)}
+  Τώρα θα δείξουμε ότι για κάθε όρο $t$
+  \[
+    \nvdash (Px \rightarrow \forall y Py)^x_t
+  \]
+  \begin{block}{Απόδειξη (μη φορμαλιστική)}
+    Έστω για έναν τυχαίο όρο $t$ ότι $\vdash (Px \rightarrow \forall y Py)_t^x$. Βλέπουμε ότι μπορούμε να θεωρήσουμε μια αυθαίρετη δομή $\mathfrak{A}$ (πχ. όπου $\neg Pt$ για κάθε $t$) στην οποία και θα έχουμε $\not\models_\mathfrak{A} (Px \rightarrow \forall y Py)_t^x$.\\
+    Άρα έχουμε ότι $\not\models (Px \rightarrow \forall y Py)_t^x$ και από το Μεταθεώρημα Αξιοπιστίας παίρνουμε το ζητούμενο.
   \end{block}
 \end{frame}
 
