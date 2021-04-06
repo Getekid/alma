@@ -1,0 +1,195 @@
+% -*- mode: LaTeX; coding: utf-8 -*-
+% Typeset with: XeLaTeX
+
+\documentclass[a4paper,11pt]{article}
+\usepackage{a4wide}
+
+% Greek fonts
+\RequirePackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+  % you may want to try: {Liberation Serif} or {Times New Roman}
+\setmainfont{FreeSerif}
+  % you may want to try: {Liberation Sans} or {Arial}
+\setsansfont[Scale=MatchLowercase]{FreeSans}
+  % you may want to try: {FreeMono} or {Courier New}
+\setmonofont[Scale=MatchLowercase]{FreeMono}
+
+\usepackage{amsmath}
+
+\newcommand{\indeq}[1]{\stackrel{\text{#1}}{=}}
+% Commands for wrapping properly common expressions.
+\newcommand{\Exp}{\mathrm{Exp}}
+\newcommand{\Expect}{{\rm I\kern-.3em E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+
+% Main document
+\begin{document}
+\title{Στοχαστικές Ανελίξεις - 1ο πακέτο Ασκήσεων}
+\author{Θωμάς Παππάς}
+\date{}
+\maketitle
+
+\section*{Άσκηση 1}
+
+\begin{flalign*}
+  P(Z \leq z) &= 1-P(Z>z) &\\
+    &= 1-P(min\{X_1+X_2,X_3\}>z)\\
+    &= 1-P(X_1+X_2>z,X_3>z)\\
+    &\indeq{ανεξ.} 1-P(X_1+X_2>z)P(X_3>z)
+\end{flalign*}
+Για να υπολογίσω το $P(X_1+X_2>z)$ θα δεσμεύσω ως προς $X_1$.
+\begin{flalign*}
+  P(X_1+X_2>z) &= \int_0^\infty P(X_1+X_2>z | X_1=x) \cdot P(X_1=x)dx &\\
+    &= \int_0^\infty P(X_2+x \leq z)) f_{X_1}(x)dx\\
+    &= \int_0^\infty (1-P(X_2 \leq z-x)) \lambda_1 e^{-\lambda_1x}dx\\
+    &= \int_0^\infty e^{-\lambda_2(z-x)} \lambda_1 e^{-\lambda_1x}dx
+    % We could calculate the integral
+    % = \lambda_1 \int_0^\infty e^{-(\lambda_2z+(\lambda_1-\lambda_2)x)}dx\\
+    %&= \lambda_1 e^{-\lambda_2z} \int_0^\infty e^{(\lambda_2-\lambda_1)x}dx
+    % = \frac{\lambda_1}{\lambda_2-\lambda_1} e^{-\lambda_2z} \left[e^{(\lambda_2-\lambda_1)x}\right]_0^\infty dx\\
+    %&= \frac{\lambda_1}{\lambda_2-\lambda_1} e^{-\lambda_2z}(0-1)
+    % = \frac{\lambda_1}{\lambda_1-\lambda_2} e^{-\lambda_2z}
+    % or use LST
+     = e^{-\lambda_2z} \int_0^\infty e^{-\lambda_2x} \lambda_1 e^{-\lambda_1x}dx\\
+    &= e^{-\lambda_2z} \widetilde{F}_{X_1}(-\lambda_2)
+     = e^{-\lambda_2z} \frac{\lambda_1}{\lambda_1-\lambda_2}
+\end{flalign*}
+Επίσης
+\[P(X_3>z) = 1-P(X_3 \leq z) = 1- (1-e^{-\lambda_3z}) = e^{-\lambda_3z}\]
+και άρα
+\[P(Z \leq z) = 1-\frac{\lambda_1}{\lambda_1-\lambda_2} e^{-(\lambda_2+\lambda_3)z}\]
+
+
+\section*{Άσκηση 2}
+
+Αν $Z$ τυχαία μεταβλητή που αναπαριστά το χρόνο ζωής της μηχανής τότε $Z \sim \Exp(\lambda)$ και $Z = X-Y$.
+Για να βρω την $\Expect[X]$ θα δεσμεύσω ως προς $Z \leq T$
+
+\begin{flalign*}
+  \Expect[X] &= \Expect[X|Z \leq T] \cdot P(Z \leq T) + \Expect[X|Z>T] \cdot P(Z>T) &\\
+    &= T (1-e^{-\lambda T}) + (T + \Expect[X]) e^{-\lambda T}\\
+    &= T - T e^{-\lambda T} + T e^{-\lambda T} + \Expect[X] e^{-\lambda T}\\
+  \Rightarrow \Expect[X] &= \frac{T}{1-e^{-\lambda T}}
+\end{flalign*}
+
+\begin{flushleft}
+	Για την $\Expect[Y]$ έχουμε
+\end{flushleft}
+\[\Expect[Y] = \Expect[X-Z] = \Expect[X]-\Expect[Z] \Rightarrow \Expect[X] = \frac{T}{1-e^{-\lambda T}} - \frac{1}{\lambda}\]
+
+
+\section*{Άσκηση 3}
+
+$X_1$: χρόνος ζωής 1ης μηχανής από σύστημα $A$, $X_1 \sim \Exp(\lambda)$\\
+$X_2$: χρόνος ζωής 2ης μηχανής από σύστημα $A$, $X_2 \sim \Exp(\lambda)$\\
+$Y$: χρόνος ζωής 1ης μηχανής από σύστημα $B$, $Y \sim \Exp(\mu)$
+\\[8pt]
+Για να βρω το $P(\max\{X_1,X_2\}<Y)$ θα δεσμεύσω ως προς $Y$ και μετά θα χρησιμοποιήσω την ανεξαρτησία των $X_1,X_2$.
+\begin{flalign*}
+  P(\max\{X_1,X_2\}<Y) &= P(X_1<Y,X_2<Y) &\\
+    &= \int_0^\infty P(X_1<Y,X_2<Y|Y=y) f_Y(y)dy\\
+    &= \int_0^\infty P(X_1<y,X_2<y) f_Y(y)dy
+     \indeq{ανεξ.} \int_0^\infty P(X_1<y \cdot P(X_2<y) f_Y(y)dy\\
+    &= \int_0^\infty (1-e^{-\lambda y})(1-e^{-\lambda y}) \mu e^{-\mu y} dy
+     = \int_0^\infty (1-e^{-\lambda y})^2 \mu e^{-\mu y} dy\\
+    &= \int_0^\infty (1-2e^{-\lambda y}+e^{-2\lambda y}) \mu e^{-\mu y} dy\\
+    &= \int_0^\infty \mu e^{-\mu y} dy - 2\int_0^\infty e^{-\lambda y} \mu e^{-\mu y} dy + \int_0^\infty e^{-2\lambda y} \mu e^{-\mu y} dy\\
+    &= 1-2\widetilde{F}_Y(\lambda)+\widetilde{F}_Y(2\lambda)\\
+  \Rightarrow P(\max\{X_1,X_2\}<Y) &=1-2\frac{\mu}{\mu+\lambda}+\frac{\mu}{\mu+2\lambda}
+\end{flalign*}
+
+
+\section*{Άσκηση 4}
+
+Για αρχή έχουμε
+\[P(N(t)=k|N(t+s)=k+m) = \frac{P(N(t)=k,N(t+s)=k+m)}{P(N(t+s)=k+m)}\]
+οπότε τώρα παίρνουμε
+\begin{flalign*}
+  P(N(t)=k,N(t+s)=k+m) &= P(N(t)=k,N(t+s)-k=m) &\\
+    &= P(N(t)=k,N(t+s)-N(t)=m)\\
+    &= P(N(t)=k,N(s)=m)\\
+    &\indeq{ανεξ. προσ.} P(N(t)=k)) \cdot P(N(s)=m)
+\end{flalign*}
+άρα
+
+\begin{flalign*}
+  P(N(t)=k|N(t+s)=k+m) &= \frac{P(N(t)=k) \cdot P(N(s)=m)}{P(N(t+s)=k+m} &\\
+    &= \frac{e^{-\lambda t}\frac{(\lambda t)^k}{k!} e^{-\lambda s}\frac{(\lambda s)^m}{m!}}{e^{-\lambda (t+s)}\frac{(\lambda (t+s))^{(k+m)}}{(k+m)!}}\\
+    &= \frac{(k+m)!}{k!m!} \frac{t^k s^m}{(t+s)^{k+m}}
+\end{flalign*}
+
+
+\section*{Άσκηση 5}
+
+\paragraph{α)}
+$A =$ ο επόμενος πελάτης που θα φτάσει να βρει όλους τους υπηρέτες απασχολημένους
+
+$X$: χρόνος άφιξης του επόμενου πελάτη, $X \sim \Exp(\lambda)$
+
+$Z_i$: χρόνος εξυπηρέτησης του i-οστού πελάτη, $Z_i \sim \Exp(\mu)$
+
+$Y$: χρόνος μέχρι την 1η εξυπηρέτηση
+\[Y = \min\{Z_1,Z_2,\dots,Z_s\} \sim \Exp(s\mu)\]
+\[P(A) = P(X<Y) = \frac{\lambda}{s\mu+\lambda}\]
+
+\paragraph{β)} $N =$ \# αφίξεων πριν την πρώτη εξυπηρέτηση
+\begin{flalign*}
+  P(N=n)&= ??? &\\
+    &= \left(\frac{\lambda}{\lambda+s\mu}\right)^n \frac{s\mu}{\lambda+s\mu}
+\end{flalign*}
+
+\paragraph{γ)} $Y \sim \Exp(\mu)$
+
+$Y_2$: χρόνος από την εξυπηρέτηση του 1ου μέχρι του 2ου πελάτη, δεδομένου ότι δεν έχει φτάσει άλλος, $Y_2 \sim \Exp((s-1)\mu)$
+\begin{flalign*}
+  P(X>Y+Y_2) &= P(X>Y+Y_2|X \geq Y) \cdot P(X \geq Y) + P(X>Y+Y_2|X<Y) \cdot P(X<Y) &\\
+    &= P(X>Y+Y_2|X \geq Y) \cdot P(X \geq Y) + 0 \cdot P(X<Y)\\
+    &= P(Y_2<X-Y|X>Y) \cdot P(X \geq Y)\\
+    &= \frac{(s-1)\mu}{\lambda+(s-1)\mu} \cdot \frac{s\mu}{\lambda+s\mu}
+\end{flalign*}
+
+
+\section*{Άσκηση 6}
+
+Για αρχή θεωρούμε ότι το $t$ μετράει ώρες, οπότε αφού $\Expect[N(1)] = 8$ και $N(t) \sim PP(\lambda)$ τότε
+\[\Expect[N(1)]=8 \Rightarrow \lambda \cdot 1 = 8 \Rightarrow \lambda = 8\]
+
+\paragraph{α)}
+\[\Expect[N(8)] = \lambda \cdot 8 = 8 \cdot 8 = 64\]
+\[\Var[N(8)] = \lambda \cdot 8 = 8 \cdot 8 = 64\]
+
+\paragraph{β)}
+\[P(N(1/4) > 4) = 1-P(N(1/4) \leq 4) = 1 - \sum_{i=0}^4 e^{-\frac14 \cdot 8} \frac{\frac14 \cdot 8}{i!} = 1 - \sum_{i=0}^4 e^{-2} \frac{2}{i!}\]
+
+\paragraph{γ)}
+\[p=\frac{\Cov[N(11)-N(9),N(12)-N(10)]}{\sqrt{\Var[N(11)-N(9)]} \cdot \sqrt{\Var[N(12)-N(10)]}}\]
+οπότε παίρνουμε
+\begin{flalign*}
+  \Cov&[N(11)-N(9),N(12)-N(10)] = &\\
+    &= \Cov[N(11),N(12)] - \Cov[N(11),N(10)] - \Cov[N(9),N(12)] + \Cov[N(9),N(10)] &\\
+    &= \Cov[N(11),N(12)-N(11)+N(11)] - \Cov[N(11)-N(10)+N(10),N(10)]\\
+    &\;\; - \Cov[N(9),N(12)-N(9)+N(9)] + \Cov[N(9),N(10)-N(9)+N(9)]\\
+    &= \Cov[N(11),N(11)] - \Cov[N(10),N(10)] - \Cov[N(9),N(9)] + \Cov[N(9),N(9)]\\
+    &= \Var[N(11)] - \Var[N(10)] = 8 \cdot 11 - 8 \cdot 10 = 8
+\end{flalign*}
+\begin{flalign*}
+  \Var[N(11)-N(9)] &= ??? &\\
+\end{flalign*}
+\begin{flalign*}
+  \Var[N(12)-N(10)] &= ??? &\\
+\end{flalign*}
+
+
+\section*{Άσκηση 7}
+
+Διαδικασία αφίξεων $PP(10)$ $\{N(t), t \geq 0\}$ $40\%$ γυναίκες, $60\%$ άντρες.\\
+Έχουμε διαχωρισμό Bernouli με $p=0.4$.
+\\[8pt]
+Διαδικασία αφίξεων γυναικών $\{N_1(t), t \geq 0\}$ είναι $PP(10 \cdot p) = PP(4)$\\
+Διαδικασία αφίξεων αντρών $\{N_2(t), t \geq 0\}$ είναι $PP(10 \cdot (1-p)) = PP(6)$\\
+\[\{N_1(t), t \geq 0\},\{N_2(t), t \geq 0\} \text{ ανεξάρτητες}\]
+άρα
+\[\Expect[N_1(1)|N_2(1)=10] \indeq{ανεξ.} \Expect[N_1(1)]=4\]
+
+\end{document}
