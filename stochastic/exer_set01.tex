@@ -41,7 +41,7 @@
 Για να υπολογίσω το $P(X_1+X_2>z)$ θα δεσμεύσω ως προς $X_1$.
 \begin{flalign*}
   P(X_1+X_2>z) &= \int_0^\infty P(X_1+X_2>z | X_1=x) \cdot P(X_1=x)dx &\\
-    &= \int_0^\infty P(X_2+x \leq z)) f_{X_1}(x)dx\\
+    &= \int_0^\infty P(X_2+x>z)) f_{X_1}(x)dx\\
     &= \int_0^\infty (1-P(X_2 \leq z-x)) \lambda_1 e^{-\lambda_1x}dx\\
     &= \int_0^\infty e^{-\lambda_2(z-x)} \lambda_1 e^{-\lambda_1x}dx
     % We could calculate the integral
@@ -64,8 +64,12 @@
 \section*{Άσκηση 2}
 
 Αν $Z$ τυχαία μεταβλητή που αναπαριστά το χρόνο ζωής της μηχανής τότε $Z \sim \Exp(\lambda)$ και $Z = X-Y$.
-Για να βρω την $\Expect[X]$ θα δεσμεύσω ως προς $Z \leq T$
-
+Για να βρω την $\Expect[X]$ θα δεσμεύσω με Θ.Ο.Π. ως προς $Z \leq T$.
+\begin{itemize}
+	\item Αν $Z \leq T$ τότε ο επιθεωρητής θα βρει τη μηχανή χαλασμένη σε χρόνο $T$
+	\item Αν $Z>T$ τότε όταν περάσει χρόνος $T$ το πείραμα επαναλαμβάνεται
+\end{itemize}
+οπότε έχουμε:
 \begin{flalign*}
   \Expect[X] &= \Expect[X|Z \leq T] \cdot P(Z \leq T) + \Expect[X|Z>T] \cdot P(Z>T) &\\
     &= T (1-e^{-\lambda T}) + (T + \Expect[X]) e^{-\lambda T}\\
@@ -90,7 +94,7 @@ $Y$: χρόνος ζωής 1ης μηχανής από σύστημα $B$, $Y \s
   P(\max\{X_1,X_2\}<Y) &= P(X_1<Y,X_2<Y) &\\
     &= \int_0^\infty P(X_1<Y,X_2<Y|Y=y) f_Y(y)dy\\
     &= \int_0^\infty P(X_1<y,X_2<y) f_Y(y)dy
-     \indeq{ανεξ.} \int_0^\infty P(X_1<y \cdot P(X_2<y) f_Y(y)dy\\
+     \indeq{ανεξ.} \int_0^\infty P(X_1<y) \cdot P(X_2<y) f_Y(y)dy\\
     &= \int_0^\infty (1-e^{-\lambda y})(1-e^{-\lambda y}) \mu e^{-\mu y} dy
      = \int_0^\infty (1-e^{-\lambda y})^2 \mu e^{-\mu y} dy\\
     &= \int_0^\infty (1-2e^{-\lambda y}+e^{-2\lambda y}) \mu e^{-\mu y} dy\\
@@ -109,7 +113,7 @@ $Y$: χρόνος ζωής 1ης μηχανής από σύστημα $B$, $Y \s
   P(N(t)=k,N(t+s)=k+m) &= P(N(t)=k,N(t+s)-k=m) &\\
     &= P(N(t)=k,N(t+s)-N(t)=m)\\
     &= P(N(t)=k,N(s)=m)\\
-    &\indeq{ανεξ. προσ.} P(N(t)=k)) \cdot P(N(s)=m)
+    &\indeq{ανεξ.προσ.} P(N(t)=k) \cdot P(N(s)=m)
 \end{flalign*}
 άρα
 
@@ -134,18 +138,21 @@ $Y$: χρόνος μέχρι την 1η εξυπηρέτηση
 \[P(A) = P(X<Y) = \frac{\lambda}{s\mu+\lambda}\]
 
 \paragraph{β)} $N =$ \# αφίξεων πριν την πρώτη εξυπηρέτηση
+
+Αφού φτάσει ένας πελάτης τότε το πείραμα ξεκινάει από την αρχή. Στην περίπτωση όπου $N=n$ έχουμε ότι οι πρώτοι $n$ πελάτες έφτασαν πριν την πρώτη εξυπηρέτηση ενώ ο $n+1$ πελάτης έφτασε μετά. Οπότε:
 \begin{flalign*}
-  P(N=n)&= ??? &\\
+  P(N=n)&= \underbrace{P(X<Y) \cdot P(X<Y) \cdot \ \dots \ \cdot P(X<Y)}_{n\ \text{φορές}} \cdot \underbrace{P(X \geq Y)}_{n+1\ \text{πελάτης}} &\\
     &= \left(\frac{\lambda}{\lambda+s\mu}\right)^n \frac{s\mu}{\lambda+s\mu}
 \end{flalign*}
-
+\newpage
 \paragraph{γ)} $Y \sim \Exp(\mu)$
 
 $Y_2$: χρόνος από την εξυπηρέτηση του 1ου μέχρι του 2ου πελάτη, δεδομένου ότι δεν έχει φτάσει άλλος, $Y_2 \sim \Exp((s-1)\mu)$
 \begin{flalign*}
   P(X>Y+Y_2) &= P(X>Y+Y_2|X \geq Y) \cdot P(X \geq Y) + P(X>Y+Y_2|X<Y) \cdot P(X<Y) &\\
     &= P(X>Y+Y_2|X \geq Y) \cdot P(X \geq Y) + 0 \cdot P(X<Y)\\
-    &= P(Y_2<X-Y|X>Y) \cdot P(X \geq Y)\\
+    &= P(Y_2<X-Y|X>Y) \cdot P(X \geq Y)
+     \indeq{ισχ.αμν.} P(Y_2<X) \cdot P(Y \leq X)\\
     &= \frac{(s-1)\mu}{\lambda+(s-1)\mu} \cdot \frac{s\mu}{\lambda+s\mu}
 \end{flalign*}
 
@@ -170,15 +177,23 @@ $Y_2$: χρόνος από την εξυπηρέτηση του 1ου μέχρι
     &= \Cov[N(11),N(12)] - \Cov[N(11),N(10)] - \Cov[N(9),N(12)] + \Cov[N(9),N(10)] &\\
     &= \Cov[N(11),N(12)-N(11)+N(11)] - \Cov[N(11)-N(10)+N(10),N(10)]\\
     &\;\; - \Cov[N(9),N(12)-N(9)+N(9)] + \Cov[N(9),N(10)-N(9)+N(9)]\\
-    &= \Cov[N(11),N(11)] - \Cov[N(10),N(10)] - \Cov[N(9),N(9)] + \Cov[N(9),N(9)]\\
+    &\indeq{ανεξ.προσ.} \Cov[N(11),N(11)] - \Cov[N(10),N(10)] - \Cov[N(9),N(9)] + \Cov[N(9),N(9)]\\
     &= \Var[N(11)] - \Var[N(10)] = 8 \cdot 11 - 8 \cdot 10 = 8
 \end{flalign*}
 \begin{flalign*}
-  \Var[N(11)-N(9)] &= ??? &\\
+  \Var&[N(11)-N(9)] =&\\
+    &= \Var[N(11)] + \Var[N(9)] - 2\Cov[N(11),N(9)] &\\
+    &= \Var[N(11)] + \Var[N(9)] -2\Cov[N(11)-N(9)+N(9),N(9)]\\
+    &\indeq{ανεξ.προσ.} \Var[N(11)] + \Var[N(9)] -2\Cov[N(9),N(9)]\\
+    &= \Var[N(11)] + \Var[N(9)] -2\Var[N(9)]\\
+    &= \Var[N(11)] - \Var[N(9)] = 8 \cdot 11 - 8 \cdot 9 = 16
 \end{flalign*}
+ομοίως βρίσκουμε ότι
 \begin{flalign*}
-  \Var[N(12)-N(10)] &= ??? &\\
+  \Var[N(12)-N(10)] &= \Var[N(12)] - \Var[N(10)] = 8 \cdot 12 - 8 \cdot 10 = 16&\\
 \end{flalign*}
+οπότε τελικώς έχουμε
+\[p=\frac{8}{\sqrt{16}\cdot\sqrt{16}} = \frac{8}{4\cdot4} = \frac12\]
 
 
 \section*{Άσκηση 7}
