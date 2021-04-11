@@ -1,0 +1,134 @@
+% -*- mode: LaTeX; coding: utf-8 -*-
+% Typeset with: XeLaTeX
+
+\documentclass[a4paper,11pt]{article}
+\usepackage{a4wide}
+
+% Greek fonts
+\RequirePackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+  % you may want to try: {Liberation Serif} or {Times New Roman}
+\setmainfont{FreeSerif}
+  % you may want to try: {Liberation Sans} or {Arial}
+\setsansfont[Scale=MatchLowercase]{FreeSans}
+  % you may want to try: {FreeMono} or {Courier New}
+\setmonofont[Scale=MatchLowercase]{FreeMono}
+
+\usepackage{amsmath}
+
+\newcommand{\indeq}[1]{\stackrel{\text{#1}}{=}}
+% Commands for wrapping properly common expressions.
+\newcommand{\Exp}{\mathrm{Exp}}
+\newcommand{\Expect}{{\rm I\kern-.3em E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+
+% Main document
+\begin{document}
+\title{Στοχαστικές Ανελίξεις - 2ο πακέτο Ασκήσεων}
+\author{Θωμάς Παππάς}
+\date{}
+\maketitle
+
+\section*{Άσκηση 1}
+
+Αρχικά έχουμε ότι $P(N(t)=k) = G_k(t)-G_{k+1}(t)$. Θα υπολογίσω το $\widetilde{G}(s)$ οπότε εφαρμόζω LST στην $G(t)$.
+\begin{flalign*}
+  \widetilde{G}(s) &= \int_0^\infty e^{-st} dG(t) = \int_0^\infty e^{-st} g(t) dt
+     = \int_0^\infty e^{-st} \lambda^2 t e^{-\lambda t} dt = \int_0^\infty \lambda^2 t e^{-(\lambda+s)t} dt\\
+    &= \frac{\lambda^2}{\lambda+s} \int_0^\infty t (\lambda+s) e^{-(\lambda+s)t} dt
+     = \frac{\lambda^2}{\lambda+s} \cdot E[Y] \text{, όπου $Y \sim \Exp(\lambda+s)$} \\
+    &= \frac{\lambda^2}{\lambda+s} \cdot \frac1{\lambda+s} = \left(\frac{\lambda}{\lambda+s}\right)^2
+\end{flalign*}
+οπότε και
+\[\widetilde{G}_k(s) = \left[\widetilde{G}(s)\right]^k = \left(\frac{\lambda}{\lambda+s}\right)^{2k}\]
+που σημαίνει ότι $S_k \sim \mathrm{Erlang}(2k,\lambda)$ και άρα $G_k(t) = 1 - \sum_{n=0}^{2k-1} e^{-\lambda t} \frac{(\lambda t)^n}{n!}$.
+Οπότε εντέλει έχουμε
+\begin{flalign*}
+  P(N(t)=k) &= G_k(t)-G_{k+1}(t) = \left(1 - \sum_{n=0}^{2k-1} e^{-\lambda t} \frac{(\lambda t)^n}{n!}\right) - \left(1 - \sum_{n=0}^{2(k+1)-1} e^{-\lambda t} \frac{(\lambda t)^n}{n!}\right) &\\
+    &= \sum_{n=0}^{2k+1} e^{-\lambda t} \frac{(\lambda t)^n}{n!} - \sum_{n=0}^{2k-1} e^{-\lambda t} \frac{(\lambda t)^n}{n!} = e^{-\lambda t} \frac{(\lambda t)^{2k}}{(2k)!} - e^{-\lambda t} \frac{(\lambda t)^{2k+1}}{(2k+1)!}
+\end{flalign*}
+
+
+\section*{Άσκηση 2}
+Έχουμε
+\[H(t) = \Expect\left[S_{N(t)+k}\right] = \int_0^\infty \Expect\left[S_{N(t)+k} | X_1=u\right] dG(u)\]
+\begin{itemize}
+	\item αν $u \leq t$ τότε $\Expect\left[S_{N(t)+k} | X_1=u\right] = u + \Expect\left[S_{N(t-u)+k}\right] = u + H(t-u)$
+	\item αν $u > t$ τότε $\Expect\left[S_{N(t)+k} | X_1=u\right] = \Expect\left[S_k | X_1 = u\right] = \Expect\left[u+S_{k-1}\right] = u + \tau (k-1)$,\\
+	όπου $\tau = \Expect[X]$
+\end{itemize}
+οπότε
+\begin{flalign*}
+  H(t) &= \int_0^t u + H(t-u) dG(u) + \int_t^\infty u + \tau (k-1) dG(u) &\\
+    &= \int_0^t u dG(u) + \int_0^t H(t-u) dG(u) + \int_t^\infty u dG(u) + \tau (k-1) \int_t^\infty dG(u) \\
+    &= \int_0^\infty u dG(u) + \int_0^t H(t-u) dG(u) + \tau (k-1) (1-G(t)) \\
+    &= \tau + \tau (k-1) (1-G(t)) + (H*G)(t)
+\end{flalign*}
+παίρνω LST
+\begin{flalign*}
+  \widetilde{H}(s) &= \tau k - \tau (k-1) \widetilde{G}(s) + \widetilde{H}(s) \widetilde{G}(s) &\\
+  \Rightarrow \widetilde{H}(s) &= \frac{\tau k - \tau (k-1) \widetilde{G}(s)}{1-\widetilde{G}(s)}
+     = \tau k \frac1{1-\widetilde{G}(s)} - \tau (k-1) \frac{\widetilde{G}(s)}{1-\widetilde{G}(s)}\\
+    &= \tau k \left(1 + \frac{\widetilde{G}(s)}{1-\widetilde{G}(s)}\right) - \tau (k-1) \frac{\widetilde{G}(s)}{1-\widetilde{G}(s)}\\
+    &= \tau k (1 + \widetilde{M}(s)) - \tau (k-1) \widetilde{M}(s) = \tau k + \tau \widetilde{M}(s)
+\end{flalign*}
+οπότε αντιστρέφοντας τον LST παίρνουμε
+\[H(t) = \Expect\left[S_{N(t)+k}\right] = \tau (M(t) + k)\]
+
+\section*{Άσκηση 3}
+
+Όταν καταγράφουμε ένα γεγονός $X_{p,k}$ τότε οι επόμενοι χρόνοι $X_n, X_{p,n}$ είναι ανεξάρτητοι του παρελθόντος,
+άρα η $\{N_p(t), t \geq 0\}$ είναι ανανεωτική διαδικασία.
+\\[5pt]
+Επίσης παρατηρούμε ότι αν το πρώτο γεγονός της $N_p(t)$ συμβεί μετά από $n$ γεγονότα της $N(t)$, τότε αφού η καταγραφή είναι ένα πείραμα Bernoulli παίρνουμε ότι $N_p(t) \sim \mathrm{Bin}(n,p)$.
+Οπότε:
+\begin{flalign*}
+  \Expect[N_p(t)] &= \sum_{n=0}^\infty \Expect\left[N_p(t) | N(t)=n\right] \cdot P(N(t)=n)
+     = \sum_{n=0}^\infty np \cdot P(N(t)=n) = p \sum_{n=0}^\infty n \cdot P(N(t)=n) &\\
+    &= p \Expect[N(t)]
+\end{flalign*}
+και άρα
+\[M_p(t) = \Expect[N_p(t)] = p \Expect[N(t)] = p M_(t)\]
+\[\Rightarrow \widetilde{M}_p = p \widetilde{M}(s) = p \frac{\widetilde{G}(s)}{1-\widetilde{G}(s)}\]
+
+
+\section*{Άσκηση 4}
+
+
+\section*{Άσκηση 5}
+
+
+\section*{Άσκηση 6}
+
+\paragraph{α)} $H(t) = \Expect[N^2(t)]$. Θα χρησιμοποιήσω ανανεωτικό επιχείρημα:
+\[H(t) = \int_0^\infty \Expect\left[N^2(t)|S_1=u\right] dG(u)\]
+\begin{itemize}
+	\item αν $u \leq t$ τότε
+	  \begin{flalign*}
+	  	\Expect\left[N^2(t)|S_1=u\right] &= \Expect\left[(1+N(t-u))^2\right] = \Expect\left[1+2N(t-u)+N^2(t-u)\right] &\\
+	  	  &= 1+2\Expect[N(t-u)]+\Expect\left[N^2(t-u)|S_1=u\right]\\
+	  	  &= 1+2M(t-u)+H(t-u)
+	  \end{flalign*}
+	\item αν $u > t$ τότε $\Expect\left[N^2(t)|S_1=u\right] = 0$
+\end{itemize}
+οπότε έχουμε
+\begin{flalign}
+  H(t) &= \int_0^t 1+2M(t-u)+H(t-u) dG(u) + \int_t^\infty 0 dG(u) &\nonumber\\
+    &= \int_0^t dG(u) + 2\int_0^t M(t-u) dG(u) + \int_0^t H(t-u) dG(u) \nonumber\\
+    &= G(t) + 2 (M*G)(t) + (H*G)(t) \label{h1}
+\end{flalign}
+όμως $M(t) = G(t) + (M*G)(t)$ άρα
+\[H(t) = G(t) + 2M(t) - 2G(t) + (H*G)(t) = 2M(t) - G(t) + (H*G)(t)\]
+η οποία είναι ανανεωτική εξίσωση με $D(t) = 2M(t) - G(t)$
+
+\paragraph{β)} παίρνω LST στην $H(t)$ στη μορφή της στην \eqref{h1}
+\begin{flalign*}
+  \widetilde{H}(s) &= \widetilde{G}(s) + 2 \widetilde{M}(s) \widetilde{G}(s) + \widetilde{H}(s) \widetilde{G}(s) &\\
+  \Rightarrow \widetilde{H}(s) &= \frac{\widetilde{G}(s)}{1-\widetilde{G}(s)} (1 + 2 \widetilde{M}(s))
+     = \widetilde{M}(s)(1 + 2 \widetilde{M}(s)) = \widetilde{M}(s) + 2 \widetilde{M}(s)\widetilde{M}(s)
+\end{flalign*}
+και αντιστρέφοντας τον LST παίρνουμε
+\[H(t) = M(t) + 2 (M*M)(t) = M(t) + 2 \int_0^t M(t-u) dM(u)\]
+
+\end{document}
