@@ -65,7 +65,7 @@
     &= \int_0^\infty u dG(u) + \int_0^t H(t-u) dG(u) + \tau (k-1) (1-G(t)) \\
     &= \tau + \tau (k-1) (1-G(t)) + (H*G)(t)
 \end{flalign*}
-παίρνω LST
+Μετά παίρνω LST οπότε
 \begin{flalign*}
   \widetilde{H}(s) &= \tau k - \tau (k-1) \widetilde{G}(s) + \widetilde{H}(s) \widetilde{G}(s) &\\
   \Rightarrow \widetilde{H}(s) &= \frac{\tau k - \tau (k-1) \widetilde{G}(s)}{1-\widetilde{G}(s)}
@@ -73,7 +73,7 @@
     &= \tau k \left(1 + \frac{\widetilde{G}(s)}{1-\widetilde{G}(s)}\right) - \tau (k-1) \frac{\widetilde{G}(s)}{1-\widetilde{G}(s)}\\
     &= \tau k (1 + \widetilde{M}(s)) - \tau (k-1) \widetilde{M}(s) = \tau k + \tau \widetilde{M}(s)
 \end{flalign*}
-οπότε αντιστρέφοντας τον LST παίρνουμε
+και τέλος αντιστρέφοντας τον LST παίρνουμε
 \[H(t) = \Expect\left[S_{N(t)+k}\right] = \tau (M(t) + k)\]
 
 \section*{Άσκηση 3}
@@ -86,17 +86,69 @@
 \begin{flalign*}
   \Expect[N_p(t)] &= \sum_{n=0}^\infty \Expect\left[N_p(t) | N(t)=n\right] \cdot P(N(t)=n)
      = \sum_{n=0}^\infty np \cdot P(N(t)=n) = p \sum_{n=0}^\infty n \cdot P(N(t)=n) &\\
-    &= p \Expect[N(t)]
+    &= p \ \Expect[N(t)]
 \end{flalign*}
 και άρα
-\[M_p(t) = \Expect[N_p(t)] = p \Expect[N(t)] = p M_(t)\]
-\[\Rightarrow \widetilde{M}_p = p \widetilde{M}(s) = p \frac{\widetilde{G}(s)}{1-\widetilde{G}(s)}\]
+\[M_p(t) = \Expect[N_p(t)] = p \ \Expect[N(t)] = p \ M_(t)\]
+\[\Rightarrow \widetilde{M}_p(s) = p \ \widetilde{M}(s) = p \ \frac{\widetilde{G}(s)}{1-\widetilde{G}(s)}\]
 
 
 \section*{Άσκηση 4}
 
+Έχουμε $H(t)) = P(A(t) \leq x)$. Χρησιμοποιώ ανανεωτικό επιχείρημα και δεσμεύω ως προς $S_1$:
+\[H(t) = \int_0^\infty P(A(t) \leq x | S_1=u)dG(u)\]
+\begin{itemize}
+	\item αν $u \leq t$ τότε $P(A(t) \leq x | S_1=u) = P(A(t-u) \leq x) = H(t-u)$
+	\item αν $u > t$ τότε $A(t) = t$ και άρα $P(A(t) \leq x | S_1=u) =
+	  \begin{cases}
+	    1, & t \leq x\\
+	    0, & t > x
+	  \end{cases} = 1_{\{t \leq x\}}$
+\end{itemize}
+άρα
+\begin{flalign*}
+  H(t) &= \int_0^t H(t-u) dG(u) + \int_t^\infty 1_{\{t \leq x\}} dG(u)
+     = (H*G)(t) + 1_{\{t \leq x\}} \int_t^\infty dG(u) &\\
+    &= 1_{\{t \leq x\}} (1-G(t)) + (H*G)(t)
+\end{flalign*}
+η οποία είναι ανανεωτική εξίσωση με $D(t) = 1_{\{t \leq x\}} (1-G(t))$.
+\\[8pt]
+Για να βρούμε τώρα το $\lim_{t\rightarrow\infty} H(t)$, βλέπουμε ότι $D(t)$ φθίνουσα, φραγμένη και μη αρνητική με
+\[\int_0^\infty |D(t)| = \int_0^\infty 1_{\{t \leq x\}} (1-G(t)) dt = \int_0^x 1-G(t)dt + \int_t^\infty 0 dt \leq  \int_0^\infty 1-G(t)dt = \tau < \infty\]
+όπου $\tau = \Expect[X_n]$, και άρα από το Β.Α.Θ. έχουμε
+\[\lim_{t\rightarrow\infty} H(t) = \frac1\tau \int_0^\infty D(t)dt = \frac1\tau \int_0^x 1-G(t)dt\]
+
 
 \section*{Άσκηση 5}
+
+Έχουμε $H(t) = P(N(t) \text{περιττός})$. Χρησιμοποιώ ανανεωτικό επιχείρημα:
+\[H(t) = \int_0^\infty P(N(t) \ \text{περιττός} | S_1=u)dG(u)\]
+\begin{itemize}
+	\item αν $u \leq t$ τότε
+	  \[P(N(t) \ \text{περιττός} | S_1=u) = P(N(t-u) \ \text{άρτιος}) = 1-P(N(t-u) \ \text{περιττός}) = 1-H(t-u)\]
+	\item αν $u > t$ τότε $P(N(t) \ \text{περιττός} | S_1=u) = 0$ αφού $N(t)=0$
+\end{itemize}
+άρα
+\begin{flalign*}
+  H(t) &= \int_0^t 1-H(t-u) dG(u) + \int_t^\infty 0 dG(u) = \int_0^t dG(u) - \int_0^t H(t-u) dG(u) &\\
+    &= G(t) - (H*G)(t)
+\end{flalign*}
+η οποία ΔΕΝ είναι ανανεωτική εξίσωση.
+\\[8pt]
+Έστω τώρα ότι η $\{N(t), t \geq 0\}$ είναι $PP(\lambda)$, και οπότε έχουμε $\widetilde{G}(s) = \frac{\lambda}{s+\lambda}$. Για να λύσω λοιπόν την $H(t)$ θα εφαρμόσω LST:
+\begin{flalign*}
+  \widetilde{H}(s) &= \widetilde{G}(s) - \widetilde{H}(s) \widetilde{G}(s)
+    \Rightarrow \widetilde{H}(s) + \widetilde{H}(s) \widetilde{G}(s) = \widetilde{G}(s)
+    \Rightarrow \widetilde{H}(s)(1 + \widetilde{G}(s)) = \widetilde{G}(s) &\\
+  \Rightarrow \widetilde{H}(s) &= \frac{\widetilde{G}(s)}{1+\widetilde{G}(s)}
+    = \frac{\frac{\lambda}{s+\lambda}}{1+\frac{\lambda}{s+\lambda}}
+    = \frac{\frac{\lambda}{s+\lambda}}{\frac{s+2\lambda}{s+\lambda}}
+    = \frac{\lambda}{s+2\lambda} = \frac12 \cdot \frac{2\lambda}{s+2\lambda}
+\end{flalign*}
+Θεωρούμε τυχαία μεταβλητή $X \sim \Exp(2\lambda)$ για την οποία έχουμε $\widetilde{F}_X(s) = \frac{2\lambda}{s+2\lambda}$ και άρα
+\[\widetilde{H}(s) = \frac12 \cdot \widetilde{F}_X(s)\]
+και αντιστρέφοντας τον LST παίρνουμε
+\[H(t) = \frac12 F_X(t) = \frac12 \left(1-e^{-2\lambda t}\right)\]
 
 
 \section*{Άσκηση 6}
