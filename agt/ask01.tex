@@ -107,8 +107,93 @@
 		Δ2-Μ2 & $0$ & $-3$ & $4$ & $0$
 	\end{tabular}
 \end{center}
-από το οποίο και βλέπουμε ότι αν οι παίκτες επιλέξουν οποιαδήποτε μικτή στρατηγική με Support μόνο τις αμιγείς στρατηγικές Δ1-Μ2 και Δ2-Μ1, τότε το συνολικό τους όφελος θα είναι $0$, και άρα δεν μπορεί να υπάρξει σημείο ισορροπίας σε αυτήν την περίπτωση.\\???
+Έστω τώρα $(p,q)$ προφίλ μικτών στρατηγικών με Support μόνο τις αμιγείς στρατηγικές Δ1-Μ2 και Δ2-Μ1, δηλαδή
+\[p=(0,p_1,1-p_1,0),q=(0,q_1,1-q_2,0)\]
+Κοιτάζουμε λοιπόν για σημείο ισορροπίας με αυτό το προφίλ
+\begin{flalign*}
+  w_1 &= \max_p \min_q u_1(p,q) &\\
+    &= \max_p \min \{u_1(p,e^1),u_1(p,e^2),u_1(p,e^3),u_1(p,e^4)\}\\
+    &= \max_{p_1} \min \{0 \cdot 0+2p_1-3(1-p_1)+0 \cdot 0,-2 \cdot 0+0p_1+0(1-p_1)+3 \cdot 0,\\
+      &\qquad\qquad\qquad 3 \cdot 0+0p_1+0(1-p_1)-4 \cdot 0,0 \cdot 0-3p_1+4(1-p_1)+0 \cdot 0\}\\
+    &= \max_{p_1} \min \{5p_1-3,0,0,-7p_1+4\}
+\end{flalign*}
+κοιτάζουμε λοιπόν τώρα τις τιμές για τις συναρτήσεις
+\[f_1(p_1)=5p_1-3,f_2(p_1)=0,f_3(p_1)=-7p_1+4\]
+(στα αριστερά μεγεθύνουμε στο σημείο ενδιαφέροντος)
 
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  width=220pt,
+  axis lines=center,
+  xmax=1, ymin=-3, ymax=5,
+  xlabel=$p_1/q_1$
+]
+
+  % Add all the utility functions.
+  \addplot[
+    color=brown,
+    domain=0:1
+  ]
+  {5*x-3};
+  \addplot[
+    color=red,
+    domain=0:1
+  ]
+  {0};
+  \addplot[
+    color=blue,
+    domain=0:1
+  ]
+  {-7*x+4};
+  \legend{$f_1$,$f_2$,$f_3$}
+\end{axis}
+\end{tikzpicture}
+\begin{tikzpicture}
+\begin{axis}[
+  width=220pt,
+  axis lines=center,
+  xmin=0.5, xmax=0.7, ymin=-0.2, ymax=0.2,
+  xtick={4/7,7/12,3/5},
+  xticklabels={$\frac47$,$\frac7{12}$,$\frac35$},
+  xlabel=$p_1/q_1$,
+  x tick label style={inner ysep=8pt,anchor=south},
+  % For some reason the 0 coordinates doesn't show the label, so we put it at 0.001.
+  ytick={-0.2,-1/12,0.001,0.2},
+  yticklabels={$-0.2$,$-\frac{1}{12}$,$0$,$0.2$}
+]
+
+  % Add all the utility functions.
+  \addplot[
+    color=brown,
+    domain=0:1
+  ]
+  {5*x-3};
+  \addplot[
+    color=red,
+    domain=0:1
+  ]
+  {0};
+  \addplot[
+    color=blue,
+    domain=0:1
+  ]
+  {-7*x+4};
+  \draw [dashed,help lines] (0,-1/12) -| (7/12,0);
+  \legend{$f_1$,$f_2$,$f_3$}
+\end{axis}
+\end{tikzpicture}
+
+\raggedright
+όπου βλέπουμε ότι η $\min\{f_1,f_2,f_3\}$ παίρνει τη $\max$ τιμή του στο σημείο $p_1=7/12$ όπου
+\[w_1 = f_1\left(\frac{7}{12}\right) = f_3\left(\frac{7}{12}\right) = 5 \cdot \frac{7}{12} - 3 = -\frac{1}{12}\]
+Τώρα για το $w_2$ λόγω συμμετρίας του προβλήματος, βλέπουμε ότι προκύπτουν οι ίδιες συναρτήσεις, οπότε χρησιμοποιώντας πάλι τις παραπάνω γραφικές παραστάσεις βλέπουμε ότι
+\begin{flalign*}
+w_2 &= \min_q \max_p u_2(p,q) = ... = \min_{q_1} \max \{5q_1-3,0,0,-7q_1+4\} = 0
+\end{flalign*}
+το οποίο ισχύει για οποιοδήποτε $q_1 \in \left[\frac47,\frac35\right]$.
+\\[8pt]
+Εφόσον $w_1 \neq w_2$, το $(p,q)$ δεν είναι σημείο ισορροπίας.
 
 \section*{Πρόβλημα 4}
 
@@ -210,19 +295,68 @@ $(s_1,t_1),(s_1,t_2),(s_2,t_1),(s_2,t_2)$.
 Έστω λοιπόν $G_1$ ένα γενικό παίγνιο $2$ παικτών με στρατηγικές $S^1,S^2$ και utility functions $u_1, u_2$.
 Κατασκευάσουμε τώρα ένα παίγνιο $G_2$ από το $G_1$ αλλά με $3$ παίκτες, στρατηγικές $S^1,S^2,S^3$ όπου $S^3 = \{r\}$ (δηλαδή ο π.3 έχει μόνο μία διαθέσιμη στρατηγική) και utility functions $u_1^\prime, u_2^\prime, u_3^\prime$ όπου:
 \begin{align}
-  u_1^\prime(p,q,r) &= u_1(p,q) \label{nash1}&\\
-  u_2^\prime(p,q,r) &= u_2(p,q) \label{nash2}\\
+  u_1^\prime(p,q,r) &= u_1(p,q) \label{nash61}\\
+  u_2^\prime(p,q,r) &= u_2(p,q) \label{nash62}\\
   u_3^\prime(p,q,r) &= -u_1(p,q)-u_2(p,q) \nonumber
 \end{align}
 Τότε το $G_2$ είναι παίγνιο μηδενικού αθροίσματος με $3$ παίκτες και έχουμε ότι ένα προφίλ στρατηγικών $(p,q)$ είναι σημείο ισορροπίας για το $G_1$ αν και μόνον αν το $(p,q,r)$ είναι σημείο ισορροπίας στο $G_2$.
 Όντως για ένα τέτοιο σημείο $(p,q,r)$ και $\forall p^\prime \in S^1, \forall q^\prime \in S^2$ έχουμε ότι:
 \begin{itemize}
-	\item $u_1(p,q) \geq u_1(p^\prime,q) \stackrel{\eqref{nash1}}{\Leftrightarrow} u_1^\prime(p,q,r) \geq u_1^\prime(p^\prime,q,r)$
-	\item $u_2(p,q) \geq u_2(p,q^\prime) \stackrel{\eqref{nash2}}{\Leftrightarrow} u_2^\prime(p,q,r) \geq u_2^\prime(p,q^\prime,r)$
+	\item $u_1(p,q) \geq u_1(p^\prime,q) \stackrel{\eqref{nash61}}{\Leftrightarrow} u_1^\prime(p,q,r) \geq u_1^\prime(p^\prime,q,r)$
+	\item $u_2(p,q) \geq u_2(p,q^\prime) \stackrel{\eqref{nash62}}{\Leftrightarrow} u_2^\prime(p,q,r) \geq u_2^\prime(p,q^\prime,r)$
 \end{itemize}
 Ενώ για τον π.3 στο $G_2$ κάθε σημείο είναι ισορροπίας για αυτόν αφού $|S^3|=1$.
 \\[8pt]
 Από το παραπάνω βλέπουμε ότι ένα παίγνιο $2$ παικτών μπορεί να αναχθεί σε μια ειδική περίπτωση ενός παιγνίου μηδενικού αθροίσματος $3$ παικτών, και άρα το τελευταίο είναι τουλάχιστον όσο δύσκολο όσο το πρώτο.
 Πιο συγκεκριμένα δηλαδή η επίλυση ενός παιγνίου μηδενικού αθροίσματος $3$ παικτών είναι PPAD-hard πρόβλημα, και άρα δεν γνωρίζουμε για την ύπαρξη πολυωνυμικού αλγορίθμου που να το επιλύνει.
+
+
+\section*{Πρόβλημα 7}
+
+\paragraph{(i)} Έτσι ώστε το $(p,q)$ να είναι $\epsilon-$σημείο ισορροπίας θα πρέπει να ισχύει ότι
+\begin{align}
+  u_1(p,q) \geq u_1(e^1,q) - \epsilon \label{nash71}\\
+  u_1(p,q) \geq u_1(e^2,q) - \epsilon \label{nash72}\\
+  u_2(p,q) \geq u_2(p,e^1) - \epsilon \label{nash73}\\
+  u_2(p,q) \geq u_2(p,e^2) - \epsilon \label{nash74}
+\end{align}
+Υπολογίζουμε τις αντίστοιχες τιμές
+\begin{align*}
+  u_1(p,q) &= 1/2 \cdot 1/2 \left[(1/2-\delta)+0+\delta+(1/2-\delta)\right] = 1/4(1-\delta) = 1/4-\delta/4&\\
+  u_1(e^1,q) &= 1/2(1/2-\delta)+1/2 \cdot 0 = 1/4-\delta/2\\
+  u_1(e^2,q) &= 1/2\delta+1/2(1/2-\delta) = 1/4\\[3pt]
+  u_2(p,q) &= 1/2 \cdot 1/2 \left[\delta+(1/2-\delta)+(1/2-\delta)+\delta\right] = 1/4 \cdot 1 = 1/4\\
+  u_2(p,e^1) &= 1/2\delta+1/2(1/2-\delta) = 1/4\\
+  u_2(p,e^2) &= 1/2(1/2-\delta)+1/2\delta = 1/4\\
+\end{align*}
+Για τον π.2 βλέπουμε ότι οι \eqref{nash73} και \eqref{nash74} ισχύουν $\forall \epsilon \geq 0$.
+Για τον π.1 τώρα έχουμε:
+\begin{itemize}
+	\item $\eqref{nash71} \Rightarrow \epsilon \geq u_1(e^1,q)-u_1(p,q) = (1/4-\delta/2) - (1/4-\delta/4) = -\delta/4$\\
+	  που ισχύει πάντα αφού $-\delta/4 < 0$
+	\item $\eqref{nash72} \Rightarrow \epsilon \geq u_1(e^2,q)-u_1(p,q) = 1/4 - (1/4-\delta/4) = \delta/4$
+\end{itemize}
+Άρα το καλύτερο (μικρότερο) $\epsilon \geq 0$ ώστε το $(p,q)$ να είναι $\epsilon-$σημείο ισορροπίας είναι το
+\[\epsilon(\delta) = \frac{\delta}{4}\]
+
+\paragraph{(ii)} Αφού $p=(1/n,1/n,\dots,1/n)$ έχουμε ότι $\Supp(p) = \{1,2,\dots,n\}$, δηλαδή περιέχει όλες τις στρατηγικές του εκάστοτε παίκτη. Άρα αρκεί να δείξουμε ότι $\forall \epsilon \geq k/n$ και $\forall i,l$ με $1 \leq i,l \leq n$ ισχύει ότι
+\begin{align}
+  u_1(e^i,p) \geq u_1(e^l,p) - \epsilon \label{nash75}\\
+  u_2(p,e^i) \geq u_2(p,e^l) - \epsilon \label{nash76}
+\end{align}
+Εφόσον από την υπόθεση σε κάθε σειρά και στήλη έχουμε το πολύ $k$ μη μηδενικές τιμές, δηλαδή $\forall i, 1 \leq i \leq n$ ισχύει ότι $|\{j:u_1(s_i,t_j) \neq 0\}| \leq k$, τότε παρατηρούμε ότι
+\begin{flalign*}
+  u_1(e^i,p) &= \sum_{j=0}^n p_j \cdot u_1(s_i,t_j) = \frac{1}{n} \sum_{j=0}^n u_1(s_i,t_j) = \frac{1}{n} \sum_{j: u_1(s_i,t_j) \neq 0} u_1(s_i,t_j)&\\
+    & \leq \frac{1}{n} \sum_{j: u_1(s_i,t_j) \neq 0} 1 \stackrel{\text{υποθ.}}{\leq} \frac{1}{n} \cdot k = \frac{k}{n}
+\end{flalign*}
+και άρα η \eqref{nash75} ισχύει αφού $\forall i,l$ με $1 \leq i,l \leq n$
+\[u_1(e^l,p)-\epsilon \leq u_1(e^l,p)-\frac{k}{n} \leq 0 \leq u_1(e^i,p)\]
+Ομοίως δείχνουμε και την \eqref{nash76}.
+Άρα το προφίλ μεικτών στρατηγικών $(p,p)$ όντως αποτελεί $\epsilon-$σημείο ισορροπίας.
+
+
+\section*{Πρόβλημα 8}
+
+\paragraph{(i)}
 
 \end{document}
