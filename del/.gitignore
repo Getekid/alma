@@ -1,0 +1,9 @@
+# Ignore the generated files from tex compilation.
+*.aux
+*.log
+*.nav
+*.out
+*.pdf
+*.snm
+*.synctex.gz
+*.toc
