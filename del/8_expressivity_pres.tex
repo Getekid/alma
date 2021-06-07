@@ -197,7 +197,7 @@
 	\begin{proof}
 		Induction on formulas
 		\begin{itemize}
-			\item $s^1,s^2$ satisfy the same properties (none)
+			\item $s^1,s^2$ satisfy the same atoms (none)
 			\item negation and conjuction are easy
 		\end{itemize} \pause
 		Suppose $K\phi$ a formula that could distinguish $(M^1,s^1)$ and $(M^2,s^2)$, i.e. $(M^1,s^1) \models K\phi$ and $(M^2,s^2) \not\models K\phi$ (opposite is impossible).
@@ -322,9 +322,9 @@
 		\item If $n=0$ then spoiler wins if $s$ and $s^\prime$ differ in any atomic property in $P$, else duplicator wins \pause
 		\item If $n>0$ then spoiler can play any of the following moves
 			\begin{itemize}
-				\item \textbf{forth-move}: choose $\alpha \in A, t \in S \text{ s.t. } (s,t) \in R_a$.\\
+				\item \textbf{forth-move}: choose $a \in A, t \in S \text{ s.t. } (s,t) \in R_a$.\\
 				Duplicator responds with state $t^\prime \in S^\prime$ s.t. $(s^\prime,t^\prime) \in R_a^\prime$
-				\item \textbf{back-move}: choose $\alpha \in A, t^\prime \in S^\prime \text{ s.t. } (s^\prime,t^\prime) \in R_a^\prime$.\\
+				\item \textbf{back-move}: choose $a \in A, t^\prime \in S^\prime \text{ s.t. } (s^\prime,t^\prime) \in R_a^\prime$.\\
 				Duplicator responds with state $t \in S$ s.t. $(s,t) \in R_a$
 			\end{itemize}
 			Output is $(t,t^\prime)$ \pause
@@ -391,7 +391,7 @@
 		$(\leftarrow)$ Suppose $(M,s) \equiv_{\lang_K^{n+1}} (M^\prime,s^\prime)$, we need to describe the duplicator's winning strategy, i.e. show that for all $t: (s,t) \in R_a$ that spoiler selects, there is a $t^\prime: (s^\prime,t^\prime) \in R_a^\prime: (M,t) \equiv_{\lang_K^n} (M^\prime,t^\prime)$\\
 		Then by the first induction hypothesis duplicator has a winning strategy for the remaining subgame \pause
 		\\[8pt]
-		Suppose there is no such $t^\prime$, so for all $t: (s^\prime,t^\prime)$ spoiler has a winning strategy, i.e. (from first induction hypothesis) there is a formula $\phi_{t^\prime}: d(\phi) \leq n$ where $(M^\prime,t^\prime) \models \phi_{t^\prime}, (M,s) \not\models \phi_{t^\prime}$
+		Suppose there is no such $t^\prime$, so for all $t^\prime: (s^\prime,t^\prime)$ spoiler has a winning strategy, i.e. (from first induction hypothesis) there is a formula $\phi_{t^\prime}: d(\phi) \leq n$ where $(M^\prime,t^\prime) \models \phi_{t^\prime}, (M,t) \not\models \phi_{t^\prime}$
 	\end{block}
 \end{frame}
 
@@ -401,7 +401,7 @@
 	\begin{proof}[Proof. (cont.)]
 		From Lemma 8.20 the set $\{\phi_{t^\prime} | (s^\prime,t^\prime) \in R_a^\prime\}$ is finite wrt equivalence.
 		If $f$ a function that chooses one formula from each equivalence class $[t^\prime]$, then
-		\[ \phi = \bigvee_{(t^\prime,u^\prime)\in R_{\alpha}^\prime} f([t^\prime]) \]
+		\[ \phi = \bigvee_{(s^\prime,t^\prime)\in R_{\alpha}^\prime} f([t^\prime]) \]
 		is finite with $d(\phi) \leq n$ \pause
 		\\[4pt]
 		We have $(M^\prime,s^\prime) \models K_a \phi$ but $(M,s) \not\models K_a \phi$ while $d(K_a \phi) \leq n+1$\\
@@ -413,7 +413,8 @@
 	\begin{block}{Theorem 8.22}
 		$(M,s) \equiv (M^\prime,s^\prime)$ iff for all $n \in \mathbb{N}$ duplicator has a winning strategy for the $n$-round $\lang_K$-game on $(M,s)$ and $(M^\prime,s^\prime)$
 	\end{block} \pause
-	Games are finite but there are infinite games
+	Games are finite but there are infinite games\\ \pause
+	Winning strategy for duplicator coincides with bisimulation only when we consider an $\lang_K(P)$ game with $\omega$ rounds (the first ordinal limit)
 \end{frame}
 
 \end{document}
