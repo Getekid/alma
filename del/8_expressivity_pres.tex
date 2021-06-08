@@ -18,6 +18,10 @@
 \graphicspath{ {./figures/} }
 
 \newcommand{\lang}{\mathcal{L}}
+\newcommand{\Mpr}{M^\prime}
+\newcommand{\Spr}{S^\prime}
+\newcommand{\spr}{s^\prime}
+\newcommand{\tpr}{t^\prime}
 
 % Main document
 \begin{document}
@@ -415,6 +419,237 @@
 	\end{block} \pause
 	Games are finite but there are infinite games\\ \pause
 	Winning strategy for duplicator coincides with bisimulation only when we consider an $\lang_K(P)$ game with $\omega$ rounds (the first ordinal limit)
+\end{frame}
+
+
+\section*{\textit{S5}}
+
+\begin{frame}{Single-agent \textit{S5}}
+	For \textit{S5}-models for one agent
+	\begin{block}{Theorem 8.24}
+		Duplicator has a winning strategy for the $n$-round $\lang_K$-game on $(M,s)$ and $(M^\prime,s^\prime)$ for every $n \in \mathbb{N}$ iff duplicator has a winning strategy for the $1$-round $\lang_K$-game on $(M,s)$ and $(M^\prime,s^\prime)$
+	\end{block} \pause
+	From right to left holds because the set of $a$-accessible states is the same for all states that are $a$-accessible from $s$ or $s^\prime$,\\
+	i.e. after $1$ round the subgame is exactly the same.
+\end{frame}
+
+\begin{frame}{Single-agent \textit{S5}}
+	\begin{block}{Theorem 8.25}
+		\[(M,s) \equiv_{\lang_K} (M^\prime,s^\prime) \text{ iff } (M,s) \equiv_{\lang_K^1} (M^\prime,s^\prime)\]
+	\end{block} \pause
+	For a formula $\phi \in \lang_K(\{a\})$
+	
+	\[\delta_s = \bigwedge \{p | p \in P(\phi) \text{ and } (M,s) \models p\}\]
+	\[
+		\psi = \bigvee_{(M,s) \in S5(\phi)} \left( \delta_s \wedge \bigwedge_{s \sim_a t} \hat{K} \delta_t \wedge K \bigvee_{s \sim_a t} \delta_t \right)
+	\] \pause
+	
+	we have $\phi \equiv \psi$ where $d(\psi) = 1$
+\end{frame}
+
+\begin{frame}{Multi-agent \textit{S5}}
+	\begin{figure}[h]
+		\includegraphics[width=1\textwidth]{figure_8_2_spine_models}
+		\caption{(8.2) Three spine models: $Spine(6)$, $Spine(3)$ and $Spine(\omega)$.}
+	\end{figure} \pause
+	\begin{block}{Theorem 8.31}
+		\[(Spine(n),0) \not\leftrightarroweq (Spine(\omega),0)\]
+	\end{block}
+\end{frame}
+
+\begin{frame}{Multi-agent \textit{S5}}
+	\begin{proof}
+		Define $\phi_n$ inductively
+		\begin{flalign*}
+			\phi_0 &= \hat{K}_a p\\
+			\phi_1 &= \hat{K}_a \hat{K}_b p\\
+			\phi_{n+1} &= \hat{K}_a \hat{K}_b \phi_n
+		\end{flalign*}
+		We have $(Spine(n),0) \models \phi_n$ and $(Spine(\omega),0) \not\models \phi_n$ for every $n \in \mathbb{N}$.
+	\end{proof}
+\end{frame}
+
+\begin{frame}{Multi-agent \textit{S5}}
+	\begin{block}{Theorem 8.32}
+		For every $n \in \mathbb{N}$
+		\[(Spine(n),0) \equiv_{\lang_K^n} (Spine(\omega),0)\]
+	\end{block} \pause
+	There is no formula that distinguishes $(Spine(\omega),0)$ from the other spine models \pause
+	\begin{block}{Theorem 8.33}
+		There is no $\phi \in \lang_K$ such that $(Spine(\omega),0) \notin \llbracket \phi \rrbracket$ and $\{(Spine(n),0) | n \in \mathbb{N}\} \subseteq \llbracket \phi \rrbracket$.
+	\end{block} \pause
+	Multi-agent \textit{S5} expressive power is quite similar to general modal logic
+\end{frame}
+
+
+\section*{\textit{S5C}}
+
+\begin{frame}{\textit{S5C}}
+	\begin{block}{Theorem 8.34}
+		\[\lang_K \prec \lang_{KC}\] \pause
+		\textbf{Proof.} Obviously $\lang_K \preceq \lang_{KC}$.
+		Now consider
+		\[\phi = C_{ab} \neg p\]
+		$\phi$ is false in $(Spine(n),0)$ for every $n \in \mathbb{N}$\\
+		and true in $(Spine(\omega),0)$
+		\\[4pt]
+		From Theorem 8.33 there is no such formula in $\lang_K$
+	\end{block} \pause
+	But still cannot distinguish bisimilar models
+	\begin{block}{Theorem 8.35}
+		For all models $(M,s)$ and $(\Mpr,\spr)$, if $(M,s) \leftrightarroweq (\Mpr,\spr)$ then $(M,s) \equiv_{\lang_{KC}} (\Mpr,\spr)$.
+	\end{block}
+	Converse does not hold
+\end{frame}
+
+\begin{frame}{The $\lang_{KC}(P)$ game}
+	For models $M = \langle S,R,V \rangle, M^\prime = \langle S^\prime,R^\prime,V^\prime \rangle$ and states $s \in S, s^\prime \in S^\prime$, the $n$-round $\lang_{KC}(P)$ \textit{game} is the same as the $\lang_K$ game, but spoiler has the following extra moves \pause
+	\begin{itemize}
+		\item \textbf{$C$-forth-move}: choose group $B$, $t \in S$ s.t. $(s,t) \in R(B)^*$\\
+		Duplicator responds with state $\tpr$ s.t. $(\spr,\tpr) \in R^\prime(B)^*$
+		\item \textbf{$C$-back-move}: choose group $B$, $\tpr \in \Spr$ s.t. $(\spr,\tpr) \in R^\prime(B)^*$\\
+		Duplicator responds with state $t$ s.t. $(s,t) \in R(B)^*$
+	\end{itemize} \pause
+	Win conditions also remain the same \pause
+	\\[4pt]
+	\textit{Note:} the length of the B-paths selected by spoiler and duplicator can differ
+\end{frame}
+
+\begin{frame}{\textit{S5C}}
+	We similarly extend \textbf{Modal depth} ($d(C_B \phi) = 1 + d(\phi)$), $\lang_{KC}^n$ and with similar reasoning we get \pause
+	\begin{block}{Theorem 8.41}
+		For all $n \in \mathbb{N}$, all models $(M,s)$ and $(M^\prime,s^\prime)$ and all finite sets of atoms $P$: duplicator has a winning strategy for the $n$-round $\lang_{KC}(P)$-game on $(M,s)$ and $(M^\prime,s^\prime)$ iff $(M,s) \equiv_{\lang_{KC}^n} (M^\prime,s^\prime)$.
+	\end{block}
+\end{frame}
+
+
+\section*{\textbf{PA}}
+
+\begin{frame}{\textbf{PA}}
+	\begin{block}{Theorem 8.44}
+		\[\lang_K \equiv \lang_{K[]}\] \pause
+		\textbf{Proof.} Clearly $\lang_K \preceq \lang_{K[]}$\\
+		For $\lang_{K[]} \preceq \lang_K$ we use
+		\begin{itemize}
+			\item the translation $t: \lang_{K[]} \rightarrow \lang_K$ from Definition 7.20
+			\item Lemma 7.24 ($\vdash \phi \leftrightarrow t(\phi), \phi \in \lang_{K[]}$)
+			\item soundness of \textbf{PA}
+		\end{itemize}
+	 to eventually get
+		\[\phi \equiv t(\phi) \text{ for every } \phi \in \lang_{K[]}\]
+	\end{block}
+\end{frame}
+
+
+\section*{\textit{PAC}}
+
+\begin{frame}{\textit{PAC}}
+	Since $\lang_{KC}$ can distinguish the spine models (spoiler can \textit{leap} to the end of the finite model) we need a different class of models, where such a leap is a bad move \pause
+	\begin{figure}[h]
+		\includegraphics[width=0.6\textwidth]{figure_8_3_hairpin_model}
+		\caption{(8.3) A hairpin model ($Hairpin(n)$). $n$ is even.}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{\textit{PAC}}
+	\begin{block}{Lemma 8.46}
+		For every $n \in \mathbb{N}$
+		\[(Hairpin(n),s_0) \equiv_{\lang_{KC}^n} (Hairpin(n),t_0)\]
+	\end{block} \pause
+	\begin{block}{Lemma 8.47}
+		There is no formula $\phi \in \lang_{KC}$ such that for all $n \in \mathbb{N}$\\
+		$(Hairpin(n),s_0) \models \phi$ and $(Hairpin(n),s_0) \not\models \phi$.
+	\end{block}
+\end{frame}
+
+\begin{frame}{\textit{PAC}}
+	\begin{block}{Theorem 8.44}
+		\[\lang_{KC} \prec \lang_{KC[]}\] \pause
+		\textbf{Proof.} Obviously $\lang_{KC} \preceq \lang_{KC[]}$.
+		Now consider
+		\[\phi = [\neg p \rightarrow K_a \neg p] C_{ab} \neg p\]
+		$\phi$ is false in $(Hairpin(n),s_0)$ but true in $(Hairpin(n),t_0)$ for every $n \in \mathbb{N}$
+		\\[4pt]
+		From Lemma 8.47 there is no such formula in $\lang_{KC}$
+	\end{block} \pause
+	But still cannot distinguish bisimilar models since public announcements preserve bisimilarity
+\end{frame}
+
+\begin{frame}
+	\begin{figure}[h]
+		\includegraphics[width=0.5\textwidth]{figure_8_3_hairpin_model_pa}
+		\caption{(8.3) A hairpin model before and after a public announcement. $n$ is even.}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{The $\lang_{KC[]}(P)$ game}
+	For models $M = \langle S,R,V \rangle, M^\prime = \langle S^\prime,R^\prime,V^\prime \rangle$ and states $s \in S, s^\prime \in S^\prime$, the $n$-round $\lang_{KC[]}(P)$ \textit{game} is the same as the $\lang_{KC}$ game, but spoiler can also initiate the following scenario \pause
+	\\[4pt]
+	\textbf{$[\phi]$-move}: choose number $r<n$ and sets $T \subseteq S, T^\prime \subseteq \Spr$ with $s \in T, s^\prime \in T^\prime$
+	\begin{itemize}[label=]
+		\item \textbf{Stage 1}: Duplicator chooses states $t \in (T \cup T^\prime), \bar{t} \in (\overline{T} \cup \overline{T^\prime})$ and they play the $r$-round game for these states\\
+			\quad If duplicator wins this subgame, wins the $n$-round game
+		\item \textbf{Stage 2}: otherwise, game continues on $(M|T,s), (\Mpr|T^\prime,\spr)$ over $(n-r)-1$ rounds
+	\end{itemize} \pause
+	Remaining win conditions remain the same
+\end{frame}
+
+\begin{frame}{\textit{S5C}}
+	We similarly extend \textbf{Modal depth} ($d([\phi] \psi) = 1 + d(\phi) + d(\psi)$), $\lang_{KC[]}^n$ and with (not as much, but still) similar reasoning we get \pause
+	\begin{block}{Theorem 8.41}
+		For all $n \in \mathbb{N}$, all models $(M,s)$ and $(M^\prime,s^\prime)$ and all finite sets of atoms $P$: duplicator has a winning strategy for the $n$-round $\lang_{KC[]}(P)$-game on $(M,s)$ and $(M^\prime,s^\prime)$ iff $(M,s) \equiv_{\lang_{KC[]}^n} (M^\prime,s^\prime)$.
+	\end{block}
+\end{frame}
+
+
+\section*{\textbf{AM}}
+
+\begin{frame}{\textbf{AM}}
+	\begin{block}{Theorem 8.57}
+		\[\lang_K \equiv \lang_{K\otimes}\] \pause
+		\textbf{Proof.} Clearly $\lang_K \preceq \lang_{K\otimes}$\\
+		For $\lang_{K\otimes} \preceq \lang_K$ we use
+		\begin{itemize}
+			\item the translation $t: \lang_{K\otimes} \rightarrow \lang_K$ from Definition 7.37
+			\item Lemma 7.40 ($\vdash \phi \leftrightarrow t(\phi), \phi \in \lang_{K\otimes}$)
+			\item soundness of \textbf{AM}
+		\end{itemize}
+		to eventually get
+		\[\phi \equiv t(\phi) \text{ for every } \phi \in \lang_{K\otimes}\]
+	\end{block}
+\end{frame}
+
+
+\section*{Relativised Common Knowledge}
+
+\begin{frame}{Relativised Common Knowledge}
+	For the general modal case $\mathcal{K}$
+	\begin{block}{Theorem 8.58}
+		\[\lang_{K\;RC} \equiv \lang_{K\;RC[]}\]
+		\\[10pt]
+	\end{block} \pause
+	\begin{block}{Theorem 8.66}
+		\[\lang_{KC[]} \prec \lang_{K\;RC}\]
+		\\[10pt]
+	\end{block} \pause
+	It is unknown whether this holds for \textit{S5}
+\end{frame}
+
+\begin{frame}{Summary}
+	\begin{center}
+		\begin{tikzpicture}
+			\draw[very thick] (0,0) -- (10,0);
+			\draw (2,0) parabola bend (5,1.5) (8,0);
+			\node at (5,0.75) {$\lang_K \equiv \lang_{K[]} \equiv \lang_{K\otimes}$};
+			\draw (1.5,0) parabola bend (5,2.5) (8.5,0);
+			\node at (5,2) {$\lang_{KC}$};
+			\draw (1,0) parabola bend (5,3.5) (9,0);
+			\node at (5,3) {$\lang_{KC[]}$};
+			\draw (0.5,0) parabola bend (5,4.5) (9.5,0);
+			\node at (5,3.8) {$\lang_{K\;RC} \equiv \lang_{K\;RC[]}$};
+		\end{tikzpicture}
+	\end{center}
+	\[\lang_K \equiv \lang_{K[]} \equiv \lang_{K\otimes} \prec \lang_{KC} \prec \lang_{KC[]} \prec \lang_{K\;RC} \equiv \lang_{K\;RC[]}\]
 \end{frame}
 
 \end{document}
