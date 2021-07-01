@@ -1,0 +1,160 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{a4wide}
+
+\usepackage{amsmath,latexsym,amssymb}
+\usepackage{graphicx}
+\graphicspath{ {./figures_final_exam/} }
+% Required packages for plotting
+\usepackage{pgfplots}
+%\usepackage{pgfplotstable}
+\pgfplotsset{compat=1.16}
+%\usepackage{tikz}
+
+% Main document
+\begin{document}
+\title{Dynamic Epistemic Logic - Final Take Home Exam}
+\author{Thomas Pappas}
+%\date{}
+\maketitle
+
+\section*{Exercise 1}
+
+\paragraph{(a)} Let $F=\left<S,R\right>$ be a frame.
+
+\subparagraph{($\Leftarrow$)} Let $M=\left<S,R,V\right>$ for some $V$ such that the property holds.
+Then
+\begin{flalign}
+	& M,w \models \Box \Box p \rightarrow \Box p \nonumber\\
+	\Leftrightarrow & M,w \models \Box \Box p \Rightarrow M,w \models \Box p \nonumber\\
+	\Leftrightarrow & (\forall s \in R[w])[M,s \models \Box p] \Rightarrow (\forall s \in R[w])[M,s \models p] \nonumber\\
+	\Leftrightarrow & (\forall s \in R[w])\left[(\forall t \in R[s]) [M,t \models p]\right] \Rightarrow (\forall s \in R[w])[M,s \models p] \label{ex1arl}
+\end{flalign}
+From hypothesis we get that $(\forall s \in R[w])\exists u \in R[w]$ such that $s \in R[u]$ therefore the first part of \eqref{ex1arl} implies that $M,s \models p, \forall s \in R[w]$ and therefore implies the second.
+Therefore it holds.
+
+\subparagraph{($\Rightarrow$)} Let $\Box \Box p \rightarrow \Box p$ hold in $F$ and assume $R$ doesn't have the weak density property, i.e. $\exists s,t$ such that $t \in R[s]$ but $\nexists u$ such that $u \in R[s]$ and $t \in R[u]$.
+Define $V(p) = R[t], \forall t \in R[s]$ and $V(q) = \emptyset, q \ne p$.
+\begin{center}
+	\begin{tikzpicture}[
+			shorten >=1pt,
+			main/.style = {inner sep=1pt}
+		]
+		\node[main] (s) {$s$};
+		\node[main] (empty1) [above right of=s] {};
+		\node[main] (p1) [above right of=empty1] {$p$};
+		\node[main] (p2) [right of=empty1] {$p$};
+		\draw[->] (s) to (empty1);
+		\draw[->] (empty1) to (p1);
+		\draw[->] (empty1) to (p2);
+	\end{tikzpicture}
+\end{center}
+Then $M,s \models \Box  \Box p$ but $M,s \not\models \Box p$ which is absurd.
+
+\paragraph{(b)} The formula that defines the property $\forall x \forall y (xRy \rightarrow xRx)$ is
+\[\Diamond p \rightarrow (\Box p \rightarrow p)\]
+\subparagraph{($\Leftarrow$)} Let $M=\left<S,R,V\right>$ for some $V$ such that the property holds.
+Then
+\begin{flalign*}
+	& M,w \models \Diamond p \rightarrow (\Box p \rightarrow p) \nonumber\\
+	\Leftrightarrow & M,w \models \Diamond p  \Rightarrow M,w \models (\Box p \rightarrow p)
+\end{flalign*}
+From hypothesis, for $w$ if we have $M,w \models \Diamond p$ then $\exists y (y \in R[w])$ and from the property we get that $w$ is reflective, and therefore $M,w \models \Box p \rightarrow p$ also holds.
+
+\subparagraph{($\Rightarrow$)} Let $\Diamond p \rightarrow (\Box p \rightarrow p$ hold in $F$ and assume that $R$ does not have the above property.
+Consider the model where $w \notin V(p)$ but $s \in V(p)$ for an $s \in R[w]$
+\begin{center}
+	\begin{tikzpicture}[
+		shorten >=1pt,
+		main/.style = {inner sep=1pt}
+	]
+	\node[main] (w) {$w$};
+	\node[main] (p) [above right of=empty1] {$p$};
+	\draw[->] (w) to (p);
+	\end{tikzpicture}
+\end{center}
+Then we have $M,w \models \Diamond p, M,w \models \Box p$ but $M,w \not\models p$.
+\\[8pt]
+Therefore the above modal formula indeed defines the property $\forall x \forall y (xRy \rightarrow xRx)$.
+
+
+\section*{Exercise 2}
+
+\paragraph{(a)} We see the following cases
+\begin{itemize}
+	\item If I was holding two aces, then Bob would see 4 aces in total and would figure out he is holding two eights.
+		Not true since Bob cannot determine his cards.
+	\item If i was holding two eights, then Alice would see 4 eight in total and would figure out she is holding two eights.
+		Not true since Alice cannot determine her cards.
+\end{itemize}
+Therefore I am holding an ace and an eight.
+
+\paragraph{(b)} Since I see two eights from Alice and an ace and an eight from Bob, it means I either have two aces or an ace and an eight.
+If I hade two aces, then Bob would be in the same position as myself in (a), and since he still cannot determine his cards it means that is not the case.
+Therefore I hold an ace and an eight.
+
+\paragraph{(c)} We see the following cases
+\begin{itemize}
+	\item If I had two eights, then Alice would be in the same position as myself in (b) and she would have figured out her cards in her second round.
+	\item If I had two aces, then the same logic can be applied as in (b) and therefore Alice would again figure out her cards.
+\end{itemize}
+Therefore I hold an ace and an eight.
+
+\paragraph{(d)} We denote as $A$ when a player holds an ace and $8$ when they hold an eight.
+Considering all posible cases for three players, the possible words of the game are
+\begin{itemize}
+	\item $(AA,AA,88),(AA,88,AA),(88,AA,AA)$
+	\item $(AA,88,88),(88,AA,88),(88,88,AA)$
+	\item $(AA,A8,A8),(A8,AA,A8),(A8,A8,AA)$
+	\item $(88,A8,A8),(A8,88,A8),(A8,A8,88)$
+	\item $(AA,A8,88),(AA,88,A8),(A8,AA,88),(A8,88,A8),(88,AA,A8),(88,A8,AA)$
+	\item $(A8,A8,A8)$
+\end{itemize}
+
+\paragraph{(e)}
+\[\] % Added to make the figure show below the paragraph label.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{aces_eights_kripke}
+	\caption{The Kripke structure describing the aces and eights game}
+\end{figure}
+
+\paragraph{(f)} Considering the situation described in part (a), when Alice and Bob say they cannot determine which cards they have, the structure becomes as such
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.5\textwidth]{aces_eights_kripke_f}
+	\caption{The Kripke structure after Alice and Bob's turns}
+\end{figure}
+
+
+\section*{Exercise 3}
+
+\subsection*{Exercise 4.20}
+
+We will show that $M,s \models \left<\phi\right> K_a \psi$ iff $M,s \models (\phi \wedge K_a(\phi \rightarrow \left<\phi\right>\psi))$
+\begin{flalign*}
+	& M,s \models (\phi \wedge K_a(\phi \rightarrow \left<\phi\right>\psi))\\
+	\Leftrightarrow & M,s \models \phi \text{ and } M,s \models K_a(\phi \rightarrow \left<\phi\right>\psi)\\
+	\Leftrightarrow & M,s \models \phi \text{ and } (\forall t \in R[s]) [M,t \models \phi \rightarrow \left<\phi\right>\psi]\\
+	\Leftrightarrow & M,s \models \phi \text{ and } (\forall t \in R[s]) [M,t \models \phi \text{ implies } M,t \models \left<\phi\right>\psi]\\
+	\Leftrightarrow & M,s \models \phi \text{ and } (\forall t \in R[s]) [M,t \models \phi \text{ implies } (M,t \models \phi \text{ and } M|_\phi,t \models \psi)]\\
+	\Leftrightarrow & M,s \models \phi \text{ and } (\forall t \in R[s]) [M,t \models \phi \text{ implies } M|_\phi,t \models \psi]\\
+	\Leftrightarrow & M,s \models \phi \text{ and } (\forall t \in R[s]: M,t \models \phi) \text{ implies } M|_\phi,t \models \psi\\
+	\Leftrightarrow & M,s \models \phi \text{ and } (\forall t \in R[s]|_\phi) \text{ implies } M|_\phi,t \models \psi\\
+	\Leftrightarrow & M,s \models \phi \text{ and } M|_\phi,s \models K_a\psi\\
+	\Leftrightarrow & M,s \models \left<\phi\right> K_a\psi
+\end{flalign*}
+
+\subsection*{Exercise 4.21}
+In Example 4.1 from the book we can first see that the formula $\phi = \left<p \wedge \neg K_b p\right>\hat{K}_a\hat{K}_b \neg p$ is not valid for the $0$ world since
+\[M,0 \not\models p \Rightarrow M,0 \not\models p \wedge \neg K_b p\]
+Then for the $1$ world we have that $M,1 \models p$, but also $M,1 \models \neg K_b p$ since $\neg K_b p \leftrightarrow \hat{K}_b \neg p$ and indeed $b$ considers possible the $0$ world where $\neg p$ holds.
+Then we see that $M,1 \models \hat{K}_a\hat{K}_b \neg p$, because
+\begin{align*}
+	& M,0 \models \neg p \\
+	\Rightarrow & M,1 \models \hat{K}_b \neg p & \text{ (since } 0 \sim_b 1 \text{)}\\
+	\Rightarrow & M,1 \models \hat{K}_a \hat{K}_b \neg p & \text{ (since } 1 \sim_a 1 \text{)}
+\end{align*}
+Therefore finally we have
+\[M,1 \models p \text{ and } M,1 \models \neg K_b p \text{ and } M,1 \models \hat{K}_a\hat{K}_b \neg p \Rightarrow M,1 \models \left<p \wedge \neg K_b p\right>\hat{K}_a\hat{K}_b \neg p\]
+
+\end{document}
