@@ -1,0 +1,19 @@
+% !TeX program = XeLaTeX
+---
+title: "Εργασία 1"
+author: "Θωμάς Παππάς"
+date: "26/10/2021"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::read_chunk('R/ergasia1.R')
+```
+
+# Άσκηση 1
+```{r ask1_nnk}
+```
