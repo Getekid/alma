@@ -4,12 +4,12 @@ d2 = function(x, y)
   return(sqrt(sum((x-y)^2)))
 }
 
-nnk = function (X, y, k, x0)
+nnk = function (x, y, k, x0)
 {
   # First some input checking.
-  if (!is.matrix(X))
+  if (!is.matrix(x))
   {
-    print("X needs to be a matrix.")
+    print("x needs to be a matrix.")
     return(FALSE)
   } else if (!is.vector(y))
   {
@@ -19,16 +19,22 @@ nnk = function (X, y, k, x0)
   {
     print("k needs to be a number")
     return(FALSE)
-  } else if (length(X[1,]) != length(x0))
+  } else if (length(x[1,]) != length(x0))
   {
     print("X column and x0 length should be the same")
     return(FALSE)
   }
   
   # Now calculate the Nearest Neighbor.
-  xdist = apply(X, 1, d2, y=x0)
+  xdist = apply(x, 1, d2, y=x0)
   dsort = sort(xdist, index.return=TRUE)
   Nk = dsort$ix[1:k]
   f = mean(y[Nk])
   return(f)
+}
+
+## ---- ask1_epek
+epe = function(y_pred, y_test)
+{
+  return(sum((y_pred-y_test)^2) / length(y_pred))
 }

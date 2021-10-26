@@ -15,5 +15,67 @@ knitr::read_chunk('R/ergasia1.R')
 ```
 
 # Άσκηση 1
+
+
 ```{r ask1_nnk}
 ```
+
+# Άσκηση 2
+
+Αρχικά φορτώνουμε τα δεδομένα.
+```{r}
+ozone = read.csv("data/ozone.data", sep="\t")
+```
+
+## Βήμα 1
+
+Πρώτα δημιουργούμε μια τυχαία μετάθεση των αριθμών 1-111 (μέχρι και τον συνολικό
+αριθμό των γραμμών των δεδομένων) έτσι ώστε να πάρουμε μια τυχαία διαμέριση.
+```{r}
+size = nrow(ozone)
+partition_index = 80
+
+sample_indexes = sample(size)
+train_set = ozone[sample_indexes[1:partition_index],]
+test_set = ozone[sample_indexes[(partition_index+1):size],]
+```
+
+## Βήμα 2
+
+Στη συνέχεια χωρίζουμε το κάθε dataset στις ανεξάρτητες και εξαρτημένες
+μεταβλητές αντίστοιχα
+```{r}
+m = ncol(train_set)
+X_train = data.matrix(train_set[, m-1])
+X_test = data.matrix(test_set[, m-1])
+y_train = train_set[, m]
+y_test = test_set[, m]
+```
+
+και ορίζουμε συνάρτηση που να υπολογίζει το μέσο τετραγωνικό σφάλμα.
+```{r ask1_epek}
+```
+
+και έτσι τώρα μπορούμε για ολα τα ζητούμενα k να εφαρμόσουμε το nnk και να
+υπολογίσουμε το μέσο τετραγωνικό σφάλμα της πρόβλεψής μας.
+```{r}
+k_values = c(1, 2, 5, 10, 15, 20, 30, 40)
+epe_values = rep(0, length(k_values))
+
+for (i in 1:length(k_values))
+{
+  y_pred = apply(X_test, 1, nnk, x=X_train, y=y_train, k=k_values[i])
+  epe_values[i] = epe(y_pred, y_test)
+}
+print(epe_values)
+```
+
+## Βήμα 3
+
+Τέλος το γράφημα του μέσου σφάλματος πρόβλεψης ως συνάρτησης του k.
+```{r}
+plot(k_values, epe_values)
+```
+
+όπου παρατηρούμε ότι όσο ανεβαίνει το k και άρα το bias μεγαλώνει τότε
+το variance πέφτει.
