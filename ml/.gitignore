@@ -1,0 +1,7 @@
+# Ignore Rstudio files and outputs.
+.Rproj.user
+.RData
+.Rhistory
+*.html
+*.log
+*.tex
