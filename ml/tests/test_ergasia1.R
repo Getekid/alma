@@ -15,11 +15,18 @@ test_that("Euclidian distance", {
 })
 
 test_that("Nearest Neighbour (k)", {
+  # Test with X as matrix.
   expect_equal(nnk(X, y, 1, c(0, 0)), 4)
   expect_equal(nnk(X, y, 1, c(3, 3)), 11)
   expect_equal(nnk(X, y, 2, c(1.5, 1.5)), 3)
   expect_equal(nnk(X, y, 4, c(2,2)), Ey)
   expect_equal(nnk(X, y, 4, c(4,5)), Ey)
+  
+  # Repeat some of the tests with X as data frame.
+  X_df = data.frame(X)
+  expect_equal(nnk(X_df, y, 1, c(0, 0)), 4)
+  expect_equal(nnk(X_df, y, 2, c(1.5, 1.5)), 3)
+  expect_equal(nnk(X_df, y, 4, c(4,5)), Ey)
 })
 
 test_that("Expected Prediction Error", {

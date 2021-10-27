@@ -7,9 +7,9 @@ d2 = function(x, y)
 nnk = function (x, y, k, x0)
 {
   # First some input checking.
-  if (!is.matrix(x))
+  if (!is.matrix(x) && !is.data.frame(x))
   {
-    print("x needs to be a matrix.")
+    print("x needs to either be a matrix or a data frame.")
     return(FALSE)
   } else if (!is.vector(y))
   {
@@ -23,6 +23,12 @@ nnk = function (x, y, k, x0)
   {
     print("X column and x0 length should be the same")
     return(FALSE)
+  }
+  
+  # If X is a data frame, convert it to a matrix.
+  if (is.data.frame(x))
+  {
+    x = data.matrix(x)
   }
   
   # Now calculate the Nearest Neighbor.

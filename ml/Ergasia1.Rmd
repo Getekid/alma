@@ -45,11 +45,11 @@ test_set = ozone[sample_indexes[(partition_index+1):size],]
 Στη συνέχεια χωρίζουμε το κάθε dataset στις ανεξάρτητες και εξαρτημένες
 μεταβλητές αντίστοιχα
 ```{r}
-m = ncol(train_set)
-X_train = data.matrix(train_set[, m-1])
-X_test = data.matrix(test_set[, m-1])
-y_train = train_set[, m]
-y_test = test_set[, m]
+independent_vars = c("radiation", "temperature", "wind")
+X_train = train_set[, independent_vars]
+X_test = test_set[, independent_vars]
+y_train = train_set$ozone
+y_test = test_set$ozone
 ```
 
 και ορίζουμε συνάρτηση που να υπολογίζει το μέσο τετραγωνικό σφάλμα.
