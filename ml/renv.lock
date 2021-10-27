@@ -156,6 +156,13 @@
       "Repository": "CRAN",
       "Hash": "41287f1ac7d28a92f0a286ed507928d3"
     },
+    "neighbr": {
+      "Package": "neighbr",
+      "Version": "1.0.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "94ddd00c60e4375237dc596cec40a6f1"
+    },
     "pillar": {
       "Package": "pillar",
       "Version": "1.6.4",

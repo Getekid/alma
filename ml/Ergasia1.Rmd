@@ -79,3 +79,33 @@ plot(k_values, epe_values)
 
 όπου παρατηρούμε ότι όσο ανεβαίνει το k και άρα το bias μεγαλώνει τότε
 το variance πέφτει.
+
+# Άσκηση 3
+
+Θα χρησιμοποιήσουμε τη μέθοδο "knn" από το πακέτο "neighbr".
+Σε αυτή τη μέθοδο το training set χρειάζεται να έχει και την target στήλη ενώ
+το test set όχι.
+Οπότε για τα ίδια k επαναλαμβάνουμε
+```{r}
+epe_values_pack = rep(0, length(k_values))
+for (i in 1:length(k_values))
+{
+  y_pred_pack = neighbr::knn(
+    train_set=train_set,
+    test_set=X_test,
+    k=k_values[i],
+    comparison_measure="euclidean",
+    continuous_target="ozone"
+  )
+  # Now the predictions are in the "test_set_scores" column which is a
+  # data frame with the numbers in the "continuous_target" column.
+  y_pred_pack = y_pred_pack$test_set_scores$continuous_target
+  epe_values_pack[i] = epe(y_pred_pack, y_test)
+}
+print(epe_values_pack)
+```
+
+και τέλος κατασκευάζουμε και το γράφημα
+```{r}
+plot(k_values, epe_values_pack)
+```
