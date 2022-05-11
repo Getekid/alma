@@ -14,15 +14,17 @@
   % you may want to try: {FreeMono} or {Courier New}
 \setmonofont[Scale=MatchLowercase]{FreeMono}
 
-\usepackage{amsmath}
+%\usepackage{amsmath}
 \usepackage{hhline}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
 
 
 % Main document
 \begin{document}
 \title{Αλγοριθμική Επιστήμη Δεδομένων - 1η Σειρά Ασκήσεων}
 \author{Θωμάς Παππάς}
-%\date{}
+\date{12 Μαΐου 2022}
 \maketitle
 
 \section*{Άσκηση 1}
@@ -92,7 +94,8 @@
 
 \subsection*{Άσκηση 6.3.2 (MMDS)}
 % Hash support on second pass: [0, 3, 2, 2, 0, 2, 4, 4, 5]
-Τρέχουμε τον Multistage αλγόριθμο με τα ίδια στοιχεία όπως στην Άσκηση 6.3.1 και το νέο hash κανόνα και παίρνουμε
+Τρέχουμε τον Multistage αλγόριθμο και κάνουμε hash τα στοιχεία που βρήκαμε συχνά στην Άσκηση 6.3.1 με το νέο hash κανόνα.
+Το hash table που παίρνουμε είναι
 \begin{center}
 	\begin{tabular}{| r | c || r | c || r | c |}
 		\hline
@@ -117,5 +120,289 @@
 		\]
 	\item το $\{A,B,C\}$, το μοναδικό 3-itemset που έχει όλα τα υποσύνολά του συχνά
 \end{itemize}
+
+\section*{Άσκηση 2}
+
+\paragraph{(α)} Η ορθότητα της μεθόδου A-priori βασίζεται στην αντι-μονοτονικότητα της συνάρτησης support, δηλαδή $\forall X,Y: X \subseteq Y$ έχουμε $\textnormal{support}(X) \geq \textnormal{support}(Y)$.
+Από αυτό παίρνουμε ότι αν ένα itemset είναι συχνό, τότε και όλα τα υποσύνολά του είναι συχνά, και άρα στο βήμα παραγωγής υποψηφίων itemsets όπου βάζουμε μόνο αυτά που ικανοποιούν αυτή τη συνθήκη, ξέρουμε ότι δεν θα προσπεράσουμε κάποιο που είναι όντως συχνό.
+
+Με αυτόν τον αλγόριθμο πραγματοποιούνται τόσες διασχίσεις στη βάση δεδομένων όσο και το μήκος του μεγαλύτερου συχνού itemset, αφού απαιτείται μετά από κάθε παραγωγή $C_i$ συνόλου.
+
+\paragraph{(β)} Είναι πολυωνυμική ως προς την έξοδο, διότι όπως αναφέραμε και στο \textbf{(α)}, πραγματοποιούνται τόσες διασχίσεις στη βάση δεδομένων όσο και το μήκος του μεγαλύτερου συχνού itemset.
+
+\paragraph{(γ)} Ο FP-Growth αρχικά χρειάζεται 2 περάσματα στη βάση δεδομένων ώστε να κατασκευάσει το FP-trie structure.
+Από εκεί και πέρα θα χρειαστεί να διασχίσει το δέντρο σε κάθε βήμα ώστε να φτιάξει τα υποδέντρα, να κάνεις τις ανανεώσεις στις συχνότητες και να υπολογίσει το πλήθος των υπόλοιπων στοιχείων.
+Εφόσον η διάσχιση του δέντρου μπορεί να γίνει σε γραμμικό χρόνο, η πολυπλοκότητα εξαρτάται πιο πολύ από τον αριθμό των βημάτων που θα χρειαστούν, δηλαδή πάλι ανάλογα με το μήκος του μεγαλύτερου συχνού itemset.
+Οπότε και ο FP-Growth αλγόριθμος είναι πολυωνυμικός ως προς την έξοδο.
+\\[8pt]
+Για την πολυπλοκότητα του αλγορίθμου ίσως αξίζει να αναφέρουμε και τη σχέση που έχει ως προς το πλήθος των items $k$.
+Tο μέγεθος του δέντρου που θα προκύψει εξαρτάται από το πόσες διαφορετικές λεξικογραφικές εγγραφές αποτελείται η βάση, όπου στη χειρότερη θα μπορούσε να είναι $2^k$.
+Ο αλγόριθμος θα πρέπει να το διασχίσει τουλάχιστον $k$ φορές, μία για κάθε στοιχείο, οπότε στη χειρότερη έχουμε μια πολυπλοκότητα $\mathcal{O}(k2^k)$.
+Εφόσον βέβαια το $k$ είναι μικρός αριθμός σε σχέση με το πλήθος των εγγραφών, ενώ επίσης έχουμε και τη γενική υπόθεση ότι τα συχνά υποσύνολα θα είναι πολύ λιγότερα από το μέγεθος της βάσης, μπορούμε να περιμένουμε ότι ακόμα και σε αυτήν την περίπτωση τα υποδέντρα που θα προκύψουν θα μικρύνουν μετά από ένα μικρό αριθμό βημάτων.
+
+\paragraph{(δ)}
+\subparagraph{Α-priori}
+Ξεκινάμε με το 1ο πέρασμα της βάσης δεδομένων όπου μετράμε τα συχνά 1-itemsets $a,b,c,d$, τα οποία και βρίσκουμε ότι έχουν συχνότητα $7,6,7,9$ αντίστοιχα, οπότε
+\[ L_1 = \{ \{a\},\{b\},\{c\},\{d\} \} \]
+Οπότε όλα τα πιθανά 2-itemsets είναι candidate
+\[ C_2 = \{ \{a,b\},\{a,c\},\{a,d\},\{b,c\},\{b,d\},\{c,d\} \} \]
+τα οποία μετράμε στο 2ο πέρασμα της βάσης και βρίσκουμε ότι έχουν συχνότητα $2,4,5,3,5,4$ αντίστοιχα, οπότε με threshold $s=4$ παίρνουμε
+\[ L_2 = \{ \{a,c\},\{a,d\},\{b,d\},\{c,d\} \} \]
+Συνεχίζοντας για candidate 3-itemsets, αρχικά ψάχνουμε δύο συχνά 2-itemsets που διαφέρουν κατά ένα στοιχείο ώστε με την ένωσή τους να πάρουμε ένα 3-itemset, για το οποίο στη συνέχεια ελέγχουμε εάν όλα τα 2-itemset υποσύνολά του είναι επίσης συχνά.
+Βρίσκουμε τα $\{a,c,d\},\{a,b,d\}$ από τους συνδυασμούς, αλλά το δεύτερο απορρίπτεται διότι το $\{a,b\}$ δεν είναι συχνό.
+Οπότε
+\[ C_3 = \{ \{a,c,d\} \} \]
+το οποίο και μετράμε στη βάση (3ο πέρασμα) και βλέπουμε ότι δεν είναι συχνό.
+Παίρνουμε λοιπόν $L_3 = \emptyset$ και σταματάμε.
+\\[8pt]
+Οπότε τα συχνά υποσύνολα της βάσης δεδομένων είναι τα
+\[ \{ \{a,c\},\{a,d\},\{b,d\},\{c,d\} \} \]
+
+\subparagraph{FP-Growth}
+Ξεκινάμε όπως με τον A-priori και βρίσκουμε τα συχνά 1-itemsets $a,b,c,d$ με συχνότητα $7,6,7,9$ αντίστοιχα.
+Κάνοντας ένα 2ο πέρασμα στη βάση ταξινομούμε τα στοιχεία σε κάθε itemset κατά φθίνουσα συχνότητα, δηλαδή $d,a,c,b$, και φτιάχνουμε το FP-trie.
+\begin{center}
+	\begin{tikzpicture}[
+			node distance=40pt,
+			main/.style = {draw, circle, inner sep=.5pt}
+		]
+		\node[main, label=above:{root}] (r) {};
+		% Level 1.
+		\node[main, below of=r] (a) {$a:2$};
+		\node[main, left of=a] (d) {$d:9$};
+		\node[main, right of=a] (c) {$c:1$};
+		% Level 2.
+		\node[main, below of=d] (dc) {$c:2$};
+		\node[main, left of=dc] (da) {$a:5$};
+		\node[main, right of=dc] (db) {$b:2$};
+		\node[main, below right of=a] (ac) {$c:2$};
+		\node[main, below right of=c] (cb) {$b:1$};
+		% Level 3.
+		\node[main, below of=da] (dac) {$c:2$};
+		\node[main, left of=dac] (dab) {$b:1$};
+		\node[main, below of=dc] (dcb) {$b:1$};
+		% Level 4.
+		\node[main, below of=dac] (dacb) {$b:1$};
+
+		\draw[->] (r) to (a);
+		\draw[->] (r) to (d);
+		\draw[->] (r) to (c);
+		\draw[->] (d) to (dc);
+		\draw[->] (d) to (da);
+		\draw[->] (d) to (db);
+		\draw[->] (a) to (ac);
+		\draw[->] (c) to (cb);
+		\draw[->] (da) to (dac);
+		\draw[->] (da) to (dab);
+		\draw[->] (dc) to (dcb);
+		\draw[->] (dac) to (dacb);
+	\end{tikzpicture}
+\end{center}
+
+Τώρα θα δούμε τα υποδέντρα που καταλήγουν σε κάθε στοιχείο.
+Ξεκινάμε με το $b$ που έχει τη μικρότερη συχνότητα οπότε φτιάχνουμε το υποδέντρο μονοπατιών που καταλήγουν σε αυτό και ανανεώνουμε συχνότητες.
+\begin{center}
+	\begin{tikzpicture}[
+			node distance=40pt,
+			main/.style = {draw, circle, inner sep=.5pt}
+		]
+		\node[main, label=above:{root}] (r) {};
+		% Level 1.
+		\node[main, below left of=r] (d) {$d:9$};
+		\node[main, below right of=r] (c) {$c:1$};
+		% Level 2.
+		\node[main, below of=d] (dc) {$c:2$};
+		\node[main, left of=dc] (da) {$a:5$};
+		\node[main, right of=dc] (db) {$b:2$};
+		\node[main, below right of=c] (cb) {$b:1$};
+		% Level 3.
+		\node[main, below of=da] (dac) {$c:2$};
+		\node[main, left of=dac] (dab) {$b:1$};
+		\node[main, below of=dc] (dcb) {$b:1$};
+		% Level 4.
+		\node[main, below of=dac] (dacb) {$b:1$};
+		
+		\draw[->] (r) to (d);
+		\draw[->] (r) to (c);
+		\draw[->] (d) to (dc);
+		\draw[->] (d) to (da);
+		\draw[->] (d) to (db);
+		\draw[->] (c) to (cb);
+		\draw[->] (da) to (dac);
+		\draw[->] (da) to (dab);
+		\draw[->] (dc) to (dcb);
+		\draw[->] (dac) to (dacb);
+	\end{tikzpicture}
+	\begin{tikzpicture}[
+			node distance=40pt,
+			main/.style = {draw, circle, inner sep=.5pt}
+		]
+		\node[main, label=above:{root}] (r) {};
+		% Level 1.
+		\node[main, below left of=r] (d) {$d:\mathbf{5}$};
+		\node[main, below right of=r] (c) {$c:1$};
+		% Level 2.
+		\node[main, below of=d] (dc) {$c:\mathbf{1}$};
+		\node[main, left of=dc] (da) {$a:\mathbf{2}$};
+		\node[main, right of=dc] (db) {$b:2$};
+		\node[main, below right of=c] (cb) {$b:1$};
+		% Level 3.
+		\node[main, below of=da] (dac) {$c:\mathbf{1}$};
+		\node[main, left of=dac] (dab) {$b:1$};
+		\node[main, below of=dc] (dcb) {$b:1$};
+		% Level 4.
+		\node[main, below of=dac] (dacb) {$b:1$};
+		
+		\draw[->] (r) to (d);
+		\draw[->] (r) to (c);
+		\draw[->] (d) to (dc);
+		\draw[->] (d) to (da);
+		\draw[->] (d) to (db);
+		\draw[->] (c) to (cb);
+		\draw[->] (da) to (dac);
+		\draw[->] (da) to (dab);
+		\draw[->] (dc) to (dcb);
+		\draw[->] (dac) to (dacb);
+	\end{tikzpicture}
+\end{center}
+Μετράμε τις συχνότητες από τα υπόλοιπα στοιχεία ($a,c,d$) και βρίσκουμε $2,3,5$ αντίστοιχα οπότε εφόσον μόνο το $d$ βγαίνει πάνω από το threshold έχουμε ότι το $\{b,d\}$ συχνό.
+
+Θα μπορούσαμε να συνεχίσουμε να ψάξουμε για συχνά 3-itemsets αλλά εφόσον δεν βρήκαμε άλλο συχνό 2-itemset που να περιέχει το $b$ τότε σίγουρα δεν υπάρχουν 3-itemsets που να το περιέχουν.
+\\[8pt]
+Ομοίως τώρα με το στοιχείο $c$.
+\begin{center}
+	\begin{tikzpicture}[
+			node distance=40pt,
+			main/.style = {draw, circle, inner sep=.5pt}
+		]
+		\node[main, label=above:{root}] (r) {};
+		% Level 1.
+		\node[main, below of=r] (a) {$a:2$};
+		\node[main, left of=a] (d) {$d:9$};
+		\node[main, right of=a] (c) {$c:1$};
+		% Level 2.
+		\node[main, below of=d] (dc) {$c:2$};
+		\node[main, left of=dc] (da) {$a:5$};
+		\node[main, below of=a] (ac) {$c:2$};
+		% Level 3.
+		\node[main, below of=da] (dac) {$c:2$};
+		
+		\draw[->] (r) to (a);
+		\draw[->] (r) to (d);
+		\draw[->] (r) to (c);
+		\draw[->] (d) to (dc);
+		\draw[->] (d) to (da);
+		\draw[->] (a) to (ac);
+		\draw[->] (da) to (dac);
+	\end{tikzpicture}
+	\begin{tikzpicture}[
+			node distance=40pt,
+			main/.style = {draw, circle, inner sep=.5pt}
+		]
+		\node[main, label=above:{root}] (r) {};
+		% Level 1.
+		\node[main, below of=r] (a) {$a:2$};
+		\node[main, left of=a] (d) {$d:\mathbf{4}$};
+		\node[main, right of=a] (c) {$c:1$};
+		% Level 2.
+		\node[main, below of=d] (dc) {$c:2$};
+		\node[main, left of=dc] (da) {$a:\mathbf{2}$};
+		\node[main, below of=a] (ac) {$c:2$};
+		% Level 3.
+		\node[main, below of=da] (dac) {$c:2$};
+		
+		\draw[->] (r) to (a);
+		\draw[->] (r) to (d);
+		\draw[->] (r) to (c);
+		\draw[->] (d) to (dc);
+		\draw[->] (d) to (da);
+		\draw[->] (a) to (ac);
+		\draw[->] (da) to (dac);
+	\end{tikzpicture}
+\end{center}
+Βρίσκουμε συχνότητα για το $a$ ίση με $2+2=4$ και για το $d$ επίσης $4$.
+Οπότε έχουμε συχνά 2-itemsets τα $\{a,c\},\{c,d\}$.
+
+Συνεχίζουμε για 3-itemsets με μόνο υποψήφιο το $\{a,c,d\}$ οπότε χρησιμοποιώντας το $\{c,d\}$ παίρνουμε το υποδέντρο με τα μονοπάτια που το περιέχει, ανανεώνουμε συχνότητες (πάλι εδώ δεν χρειάζεται) και μετά μετράμε συχνότητα για το $a$.
+(Tο ίδιο αποτέλεσμα θα πάρουμε και εάν χρησιμοποιήσουμε το $\{a,c\}$ και μετά μετρήσουμε τη συχνότητα του $d$)
+\begin{center}
+	\begin{tikzpicture}[
+			node distance=40pt,
+			main/.style = {draw, circle, inner sep=.5pt}
+		]
+		\node[main, label=above:{root}] (r) {};
+		% Level 1.
+		\node[main, below of=r] (d) {$d:4$};
+		% Level 2.
+		\node[main, below right of=d] (dc) {$c:2$};
+		\node[main, below left of=d] (da) {$a:2$};
+		% Level 3.
+		\node[main, below left of=da] (dac) {$c:2$};
+
+		\draw[->] (r) to (d);
+		\draw[->] (d) to (dc);
+		\draw[->] (d) to (da);
+		\draw[->] (da) to (dac);
+	\end{tikzpicture}
+\end{center}
+Βλέπουμε ότι η συχνότητα του $a$ είναι $2$ οπότε το $\{a,c,d\}$ δεν είναι συχνό.
+\\[8pt]
+Συνεχίζουμε ομοίως με το στοιχείο $a$.
+\begin{center}
+	\begin{tikzpicture}[
+			node distance=40pt,
+			main/.style = {draw, circle, inner sep=.5pt}
+		]
+		\node[main, label=above:{root}] (r) {};
+		% Level 1.
+		\node[main, below left of=r] (d) {$d:9$};
+		\node[main, below right of=r] (a) {$a:2$};
+		% Level 2.
+		\node[main, below left of=d] (da) {$a:5$};
+		
+		\draw[->] (r) to (d);
+		\draw[->] (r) to (a);
+		\draw[->] (d) to (da);
+	\end{tikzpicture}
+	\begin{tikzpicture}[
+			node distance=40pt,
+			main/.style = {draw, circle, inner sep=.5pt}
+		]
+		\node[main, label=above:{root}] (r) {};
+		% Level 1.
+		\node[main, below left of=r] (d) {$d:\mathbf{5}$};
+		\node[main, below right of=r] (a) {$a:2$};
+		% Level 2.
+		\node[main, below left of=d] (da) {$a:5$};
+		
+		\draw[->] (r) to (d);
+		\draw[->] (r) to (a);
+		\draw[->] (d) to (da);
+	\end{tikzpicture}
+\end{center}
+Εφόσον η συχνότητα του $d$ είναι $5$ παίρνουμε ότι το $\{a,d\}$ συχνό.
+Εφόοσον το υποδέντρο έχει μόνο δύο στοιχεία δεν έχει νόημα να ψάξουμε για 3-itemsets, ενώ για τον ίδιο λόγο δεν έχει νόημα να κοιτάξουμε το στοιχείο $d$ (το υποδέντρο θα έχει μόνο έναν κόμβο πέρα από το root).
+\\[8pt]
+Οπότε τα συχνά υποσύνολα της βάσης δεδομένων είναι τα
+\[ \{ \{a,c\},\{a,d\},\{b,d\},\{c,d\} \} \]
+
+\paragraph{(ε)}
+\subparagraph{$s^\prime=1$} Με threshold $s^\prime$ από τις 3 πρώτες εγγραφές παίρνουμε ότι τα υποψήφια συχνά itemets είναι τα
+\[ \{a,c,d\},\{b,c,d\} \]
+προφανώς μαζί με όλα τα υποσύνολά τους.
+Το Negative Border είναι το σύνολο $\{ \{a,b\} \}$ εφόσον αυτό είναι το μοναδικό 2-itemset που δεν είναι συχνό (τα 1-itemsets είναι όλα συχνά), ενώ τα 3-itemsets που δεν είναι συχνά είναι τα $\{a,b,c\},\{a,b,d\}$ τα οποία και τα δύο έχουν υποσύνολο το $\{a,b\}$.
+Τέλος προφανώς και το 4-itemset $\{a,b,c,d\}$ επίσης δεν είναι στο Negative Border.
+
+Με έναν έλεγχο στη βάση βλέπουμε ότι ο αλγόριθμος θα βρει σωστά τα συχνά itemsets αφού όλα βρίσκονται στα υποψήφια ενώ το Negative Border θα βγει μη συχνό.
+
+\subparagraph{$s^{\prime\prime}=2$} Με threshold $s^{\prime\prime}$ από τις 3 πρώτες εγγραφές παίρνουμε ότι τα υποψήφια συχνά itemsets είναι τα
+\[ \{ \{c\},\{a,d\} \} \]
+και το Negative Border είναι το
+\[ \{ \{b\},\{a,c\},\{c,d\} \} \]
+Βλέπουμε ότι ο αλγόριθμος δεν θα δουλέψει διότι το $\{b\}$ από το Negative Border είναι συχνό itemset στη βάση.
+\\[8pt]
+Παρατηρούμε ότι όπως περιμέναμε το $s^{\prime\prime}$ δεν ήταν καλή επιλογή για threshold.
+Εφόσον πήραμε το $1/4$ των εγγραφών για δείγμα, το προτεινόμενο θα ήταν να πάρουμε ένα ακόμα μικρότερο κλάσμα του αρχικού threshold.
+Αυτό εδώ προφανώς δεν γίνεται οπότε το $s^\prime$, το ακριβώς $1/4$ του $s$, είναι μια καλή επιλογή που εσωκλείει όλα τα συχνά στα υποψήφια, ενώ το $s^{\prime\prime}$ αφήνει τα περισσότερα απ' έξω.
 
 \end{document}
