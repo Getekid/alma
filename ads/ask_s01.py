@@ -1,4 +1,5 @@
 # Exercise 1
+import math
 
 
 class Multistage:
@@ -122,3 +123,105 @@ print(mg.hash_buckets)
 # Exercise 6.3.2
 print(mg.hash_buckets_multistage)
 
+
+# Exercise 5
+def d2(point_a, point_b):
+    return math.sqrt((point_a[0] - point_b[0]) ** 2 + (point_a[1] - point_b[1]) ** 2)
+
+
+data = [(4, 10), (7, 10), (4, 8), (6, 8), (12, 6), (10, 5), (3, 4), (11, 4), (9, 3), (12, 3), (2, 2), (5, 2)]
+
+# Exercise 7.2.2
+format_row = "{:>8}" * (len(data) + 1)
+print(format_row.format('', *list(map(lambda x: str(x), data))))
+for point_row in data:
+    distances = []
+    for point_col in data:
+        distances.append(round(d2(point_col, point_row), 2))
+    print(format_row.format(str(point_row), *distances))
+
+
+# Exercise 7.2.3
+class Cluster:
+    def __init__(self, points):
+        self.points = list(set(points))
+        self.centroid = self.get_centroid()
+
+    def get_centroid(self):
+        x = (sum([point[0] for point in self.points])) / len(self.points)
+        y = (sum([point[1] for point in self.points])) / len(self.points)
+        return x, y
+
+    def get_radius(self):
+        radii = [d2(self.centroid, point) for point in self.points]
+        return max(radii)
+
+    def get_diameter(self):
+        diameter = 0
+        for point_a in self.points:
+            for point_b in self.points:
+                if point_a == point_b:
+                    continue
+                d = d2(point_a, point_b)
+                diameter = d if d > diameter else diameter
+        return diameter
+
+    def __repr__(self):
+        return str(self.points)
+
+
+class HClustering:
+    def __init__(self, points):
+        self.points = points
+        self.clusters = [Cluster([point]) for point in points]
+        self.criterion = ''
+
+    def cluster_step(self):
+        radius_min = 1000
+        diameter_min = 1000
+        merge = {}
+        for cluster_a in self.clusters:
+            for cluster_b in self.clusters:
+                if cluster_a == cluster_b:
+                    continue
+                cluster_new = Cluster(cluster_a.points + cluster_b.points)
+
+                if self.criterion == 'radius':
+                    radius = cluster_new.get_radius()
+                    if radius < radius_min:
+                        merge = {'a': cluster_a, 'b': cluster_b, 'new': cluster_new}
+                        radius_min = radius
+                elif self.criterion == 'diameter':
+                    diameter = cluster_new.get_diameter()
+                    if diameter < diameter_min:
+                        merge = {'a': cluster_a, 'b': cluster_b, 'new': cluster_new}
+                        diameter_min = diameter
+
+        criterion_value = radius_min if self.criterion == 'radius' else diameter_min
+        criterion_value = round(criterion_value, 2)
+        print('Merging clusters {0} and {1}. New cluster has centroid {2} and {3} {4}'.format(
+            merge['a'].points, merge['b'].points, merge['new'].get_centroid(), self.criterion, criterion_value))
+
+        self.clusters.remove(merge['a'])
+        self.clusters.remove(merge['b'])
+        self.clusters.append(merge['new'])
+
+    def cluster(self):
+        while len(self.clusters) > 3:
+            self.cluster_step()
+
+
+print()
+print('Exercise 7.2.3')
+
+print('(a) - radius')
+hcl = HClustering(data)
+hcl.criterion = 'radius'
+hcl.cluster()
+print('Final clusters:', hcl.clusters)
+
+print('(b) - diameter')
+hcl = HClustering(data)
+hcl.criterion = 'diameter'
+hcl.cluster()
+print('Final clusters:', hcl.clusters)
