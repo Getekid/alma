@@ -17,6 +17,8 @@
 \usepackage{amsmath}
 \usepackage{hhline}
 \usepackage{tikz}
+\usepackage{multirow}
+
 \usetikzlibrary{positioning}
 
 
@@ -404,6 +406,224 @@ Tο μέγεθος του δέντρου που θα προκύψει εξαρτ
 Παρατηρούμε ότι όπως περιμέναμε το $s^{\prime\prime}$ δεν ήταν καλή επιλογή για threshold.
 Εφόσον πήραμε το $1/4$ των εγγραφών για δείγμα, το προτεινόμενο θα ήταν να πάρουμε ένα ακόμα μικρότερο κλάσμα του αρχικού threshold.
 Αυτό εδώ προφανώς δεν γίνεται οπότε το $s^\prime$, το ακριβώς $1/4$ του $s$, είναι μια καλή επιλογή που εσωκλείει όλα τα συχνά στα υποψήφια, ενώ το $s^{\prime\prime}$ αφήνει τα περισσότερα απ' έξω.
+
+\section*{Άσκηση 4}
+
+\subsection*{5.2.2 (MMDS)}
+
+\paragraph{(a)} Για το γράφο του σχήματος 5.4 (MMDS), η αναπαράστασή του ως sparse matrix είναι
+\begin{center}
+	\begin{tabular}{| c | c | l |}
+		\hline
+		Source & Degree & Destinations \\ \hhline{|=|=|=|}
+		$A$ & $3$ & $B,C,D$ \\
+		$B$ & $2$ & $A,D$ \\
+		$C$ & $1$ & $E$ \\
+		$D$ & $2$ & $B,C$ \\
+		\hline
+	\end{tabular}
+\end{center}
+Παραλείπουμε τη γραμμή για το $E$ αφού δεν έχει κανένα outgoing link.
+
+\paragraph{(b)} Για το γράφο του σχήματος 5.7 (MMDS), η αναπαράστασή του ως sparse matrix είναι
+\begin{center}
+	\begin{tabular}{| c | c | l |}
+		\hline
+		Source & Degree & Destinations \\ \hhline{|=|=|=|}
+		$a$ & $3$ & $a,b,c$ \\
+		$b$ & $2$ & $a,c$ \\
+		$c$ & $1$ & $b,c$ \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\subsection*{5.2.3 (MMDS)}
+
+Ο γράφο του σχήματος 5.3 (MMDS) έχει τέσσερις κόμβους-σελίδες οπότε ο πίνακάς του είναι $4x4$, οπότε μια διαμέριση $2x2$ θα το χωρίσει σε τέσσερα blocks.
+\begin{center}
+	\begin{tabular}{| c | c | c |}
+		\hline
+		& $A \quad B$ & $C \quad D$ \\ \hhline{|=|=|=|}
+		$A$ & \multirow{2}{*}{$M_{11}$} & \multirow{2}{*}{$M_{12}$} \\
+		$B$ & & \\
+		\hline
+		$C$ & \multirow{2}{*}{$M_{21}$} & \multirow{2}{*}{$M_{22}$} \\
+		$D$ & & \\
+		\hline
+	\end{tabular}
+\end{center}
+Οπότε έχουμε για το $M_{11}$ (από $A,B$ σε $A,B$)
+\begin{center}
+	\begin{tabular}{| c | c | l |}
+		\hline
+		Source & Degree & Destinations \\ \hhline{|=|=|=|}
+		$A$ & $3$ & $B$ \\
+		$B$ & $2$ & $A$ \\
+		\hline
+	\end{tabular}
+\end{center}
+για $M_{12}$ (από $A,B$ σε $C,D$)
+\begin{center}
+	\begin{tabular}{| c | c | l |}
+		\hline
+		Source & Degree & Destinations \\ \hhline{|=|=|=|}
+		$A$ & $3$ & $C,D$ \\
+		$B$ & $2$ & $D$ \\
+		\hline
+	\end{tabular}
+\end{center}
+για $M_{21}$ (από $C,D$ σε $A,B$)
+\begin{center}
+	\begin{tabular}{| c | c | l |}
+		\hline
+		Source & Degree & Destinations \\ \hhline{|=|=|=|}
+		$D$ & $2$ & $B$ \\
+		\hline
+	\end{tabular}
+\end{center}
+και τέλος για $M_{22}$ (από $C,D$ σε $C,D$)
+\begin{center}
+	\begin{tabular}{| c | c | l |}
+		\hline
+		Source & Degree & Destinations \\ \hhline{|=|=|=|}
+		$D$ & $2$ & $C$ \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\subsection*{5.3.1 (MMDS)}
+
+Για το γράφο του σχήματος 5.15 (MMDS) έχουμε από το παράδειγμα του βιβλίου ότι ο πίνακας μετάβασης είναι (έχουμε $\beta=0.8$)
+\[
+	\beta M =
+	\begin{bmatrix}
+		0 & 2/5 & 4/5 & 0 \\
+		4/15 & 0 & 0 & 2/5 \\
+		4/15 & 0 & 0 & 2/5 \\
+		4/15 & 2/5 & 0 & 0
+	\end{bmatrix}
+\]
+
+\paragraph{(a)} Αν $S={A}$ τότε παίρνουμε $(1-\beta)/|S|=1/5$ και άρα
+\[
+	\textbf{v}^\prime = \beta M \textbf{v} + (1-\beta)\textbf{e}_S/|S| =
+	\begin{bmatrix}
+		0 & 2/5 & 4/5 & 0 \\
+		4/15 & 0 & 0 & 2/5 \\
+		4/15 & 0 & 0 & 2/5 \\
+		4/15 & 2/5 & 0 & 0
+	\end{bmatrix}
+	\textbf{v} +
+	\begin{bmatrix}
+		1/5 \\ 0 \\ 0 \\ 0
+	\end{bmatrix}
+\]
+Ξεκινώντας λοιπόν από το $(1,0,0,0)$ παίρνουμε
+\[
+	\textbf{v}^\prime=
+	\begin{bmatrix}1 \\ 0 \\ 0 \\ 0\end{bmatrix},
+	\begin{bmatrix}0.2 \\ 0.27 \\ 0.27 \\ 0.27\end{bmatrix},
+	\begin{bmatrix}0.52 \\ 0.16 \\ 0.16 \\ 0.16\end{bmatrix},
+	\begin{bmatrix}0.39 \\ 0.20 \\ 0.20 \\ 0.20\end{bmatrix},
+	\begin{bmatrix}0.44 \\ 0.19 \\ 0.19 \\ 0.19\end{bmatrix},
+	\begin{bmatrix}0.42 \\ 0.19 \\ 0.19 \\ 0.19\end{bmatrix},
+	\begin{bmatrix}0.43 \\ 0.19 \\ 0.19 \\ 0.19]\end{bmatrix},
+	\dots
+\]
+Οπότε ο topic-sensitive PageRank πίνακας είναι ο
+\[ \textbf{v}^\prime = [0.43,0.19,0.19,0.19] \]
+
+\paragraph{(b)} Αν $S={A,C}$ τότε παίρνουμε $(1-\beta)/|S|=1/10$ και άρα
+\[
+	\textbf{v}^\prime =
+	\begin{bmatrix}
+		0 & 2/5 & 4/5 & 0 \\
+		4/15 & 0 & 0 & 2/5 \\
+		4/15 & 0 & 0 & 2/5 \\
+		4/15 & 2/5 & 0 & 0
+	\end{bmatrix}
+	\textbf{v} +
+	\begin{bmatrix}
+	1/10 \\ 0 \\ 1/10 \\ 0
+	\end{bmatrix}
+\]
+Ξεκινώντας λοιπόν από το $(1,0,1,0)$ παίρνουμε
+\[
+	\textbf{v}^\prime=
+	\begin{bmatrix}1 \\ 0 \\ 1 \\ 0\end{bmatrix},
+	\begin{bmatrix}0.9 \\ 0.27 \\ 0.37 \\ 0.27\end{bmatrix},
+	\begin{bmatrix}0.5 \\ 0.35 \\ 0.45 \\ 0.35\end{bmatrix},
+	\begin{bmatrix}0.6 \\ 0.27 \\ 0.37 \\ 0.27\end{bmatrix},
+	\begin{bmatrix}0.5 \\ 0.27 \\ 0.37 \\ 0.27\end{bmatrix},
+	\begin{bmatrix}0.5 \\ 0.24 \\ 0.34 \\ 0.24\end{bmatrix},
+	\begin{bmatrix}0.47 \\ 0.23 \\ 0.33 \\ 0.23\end{bmatrix},
+	\begin{bmatrix}0.46 \\ 0.22 \\ 0.32 \\ 0.22\end{bmatrix},
+	\dots,
+	\begin{bmatrix}0.39 \\ 0.17 \\ 0.27 \\ 0.17]\end{bmatrix}
+\]
+(Στον παραπάνω υπολογισμό, για να συγκλίνει ο $\textbf{v}$ κάναμε $20$ επαναλήψεις.)
+\\[8pt]
+Οπότε ο topic-sensitive PageRank πίνακας είναι ο
+\[ \textbf{v}^\prime = [0.39,0.17,0.27,0.17] \]
+
+\subsection*{5.4.2 (MMDS)}
+
+\paragraph{(a)} Για να υπολογίσουμε το TrustRank θα ακολουθήσουμε την ίδια διαδικασία με το topic-sensitive PageRank.
+Ξεκινάμε με τον transition matrix του σχήματος 5.1 (MMDS) όπου αν πολλαπλασιάζουμε με το $\beta=0.8$ θα πάρουμε πάλι
+\[
+	\beta M =
+	\begin{bmatrix}
+		0 & 2/5 & 4/5 & 0 \\
+		4/15 & 0 & 0 & 2/5 \\
+		4/15 & 0 & 0 & 2/5 \\
+		4/15 & 2/5 & 0 & 0 \\
+	\end{bmatrix}
+\]
+Μετά εφόσον μόνο το $B$ είναι trusted page, έχουμε ότι $(1-\beta)/|S|=1/5$ άρα
+\[
+	\textbf{v}^\prime =
+	\begin{bmatrix}
+		0 & 2/5 & 4/5 & 0 \\
+		4/15 & 0 & 0 & 2/5 \\
+		4/15 & 0 & 0 & 2/5 \\
+		4/15 & 2/5 & 0 & 0 \\
+	\end{bmatrix}
+	\textbf{v} +
+	\begin{bmatrix}
+		0 \\ 1/5 \\ 0 \\ 0
+	\end{bmatrix}
+\]
+Οπότε ξεκινώντας από το $[0,1,0,0]$ παίρνουμε
+\[
+	\textbf{v}^\prime =
+	\begin{bmatrix}0 \\ 1 \\ 0 \\ 0\end{bmatrix},
+	\begin{bmatrix}0.4 \\ 0.2 \\ 0 \\ 0.4\end{bmatrix},
+	\begin{bmatrix}0.08 \\ 0.47 \\ 0.27 \\ 0.19\end{bmatrix},
+	\begin{bmatrix}0.4 \\ 0.3 \\ 0.1 \\ 0.2\end{bmatrix},
+	\begin{bmatrix}0.2 \\ 0.39 \\ 0.19 \\ 0.23\end{bmatrix},
+	\begin{bmatrix}0.31 \\ 0.34 \\ 0.14 \\ 0.21 \\ \end{bmatrix},
+	\begin{bmatrix}0.25 \\ 0.37 \\ 0.17 \\ 0.22\end{bmatrix},
+	\begin{bmatrix}0.28 \\ 0.35 \\ 0.15 \\ 0.21\end{bmatrix},
+	\begin{bmatrix}0.27 \\ 0.36 \\ 0.16 \\ 0.22\end{bmatrix},
+	\begin{bmatrix}0.27 \\ 0.36 \\ 0.16 \\ 0.21\end{bmatrix},
+	\dots
+\]
+και εντέλει ο TrustRank της κάθε σελίδας είναι
+\[ \textbf{v}^\prime = [0.27,0.36,0.16,0.21]\]
+
+\paragraph{(b)} Για να βρούμε το spam mass της κάθε σελίδας θα πρέπει αρχικά να υπολογίσουμε το PageRank τους.
+Από τα παραδείγματα του βιβλίου βλέπουμε ότι το PageRank των σελιδών του σχήματος 5.1 (MMDS) είναι $[3/9,2/9/,2/9,2/9]$.
+Οπότε
+\begin{center}
+	\begin{tabular}{c c c c}
+		Node & PageRank & TrustRank & Spam Mass \\
+		\hline
+		$A$ & 3/9 & 0.27 & 0.19 \\
+		$B$ & 2/9 & 0.36 & -0.62 \\
+		$C$ & 2/9 & 0.16 & 0.28 \\
+		$D$ & 2/9 & 0.21 & 0.05
+	\end{tabular}
+\end{center}
 
 \section*{Άσκηση 5}
 

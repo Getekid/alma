@@ -1,5 +1,6 @@
 # Exercise 1
 import math
+import numpy as np
 
 
 class Multistage:
@@ -124,7 +125,46 @@ print(mg.hash_buckets)
 print(mg.hash_buckets_multistage)
 
 
+# Exercise 4
+print()
+# Exercise 5.3.1
+print('Exercise 5.3.1')
+trans = np.array([
+    [0, 2/5, 4/5, 0],
+    [4/15, 0, 0, 2/5],
+    [4/15, 0, 0, 2/5],
+    [4/15, 2/5, 0, 0]
+])
+
+# Question (a)
+print('(a)')
+taxation = np.array([1/5, 0, 0, 0])
+v = np.array([1, 0, 0, 0])
+for i in range(1000):
+    v = (trans @ v) + taxation
+print(v)
+
+# Question (b)
+print('(b)')
+taxation = np.array([1/10, 0, 1/10, 0])
+v = np.array([1, 0, 1, 0])
+for i in range(1000):
+    v = (trans @ v) + taxation
+print(v)
+
+# Exersice 5.3.2
+print()
+print('Exersice 5.3.2 (a)')
+taxation = np.array([0, 1/5, 0, 0])
+v = np.array([0, 1, 0, 0])
+for i in range(1000):
+    v = (trans @ v) + taxation
+print(v)
+
 # Exercise 5
+print()
+
+
 def d2(point_a, point_b):
     return math.sqrt((point_a[0] - point_b[0]) ** 2 + (point_a[1] - point_b[1]) ** 2)
 
@@ -132,6 +172,7 @@ def d2(point_a, point_b):
 data = [(4, 10), (7, 10), (4, 8), (6, 8), (12, 6), (10, 5), (3, 4), (11, 4), (9, 3), (12, 3), (2, 2), (5, 2)]
 
 # Exercise 7.2.2
+print('Exercise 7.2.2')
 format_row = "{:>8}" * (len(data) + 1)
 print(format_row.format('', *list(map(lambda x: str(x), data))))
 for point_row in data:
