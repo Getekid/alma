@@ -6,3 +6,6 @@
 *.log
 *.pdf
 *.synctex.gz
+
+# Ignore the implementations and datasets from http://fimi.uantwerpen.be/
+/fimi/
