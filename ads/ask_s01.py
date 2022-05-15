@@ -18,38 +18,6 @@ class Multistage:
         self.hash_buckets = [0 for k in range(11)]
         self.hash_buckets_multistage = [0 for m in range(9)]
 
-    @property
-    def singletons_support(self):
-        return self._singletons_support
-
-    @singletons_support.setter
-    def singletons_support(self, value):
-        self._singletons_support = value
-
-    @property
-    def pairs_support(self):
-        return self._pairs_support
-
-    @pairs_support.setter
-    def pairs_support(self, value):
-        self._pairs_support = value
-
-    @property
-    def hash_buckets(self):
-        return self._hash_buckets
-
-    @hash_buckets.setter
-    def hash_buckets(self, value):
-        self._hash_buckets = value
-
-    @property
-    def hash_buckets_multistage(self):
-        return self._hash_buckets_multistage
-
-    @hash_buckets_multistage.setter
-    def hash_buckets_multistage(self, value):
-        self._hash_buckets_multistage = value
-
     # Get the index using the Triangular-Matrix method.
     @staticmethod
     def triangular_matrix_index(i, j):
@@ -104,6 +72,7 @@ class Multistage:
 
 
 # Exercise 6.3.1
+print('Exercise 6.3.1')
 # Dataset and requirements from Exercise 6.3.1.
 items = range(1, 7)
 data = [
@@ -115,13 +84,17 @@ mg = Multistage(data, 4)
 mg.run()
 
 # Question (a).
+print('(a)')
 print(mg.singletons_support)
 print(mg.pairs_support)
 
 # Question (c).
+print('(c)')
 print(mg.hash_buckets)
 
 # Exercise 6.3.2
+print()
+print('Exercise 6.3.2')
 print(mg.hash_buckets_multistage)
 
 
