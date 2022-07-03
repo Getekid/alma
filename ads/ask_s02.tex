@@ -15,6 +15,8 @@
 \setmonofont[Scale=MatchLowercase]{FreeMono}
 
 \usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 \usepackage{hhline}
 
 \newcommand{\RightarrowArg}[1]{\stackrel{#1}{\Longrightarrow}}
@@ -82,6 +84,98 @@
 
 \section*{Άσκηση 3}
 
+\paragraph{(α)} Βλέπε τους αλγoρίθμους \ref{gn-bfsdfs} και \ref{gn-main}.
+
+\begin{algorithm}
+	\caption{Girvan-Newman($V, E$) - BFS/DFS functions}
+	\label{gn-bfsdfs}
+	\begin{algorithmic}
+		\Function{bfs\_step\_1}{$v, dag$}
+			\Comment{BFS loop to construct the DAG Tree.}
+			\ForAll{$u:(v,u) \in E$}
+				\If{$u \notin dag$}
+					\State $dag.insert(u, \text{parent} \gets v$)
+				\EndIf
+			\EndFor
+			\ForAll{$u \in dag.nodes[v].children$}
+				\State \Call{bfs\_step\_1}{$u, dag$}
+			\EndFor
+		\EndFunction
+		\Statex
+		\Function{bfs\_step\_2}{$v, dag$}
+			\Comment{BFS loop to calculate the node labels.}
+			\If{$v == dag.root$}
+				\State $dag.nodes[v].label \gets 1$
+			\Else
+				\State $label \gets 0$
+				\ForAll{$p \in dag.nodes[v].parents$}
+					$label \gets label + p.label$
+				\EndFor
+				\State $dag.nodes[v].label \gets label$
+			\EndIf
+			\ForAll{$u \in dag.nodes[v].children$}
+				\State \Call{bfs\_step\_2}{$u, dag$}
+			\EndFor
+		\EndFunction
+		\Statex
+		\Function{dfs\_step\_3}{$v, dag$}
+			\Comment{DFS loop to calculate the node/DAG edge credits.}
+			\ForAll{$c \in dag.nodes[v].children$}
+				\State \Call{dfs\_step\_3}{$c, dag$}
+			\EndFor
+			\State $credit \gets 1$
+			\If{$v$ is not leaf}
+				\ForAll{$c \in dag.nodes[v].children$}
+					\State $credit \gets credit + dag.edges[(v,c)].credit$
+				\EndFor
+			\EndIf
+			\State $dag.nodes[v].credit \gets credit$
+			\State $parent\_total\_credit \gets 0$
+			\ForAll{$p \in dag.nodes[v].parents$}
+				\State $parent\_total\_credit \gets parent\_total\_credit + p.credit$
+			\EndFor
+			\ForAll{$p \in dag.nodes[v].parents$}
+				\State $dag.edges[(p,v)].credit \gets p.credit / parent\_total\_credit$
+			\EndFor
+		\EndFunction
+	\end{algorithmic}
+\end{algorithm}
+\begin{algorithm}
+	\caption{Girvan-Newman($V, E$) - main}
+	\label{gn-main}
+	\begin{algorithmic}
+		\If {$|E| == 0$ OR $|V| \leq 1$}
+			\State \Return FALSE
+		\EndIf
+		\State $edge\_credit \gets array[]$
+		\ForAll{$e \in E$}
+			\State $edge\_credit[e] \gets 0$
+		\EndFor
+		\Statex
+		\ForAll{$v \in V$}
+			\State $dag \gets new \; DAG()$
+			\Comment{The DAG tree structure.}
+			\State $dag.root \gets v$
+			\State \Call{bfs\_step\_1}{$v, dag$}
+			\State \Call{bfs\_step\_2}{$v, dag$}
+			\State \Call{dfs\_step\_3}{$v, dag$}
+			\ForAll{$e \in dag.edges$}
+				\State $edge\_credit[e] \gets edge\_credit + e.credit$
+			\EndFor
+		\EndFor
+		\Statex
+		\ForAll{$e \in E$}
+			\Comment{Finally divide everything by 2.}
+			\State $edge\_credit[e] \gets edge\_credit[e] / 2$
+		\EndFor
+		\Statex
+		\Return $edge\_credit$
+	\end{algorithmic}
+\end{algorithm}
+
+Βλέποντας τα βήματα του αλγορίθμου έχουμε ένα pre και post-processing για τις ακμές πριν και μετά τα BFS/DFS.
+Οπότε η πολυπλοκότητά του είναι $\mathcal{O}(m + n[(m+n) + (m+n) + (m+n)] + m) = \mathcal{O}(n(m+n))$.
+
 \paragraph{(β)} Στην περίπτωση που ο γράφος είναι δέντρο τότε κάθε ακμή είναι γέφυρα και άρα τα συντομότερα μονοπάτια που περνάνε από την ακμή αυτή είναι αυτά που ξεκινάνε από έναν κόμβο της μιας πλευράς και καταλήγουν σε κόμβο της άλλης.
 Οπότε αν η ακμή χωρίζει το γράφο στους υπογράφους $G_1,G_2$ τότε το edge betweeness της ακμής είναι $|G_1| \times |G_2|$.
 
@@ -145,7 +239,7 @@
 
 Χρησιμοποιώντας python βρίσκουμε ότι η δεύτερη μικρότερη ιδιοτιμή είναι $0.7$ και ο αντίστοιχος ιδιοπίνακας ο
 \[[-0.33,-0.22,-0.33,-0.52,0.09,0,-0.36,-0.39,-0.41]\]
-το οποίο και προτείνει τη διαμέριση $\{A,B,C,D,G,H,I\},\{E,F\}$.
+το οποίο και προτείνει τη διαμέριση $\{\{A,B,C,D,G,H,I\},\{E,F\}\}$ αν θεωρήσουμε ως κέντρο το $0$, ενώ αν πάρουμε το μέσο όρο τους $-0.27$ τότε παίρνουμε τη διαμέριση $\{\{A,C,D,G,H,I\},\{B,E,F\}\}$.
 
 
 \section*{Άσκηση 5}
