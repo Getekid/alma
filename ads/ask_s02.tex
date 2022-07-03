@@ -18,6 +18,7 @@
 \usepackage{hhline}
 
 \newcommand{\RightarrowArg}[1]{\stackrel{#1}{\Longrightarrow}}
+\newcommand{\indeq}[1]{\stackrel{\text{#1}}{=}}
 
 
 % Main document
@@ -43,19 +44,30 @@
 	\item Εφόσον $p$ πρώτος, $\forall a,b \in [p], a \neq 0$ υπάρχει μοναδικό ζευγάρι $(y_1,y_2) \in [p] \times [p]$ όπου\\
 		$y_1 \equiv ak_1+b \bmod p, y_2 \equiv ak_2+b \bmod p$ και $y_1 \neq y_2$, αφού
 		\[y_1=y_2 \Rightarrow ak_1+b \equiv ak_2+b \bmod p \RightarrowArg{p \text{ πρώτος}} k_1 \equiv k_2 \bmod p \RightarrowArg{k_1,k_2<p} k_1=k_2 \text{ άτοπο}\]
-		Δηλαδή τα $p(p-1)$ το πλήθος ζευγάρια $y_1,y_2$ αντιστοιχούνται 1-1 με τις $p(p-1)$ πιθανές επιλογές των $a,b$
+		Δηλαδή τα $p(p-1)$ το πλήθος ζευγάρια $(y_1,y_2)$ αντιστοιχούνται 1-1 με τις $p(p-1)$ πιθανές επιλογές των $a,b$
 	\item Έχουμε $h_{a,b}(k_1) = h_{a,b}(k_2) \Leftrightarrow y_1 \equiv y_2 \bmod m$
 \end{itemize}
 Μετράμε λοιπόν τα πιθανά ζευγάρια $y_1,y_2$ τέτοια ώστε $y_1 \equiv y_2 \bmod m$.
-Έστω ότι $y_1 \equiv 0 \bmod m$ όπου υπάρχουν $\lfloor p/m \rfloor + 1$ πιθανές τιμές για το $y_1$. Για καθεμία έχουμε το πολύ $\lfloor p/m \rfloor$ το πλήθος $y_2$ τέτοια ώστε $y_2 \equiv 0 \bmod p$ (εξαιρούμε την περίπτωση $y_2=y_1$).
-Επαναλαμβάνουμε το παραπάνω $\forall i = 1,2,\dots,m-1$ και παίρνουμε $m$ φορές το προηγούμενο.
-Οπότε συνολικά έχουμε
-\[
-	|h_{a,b}|_{h_{a,b}(k_1)=h_{a,b}(k_2)} \leq m \left(\left\lfloor \frac{p}{m} \right\rfloor + 1\right) \left\lfloor \frac{p}{m} \right\rfloor \leq m \frac{p(p+m)}{m^2} \leq ??? %\frac{p(p-1)}{m} = \frac{|H|}{m}
-\]
-%Άρα η $H$ είναι καθολική οικογένεια συναρτήσεων κατακερματισμού.
+Έστω ότι $y_1 \equiv 0 \bmod m$ όπου υπάρχουν $\lfloor p/m \rfloor + 1$ πιθανές τιμές για το $y_1$. Για καθεμία έχουμε $\lfloor p/m \rfloor$ το πλήθος $y_2$ τέτοια ώστε $y_2 \equiv 0 \bmod p$ (εξαιρούμε την περίπτωση $y_2=y_1$).
+Επαναλαμβάνουμε το παραπάνω για $y_1 \equiv i \bmod m, \forall i = 1,2,\dots,[(p-1) \bmod m]$ διότι μέχρι εκεί θα ισχύουν τα ίδια πλήθη. Για $i=(p \bmod m),\dots,m-1$ έχουμε $\lfloor p/m \rfloor$ πιθανές τιμές για το $y_1$ και $\lfloor p/m \rfloor - 1$ για το $y_2$.
 
-%\paragraph{(γ)} Θέτοντας $U=[p]$ παρατηρούμε ότι η παραπάνω απόδειξη παραμένει απαράλλαχτη, εφόσον για μια τυχαία επιλογή  $k_1,k_2 \in U = [p]$ έχουμε πάλι ότι $\forall a,b \in [p], a \neq 0$ αντιστοιχούν σε ένα μοναδικό ζευγάρι $(y_1, y_2) \in [p] \times [p]$, οπότε με τον ίδιο συλλογισμό καταλήγουμε ότι η οικογένεια συναρτήσεων κατακερματισμού παραμένει καθολική.
+Θέτουμε $p_m = p \bmod m$ και αναφέρουμε ότι
+\begin{equation}
+	m \left\lfloor \frac{p}{m} \right\rfloor = p - p_m \label{eq1}
+\end{equation}
+
+Συνολικά λοιπόν έχουμε 
+\begin{flalign*}
+	|h_{a,b}|_{h_{a,b}(k_1)=h_{a,b}(k_2)} &= p_m \left(\left\lfloor \frac{p}{m} \right\rfloor + 1\right) \left\lfloor \frac{p}{m} \right\rfloor + (m-p_m) \left\lfloor \frac{p}{m} \right\rfloor \left(\left\lfloor \frac{p}{m} \right\rfloor - 1\right) \\
+		&= \left\lfloor \frac{p}{m} \right\rfloor \left( p_m \left\lfloor \frac{p}{m} \right\rfloor + p_m + (m-p_m) \left\lfloor \frac{p}{m} \right\rfloor - m + p_m \right) \\
+		&= \left\lfloor \frac{p}{m} \right\rfloor \left( m \left\lfloor \frac{p}{m} \right\rfloor - m + 2p_m \right) \\
+		&\indeq{(\ref{eq1})} \left\lfloor \frac{p}{m} \right\rfloor (p - p_m - m + 2p_m) \\
+		&= \left\lfloor \frac{p}{m} \right\rfloor (p - (m - p_m)) \\
+		&\leq \left(\frac{p}{m}\right) (p - 1) = \frac{|H|}{m}
+\end{flalign*}
+Άρα η $H$ είναι καθολική οικογένεια συναρτήσεων κατακερματισμού.
+
+\paragraph{(γ)} Θέτοντας $U=[p]$ παρατηρούμε ότι η παραπάνω απόδειξη παραμένει απαράλλαχτη, εφόσον για μια τυχαία επιλογή  $k_1,k_2 \in U = [p]$ έχουμε πάλι ότι $\forall a,b \in [p], a \neq 0$ υπάρχει 1-1 αντιστοιχία σε ένα ζευγάρι $(y_1, y_2) \in [p] \times [p]$, οπότε με τον ίδιο συλλογισμό καταλήγουμε ότι η οικογένεια συναρτήσεων κατακερματισμού παραμένει καθολική.
 
 
 %\section*{Άσκηση 2}
