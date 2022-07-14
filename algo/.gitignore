@@ -1,8 +1,14 @@
 # Ignore everything in order to include only the desired file extensions.
-algo/*
+*
+
+# Include self.
+!.gitignore
 
 # Inlcude the .cpp files.
-!algo/*.cpp
+!*.cpp
 
 # Include the .tex files.
-!algo/*.tex
+!*.tex
+
+# Include shell script files.
+!*.sh
