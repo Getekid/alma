@@ -1,0 +1,89 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{a4wide}
+
+% Greek fonts
+\RequirePackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+  % you may want to try: {Liberation Serif} or {Times New Roman}
+\setmainfont{FreeSerif}
+  % you may want to try: {Liberation Sans} or {Arial}
+\setsansfont[Scale=MatchLowercase]{FreeSans}
+  % you may want to try: {FreeMono} or {Courier New}
+\setmonofont[Scale=MatchLowercase]{FreeMono}
+
+% \usepackage{mathtools}
+% \usepackage{tikz}
+\usepackage{enumerate}
+
+\newcommand{\indeq}[1]{\stackrel{\text{#1}}{=}}
+% Commands for wrapping properly common expressions.
+\newcommand{\Exp}{\mathrm{Exp}}
+\newcommand{\Expect}{{\rm I\kern-.3em E}}
+\newcommand{\at}{\mathrm{\alpha_t}}
+\newcommand{\NE}{\mathrm{N.E.}}
+
+% Main document
+\begin{document}
+\title{Profit Optimisation in Heterogeneous 2-link Parallel Games}
+\author{Thomas Pappas}
+\date{}
+\maketitle
+
+\section*{Abstract}
+We study (so far) a 3-level optimisation problem where, in a 2-link $s-t$ network, link owners compete for profit by assigning tolls to links, thus creating a toll congestion game.
+In addition, each player responds to tolls in a heterogeneous way, described by a distribution function $\alpha(p)$.
+We first introduce a new term $\at$ which, given a set of tolls, can help us describe how the flow is split between the 2 links, and then we will use it to prove some properties of the game.
+We will show that even with affine latencies, there are cases where no Nash Equilibrium exists in the profit game between the toll owners.
+
+Then what else? Maybe find cases where there always exists a $\NE$.
+
+
+\section{Introduction}
+
+In this thesis we study a three level optimisation problem.
+On the basis there is a 2-node $(s, t)$, 2-link $s-t$ network, each link with a non-decreasing latency function that defines how the traffic increases as more players flow into that link.
+On the first level a flow $[0, 1]$ wants to move from $s$ to $t$ and experience the minimum latency (traffic).
+On the second level, the links might also have tolls which impose an additional cost to the flow players, plus in our case (heterogeneous users) each player has a different money-time trade-off and thus see the link costs differently.
+Finally on the third level (are the levels really that way?), the tolls are owned by players who profit on the flow that uses that link and compete to maximise it.
+
+We know from [insert ref] that regardless of the distribution function $a$ or the latency functions (as long as they are non-decreasing) a $\NE$ always exists.
+In that $\NE$ the users are split with the money-sensitive ones on the link with the lower toll and the time-sensitive ones on the higher toll one, each one seeing their link as either lower or equal cost with the other (while they all see traffic equally).
+
+We introduce a new term $\at=\frac{l_1(x)-l_2(1-x)}{t_2-t_1}$ which is the $a(p)$ value of a user $p$ which sees the link costs equally.
+
+
+\section{Related Work}
+TODO
+
+
+\section{Preliminaries}
+
+A 2-link $s-t$ parallel network is a graph with a source node $s$, a destination node $t$ and $2$ edges connecting $s$ to $t$.
+Each link is associated with a latency function $l_1, l_2$
+[TODO: Add figure]
+A flow of infinitesimal users totaling up to a flow of $[0, 1]$ wishes to move from $s$ to $t$ through the link with the lowest cost.
+
+
+\section{2-link parallel networks}
+
+We start with the simple case of 2-link parallel networks.
+[TODO: Add figure]
+In this simple setup a user of the flow 
+
+\subsection{Time-money sensitivity split}
+
+Consider a 2-link parallel network.
+For the 2 edges of the game we introduce the term time-money sensitivity split, or sensitivity split for simplicity, $\alpha_s(t)$ as the value which if any player $p$ has $\alpha(p)=\alpha_s(t)$ then that player sees the 2 edge total latencies as equal.
+More specifically, $\alpha_s(t)$ is the value of the distribution function $\alpha$ such that
+\[l_1(x(t)) + \alpha_s(t) t_1 = l_2(1 - x(t)) + \alpha_s(t) t_2 \Rightarrow \alpha_s(t) = \frac{l_1(x(t)) - l_2(1 - x(t)))}{t_2 - t_1}\]
+For a set of tolls $t=(t_1,t_2)$ and their respective latencies $l_1(x(t)), l_2(1-x(t))$ on the flows enforced by $t$, $a_s(t)$ is defined as
+
+
+Some basic properties
+\begin{enumerate}[(i)]
+	\item $a_s(t) \in [\alpha(0), \alpha(1)] \subseteq [0, +\infty]$
+	\item $\alpha_s(t)$
+\end{enumerate}
+
+
+\end{document}
