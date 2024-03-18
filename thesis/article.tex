@@ -209,15 +209,30 @@ The next lemma gives us some insight of the behavior of $\as(t)$ around its edge
 \begin{lemma}
 	Given a 2-link parallel heterogeneous game with distribution function $\alpha$ and time-money sensitivity split function $\as$, the following hold:
 	\begin{enumerate}[(i)]
-		\item $\as(t) \rightarrow 0$ iff $|t_1 - t_2| \rightarrow \infty$
-		\item $\lim_{t_1 \rightarrow t_2^-} \as(t) = \alpha(x_1), \lim_{t_1 \rightarrow t_2^+} \as(t) = \alpha(x_2)$, where ($x_1, x_2)$ the optimal flow under no tolls
+		\item if $\alpha(0) > 0$ then $\as(t) < \alpha(0) \Rightarrow x(t) = (0, 1)$ or $(1, 0)$
+		\item if $\alpha(0) = 0$ with $0$ an accumulation point, then $x_1(t), x_2(t) > 0, \forall t \in \mathbb{R}_+^2$
+		\item $\lim_{|t_1 - t_2| \rightarrow +\infty}\as(t) = 0$
+		\item $\lim_{t_1 - t_2 \rightarrow 0^-} \as(t) = \alpha(x_1), \lim_{t_1 - t_2 \rightarrow 0^+} \as(t) = \alpha(x_2)$, where ($x_1, x_2)$ the optimal flow under no tolls
 	\end{enumerate}
 \end{lemma}
 
 \begin{proof}
+	$ $
 	\begin{enumerate}[(i)]
-		\item If $\alpha(0) > 0$ then...
-		\item 
+		\item Direct consequence from the fact that all players $p$ with $\as(t) < \alpha(p)$ are in the low latency edge.
+		\item Since $\alpha(0) = 0$ and $0$ an accumulation point, then $\forall \delta > 0 \exists \epsilon > 0: p < \epsilon \Rightarrow \alpha(p) < \delta$.
+		Therefore $\forall t \in \mathbb{R}_+^2$ if $\delta = \as(t)$ then $\exists \epsilon > 0: p < \epsilon \Rightarrow \alpha(p) < \as(t)$, which means that the lower latency edge will always have flow some $\epsilon > 0$, and therefore $x_1(t), x_2(t) > 0$.
+		\item We only need to notice that $|l_1(x_1(t)) - l_2(x_2(t))| \le \max\{l_1(1), l_2(1)\} = L$ and we find
+		\[\lim_{|t_1 - t_2| \rightarrow +\infty}\as(t) = \lim_{|t_1 - t_2| \rightarrow +\infty}\frac{|l_1(x_1(t)) - l_2(x_2(t))|}{|t_1 - t_2|} \le \lim_{|t_1 - t_2| \rightarrow +\infty}\frac{L}{|t_1 - t_2|} = 0\]
+		and since $\as(t) > 0$ we get $\lim_{|t_1 - t_2| \rightarrow +\infty}\as(t) = 0$.
+		\item As $|t_1 - t_2| \rightarrow 0$ then also $|l_1(x_1(t)) - l_2(x_2(t))| \rightarrow 0$ as the game approaches the homogeneous case.
+		Then flow on the low latency edge will define the limit of $\as(t)$.
+			\begin{itemize}
+				\item For $t_1 > t_2$ we get lower latency edge $1$ with flow $x_1(t) \rightarrow x_1$ and therefore
+				\[\lim_{t_1 - t_2 \rightarrow 0^-} \as(t) = \alpha(x_1)\]
+				\item For $t_1 < t_2$ we get lower latency edge $2$ with flow $x_2(t) \rightarrow x_2$ and therefore
+				\[\lim_{t_1 - t_2 \rightarrow 0^+} \as(t) = \alpha(x_2)\]
+			\end{itemize}
 	\end{enumerate}
 \end{proof}
 
