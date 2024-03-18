@@ -14,13 +14,21 @@
 % \usepackage{mathtools}
 % \usepackage{tikz}
 \usepackage{enumerate}
+\usepackage{amssymb}
+\usepackage{amsthm}
 
-\newcommand{\indeq}[1]{\stackrel{\text{#1}}{=}}
 % Commands for wrapping properly common expressions.
-\newcommand{\Exp}{\mathrm{Exp}}
-\newcommand{\Expect}{{\rm I\kern-.3em E}}
-\newcommand{\at}{\mathrm{\alpha_t}}
+\newcommand{\indeq}[1]{\stackrel{\text{#1}}{=}}
+\newcommand{\RightarrowArg}[1]{\stackrel{#1}{\Longrightarrow}}
+\newcommand{\LeftrightarrowArg}[1]{\stackrel{#1}{\Leftrightarrow}}
 \newcommand{\NE}{\mathrm{N.E.}}
+\newcommand{\as}{\mathrm{\alpha_s}}
+% \newcommand{\Exp}{\mathrm{Exp}}
+% \newcommand{\Expect}{{\rm I\kern-.3em E}}
+
+% Theorem structures.
+\newtheorem{definition}{Definition}[section]
+\newtheorem{lemma}{Lemma}[section]
 
 % Main document
 \begin{document}
@@ -32,7 +40,7 @@
 \section*{Abstract}
 We study (so far) a 3-level optimisation problem where, in a 2-link $s-t$ network, link owners compete for profit by assigning tolls to links, thus creating a toll congestion game.
 In addition, each player responds to tolls in a heterogeneous way, described by a distribution function $\alpha(p)$.
-We first introduce a new term $\at$ which, given a set of tolls, can help us describe how the flow is split between the 2 links, and then we will use it to prove some properties of the game.
+We first introduce a new term $\as$ which, given a set of tolls, can help us describe how the flow is split between the 2 links, and then we will use it to prove some properties of the game.
 We will show that even with affine latencies, there are cases where no Nash Equilibrium exists in the profit game between the toll owners.
 
 Then what else? Maybe find cases where there always exists a $\NE$.
@@ -49,7 +57,7 @@ Finally on the third level (are the levels really that way?), the tolls are owne
 We know from [insert ref] that regardless of the distribution function $a$ or the latency functions (as long as they are non-decreasing) a $\NE$ always exists.
 In that $\NE$ the users are split with the money-sensitive ones on the link with the lower toll and the time-sensitive ones on the higher toll one, each one seeing their link as either lower or equal cost with the other (while they all see traffic equally).
 
-We introduce a new term $\at=\frac{l_1(x)-l_2(1-x)}{t_2-t_1}$ which is the $a(p)$ value of a user $p$ which sees the link costs equally.
+We introduce a new term $\as=\frac{l_1(x)-l_2(1-x)}{t_2-t_1}$ which is the $a(p)$ value of a user $p$ which sees the link costs equally.
 
 
 \section{Related Work}
@@ -72,18 +80,124 @@ In this simple setup a user of the flow
 
 \subsection{Time-money sensitivity split}
 
-Consider a 2-link parallel network.
-For the 2 edges of the game we introduce the term time-money sensitivity split, or sensitivity split for simplicity, $\alpha_s(t)$ as the value which if any player $p$ has $\alpha(p)=\alpha_s(t)$ then that player sees the 2 edge total latencies as equal.
-More specifically, $\alpha_s(t)$ is the value of the distribution function $\alpha$ such that
-\[l_1(x(t)) + \alpha_s(t) t_1 = l_2(1 - x(t)) + \alpha_s(t) t_2 \Rightarrow \alpha_s(t) = \frac{l_1(x(t)) - l_2(1 - x(t)))}{t_2 - t_1}\]
-For a set of tolls $t=(t_1,t_2)$ and their respective latencies $l_1(x(t)), l_2(1-x(t))$ on the flows enforced by $t$, $a_s(t)$ is defined as
+Consider a 2-link parallel network with latency functions $l_1(x), l_2(x)$ and tolls $t=(t_1, t_2)$ assigned to them.
+Without loss of generality we assume $t_1 > t_2$ which in turn means that for the resulting equilibrium flow $x = (x_1(t), x_2(t))$ it holds that $l_1(x_1(t)) < l_2(x_2(t))$.
+This equilibrium is guaranteed to exist according to [TODO: add ref]).
+For the 2 edges of the game we introduce the term time-money sensitivity split $\as(t)$ as the value for which if any player $p$ has $\alpha(p)=\as(t)$ then that player sees the $2$ edge total latencies as equal.
+More specifically, $\as(t)$ is the value of the distribution function $\alpha$ for which it holds
+\[l_1(x_1(t)) + \as(t) t_1 = l_2(x_2(t)) + \as(t) t_2\]
+Solving for $\as$ we get
+\[\as(t) = \frac{l_2(x_2(t)) - l_1(x_1(t))}{t_1 - t_2}\]
+\\
+Before we get into a more formal definition and description of $\as$, it'd help to first discuss the nature of the split that $\as$ captures.
+Regardless of whether there exists a player $p$ such that $\alpha(p) = \as(t)$, it still holds that
+\begin{itemize}
+	\item if $\alpha(p) < \as$ then $l_1(x_1(t)) + \alpha(p) t_1 < l_2(x_2(t)) + \alpha(p) t_2$, thus $p$ is on edge $1$
+	\item if $\alpha(p) > \as$ then $l_1(x_1(t)) + \alpha(p) t_1 > l_2(x_2(t)) + \alpha(p) t_2$, thus $p$ is on edge $2$
+	\item if $\alpha(p) = \as$ then $l_1(x_1(t)) + \alpha(p) t_1 = l_2(x_2(t)) + \alpha(p) t_2$, thus $p$ is either on edge $1$ or $2$
+\end{itemize}
+Remember that we have assumed that $t_1 > t_2 \Rightarrow l_1(x_1(t)) < l_2(x_2(t))$.
+Therefore the flow passing through the faster edge $1$ is contained with players where $\alpha(p) \le \as(t)$, while the flow in the cheaper edge $2$ is contained with players where $\alpha(p) \ge \as(t)$.
+Since the players are sorted in increasing order according to $\alpha$, it helps to view the players in the first case as the "lower" part of the split and respectively the players in the second case as the "higher" part of the split.
+[TODO: Alternative splits: rushed-relaxed, rich-poor]
+Table \ref{table:split_summary} provides of a summary for each part of the split
 
+\begin{table}[h!]
+	\centering
+	\caption{Summary of properties for the sensitivity split.}
+	\begin{tabular}{| c || c | c |}
+		\hline
+		& $\alpha(p) \le \as(t)$ & $\alpha(p) \ge \as(t)$ \\ \hline
+		sensitivity & time $\ge$ money & time $\le$ money \\ \hline
+		latency & lower $(l_2)$ & higher $(l_1)$ \\ \hline
+		toll & higher $(t_1)$ & lower $(t_2)$ \\ \hline
+		edge & low-latency, high-toll $(1)$ & high-latency, low-toll $(2)$ \\ \hline
+		$t_1 - t_2$ & lower & higher \\ \hline
+		split & lower & higher \\ \hline
+	\end{tabular}
+	\label{table:split_summary}
+\end{table}
 
-Some basic properties
-\begin{enumerate}[(i)]
-	\item $a_s(t) \in [\alpha(0), \alpha(1)] \subseteq [0, +\infty]$
-	\item $\alpha_s(t)$
-\end{enumerate}
+Finally to acknowledge that we have arbitrarily handled any players with $\alpha(p) = \as(t)$.
+Those players, if any, even though they see both edges with equal total cost, in the optimal flow $x$ they have settled in either edge $1$ or $2$.
+We investigate more in depth the relation of $\as$ to the flow in [TODO: add ref].
+\\[12pt]
+We can now formally define $\as$ and prove some of its properties.
+\begin{definition}
+	Given a 2-link parallel heterogeneous game with latency functions $l_1, l_2$, we define the time-money sensitivity split function $\as: \mathbb{R}^2_+ \rightarrow (0, +\infty)$ where for given tolls $t = (t_1, t_2)$
+	\[\as(t) = \frac{l_2(x_2(t)) - l_1(x_1(t))}{t_1 - t_2}\]
+\end{definition}
+The function is well defined since the given tolls $t$ result in a single optimal flow $x(t) = (x_1(t), x_2(t))$ [TODO: add ref].
+
+\begin{lemma}
+	Given a 2-link parallel heterogeneous game with distribution function $\alpha$ and time-money sensitivity split function $\as$, the following hold:
+	\begin{enumerate}[(i)]
+		\item $\as(t) > 0$
+		\item if $x_1(t), x_2(t) > 0$ then $\as(t) \in [\alpha(0), \alpha(1)]$
+		\item if $0 < x_1(t) < x_2(t)$ then $\alpha(x_1(t)) \le \as(t) \le \alpha(x_1(t) + \epsilon), \forall \epsilon > 0$ arbitrarily small
+		\item if $t, t^\prime$ tolls such that $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} > 0$ then
+			\begin{itemize}
+				\item $\as(t) \ge \as(t^\prime)$ iff $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \le 1$
+				\item $\as(t) \le \as(t^\prime)$ iff $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \ge 1$
+			\end{itemize}
+		\item $\as(t) \rightarrow 0$ iff $|t_1 - t_2| \rightarrow \infty$
+		\item $\lim_{t_1 \rightarrow t_2^-} \as(t) = \alpha(x_1), \lim_{t_1 \rightarrow t_2^+} \as(t) = \alpha(x_2)$, where ($x_1, x_2)$ the optimal flow under no tolls
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+	$ $ % Just to make a line break after "Proof".
+	\begin{enumerate}[(i)]
+		\item Obviously $\as(t) \ne 0$ since $\as(t) = 0 \Rightarrow l_1(x_1(t)) = l_2(x_2(t))$ which is impossible in a heterogeneous setup.
+		Then we only need to notice that $l_1(x_1(t)) < l_2(x_2(t)) \iff t_1 > t_2$ and we get $\as(t) > 0$ from definition.
+		\item Since $x_1(t), x_2(t) > 0$ then $\exists p_1, p_2 \in [0, 1]$ each on a different edge, for which we assume w.l.o.g. that $\alpha(p_1) \le \alpha(p_2)$.
+		It holds that $\alpha(p_1) \le \as(t) \le \alpha(p_2)$ so with $\alpha$ being non-decreasing it follows
+		\[\alpha(0) \le \alpha(p_1) \le \as(t) \le \alpha(p_2) \le \alpha(1) \Rightarrow \as(t) \in [\alpha(0), \alpha(1)]\]
+		\item We know that $x_1(t) < x_2(t)$ means that edge 1 has the lower split.
+		Therefore we have
+		\[\alpha(p) \le \as(t), \forall p \in [0, x_1(t)] \Rightarrow \alpha(x_1(t)) \le \as(t)\]
+		Likewise for edge 2 we have
+		\[\as(t) \le \alpha(p), \forall p \in (x_1(t), 1] \Rightarrow \as(t) \le \alpha(x_1(t) + \epsilon), \forall \epsilon \in (0, 1 - x_1(t))\]
+		\item The condition
+		\begin{equation}
+			\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} > 0
+			\label{eq:split_property_cond_tolls_0}
+		\end{equation}
+		ensures that the two tolls provide splits with same edges in their respective lower and higher sections.
+		We show this for $t_1 > t_2$ and likewise it also holds for $t_1 < t_2$.
+		\[t_1 > t_2 \Leftrightarrow t_1 - t_2 > 0 \LeftrightarrowArg{(\ref{eq:split_property_cond_tolls_0})} t_1^\prime - t_2^\prime > 0 \Leftrightarrow t_1^\prime > t_2^\prime\]
+		%Also note that this property extends to the latencies, giving us
+		%\begin{equation}
+		%	\frac{l_1(x_1(t)) - l_2(x_2(t))}{l_1(x_1^\prime(t)) - l_2(x_2^\prime(t))} > 0
+		%	\label{eq:split_property_cond_latencies_0}
+		%\end{equation}
+		Then moving on to the first case, we first see that $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \le 1 \Leftrightarrow |t_1 - t_2| \le |t_1^\prime - t_2^\prime|$ (opposite direction is ensured by $(\ref{eq:split_property_cond_tolls_0})$), i.e. the toll difference is increasing.
+		Assume w.l.o.g. that $x_1 < x_2$.
+		
+		If $x_1(t) = 0$ then
+		\[\as(t) = \frac{l_2(1)}{t_2 - t_1}, \as(t^\prime) = \frac{l_2(1)}{t_2^\prime - t_1^\prime}\] 
+		so obviously $t_2 - t_1 \le t_2^\prime - t_1^\prime \Rightarrow \as(t) \ge \as(t^\prime)$.
+		
+		If $x_1(t) > 0$ then we know [TODO: do we?] that the latency difference might also increase, with flow from the lower latency edge, if any, moving towards the slower one, i.e. $x_1(t) \ge x_1(t^\prime)$.
+		If no flow moves then we can easily show that $\as(t) \ge \as(t^\prime)$ similarly to the case with $x_1(t) = 0$.
+		Otherwise $x_1(t) > x_1(t^\prime) \Rightarrow \exists \epsilon > 0: x_1(t) = x_1(t^\prime) + \epsilon$.
+		%\[|t_1 - t_2| \le |t_1^\prime - t_2^\prime| \Leftrightarrow |l_1(x_1(t)) - l_2(x_2(t))| \le |l_1(x_1(t^\prime)) - l_2(x_2(t^\prime))|\]
+		%\begin{equation}
+		%	|l_1(x_1(t)) - l_2(x_2(t))| \le |l_1(x_1(t^\prime)) - l_2(x_2(t^\prime))| \LeftrightarrowArg{(\ref{eq:split_property_cond_latencies_0})} \frac{l_1(x_1(t)) - l_2(x_2(t))}{|l_1(x_1(t^\prime)) - l_2(x_2(t^\prime))|} \le 1
+		%	\label{eq:split_property_cond_latencies_1}
+		%\end{equation}
+		Finally, by carefully applying property (ii) we get
+		\[\as(t^\prime) \le \alpha(x_1(t^\prime) + \epsilon) = \alpha(x_1(t)) \le \as(t)\]
+		
+		All steps can be followed backwards as well, therefore the opposite also holds.
+		
+		For the second case, we see that the toll difference decreases, and following respectively the same arguments we can show that $\as(t) \le \as(t^\prime)$.
+		\item If $\alpha(0) > 0$ then...
+	\end{enumerate}
+\end{proof}
+
+\subsection{Example with no $\NE$}
+
 
 
 \end{document}
