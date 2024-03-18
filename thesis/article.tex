@@ -129,19 +129,14 @@ We can now formally define $\as$ and prove some of its properties.
 \end{definition}
 The function is well defined since the given tolls $t$ result in a single optimal flow $x(t) = (x_1(t), x_2(t))$ [TODO: add ref].
 
+We start with some basic properties.
 \begin{lemma}
+	\label{lemma:split_basic}
 	Given a 2-link parallel heterogeneous game with distribution function $\alpha$ and time-money sensitivity split function $\as$, the following hold:
 	\begin{enumerate}[(i)]
 		\item $\as(t) > 0$
 		\item if $x_1(t), x_2(t) > 0$ then $\as(t) \in [\alpha(0), \alpha(1)]$
 		\item if $0 < x_1(t) < x_2(t)$ then $\alpha(x_1(t)) \le \as(t) \le \alpha(x_1(t) + \epsilon), \forall \epsilon > 0$ arbitrarily small
-		\item if $t, t^\prime$ tolls such that $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} > 0$ then
-			\begin{itemize}
-				\item $\as(t) \ge \as(t^\prime)$ iff $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \le 1$
-				\item $\as(t) \le \as(t^\prime)$ iff $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \ge 1$
-			\end{itemize}
-		\item $\as(t) \rightarrow 0$ iff $|t_1 - t_2| \rightarrow \infty$
-		\item $\lim_{t_1 \rightarrow t_2^-} \as(t) = \alpha(x_1), \lim_{t_1 \rightarrow t_2^+} \as(t) = \alpha(x_2)$, where ($x_1, x_2)$ the optimal flow under no tolls
 	\end{enumerate}
 \end{lemma}
 
@@ -158,41 +153,71 @@ The function is well defined since the given tolls $t$ result in a single optima
 		\[\alpha(p) \le \as(t), \forall p \in [0, x_1(t)] \Rightarrow \alpha(x_1(t)) \le \as(t)\]
 		Likewise for edge 2 we have
 		\[\as(t) \le \alpha(p), \forall p \in (x_1(t), 1] \Rightarrow \as(t) \le \alpha(x_1(t) + \epsilon), \forall \epsilon \in (0, 1 - x_1(t))\]
-		\item The condition
-		\begin{equation}
-			\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} > 0
-			\label{eq:split_property_cond_tolls_0}
-		\end{equation}
-		ensures that the two tolls provide splits with same edges in their respective lower and higher sections.
-		We show this for $t_1 > t_2$ and likewise it also holds for $t_1 < t_2$.
-		\[t_1 > t_2 \Leftrightarrow t_1 - t_2 > 0 \LeftrightarrowArg{(\ref{eq:split_property_cond_tolls_0})} t_1^\prime - t_2^\prime > 0 \Leftrightarrow t_1^\prime > t_2^\prime\]
-		%Also note that this property extends to the latencies, giving us
-		%\begin{equation}
-		%	\frac{l_1(x_1(t)) - l_2(x_2(t))}{l_1(x_1^\prime(t)) - l_2(x_2^\prime(t))} > 0
-		%	\label{eq:split_property_cond_latencies_0}
-		%\end{equation}
-		Then moving on to the first case, we first see that $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \le 1 \Leftrightarrow |t_1 - t_2| \le |t_1^\prime - t_2^\prime|$ (opposite direction is ensured by $(\ref{eq:split_property_cond_tolls_0})$), i.e. the toll difference is increasing.
-		Assume w.l.o.g. that $x_1 < x_2$.
-		
-		If $x_1(t) = 0$ then
-		\[\as(t) = \frac{l_2(1)}{t_2 - t_1}, \as(t^\prime) = \frac{l_2(1)}{t_2^\prime - t_1^\prime}\] 
-		so obviously $t_2 - t_1 \le t_2^\prime - t_1^\prime \Rightarrow \as(t) \ge \as(t^\prime)$.
-		
-		If $x_1(t) > 0$ then we know [TODO: do we?] that the latency difference might also increase, with flow from the lower latency edge, if any, moving towards the slower one, i.e. $x_1(t) \ge x_1(t^\prime)$.
-		If no flow moves then we can easily show that $\as(t) \ge \as(t^\prime)$ similarly to the case with $x_1(t) = 0$.
-		Otherwise $x_1(t) > x_1(t^\prime) \Rightarrow \exists \epsilon > 0: x_1(t) = x_1(t^\prime) + \epsilon$.
-		%\[|t_1 - t_2| \le |t_1^\prime - t_2^\prime| \Leftrightarrow |l_1(x_1(t)) - l_2(x_2(t))| \le |l_1(x_1(t^\prime)) - l_2(x_2(t^\prime))|\]
-		%\begin{equation}
-		%	|l_1(x_1(t)) - l_2(x_2(t))| \le |l_1(x_1(t^\prime)) - l_2(x_2(t^\prime))| \LeftrightarrowArg{(\ref{eq:split_property_cond_latencies_0})} \frac{l_1(x_1(t)) - l_2(x_2(t))}{|l_1(x_1(t^\prime)) - l_2(x_2(t^\prime))|} \le 1
-		%	\label{eq:split_property_cond_latencies_1}
-		%\end{equation}
-		Finally, by carefully applying property (ii) we get
-		\[\as(t^\prime) \le \alpha(x_1(t^\prime) + \epsilon) = \alpha(x_1(t)) \le \as(t)\]
-		
-		All steps can be followed backwards as well, therefore the opposite also holds.
-		
-		For the second case, we see that the toll difference decreases, and following respectively the same arguments we can show that $\as(t) \le \as(t^\prime)$.
+	\end{enumerate}
+\end{proof}
+
+The next lemma will help us describe how $\as(t)$ is changing in relation to toll difference (and in extend to latency difference).
+\begin{lemma}
+	Given a 2-link parallel heterogeneous game with time-money sensitivity split function $\as$ and tolls $t, t^\prime$ such that $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} > 0$, the following hold:
+	\begin{enumerate}[(i)]
+		\item $\as(t) \ge \as(t^\prime)$ iff $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \le 1$
+		\item $\as(t) \le \as(t^\prime)$ iff $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \ge 1$
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+	Before we get into the propositions, notice that the condition
+	\begin{equation}
+		\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} > 0
+		\label{eq:split_property_cond_tolls_0}
+	\end{equation}
+	ensures that the two tolls provide splits with same edges in their respective lower and higher sections.
+	We show this for $t_1 > t_2$ and likewise it also holds for $t_1 < t_2$.
+	\[t_1 > t_2 \Leftrightarrow t_1 - t_2 > 0 \LeftrightarrowArg{(\ref{eq:split_property_cond_tolls_0})} t_1^\prime - t_2^\prime > 0 \Leftrightarrow t_1^\prime > t_2^\prime\]
+	%Also note that this property extends to the latencies, giving us
+	%\begin{equation}
+	%	\frac{l_1(x_1(t)) - l_2(x_2(t))}{l_1(x_1^\prime(t)) - l_2(x_2^\prime(t))} > 0
+	%	\label{eq:split_property_cond_latencies_0}
+	%\end{equation}
+	Now moving on to the prepositions, we focus on proving $(i)$ in the right-to-left direction; then the same steps can be followed backwards to prove left-to-right.
+	Finally proving $(ii)$ will be much easier as there are many steps symmetric to the ones for $(i)$.
+	
+	\paragraph{$(i)$}
+	Begin by noticing that $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \le 1 \Leftrightarrow |t_1 - t_2| \le |t_1^\prime - t_2^\prime|$ (opposite direction is ensured by $(\ref{eq:split_property_cond_tolls_0})$), i.e. the toll difference is increasing.
+	Assume w.l.o.g. that $x_1 < x_2$.
+	
+	If $x_1(t) = 0$ then
+	\[\as(t) = \frac{l_2(1)}{t_2 - t_1}, \as(t^\prime) = \frac{l_2(1)}{t_2^\prime - t_1^\prime}\] 
+	so obviously $t_2 - t_1 \le t_2^\prime - t_1^\prime \Rightarrow \as(t) \ge \as(t^\prime)$.
+	
+	If $x_1(t) > 0$ then we know [TODO: do we?] that the latency difference might also increase, with flow from the lower latency edge, if any, moving towards the slower one, i.e. $x_1(t) \ge x_1(t^\prime)$.
+	%\[|t_1 - t_2| \le |t_1^\prime - t_2^\prime| \Leftrightarrow |l_1(x_1(t)) - l_2(x_2(t))| \le |l_1(x_1(t^\prime)) - l_2(x_2(t^\prime))|\]
+	%\begin{equation}
+	%	|l_1(x_1(t)) - l_2(x_2(t))| \le |l_1(x_1(t^\prime)) - l_2(x_2(t^\prime))| \LeftrightarrowArg{(\ref{eq:split_property_cond_latencies_0})} \frac{l_1(x_1(t)) - l_2(x_2(t))}{|l_1(x_1(t^\prime)) - l_2(x_2(t^\prime))|} \le 1
+	%	\label{eq:split_property_cond_latencies_1}
+	%\end{equation}
+	If no flow moves then we can easily show that $\as(t) \ge \as(t^\prime)$ similarly to the case with $x_1(t) = 0$.
+	Otherwise we have $x_1(t) > x_1(t^\prime) \Rightarrow \exists \epsilon > 0: x_1(t) = x_1(t^\prime) + \epsilon$ and by carefully applying property $\ref{lemma:split_basic}(ii)$ we get
+	\[\as(t^\prime) \le \alpha(x_1(t^\prime) + \epsilon) = \alpha(x_1(t)) \le \as(t)\]
+	
+	\paragraph{$(ii)$}
+	Symmetrically to $(i)$ in this case the toll difference is decreasing, and therefore flow from the higher latency edge will move towards the lower one, i.e. $x_1(t) \le x_1(t^\prime)$ (assuming again $x_1 < x_2$).
+	With a similar argument we then get $\as(t) \le \as(t^\prime)$.
+\end{proof}
+
+The next lemma gives us some insight of the behavior of $\as(t)$ around its edge values.
+\begin{lemma}
+	Given a 2-link parallel heterogeneous game with distribution function $\alpha$ and time-money sensitivity split function $\as$, the following hold:
+	\begin{enumerate}[(i)]
+		\item $\as(t) \rightarrow 0$ iff $|t_1 - t_2| \rightarrow \infty$
+		\item $\lim_{t_1 \rightarrow t_2^-} \as(t) = \alpha(x_1), \lim_{t_1 \rightarrow t_2^+} \as(t) = \alpha(x_2)$, where ($x_1, x_2)$ the optimal flow under no tolls
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+	\begin{enumerate}[(i)]
 		\item If $\alpha(0) > 0$ then...
+		\item 
 	\end{enumerate}
 \end{proof}
 
