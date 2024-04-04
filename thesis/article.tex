@@ -338,7 +338,7 @@ with profits $\Pi_1(t) = {2 t_2}/3, t_2 + 4 - 2 \sqrt{t_2 + 3}$ and $\Pi_2(t) = 
 				+\infty, & t_2 < 3 \\
 				\textrm{undefined}, & t_2 = 3 \\
 				t_2, & 3 < t_2 < 6 \\
-				t2 + 3 - \sqrt{t_2 + 3} & t_2 \ge 6
+				t_2 + 3 - \sqrt{t_2 + 3} & t_2 \ge 6
 			\end{cases}
 	\end{aligned}
 	\qquad
@@ -355,6 +355,228 @@ Below that threshold, which will eventually occur from any starting point, they 
 
 \paragraph{The bad behaviors} are obviously having divergent or undefined best response functions, which we claim occur only when we allow $0$ to be an accumulation point in $\alpha$, since this allows players with arbitrarily low money-sensitivity to always stay on the expensive edge.
 Assume that in Example $\ref{example:a_0_ap}$ we use $\alpha(p) = p + 1$ as a distribution function.
-Then we get best response functions
+Then we get the following best response functions
+\begin{align*}
+	B_1(t_2) &=
+	\begin{cases}
+		\sqrt{5 (3 - t_2)} - (3 - t_2), & t_2 < 6/5 \\
+		t_2, & 6/5 \le t_2 \le 3/2 \\
+		t_2 + 3 - \sqrt{2 t_2 + 6}, & 3/2 < t_2 < 5 \\
+		t_2 - 1 & t_2 \ge 5
+	\end{cases}\\
+	B_2(t_1) &=
+	\begin{cases}
+		2 \sqrt{3 - t_1} - (3 - t_1), & t_1 \le \frac29 \sqrt{22 - 4 \sqrt{10}} \\
+		t_1 + 3 - \frac{\sqrt{10}}2 \sqrt{t_1 + 3}, & \frac29 \sqrt{22 - 4 \sqrt{10}} < t_1 < 7 \\
+		t_1 - 2, & t_1 \ge 7
+	\end{cases}
+\end{align*}
+which can be shown [TODO: currently done experimentally in python] that has a $\NE$ at $t \approx (1.1464, 0.9268)$.
+
+\begin{example}
+	Consider a $2$-link parallel network pricing game with $l_1(x) = x, l_2(x) = 2x$ and distribution function
+	\[
+		\alpha(p) =
+		\begin{cases}
+			1, & p \le 1/2 \\
+			5, & p > 1/2
+		\end{cases}
+	\]
+\end{example}
+
+First we calculate the edge cases [TODO: add relevant section in preliminaries].
+If all flow is in edge $1$ then $t_2 - t_1 = \alpha(0) l_1(1) = 1$, while if all flow is in edge $2$ then $t_1 - t_2 = \alpha(0) l_2(1) = 2$ therefore
+\[t_2 - t_1 \le 1 \qquad t_1 - t_2 \le 2\]
+
+\paragraph{If $t_1 < t_2$} then $x_2(t)$ is the low-latency flow with $x_2(t) < 1/3$ as without tolls we have Wardrop equilibrium at $x = (2/3, 1/3)$.
+As such we get $\as(t) = 1$ and therefore
+\[
+	l_1(x_1(t)) + \as(t) t_1 = l_2(x_2(t)) + \as(t) t_2 \Rightarrow	x_1(t) + t_1 = 2 (1 - x_1(t)) + t_2 \Rightarrow
+\]
+\begin{equation*}
+	\begin{aligned}
+		x_1(t) = \frac{2 + (t_2 - t_1)}3
+	\end{aligned}
+	\qquad
+	\begin{aligned}
+		x_2(t) = \frac{1 - (t_2 - t_1)}3
+	\end{aligned}
+\end{equation*}
+Using first order conditions we find
+\begin{equation*}
+	\begin{aligned}
+		\argmax_{t_1 < t_2}\Pi_1(t_2) = \frac{t_2 + 2}2
+	\end{aligned}
+	\qquad
+	\begin{aligned}
+		\argmax_{t_1 < t_2}\Pi_2(t_1) = \frac{t_1 + 1}2
+	\end{aligned}
+\end{equation*}
+and by also applying the edge case restrictions we get
+\begin{equation*}
+	\begin{aligned}
+		B_1^<(t_2) =
+		\begin{cases}
+			t_2, & t_2 \le 2 \\
+			\frac{t_2 + 2}2, & 2 < t_2 < 4 \\
+			t_2 - 1, & t_2 \ge 4
+		\end{cases}
+	\end{aligned}
+	\qquad
+	\begin{aligned}
+		B_2^<(t_1) =
+		\begin{cases}
+			\frac{t_1 + 1}2, & t_1 < 1 \\
+			t_1, & t_1 \ge 1
+		\end{cases}
+	\end{aligned}
+\end{equation*}
+with profits
+\begin{equation*}
+	\begin{aligned}
+		\Pi_1^<(t_2) =
+		\begin{cases}
+			\frac23 t_2, & t_2 \le 2 \\
+			\frac{(t_2 + 2)^2}{12}, & 2 < t_2 < 4 \\
+			t_2 - 1, & t_2 \ge 4
+		\end{cases}
+	\end{aligned}
+	\qquad
+	\begin{aligned}
+		\Pi_2^<(t_1) =
+		\begin{cases}
+			\frac{(t_1 + 1)^2}{12}, & t_1 < 1 \\
+			\frac13 t_1, & t_1 \ge 1
+		\end{cases}
+	\end{aligned}
+\end{equation*}
+
+\paragraph{If $t_1 > t_2$} then $x_1(t)$ is the low-latency flow so we need to take cases depending on its value.
+We will show analytically the process for toll owner $1$.
+
+\subparagraph{If $x_1 < 1/2$} then $\as(t) = 1$ so we get $x_1(t), x_2(t)$ and best responses as before.
+Also
+\[x_1(t) < \frac12 \Rightarrow \frac{2 - (t_1 - t_2)}{3} < \frac12 \Rightarrow t_1 - t_2 > \frac12\]
+so for toll owner $1$ with $B_1^>(t_2) = \frac{t_2 + 2}2$ we have
+\[t_1 - t_2 > \frac12 \Rightarrow \frac{t_2 + 2}2 - t_2 > \frac12 \Rightarrow t_2 < 1\]
+\[t_1 > t_2 \Rightarrow \frac{t_2 + 2}2 > t_2 \Rightarrow t_2 < 2\]
+
+\subparagraph{If $x_1 > 1/2$} then $\as(t) = 5$ so we calculate $x_1(t)$ and its $\argmax$ using first order conditions.
+\[
+	l_1(x_1(t)) + \as(t) t_1 = l_2(x_2(t)) + \as(t) t_2 \Rightarrow	x_1(t) + 5 t_1 = 2 (1 - x_1(t)) + 5 t_2 \Rightarrow
+\]
+\begin{equation*}
+	\begin{aligned}
+		x_1(t) = \frac{2 + 5 (t_2 - t_1)}3
+	\end{aligned}
+	\qquad
+	\begin{aligned}
+		\argmax_{t_1 > t_2}\Pi_1(t_2) = \frac{5 t_2 + 2}{10}
+	\end{aligned}
+\end{equation*}
+Also
+\[x_1(t) > \frac12 \Rightarrow \frac{2 - 5 (t_1 - t_2)}{3} > \frac12 \Rightarrow t_1 - t_2 < \frac1{10}\]
+so for toll owner $1$ we have
+\[t_1 - t_2 < \frac1{10} \Rightarrow \frac{5 t_2 + 2}{10} - t_2 < \frac1{10} \Rightarrow t_2 > \frac15\]
+\[t_1 > t_2 \Rightarrow \frac{5 t_2 + 2}{10} > t_2 \Rightarrow t_2 < \frac25\]
+
+\subparagraph{If $x_1 = 1/2$} then $\as(t) \in [1, 5]$ and using the definition we get
+\[\as(t) = \frac{l_2(1/2) - l_1(1/2)}{t_1 - t_2} = \frac1{2 (t_1 - t_2)}\]
+and in order to get the range of $t_1 - t_2$ where this applies we check
+\[1 \le \as(t) \le 5 \Rightarrow 1 \le \frac1{2 (t_1 - t_2)} \le 5 \Rightarrow \frac12 \ge t_1 - t_2 \ge \frac1{10}\]
+
+The flow is always the same so the best response for toll owner $1$ is to maximize $t_1 - t_2$ so we get $t_1 - t_2 = 1/2 \Rightarrow t_1 = t_2 + 1/2$.
+
+\subparagraph{Gathering all the above} we see that the player has the option to play $t_1$ with the case that provides the maximum profit, so we calculate them.
+\[
+	\Pi_1^>(t_2) =
+	\begin{cases}
+		\frac{(5 t_2 + 2)^2}{60}, & t_1 - t_2 < \frac1{10} \\
+		\frac{2 t_2 + 1}4, & t_1 - t_2 \in \left[\frac1{10}, \frac12\right] \\
+		\frac{(t_2 + 2)^2}{12}, & t_1 - t_2 > \frac12
+	\end{cases}
+\]
+and by solving the inequalities (in each respective bound) we finally get
+\begin{equation*}
+	\begin{aligned}
+		B_1^>(t_2) =
+		\begin{cases}
+			\frac{t_2 + 2}{12}, & t_2 < 1 \\
+			t_2 + \frac12, & t_2 \ge 1
+		\end{cases}
+	\end{aligned}
+	\qquad
+	\begin{aligned}
+		\Pi_1^>(t_2) =
+		\begin{cases}
+			\frac{(t_2 + 2)^2}{12}, & t_2 < 1 \\
+			\frac{2 t_2 + 1}4, & t_2 \ge 1
+		\end{cases}
+	\end{aligned}
+\end{equation*}
+
+In a similar way we calculate $B_2^>(t_1)$ and $\Pi_2^>(t_1)$, with only some extra care on the bounds as since $t_2 < t_1$ then not all options are always available (e.g. if $t_1 < 1/10$ then only $t_1 - t_2 < 1/10$ can be picked).
+Finally we get
+
+\begin{equation*}
+	\begin{aligned}
+		B_2^>(t_1) =
+		\begin{cases}
+			t_1, & t_1 < \frac15 \\
+			\frac{5 t_1 + 1}{10}, & \frac15 \le t_1 \le \frac25 \\
+			t_1 - \frac1{10}, & \frac25 < t_1 < \frac{10 + 2 \sqrt{15}}5 \\
+			\frac{t_1 + 1}2, & \frac{10 + 2 \sqrt{15}}5 \le t_1 \le 5 \\
+			t_1 - 2, & t_2 > 5
+		\end{cases}
+	\end{aligned}
+	\qquad
+	\begin{aligned}
+		\Pi_2^>(t_1) =
+		\begin{cases}
+			\frac13 t_1, & t_1 < \frac15 \\
+			\frac{(5 t_1 + 1)^2}{12}, & \frac15 \le t_1 \le \frac25 \\
+			\frac{10 t_1 - 1}{20}, & \frac25 < t_1 < \frac{10 + 2 \sqrt{15}}5 \\
+			\frac{(t_1 + 1)^2}{12}, & \frac{10 + 2 \sqrt{15}}5 \le t_1 \le 5 \\
+			t_1 - 2, & t_2 > 5
+		\end{cases}
+	\end{aligned}
+\end{equation*}
+
+\subparagraph{Combining} $B_1^>(t_2), B_1^<(t_2)$ and $B_2^>(t_1), B_2^<(t_1)$ the same way as in Example $\ref{example:a_0_ap}$ we get the final best response functions.
+\begin{equation*}
+	\begin{aligned}
+		B_1(t_2) =
+		\begin{cases}
+			\frac{t_2 + 2}2, & t_2 \le 1 \\
+			t_2 + \frac12, & 1 < t_2 < \frac32 \\
+			t_2, & \frac32 \le t_2 \le 2 \\
+			\frac{t_2 + 2}2, & 2 < t_2 < 4 \\
+			t_2 - 1, & t_2 \ge 4
+		\end{cases}
+	\end{aligned}
+	\qquad
+	\begin{aligned}
+		B_2(t_2) =
+		\begin{cases}
+			\frac{t_1 + 1}2, & t_1 \le \frac15 \\
+			\frac{5 t_1 + 1}{10}, & \frac15 < t_1 < frac25 \\
+			t_1 - \frac1{10}, & \frac25 \le t_1 \le \frac{10 + 2 \sqrt{15}}5 \\
+			\frac{t_1 + 1}2, & \frac{10 + 2 \sqrt{15}}5 < t_1 < 5 \\
+			t_1 - 2, & t_1 \ge 5
+		\end{cases}
+	\end{aligned}
+\end{equation*}
+
+For the above functions we can show [TODO: currently done experimentally in python] that there is NO $\NE$ for the pricing game.
+
+
+\subsection{Equilibrium}
+
+In this section we will show that if the distribution function has the following properties
+\begin{itemize}
+	\item $\alpha(0) > 0$
+	\item $\alpha$ is onto
+\end{itemize}
+Then a $\NE$ for the pricing game exists ???
 
 \end{document}
