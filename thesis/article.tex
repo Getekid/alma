@@ -32,6 +32,7 @@
 \newtheorem{definition}{Definition}[section]
 \newtheorem{lemma}{Lemma}[section]
 \newtheorem{example}{Example}[section]
+\newtheorem{corollary}{Corollary}[section]
 
 % Main document
 \begin{document}
@@ -239,6 +240,16 @@ The next lemma gives us some insight of the behavior of $\as(t)$ around its edge
 			\end{itemize}
 	\end{enumerate}
 \end{proof}
+
+From the above lemma we can also observe the following
+
+\begin{corollary}
+	Given a 2-link parallel heterogeneous game with distribution function $\alpha$ and time-money sensitivity split function $\as$ and $x = (x_1, x_2)$ the optimal flow in the game without tolls, then $\as(t) \le \max\{\alpha(x_1), \alpha(x_2)\}$.
+\end{corollary}
+
+This corollary hints that all values of $\alpha$ above $\max\{x_1, x_2\}$ are irrelevant to the game.
+This will become more obvious later when calculating best responses as those values will never be used.
+[TODO: Maybe put this in its own Lemma and prove it?]
 
 \subsection{Profit maximisation and distribution function}
 
