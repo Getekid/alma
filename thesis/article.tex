@@ -140,7 +140,7 @@ We start with some basic properties.
 	\begin{enumerate}[(i)]
 		\item $\as(t) > 0$
 		\item if $x_1(t), x_2(t) > 0$ then $\as(t) \in [\alpha(0), \alpha(1)]$
-		\item if $0 < x_1(t) < x_2(t)$ then $\alpha(x_1(t)) \le \as(t) \le \alpha(x_1(t) + \epsilon), \forall \epsilon > 0$ arbitrarily small
+		\item if $0 < l_1(x_1(t)) < l_2(x_2(t))$ then $\alpha(x_1(t)) \le \as(t) \le \alpha(x_1(t) + \epsilon), \forall \epsilon > 0$ arbitrarily small
 	\end{enumerate}
 \end{lemma}
 
@@ -215,7 +215,7 @@ The next lemma gives us some insight of the behavior of $\as(t)$ around its edge
 	Given a 2-link parallel heterogeneous game with distribution function $\alpha$ and time-money sensitivity split function $\as$, the following hold:
 	\begin{enumerate}[(i)]
 		\item if $\alpha(0) > 0$ then $\as(t) < \alpha(0) \Rightarrow x(t) = (0, 1)$ or $(1, 0)$
-		\item if $\alpha(0) = 0$ with $0$ an accumulation point, then $x_1(t), x_2(t) > 0, \forall t \in \R_+^2$
+		\item if $x_1(0), x_2(0) > 0$ and $\alpha(0) = 0$ with $0$ an accumulation point, then $x_1(t), x_2(t) > 0, \forall t \in \R_+^2$
 		\item $\lim_{|t_1 - t_2| \rightarrow +\infty}\as(t) = 0$
 		\item $\lim_{t_1 - t_2 \rightarrow 0^-} \as(t) = \alpha(x_1), \lim_{t_1 - t_2 \rightarrow 0^+} \as(t) = \alpha(x_2)$, where ($x_1, x_2)$ the optimal flow under no tolls
 	\end{enumerate}
