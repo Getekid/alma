@@ -30,7 +30,7 @@
 			\vtop{
 				\vspace{2cm}
 				\begin{flushleft}
-					\huge{\bf Profit Optimisation in Heterogeneous 2-link Parallel Games\\}
+					\huge{\bf Profit Games in Heterogeneous 2-link Parallel Networks\\}
 					\vskip3cm
 					\Large  Thomas Pappas\\
 					AL1.18.0011\\
@@ -107,12 +107,13 @@
 \thispagestyle{empty}
 \pagenumbering{gobble}
 \chapter*{Abstract}
-We study (so far) a 3-level optimisation problem where, in a 2-link $s-t$ network, link owners compete for profit by assigning tolls to links, thus creating a toll congestion game.
-In addition, each player responds to tolls in a heterogeneous way, described by a distribution function $\alpha(p)$.
-We first introduce a new term $\as$ which, given a set of tolls, can help us describe how the flow is split between the 2 links, and then we will use it to prove some properties of the game.
-We will show that even with affine latencies, there are cases where no Nash Equilibrium exists in the profit game between the toll owners.
-
-Then what else? Maybe find cases where there always exists a $\NE$.
+In this masters thesis we study a $2$-level optimisation problem where, on a $2$-link network from a source $s$ to a target $t$, a unit of flow wants to move from $s$ to $t$ using the link with the lowest cost, while the two link owners compete for profit by assigning tolls to links and thus creating a toll congestion game.
+We examine only affine latencies for the links.
+In addition, each flow player responds to tolls in a heterogeneous way, i.e. each flow player $p$ has a different money-time sensitivity value, which is described by a distribution function $\alpha(p)$.
+First we present some basic definitions and properties of profit homogeneous games.
+Using them as base, we examine cases of fixed and step distribution functions, where for the latter we present strict conditions for the existence or not of a Nash Equilibrium.
+We then introduce a new term, the split function $\as(t)$, defined as the time-money sensitivity value for which the $2$ link costs are equal for a given set of tolls $t$. With the help of $\as$ we will describe and prove some properties of the heterogeneous games for continuous distribution functions.
+In our main result, we generalise the conditions necessary for the existence of a Nash Equilibrium in the profit game between the toll owners, and finally we discuss some extensions to $n$-link parallel networks.
 \clearpage
 
 \thispagestyle{empty}
@@ -121,8 +122,14 @@ Then what else? Maybe find cases where there always exists a $\NE$.
 
 \thispagestyle{empty}
 \pagenumbering{gobble}
-\chapter*{Σύνοψη}
-TODO: Να μεταφράσω το Abstract στα ελληνικά.
+\chapter*{Συνοψη}
+Σε αυτή τη διπλωματική μεταπτυχιακού μελετάμε ένα πρόβλημα βελτιστοποίησης $2$ επιπέδων, όπου σε ένα δίκτυο με $2$ ακμές από μια πηγή $s$ σε ένα στόχο $t$, μια μονάδα ροής θέλει να μετακινηθεί από το $s$ στο $t$ χρησιμοποιώντας την ακμή με το χαμηλότερο κόστος, ενώ οι δύο ιδιοκτήτες των ακμών ανταγωνίζονται για κέρδος βάζοντας δίοδια στις ακμές και δημιουργώντας έτσι ένα παίγνιο συμφόρησης με διόδια.
+Εξετάζουμε μόνο αφινικές καθυστερήσεις για τις ακμές.
+Επιπλέον, ο κάθε παίκτης ροής αντιδρά στα διόδια με ετερογενή τρόπο, δηλ. ο κάθε παίκτης ροής $p$ έχει διαφορετική τιμή ευαισθησίας χρόνου-χρήματος, η οποία περιγράφεται από μια συνάρτηση κατανομής $\alpha(p)$.
+Πρώτα παρουσιάζουμε κάποιους βασικούς ορισμούς και ιδιότητες των ομογενών παιγνίων κέρδους. Mε αυτά ως βάση, εξετάζουμε περιπτώσεις σταθερών και βηματικών συναρτήσεων κατανομής, όπου για το τελευταίο παρουσιάζουμε αυστηρές συνθήκες για την ύπαρξη ή μη σημείου ισορροπίας Nash.
+Μετά εισαγάγουμε έναν νέο όρο, τη συνάρτηση διαχωρισμού $\as(t)$, ορισμένη ως η τιμή ευαισθησίας χρόνου-χρήματος για την οποία τα κόστη των $2$ ακμών είναι ίσα για ένα δοσμένο σετ διοδίων $t$.
+Με τη βοήθεια της $\as$ θα περιγράψουμε και θα αποδείξουμε μερικές ιδιότητες των ετερογενών παιγνίων με συνεχή συνάρτηση κατανομής.
+Στο κύριο αποτέλεσμά μας, γενικοποιούμε τις συνθήκες που είναι απαραίτητες για την ύπαρξη ισορροπίας Nash στο παίγνιο κέρδους μεταξύ των ιδιοκτητών των ακμών, και τελικώς συζητάμε κάποιες επεκτάσεις για δίκτυα με $n$ ακμές.
 \clearpage
 
 \thispagestyle{empty}
