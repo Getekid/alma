@@ -19,6 +19,7 @@
 
 %\usepackage{tikz}
 \usepackage{enumerate}
+\usepackage{natbib}
 
 \renewcommand{\maketitle}{
 	\begin{titlepage}
@@ -153,7 +154,7 @@ On the first level a flow $[0, 1]$ wants to move from $s$ to $t$ and experience 
 On the second level, the links might also have tolls which impose an additional cost to the flow players, plus in our case (heterogeneous users) each player has a different money-time trade-off and thus see the link costs differently.
 Finally on the third level (are the levels really that way?), the tolls are owned by players who profit on the flow that uses that link and compete to maximise it.
 
-We know from [insert ref] that regardless of the distribution function $a$ or the latency functions (as long as they are non-decreasing) a $\NE$ always exists.
+We know from Cole et al. \cite{10.1145/780542.780618} that regardless of the distribution function $a$ or the latency functions (as long as they are non-decreasing) a $\NE$ always exists.
 In that $\NE$ the users are split with the money-sensitive ones on the link with the lower toll and the time-sensitive ones on the higher toll one, each one seeing their link as either lower or equal cost with the other (while they all see traffic equally).
 
 We introduce a new term $\as=\frac{l_1(x)-l_2(1-x)}{t_2-t_1}$ which is the $a(p)$ value of a user $p$ which sees the link costs equally.
@@ -181,7 +182,7 @@ In this simple setup a user of the flow
 
 Consider a 2-link parallel network with latency functions $l_1(x), l_2(x)$ and tolls $t=(t_1, t_2)$ assigned to them.
 Without loss of generality we assume $t_1 > t_2$ which in turn means that for the resulting equilibrium flow $x = (x_1(t), x_2(t))$ it holds that $l_1(x_1(t)) < l_2(x_2(t))$.
-This equilibrium is guaranteed to exist according to [TODO: add ref]).
+This equilibrium is guaranteed to exist according to Harks et al. \cite{Harks_2019}.
 For the 2 edges of the game we introduce the term time-money sensitivity split $\as(t)$ as the value for which if any player $p$ has $\alpha(p)=\as(t)$ then that player sees the $2$ edge total latencies as equal.
 More specifically, $\as(t)$ is the value of the distribution function $\alpha$ for which it holds
 \[l_1(x_1(t)) + \as(t) t_1 = l_2(x_2(t)) + \as(t) t_2\]
@@ -226,7 +227,7 @@ We can now formally define $\as$ and prove some of its properties.
 	Given a 2-link parallel heterogeneous game with latency functions $l_1, l_2$, we define the time-money sensitivity split function $\as: \R^2_+ \rightarrow (0, +\infty)$ where for given tolls $t = (t_1, t_2)$
 	\[\as(t) = \frac{l_2(x_2(t)) - l_1(x_1(t))}{t_1 - t_2}\]
 \end{definition}
-The function is well defined since the given tolls $t$ result in a single optimal flow $x(t) = (x_1(t), x_2(t))$ [TODO: add ref].
+The function is well defined since the given tolls $t$ result in a single optimal flow $x(t) = (x_1(t), x_2(t))$ \cite{Harks_2019}.
 
 We start with some basic properties.
 \begin{lemma}
@@ -352,7 +353,7 @@ In this section we will examine how different distribution functions $\alpha$ ca
 [TODO: add framework for examining games]
 We will restrict our analysis on distribution functions such that $\alpha(0) > 0$, the reason being that we want to avoid two instances.
 The first is to ensure that $\alpha(p) > 0$ when $p > 0$, while the second is that $0$ is not an accumulation point.
-[TODO: maybe mention add ref who also take the first restriction as it creates games with no optimal tolls]
+[TODO: maybe mention \cite{10.1145/780542.780618} where they also take the first restriction as it creates games with no optimal tolls]
 The following two examples demonstrate the issues that might occur if these restrictions are not met.
 
 \begin{example}
@@ -690,9 +691,8 @@ Then a $\NE$ for the pricing game exists ???
 \phantomsection
 \addcontentsline{toc}{chapter}{Bibliography}
 
-\chapter*{Bibliography}
-%\begin{thebibliography}{99}
-%\end{thebibliography}
-TODO
+
+\bibliographystyle{plain}
+\bibliography{ref.bib}
 
 \end{document}
