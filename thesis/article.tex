@@ -1,21 +1,66 @@
-\documentclass[a4paper,11pt]{article}
-\usepackage{a4wide}
+%Typeset using XeLaTeX
 
-% Greek fonts
-\RequirePackage{fontspec}
-\defaultfontfeatures{Ligatures=TeX}
-  % you may want to try: {Liberation Serif} or {Times New Roman}
-\setmainfont{FreeSerif}
-  % you may want to try: {Liberation Sans} or {Arial}
-\setsansfont[Scale=MatchLowercase]{FreeSans}
-  % you may want to try: {FreeMono} or {Courier New}
-\setmonofont[Scale=MatchLowercase]{FreeMono}
+\documentclass[10pt,a4paper]{book}
+\usepackage{mathtools,amssymb,amsthm}
+%\usepackage{phonetic}
+\usepackage{fancyhdr}
+\usepackage[pass]{geometry}
+\usepackage{fontspec}
+%\usepackage{xunicode}
+%\usepackage{xltxtra}
+%\usepackage{xgreek}
+\setmainfont[Mapping=TeX-text]{Times New Roman}
+\usepackage{hyperref}
+%\usepackage{color}
+\usepackage[Glenn]{fncychap}
+\ChNameVar{\bfseries\Large}
+%\usepackage{tabularx}
+%\usepackage[normalem]{ulem}
 
-% \usepackage{tikz}
+%\usepackage{tikz}
 \usepackage{enumerate}
-\usepackage{amssymb}
-\usepackage{amsthm}
-\usepackage{mathtools}
+
+\renewcommand{\maketitle}{
+	\begin{titlepage}
+		\newgeometry{left=4cm, top=2.3cm, bottom=2.3cm}
+		\hbox{\mbox{\hspace{-1.3cm}}
+			\vrule depth 0.98\textheight
+			\mbox{\hspace{1cm}}
+			\vtop{
+				\vspace{2cm}
+				\begin{flushleft}
+					\huge{\bf Profit Optimisation in Heterogeneous 2-link Parallel Games\\}
+					\vskip3cm
+					\Large  Thomas Pappas\\
+					AL1.18.0011\\
+					\vskip3cm
+					\begin{minipage}{7.5cm}
+						\begin{flushleft}
+							\normalsize {\it {\bf Examination committee:}\\
+								Dimitris Fotakis, School of Electrical and Computer Engineering, National Technical University of Athens.\\
+								Professor's name, Department or School, Institution.\\
+								Professor's name, Department or School, Institution.}
+						\end{flushleft}
+					\end{minipage}
+					\hskip0.5cm
+					\begin{minipage}{6cm}
+						\begin{flushleft}
+							\normalsize {\it {\bf Supervisor:}\\
+								Dimitris Fotakis, Professor, \\ School of Electrical and Computer Engineering,\\
+								National Technical University of Athens.\\
+							}
+						\end{flushleft}
+					\end{minipage}
+				\end{flushleft}
+				\vskip6cm
+				\hskip4.5cm
+				\begin{minipage}{5cm}
+					\begin{center}
+						\includegraphics[width=0.8\textwidth]{alma.png}
+					\end{center}
+		\end{minipage}}}
+	\end{titlepage}
+}
 
 % Commands for wrapping properly common expressions.
 \newcommand{\indeq}[1]{\stackrel{\text{#1}}{=}}
@@ -29,28 +74,78 @@
 % \newcommand{\Expect}{{\rm I\kern-.3em E}}
 
 % Theorem structures.
-\newtheorem{definition}{Definition}[section]
-\newtheorem{lemma}{Lemma}[section]
-\newtheorem{example}{Example}[section]
-\newtheorem{corollary}{Corollary}[section]
+\theoremstyle{definition}
+\newtheorem{ex}{}[section]
+\newtheorem{definition}{Definition}[chapter]
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{corollary}[definition]{Corollary}
+\theoremstyle{comment}
+\newtheorem{example}[definition]{Example}
+\newtheorem{claim}[definition]{Claim}
+
+\fancyhead[LO]{\slshape \leftmark}
+\fancyhead[RE]{\slshape \rightmark}
+\fancyhead[LE]{}
+\fancyhead[RO]{}
+\fancyfoot[LO,RE]{\tiny{\it}}
 
 % Main document
 \begin{document}
-\title{Profit Optimisation in Heterogeneous 2-link Parallel Games}
-\author{Thomas Pappas}
-\date{}
-\maketitle
 
-\section*{Abstract}
+\maketitle
+\clearpage
+
+
+\thispagestyle{empty}
+\null
+\clearpage
+
+\restoregeometry
+
+\thispagestyle{empty}
+\pagenumbering{gobble}
+\chapter*{Abstract}
 We study (so far) a 3-level optimisation problem where, in a 2-link $s-t$ network, link owners compete for profit by assigning tolls to links, thus creating a toll congestion game.
 In addition, each player responds to tolls in a heterogeneous way, described by a distribution function $\alpha(p)$.
 We first introduce a new term $\as$ which, given a set of tolls, can help us describe how the flow is split between the 2 links, and then we will use it to prove some properties of the game.
 We will show that even with affine latencies, there are cases where no Nash Equilibrium exists in the profit game between the toll owners.
 
 Then what else? Maybe find cases where there always exists a $\NE$.
+\clearpage
+
+\thispagestyle{empty}
+\null
+\clearpage
+
+\thispagestyle{empty}
+\pagenumbering{gobble}
+\chapter*{Σύνοψη}
+TODO: Να μεταφράσω το Abstract στα ελληνικά.
+\clearpage
+
+\thispagestyle{empty}
+\null
+\clearpage
 
 
-\section{Introduction}
+\clearpage
+\thispagestyle{empty}
+
+\pagestyle{fancy}
+
+\pagenumbering{roman}
+\tableofcontents
+\clearpage
+
+\thispagestyle{empty}
+\null
+\clearpage
+
+\pagenumbering{arabic}
+
+
+\chapter{Introduction}
 
 In this thesis we study a three level optimisation problem.
 On the basis there is a 2-node $(s, t)$, 2-link $s-t$ network, each link with a non-decreasing latency function that defines how the traffic increases as more players flow into that link.
@@ -64,11 +159,11 @@ In that $\NE$ the users are split with the money-sensitive ones on the link with
 We introduce a new term $\as=\frac{l_1(x)-l_2(1-x)}{t_2-t_1}$ which is the $a(p)$ value of a user $p$ which sees the link costs equally.
 
 
-\section{Related Work}
+\chapter{Related Work}
 TODO
 
 
-\section{Preliminaries}
+\chapter{Preliminaries}
 
 A 2-link $s-t$ parallel network is a graph with a source node $s$, a destination node $t$ and $2$ edges connecting $s$ to $t$.
 Each link is associated with a latency function $l_1, l_2$
@@ -76,13 +171,13 @@ Each link is associated with a latency function $l_1, l_2$
 A flow of infinitesimal users totaling up to a flow of $[0, 1]$ wishes to move from $s$ to $t$ through the link with the lowest cost.
 
 
-\section{2-link parallel networks}
+\chapter{2-link parallel networks}
 
 We start with the simple case of 2-link parallel networks.
 [TODO: Add figure]
 In this simple setup a user of the flow 
 
-\subsection{Time-money sensitivity split}
+\section{Time-money sensitivity split}
 
 Consider a 2-link parallel network with latency functions $l_1(x), l_2(x)$ and tolls $t=(t_1, t_2)$ assigned to them.
 Without loss of generality we assume $t_1 > t_2$ which in turn means that for the resulting equilibrium flow $x = (x_1(t), x_2(t))$ it holds that $l_1(x_1(t)) < l_2(x_2(t))$.
@@ -104,7 +199,7 @@ Remember that we have assumed that $t_1 > t_2 \Rightarrow l_1(x_1(t)) < l_2(x_2(
 Therefore the flow passing through the faster edge $1$ is contained with players where $\alpha(p) \le \as(t)$, while the flow in the cheaper edge $2$ is contained with players where $\alpha(p) \ge \as(t)$.
 Since the players are sorted in increasing order according to $\alpha$, it helps to view the players in the first case as the "lower" part of the split and respectively the players in the second case as the "higher" part of the split.
 [TODO: Alternative splits: rushed-relaxed, rich-poor]
-Table \ref{table:split_summary} provides of a summary for each part of the split
+Table \autoref{table:split_summary} provides of a summary for each part of the split
 
 \begin{table}[h!]
 	\centering
@@ -251,7 +346,7 @@ This corollary hints that all values of $\alpha$ above $\max\{x_1, x_2\}$ are ir
 This will become more obvious later when calculating best responses as those values will never be used.
 [TODO: Maybe put this in its own Lemma and prove it?]
 
-\subsection{Profit maximisation and distribution function}
+\section{Profit maximisation and distribution function}
 
 In this section we will examine how different distribution functions $\alpha$ can affect the profit maximisation game between the toll owners.
 [TODO: add framework for examining games]
@@ -581,7 +676,7 @@ Finally we get
 For the above functions we can show [TODO: currently done experimentally in python] that there is NO $\NE$ for the pricing game.
 
 
-\subsection{Equilibrium}
+\section{Equilibrium}
 
 In this section we will show that if the distribution function has the following properties
 \begin{itemize}
@@ -589,5 +684,15 @@ In this section we will show that if the distribution function has the following
 	\item $\alpha$ is onto
 \end{itemize}
 Then a $\NE$ for the pricing game exists ???
+
+
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{Bibliography}
+
+\chapter*{Bibliography}
+%\begin{thebibliography}{99}
+%\end{thebibliography}
+TODO
 
 \end{document}
