@@ -136,10 +136,6 @@ In our main result, we generalise the conditions necessary for the existence of 
 \null
 \clearpage
 
-
-\clearpage
-\thispagestyle{empty}
-
 \pagestyle{fancy}
 
 \pagenumbering{roman}
@@ -167,11 +163,74 @@ In that $\NE$ the users are split with the money-sensitive ones on the link with
 We introduce a new term $\as=\frac{l_1(x)-l_2(1-x)}{t_2-t_1}$ which is the $a(p)$ value of a user $p$ which sees the link costs equally.
 
 
-\chapter{Related Work}
+\section{Related Work}
+
+Adding tolls to a Network Game has began as a standard practice to regulate the network flow, as it is well known that the equilibrium that occurs by the game is not guarranteed to be the most efficient.
+
 TODO
 
 
 \chapter{Preliminaries}
+
+In this section we will describe the model utilised throughout this thesis.
+If we attempted to call that model by including all of it's properties, the result would be a Heterogeneous Non-atomic 2-link Parallel Network Toll Congestion Pricing Game, so while we will describe each of those properties, we will eventually focus on heterogeneity and the pricing competition, thus calling it a Heterogeneous Pricing Game.
+
+\section*{Non-atomic Parallel Network Games}
+
+We consider a directed graph $G = (\{s, t\}, N)$ where $N = \{1,\dots, n\}$ is a set of parallel links from a source node $s$ to a target node $t$.
+For the non-atomic case, there is one unit of traffic that wishes to travel from $s$ to $t$, described as the unit interval $[0, 1]$ endowed with Lebesque measure $\lambda$.
+Each point $p \in [0, 1]$ will be called a \textit{player} and will be considered to be non-cooperative and contribute to the traffic by an infinitesimal amount.
+As such the decisions of individual players have no effect on the game and it becomes natural to only consider non-zero measure collection of players.
+
+A \textit{flow} is a (stochastic) vector $x = (x_i)_{i \in N}$ where $x_i$ is the total flow on link $i$.
+The flow then creates congestion on the links, each described by a non-decreasing latency function $(\ell_i)_{i \in N}$ which we assume to be affine.
+We denote by $\mathcal{L}_d$ the class of polynomial latency functions with nonnegative coefficients and degree at most $d$, and as such $\mathcal{L}_1$ becomes the class of affine latency functions.
+Finally, the network can also be extended by allowing a set of tolls $t = (t_i)_{i \in N}$ to be assigned to each link, which in turn adds to the effective cost of a player using them.
+
+The above set-up creates a Non-atomic Parallel Network Game with tolls where each player will select the edge that minimises their \textit{individual} traffic latency.
+We consider two cases where players either react to tolls in a \textit{homogeneous} or a \textit{heterogeneous} manner.
+
+\subsection*{Homogeneous players}
+
+In the homogeneous case all players have an equal reaction to tolls, and therefore the effective cost of a player using link $i$ becomes $\ell_i(x_i) + t_i$.
+For a given set of tolls $t$, a flow $x$ is a \textit{Wardrop equilibrium for $t$} if $\forall i, j \in N$ with $x_i > 0$ it holds that
+\begin{equation}
+	\label{wardrop_inequality_cost}
+	\ell_i(x_i) + t_i \leq \ell_j(x_j) + t_j
+\end{equation}
+In that case, all links with $x_i > 0$ have equal effective costs, i.e. there exists some $K > 0$ such that $\ell_i(x_1) + t_i = K$ for all links $i$ with $x_i > 0$.
+From a well-known result from Beckman et al. \cite{beckmann1956studies} and Dafermos and Sparrow \cite{1363388843888284416}, such and an equilibrium for $t$ exists and is unique, therefore for a toll vector $t$ we can denote by $x(t)$ the flow occurring on  that unique equilibrium for the given toll $t$.
+We copy Lemma 2.1 from Harkes et al \cite{Harks_2019} as is for later use.
+\begin{lemma}
+	\label{lemma:wardrop_equilibrium}
+	A flow $x$ is a Wardrop equilibrium for $t$ if and only if for all feasible flows $x^\prime$,
+	\[\sum_{i \in N} (\ell_i(x_i) + t_i) \cdot (x_i - x_i^\prime) \leq 0\]
+\end{lemma}
+If $t = 0$ then the equilibrium is called the \textit{Wardrop equilibrium}.
+It's also worth noting that looking at \eqref{wardrop_inequality_cost}, we can see that what actually matters, with regard to the flow, is the relative difference among the tolls.
+I.e. if we consider any $c \in \R_+$ (or even $c \geq -\min_{i \in N} t_i$) then for $t^\prime = t + c$ the inequalities remain true for all $i, j \in N$ and thus the network game for the flow between tolls $t$ and $t^\prime$ is the same.
+
+Finally for affine latencies we can calculate $x(t)$.
+For $l_i(x_i) = a_i \cdot x_i + b_i, a_i > 0, b_i \geq 0$ and $t \in \R_+^N$ define $N(t) = \{i \in N | x_i(t) > 0\}$.
+Since $x(t)$ is an equilibrium for $t$ and $\sum_{i \in N(t)}x_i(t) = 1$ we solve the equations with regard to the common efficient cost $K$ and then we get for all $i \in N(t)$
+\begin{equation}
+	x_i(t) = \frac{1 + \sum_{j \in N(t)}\frac{b_j + t_j - b_i - t_i}{a_j}}{\sum_{j \in N(t)}\frac{a_i}{a_j}}
+\end{equation}
+
+\subsection*{Heterogeneous players}
+
+In the heterogeneous case, each player $p$ reacts differently to tolls, presumably due to different money/time valuation ratios.
+We describe this by adding a money-sensitivity weight $\alpha(p)$ on the toll costs experienced by the player, making them see the cost of each edge as $c_i^p(x, t) = \ell_i(x_i) + \alpha(p) t_i$ and then seek the shortest link among them.
+By also assuming that the players are sorted by money-sensitivity, we can describe their heterogeneity by defining a non-decreasing function $\alpha: [0, 1] \rightarrow [0, \infty]$.
+We call $\alpha$ a \textit{distribution function}.
+Even though the definition does allow functions that are not upper bounded with $\alpha(1) = +\infty$, we will always assume that $\alpha$ is finite on $[0, 1)$.
+Also we will assume that $\alpha(0) > 0$, since, as we'll see in more detail in Section ??, allowing many players close to $0$ breaks the pricing game.
+
+\section*{Pricing Games}
+
+We introduce $n$ link owners which can assign a toll $t_i$ on link $i$ and profit from it.
+
+\section*{2-link Pricing Games (our model)}
 
 A 2-link $s-t$ parallel network is a graph with a source node $s$, a destination node $t$ and $2$ edges connecting $s$ to $t$.
 Each link is associated with a latency function $l_1, l_2$
