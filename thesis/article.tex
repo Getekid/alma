@@ -182,7 +182,9 @@ For the non-atomic case, there is one unit of traffic that wishes to travel from
 Each point $p \in [0, 1]$ will be called a \textit{player} and will be considered to be non-cooperative and contribute to the traffic by an infinitesimal amount.
 As such the decisions of individual players have no effect on the game and it becomes natural to only consider non-zero measure collection of players.
 
-A \textit{flow} is a (stochastic) vector $x = (x_i)_{i \in N}$ where $x_i$ is the total flow on link $i$.
+A \textit{flow} is a Lebesque measurable function $f: [0, 1] \rightarrow N$ that describes which link is selected by each player.
+It is more intuitive, however, to consider the resulting flow on each link (\textit{flow on paths}), i.e. $x_i = \lambda(\{p \in [0, 1]: f(p) = i\})$.
+Hence we get flow as a (stochastic) vector $x = (x_i)_{i \in N}$ where $x_i$ is the total flow on link $i$ with $x_i \geq 0$ and $\sum_{i \in N}x_i = 1$.
 The flow then creates congestion on the links, each described by a non-decreasing latency function $(\ell_i)_{i \in N}$ which we assume to be affine.
 We denote by $\mathcal{L}_d$ the class of polynomial latency functions with nonnegative coefficients and degree at most $d$, and as such $\mathcal{L}_1$ becomes the class of affine latency functions.
 Finally, the network can also be extended by allowing a set of tolls $t = (t_i)_{i \in N}$ to be assigned to each link, which in turn adds to the effective cost of a player using them.
@@ -200,6 +202,7 @@ For a given set of tolls $t$, a flow $x$ is a \textit{Wardrop equilibrium for $t
 \end{equation}
 In that case, all links with $x_i > 0$ have equal effective costs, i.e. there exists some $K > 0$ such that $\ell_i(x_1) + t_i = K$ for all links $i$ with $x_i > 0$.
 From a well-known result from Beckman et al. \cite{beckmann1956studies} and Dafermos and Sparrow \cite{1363388843888284416}, such and an equilibrium for $t$ exists and is unique, therefore for a toll vector $t$ we can denote by $x(t)$ the flow occurring on  that unique equilibrium for the given toll $t$.
+We will freely use when needed the general game-theoretical notation of $x(t_i, t_{-i})$ where $t_{-i} = t \setminus \{t_i\}$.
 We copy Lemma 2.1 from Harkes et al \cite{Harks_2019} as is for later use.
 \begin{lemma}
 	\label{lemma:wardrop_equilibrium}
@@ -220,22 +223,35 @@ Since $x(t)$ is an equilibrium for $t$ and $\sum_{i \in N(t)}x_i(t) = 1$ we solv
 \subsection*{Heterogeneous players}
 
 In the heterogeneous case, each player $p$ reacts differently to tolls, presumably due to different money/time valuation ratios.
-We describe this by adding a money-sensitivity weight $\alpha(p)$ on the toll costs experienced by the player, making them see the cost of each edge as $c_i^p(x, t) = \ell_i(x_i) + \alpha(p) t_i$ and then seek the shortest link among them.
+We describe this by adding a money-sensitivity weight $\alpha(p)$ on the toll costs experienced by the player, making them see the cost of each edge as $c_i^p(x(t)) = \ell_i(x_i) + \alpha(p) \cdot t_i$ and then seek the shortest link among them.
 By also assuming that the players are sorted by money-sensitivity, we can describe their heterogeneity by defining a non-decreasing function $\alpha: [0, 1] \rightarrow [0, \infty]$.
 We call $\alpha$ a \textit{distribution function}.
 Even though the definition does allow functions that are not upper bounded with $\alpha(1) = +\infty$, we will always assume that $\alpha$ is finite on $[0, 1)$.
-Also we will assume that $\alpha(0) > 0$, since, as we'll see in more detail in Section ??, allowing many players close to $0$ breaks the pricing game.
+Finally, we will assume that $\alpha(0) > 0$, since, as we'll see in more detail in Example \ref{example:a_0_0}, allowing many players close to $0$ breaks the pricing game.
+
+With the above we can again define a Nash equilibrium for the game if $\forall i \in N$ and $\forall p \in [0, 1]$ it holds that
+\[c_{f(p)}^p(x(t)) \leq c_i^p(x(t))\]
+Existence of an equilibrium is guaranteed by the more general results of Schmeidler \cite[Thm 2]{1973JSP.....7..295S}, while uniqueness is covered by Milchtaich \cite[Prop 3.3]{doi:10.1287/moor.25.3.349.12220}; for a more detailed coverage of those look at the definitions and propositions of Cole et al. \cite[\S2]{10.1145/780542.780618}.
+Therefore can extend the definition for $x(t)$ similarly as in the homogeneous case.
 
 \section*{Pricing Games}
 
-We introduce $n$ link owners which can assign a toll $t_i$ on link $i$ and profit from it.
+While keeping the above Network Game model, we introduce $n$ agents who each own one link of the network and can thus assign its toll and profit from it.
+The profit is defined for each link owner $i$ as $\Pi_i = x_i \cdot t_i$ which, since we defined $x(t)$ above, we can extend the definition to $\Pi_i(t) = x_i(t) \cdot t_i$ describing the profit at the equilibrium for given toll $t$.
+The link owners compete with each other for profit, each selfishly selecting the toll $t_i$ that will maximise their profit given the remaining tolls $t_{-i}$.
+We describe this best response as $B_i(t_{-i}) = \argmax_{t_i \geq 0} \Pi_i(t_i, t_{-i})$.
+Consequently, a toll vector $t$ is a \textit{Nash Equilibrium} for the pricing game, if $\forall i \in N$ and $\forall t_i^\prime \in \R$ it holds that
+\[\Pi_i(t_i, t_{-i}) \geq \Pi_i(t_i^\prime, t_{-i})\]
 
-\section*{2-link Pricing Games (our model)}
+\subsection*{Homogeneous players}
 
-A 2-link $s-t$ parallel network is a graph with a source node $s$, a destination node $t$ and $2$ edges connecting $s$ to $t$.
-Each link is associated with a latency function $l_1, l_2$
+For homogeneous players and affine latencies we can calculate the best response functions for each link owner by solving first order conditions on $\Pi_i(t_i, t_{-i})$ for $t_i$. TODO
+
+\section*{2-link Heterogeneous Pricing Games (our model)}
+
+Focusing on the model that will be used in this thesis, simplify our network by only having two links but consider that the flow is acting in a heterogeneous way.
+The model can thus be defined as the tuple $(\ell, \alpha)$, where $\ell = (\ell_1, \ell_2)$ the latency functions and $\alpha$ the distribution function.
 [TODO: Add figure]
-A flow of infinitesimal users totaling up to a flow of $[0, 1]$ wishes to move from $s$ to $t$ through the link with the lowest cost.
 
 
 \chapter{2-link parallel networks}
@@ -423,6 +439,7 @@ The first is to ensure that $\alpha(p) > 0$ when $p > 0$, while the second is th
 The following two examples demonstrate the issues that might occur if these restrictions are not met.
 
 \begin{example}
+	\label{example:a_0_0}
 	Consider a $2$-link parallel network pricing game with distribution function $\alpha$ for which it does not hold that $\alpha(p) > 0$ when $p > 0$.
 \end{example}
 
