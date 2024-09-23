@@ -65,7 +65,7 @@
 
 % Commands for wrapping properly common expressions.
 \newcommand{\indeq}[1]{\stackrel{\text{#1}}{=}}
-\newcommand{\RightarrowArg}[1]{\stackrel{#1}{\Longrightarrow}}
+\newcommand{\RightarrowArg}[1]{\stackrel{#1}{\Rightarrow}}
 \newcommand{\LeftrightarrowArg}[1]{\stackrel{#1}{\Leftrightarrow}}
 \newcommand{\NE}{\mathrm{N.E.}}
 \newcommand{\as}{\mathrm{\alpha_s}}
@@ -223,16 +223,38 @@ Since $x(t)$ is an equilibrium for $t$ and $\sum_{i \in N(t)}x_i(t) = 1$ we solv
 \subsection*{Heterogeneous players}
 
 In the heterogeneous case, each player $p$ reacts differently to tolls, presumably due to different money/time valuation ratios.
-We describe this by adding a money-sensitivity weight $\alpha(p)$ on the toll costs experienced by the player, making them see the cost of each edge as $c_i^p(x(t)) = \ell_i(x_i) + \alpha(p) \cdot t_i$ and then seek the shortest link among them.
+We describe this by adding a money-sensitivity weight $\alpha(p)$ on the toll costs experienced by the player, making them see the cost of each edge as $c_i^p(t) = \ell_i(x_i(t)) + \alpha(p) \cdot t_i$ and then seek the shortest link among them.
 By also assuming that the players are sorted by money-sensitivity, we can describe their heterogeneity by defining a non-decreasing function $\alpha: [0, 1] \rightarrow [0, \infty]$.
 We call $\alpha$ a \textit{distribution function}.
 Even though the definition does allow functions that are not upper bounded with $\alpha(1) = +\infty$, we will always assume that $\alpha$ is finite on $[0, 1)$.
 Finally, we will assume that $\alpha(0) > 0$, since, as we'll see in more detail in Example \ref{example:a_0_0}, allowing many players close to $0$ breaks the pricing game.
 
-With the above we can again define a Nash equilibrium for the game if $\forall i \in N$ and $\forall p \in [0, 1]$ it holds that
-\[c_{f(p)}^p(x(t)) \leq c_i^p(x(t))\]
+We can therefore define an instance of a Heterogeneous Pricing Game as the tuple $(N, \ell, \alpha)$ with $N = \{1, 2, \dots, n\}$, $\ell = (\ell_i)_{i \in N}$ and $\alpha$ the distribution function.
+Then with all the above we can again define a Nash equilibrium for the game if $\forall i \in N$ and $\forall p \in [0, 1]$ it holds that
+\[c_{f(p)}^p(t) \leq c_i^p(t)\]
 Existence of an equilibrium is guaranteed by the more general results of Schmeidler \cite[Thm 2]{1973JSP.....7..295S}, while uniqueness is covered by Milchtaich \cite[Prop 3.3]{doi:10.1287/moor.25.3.349.12220}; for a more detailed coverage of those look at the definitions and propositions of Cole et al. \cite[\S2]{10.1145/780542.780618}.
 Therefore can extend the definition for $x(t)$ similarly as in the homogeneous case.
+
+Finally, we will prove here a general property of parallel networks which capture the relationship between latencies and tolls.
+It is trivial for homogeneous games that higher tolls create lower latencies on the respective edges, but for the heterogeneous case it is not straightforward so we'll prove it.
+
+\begin{lemma}
+	\label{lemma:latencies_tolls}
+	For a Heterogeneous Parallel Game $(N, \ell, \alpha)$ with tolls $t$ and Nash equilibrium for $t$ flow $x(t)$, it holds that for all $i, j \in N$ with $x_i(t), x_j(t) > 0$
+	\begin{enumerate}[(i)]
+		\item $\ell_i(x_i(t)) < \ell_j(x_j(t))$ iff $t_i > t_j$
+		\item $\ell_i(x_i(t)) = \ell_j(x_j(t))$ iff $t_i = t_j$
+		\item $\ell_i(x_i(t)) > \ell_j(x_j(t))$ iff $t_i < t_j$
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+	We will prove $(i)$ and the rest follow similarly.
+	For the left-to-right direction we assume that $\ell_i(x_i(t)) < \ell_j(x_j(t))$.
+	If now $t_i \le t_j$ then for all players $p$ we get $\ell_i(x_i(t)) + \alpha(p) \cdot t_i < \ell_j(x_j(t)) + \alpha(p) \cdot t_j \Rightarrow c_i^p(t) < c_j^p(t)$.
+	Therefore there exist players $p_j$ on link $j$ for which $c_{f(p_j)}^{p_j}(t) = c_j^{p_j}(t) > c_i^{p_j}(t)$, which is a contradiction since $x(t)$ is a Nash equilibrium.
+	The opposite direction is also proved similarly.
+\end{proof}
 
 \section*{Pricing Games}
 
@@ -249,39 +271,35 @@ For homogeneous players and affine latencies we can calculate the best response 
 
 \section*{2-link Heterogeneous Pricing Games (our model)}
 
-Focusing on the model that will be used in this thesis, simplify our network by only having two links but consider that the flow is acting in a heterogeneous way.
-The model can thus be defined as the tuple $(\ell, \alpha)$, where $\ell = (\ell_1, \ell_2)$ the latency functions and $\alpha$ the distribution function.
+Focusing on the model that will be used in this thesis, we simplify our network by only having $2$ links, and then consider that the flow is acting in a heterogeneous way.
+The model can thus be defined as the tuple $([2], \ell, \alpha)$, where $[2] = \{1, 2\}$ the links, $\ell = (\ell_1, \ell_2)$ the latency functions and $\alpha$ the distribution function.
 [TODO: Add figure]
+When discussing properties of the model where the pricing game is not relevant, we will refer to a $([2], \ell, \alpha)$ instance as a toll game, and otherwise as a pricing game.
 
 
-\chapter{2-link parallel networks}
+\chapter{Money sensitivity split}
 
-We start with the simple case of 2-link parallel networks.
-[TODO: Add figure]
-In this simple setup a user of the flow 
+\section{Introduction}
 
-\section{Time-money sensitivity split}
-
-Consider a 2-link parallel network with latency functions $l_1(x), l_2(x)$ and tolls $t=(t_1, t_2)$ assigned to them.
-Without loss of generality we assume $t_1 > t_2$ which in turn means that for the resulting equilibrium flow $x = (x_1(t), x_2(t))$ it holds that $l_1(x_1(t)) < l_2(x_2(t))$.
-This equilibrium is guaranteed to exist according to Harks et al. \cite{Harks_2019}.
-For the 2 edges of the game we introduce the term time-money sensitivity split $\as(t)$ as the value for which if any player $p$ has $\alpha(p)=\as(t)$ then that player sees the $2$ edge total latencies as equal.
+Consider a $([2], \ell, \alpha)$ toll game such that $x_1(0), x_2(0) > 0$ with tolls $t = (t_1, t_2)$ assigned to them and  $x(t) = (x_1(t), x_2(t))$ the Nash equilibrium for $t$.
+Without loss of generality we assume $t_1 > t_2$ which from Lemma \ref{lemma:latencies_tolls} follows that $\ell_1(x_1(t)) < \ell_2(x_2(t))$.
+For the $2$ edges of the game we introduce the term money sensitivity split $\as(t)$ as the value of $\alpha$ for which if any player $p$ has $\alpha(p)=\as(t)$ then that player sees the $2$ edges' total latencies as equal.
 More specifically, $\as(t)$ is the value of the distribution function $\alpha$ for which it holds
-\[l_1(x_1(t)) + \as(t) t_1 = l_2(x_2(t)) + \as(t) t_2\]
+\[\ell_1(x_1(t)) + \as(t) \cdot t_1 = \ell_2(x_2(t)) + \as(t) \cdot t_2\]
 Solving for $\as$ we get
-\[\as(t) = \frac{l_2(x_2(t)) - l_1(x_1(t))}{t_1 - t_2}\]
+\[\as(t) = \frac{\ell_2(x_2(t)) - \ell_1(x_1(t))}{t_1 - t_2}\]
 \\
 Before we get into a more formal definition and description of $\as$, it'd help to first discuss the nature of the split that $\as$ captures.
 Regardless of whether there exists a player $p$ such that $\alpha(p) = \as(t)$, it still holds that
 \begin{itemize}
-	\item if $\alpha(p) < \as$ then $l_1(x_1(t)) + \alpha(p) t_1 < l_2(x_2(t)) + \alpha(p) t_2$, thus $p$ is on edge $1$
-	\item if $\alpha(p) > \as$ then $l_1(x_1(t)) + \alpha(p) t_1 > l_2(x_2(t)) + \alpha(p) t_2$, thus $p$ is on edge $2$
-	\item if $\alpha(p) = \as$ then $l_1(x_1(t)) + \alpha(p) t_1 = l_2(x_2(t)) + \alpha(p) t_2$, thus $p$ is either on edge $1$ or $2$
+	\item if $\alpha(p) < \as(t)$ then $\ell_1(x_1(t)) + \alpha(p) \cdot t_1 < \ell_2(x_2(t)) + \alpha(p \cdot) t_2$, thus $p$ is on edge $1$
+	\item if $\alpha(p) > \as(t)$ then $\ell_1(x_1(t)) + \alpha(p) \cdot t_1 > \ell_2(x_2(t)) + \alpha(p) \cdot t_2$, thus $p$ is on edge $2$
+	\item if $\alpha(p) = \as(t)$ then $\ell_1(x_1(t)) + \alpha(p) \cdot t_1 = \ell_2(x_2(t)) + \alpha(p) \cdot t_2$, thus $p$ is either on edge $1$ or $2$
 \end{itemize}
-Remember that we have assumed that $t_1 > t_2 \Rightarrow l_1(x_1(t)) < l_2(x_2(t))$.
+Remember that we have assumed that $t_1 > t_2 \Rightarrow \ell_1(x_1(t)) < \ell_2(x_2(t))$.
 Therefore the flow passing through the faster edge $1$ is contained with players where $\alpha(p) \le \as(t)$, while the flow in the cheaper edge $2$ is contained with players where $\alpha(p) \ge \as(t)$.
-Since the players are sorted in increasing order according to $\alpha$, it helps to view the players in the first case as the "lower" part of the split and respectively the players in the second case as the "higher" part of the split.
-[TODO: Alternative splits: rushed-relaxed, rich-poor]
+Since the players are sorted in increasing order according to $\alpha$, it helps to view the players in the first case as the "lower" part of the split and respectively the players in the second case as the "upper" part of the split.
+If it helps with the intuition, alternative split labels could be rushed-relaxed or rich-poor.
 Table \autoref{table:split_summary} provides of a summary for each part of the split
 
 \begin{table}[h!]
@@ -291,145 +309,325 @@ Table \autoref{table:split_summary} provides of a summary for each part of the s
 		\hline
 		& $\alpha(p) \le \as(t)$ & $\alpha(p) \ge \as(t)$ \\ \hline
 		sensitivity & time $\ge$ money & time $\le$ money \\ \hline
-		latency & lower $(l_2)$ & higher $(l_1)$ \\ \hline
+		latency & lower $(\ell_2)$ & higher $(\ell_1)$ \\ \hline
 		toll & higher $(t_1)$ & lower $(t_2)$ \\ \hline
-		edge & low-latency, high-toll $(1)$ & high-latency, low-toll $(2)$ \\ \hline
+		link/edge & low-latency, high-toll $(1)$ & high-latency, low-toll $(2)$ \\ \hline
 		$t_1 - t_2$ & lower & higher \\ \hline
-		split & lower & higher \\ \hline
+		split & lower & upper \\ \hline
 	\end{tabular}
 	\label{table:split_summary}
 \end{table}
 
 Finally to acknowledge that we have arbitrarily handled any players with $\alpha(p) = \as(t)$.
 Those players, if any, even though they see both edges with equal total cost, in the optimal flow $x$ they have settled in either edge $1$ or $2$.
-We investigate more in depth the relation of $\as$ to the flow in [TODO: add ref].
+We investigate more in depth the relation of $\as$ with the flow in the following Lemmas.
 \\[12pt]
 We can now formally define $\as$ and prove some of its properties.
-\begin{definition}
-	Given a 2-link parallel heterogeneous game with latency functions $l_1, l_2$, we define the time-money sensitivity split function $\as: \R^2_+ \rightarrow (0, +\infty)$ where for given tolls $t = (t_1, t_2)$
-	\[\as(t) = \frac{l_2(x_2(t)) - l_1(x_1(t))}{t_1 - t_2}\]
-\end{definition}
-The function is well defined since the given tolls $t$ result in a single optimal flow $x(t) = (x_1(t), x_2(t))$ \cite{Harks_2019}.
 
-We start with some basic properties.
+\section{Definitions}
+
+\begin{definition}
+	\label{definition:split_function}
+	Given a $([2], \ell, \alpha)$ toll game with $x_1(0), x_2(0) > 0$, tolls $t = (t_1, t_2), t_1 \ne t_2$ and $x(t) = (x_1(t), x_2(t))$ the Nash equilibrium for $t$, we define the \textit{money sensitivity split function} $\as: \R_+^2 \setminus \{(a, a) | a \in \R_+\} \rightarrow (0, +\infty)$ as follows 
+	\[\as(t) = \frac{\ell_2(x_2(t)) - \ell_1(x_1(t))}{t_1 - t_2}\]
+\end{definition}
+
+We will also give a more formal definition to the lower-upper split intuition we described above.
+\begin{definition}
+	\label{definition:split_lower_upper}
+	Given a $([2], \ell, \alpha)$ toll game with $x_1(0), x_2(0) > 0$, tolls $t \ne 0$ and $x(t)$ the Nash equilibrium for $t$, and also assuming w.l.o.g. that $t_1 > t_2$, we define as \textit{lower split} the (possibly zero) flow $x_1(t)$ and as \textit{upper split} the remaining flow $x_2(t)$. 
+\end{definition}
+
+\begin{corollary}
+	\label{corollary:split_to_alpha}
+	Given a $([2], \ell, \alpha)$ toll game with $x_1(0), x_2(0) > 0$ and tolls $t \ne 0$, it holds that
+	\begin{itemize}
+		\item $\alpha(p) \le \as(t)$, for all players $p$ in the lower split
+		\item $\alpha(p) \ge \as(t)$, for all players $p$ in the upper split
+	\end{itemize}
+\end{corollary}
+
+\begin{proof}
+	Let again w.l.o.g. assume $t_1 > t_2 \LeftrightarrowArg{\ref{lemma:latencies_tolls}} \ell_1(x_1(t)) < \ell_2(x_2(t))$, making by definition \ref{definition:split_lower_upper} a player $p$ in the lower split be in link $1$.
+	Since $x$ is a Nash equilibrium we have
+	\begin{align*}
+		c_1^p(t) &\le c_2^p(t) \Rightarrow \ell_1(x_1(t)) + \alpha(p) \cdot t_1 \le \ell_2(x_2(t)) + \alpha(p) \cdot t_2 \\
+		&\RightarrowArg{t_1 > t_2} \alpha(p) \le \frac{\ell_2(x_2(t)) - \ell_1(x_1(t))}{t_1 - t_2} \RightarrowArg{\ref{definition:split_function}} \alpha(p) \le \as(t)
+	\end{align*}
+	Similarly we can show that $\alpha(p) \ge \as(t)$, for all players $p$ in the upper split.
+\end{proof}
+
+At this point in our analysis, we will additionally need the notion of the lowest and highest $\alpha$ value in a flow of players.
+
+In general, since we're working with a Lebesque-measurable flow, it is natural to not bother with distinguishing between a flow $[0, x_1]$ or $[0, x_1)$, as the player $x_1$ can be arbitrarily placed at any link without affecting the game.
+In a heterogeneous setting, however, the existence or not of that player matters, as its $\alpha(x_1)$ value might be different from the rest of the players in the flow, depending on how $\alpha$ is defined.
+We bypass this issue by instead using set border bounds.
+
+\begin{definition}
+	\label{definition:alpha_flow_sets}
+	Let $([2], \ell, \alpha)$ a toll game with $x_1(0), x_2(0) > 0$, tolls $t \ne 0$ and $x(t)$ the Nash equilibrium for $t$.
+	We define as $A_i(t)$ the set of $\alpha(p)$ values for players $p$ on edge $i$ in the Nash equilibrium for $t$.
+	More formally, we define a set function $A_i: \R_+^2 \setminus \{(a, a) | a \in \R_+\} \rightarrow \mathcal{P}(\R_+)$ such that
+	\[A_i(t) = \{\alpha(p)|p \text{ in edge } i \textit{ for } x(t) \}\]
+	For tolls where $t_1 = t_2$ we cannot define lower and upper split, but we will extend the definition of $A_i$ for those tolls with a sign to specify which split we assume the link to have.
+	Therefore we define $A_i^-(0)$ and $A_i^+(0)$ respectively as
+	\[A_i^-(0) = \{\alpha(p)|p \in [0, x_i(0))\} \qquad A_i^+(0) = \{\alpha(p)|p \in (x_i(0), 1]\}\]
+	%\[A_i^-(0) = \lim_{t_1 - t_2 \rightarrow 0^-}A_i(t) \qquad A_i^+(0) = \lim_{t_1 - t_2 \rightarrow 0^+}A_i(t)\]
+\end{definition}
+
+We ignore all $\alpha(x_i(0))$ values in order to avoid any confusion, since they are arbitrarily placed in any edge and their $\alpha$ value could change the sets' properties.
+It doesn't affect our analysis, however, since having a split on that player is only possible for $t = 0$ and $\as(0)$ is undefined, plus as we'll show in the next section neither it's limit exists, making the $\alpha$ value of player $x_i(0)$ (in each assumingly split case) irrelevant.
+
+We continue with describing some basic properties around the values of $\as$.
+
+\section{Properties and analysis}
+
 \begin{lemma}
 	\label{lemma:split_basic}
-	Given a 2-link parallel heterogeneous game with distribution function $\alpha$ and time-money sensitivity split function $\as$, the following hold:
+	Given a $([2], \ell, \alpha)$ toll game with $x_1(0), x_2(0) > 0$ and tolls $t \ne 0$, the following hold:
 	\begin{enumerate}[(i)]
 		\item $\as(t) > 0$
 		\item if $x_1(t), x_2(t) > 0$ then $\as(t) \in [\alpha(0), \alpha(1)]$
-		\item if $0 < l_1(x_1(t)) < l_2(x_2(t))$ then $\alpha(x_1(t)) \le \as(t) \le \alpha(x_1(t) + \epsilon), \forall \epsilon > 0$ arbitrarily small
+		\item if $\as(t) < \alpha(0)$ or $\as(t) > \alpha(1)$ then $x(t) = (0, 1)$ or $(1, 0)$
+		\item if $x_1(t), x_2(t) > 0$ with $\ell_1(x_1(t)) < \ell_2(x_2(t))$ then\\
+		$\sup A_1(t) \le \as(t) \le \inf A_2(t)$
 	\end{enumerate}
 \end{lemma}
 
 \begin{proof}
 	$ $ % Just to make a line break after "Proof".
 	\begin{enumerate}[(i)]
-		\item Obviously $\as(t) \ne 0$ since $\as(t) = 0 \Rightarrow l_1(x_1(t)) = l_2(x_2(t))$ which is impossible in a heterogeneous setup.
-		Then we only need to notice that $l_1(x_1(t)) < l_2(x_2(t)) \iff t_1 > t_2$ and we get $\as(t) > 0$ from definition.
-		\item Since $x_1(t), x_2(t) > 0$ then $\exists p_1, p_2 \in [0, 1]$ each on a different edge, for which we assume w.l.o.g. that $\alpha(p_1) \le \alpha(p_2)$.
-		It holds that $\alpha(p_1) \le \as(t) \le \alpha(p_2)$ so with $\alpha$ being non-decreasing it follows
+		\item Trivial application of Lemma \ref{lemma:latencies_tolls}.
+		Since we have $t_1 \ne t_2$ it follows that $\ell_1(x_1(t)) \ne \ell_2(x_2(t))$ and therefore $\as(t) \ne 0$.
+		Then we only need to notice that $\ell_1(x_1(t)) < \ell_2(x_2(t)) \Leftrightarrow t_1 > t_2$ and we get $\as(t) > 0$ from Definition \ref{definition:split_function}.
+		\item Since $x_1(t), x_2(t) > 0$ then $\exists p_1, p_2 \in [0, 1]$ each on a different link, for which we assume w.l.o.g. that $\alpha(p_1) \le \alpha(p_2)$.
+		It holds from \ref{corollary:split_to_alpha} that $\alpha(p_1) \le \as(t) \le \alpha(p_2)$ so with $\alpha$ being non-decreasing it follows
 		\[\alpha(0) \le \alpha(p_1) \le \as(t) \le \alpha(p_2) \le \alpha(1) \Rightarrow \as(t) \in [\alpha(0), \alpha(1)]\]
-		\item We know that $x_1(t) < x_2(t)$ means that edge 1 has the lower split.
-		Therefore we have
-		\[\alpha(p) \le \as(t), \forall p \in [0, x_1(t)] \Rightarrow \alpha(x_1(t)) \le \as(t)\]
-		Likewise for edge 2 we have
-		\[\as(t) \le \alpha(p), \forall p \in (x_1(t), 1] \Rightarrow \as(t) \le \alpha(x_1(t) + \epsilon), \forall \epsilon \in (0, 1 - x_1(t))\]
+		\item Inverse logic statement of $(ii)$ ($(P \rightarrow Q) \rightarrow (\neg Q \rightarrow \neg P)$).
+		\item Natural consequence from Corollary \ref{corollary:split_to_alpha} and Definition \ref{definition:alpha_flow_sets}.
 	\end{enumerate}
 \end{proof}
 
-The next lemma will help us describe how $\as(t)$ is changing in relation to toll difference (and in extend to latency difference).
+At this point we should notice that $\as$, similarly to $x$, depends only on the toll difference $t_1 - t_2$ and whether $t_1 < t_2$ or otherwise.
+In order to emphasise on this, let's point out that we could alternatively have defined both $x$ and $\as$ as single variable functions with a domain of values $t_d = t_1 - t_2 \in \R$ and function values as such
+\[
+	x(t_d) =
+	\begin{cases*}
+		x((t_d, 0)) & $t_d \ge 0$ \\
+		x((0, -t_d)) & $t_d < 0$ \\
+	\end{cases*}
+\]
+We will not utilise this definition as is in this work, however displaying it helps with the intuition that the flow, and consequently $\as$, actually changes as the toll difference does in $\R$.
+
+With that in mind, we will investigate the monotonicity of $\as(t)$ in relation to toll differences (and in extension to latency differences).
+For this we will need to compare different tolls that create lower-upper splits in the same edges, or in other words for tolls $t, t^\prime$ to hold that if $t_1 > t_2$ then also $t_1^\prime > t_2^\prime$ and vice-versa.
+We will capture this with the following condition
+\begin{equation}
+	\label{eq:split_property_cond_tolls_0}
+	\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} > 0
+\end{equation}
+where indeed if $t_1 > t_2$ then
+\[t_1 > t_2 \Leftrightarrow t_1 - t_2 > 0 \LeftrightarrowArg{(\ref{eq:split_property_cond_tolls_0})} t_1^\prime - t_2^\prime > 0 \Leftrightarrow t_1^\prime > t_2^\prime\]
+and likewise we also get $t_1 < t_2 \Leftrightarrow t_1^\prime < t_2^\prime$.
+Also note that this property also holds for the respective latencies.
+
 \begin{lemma}
-	Given a 2-link parallel heterogeneous game with time-money sensitivity split function $\as$ and tolls $t, t^\prime$ such that $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} > 0$, the following hold:
+	\label{lemma:split_monotonicity}
+	Given a $([2], \ell, \alpha)$ toll game with $x_1(0), x_2(0) > 0$ and tolls $t, t^\prime \ne 0$ such that $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} > 0$, the following hold:
 	\begin{enumerate}[(i)]
-		\item $\as(t) \ge \as(t^\prime)$ iff $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \le 1$
-		\item $\as(t) \le \as(t^\prime)$ iff $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \ge 1$
+		\item if $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \le 1$ then $\as(t) \ge \as(t^\prime)$
+		\item if $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \ge 1$ then $\as(t) \le \as(t^\prime)$
+		\item if $\as(t) > \as(t^\prime)$ then $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} < 1$
+		\item if $\as(t) < \as(t^\prime)$ then $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} > 1$
 	\end{enumerate}
 \end{lemma}
 
 \begin{proof}
-	Before we get into the propositions, notice that the condition
-	\begin{equation}
-		\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} > 0
-		\label{eq:split_property_cond_tolls_0}
-	\end{equation}
-	ensures that the two tolls provide splits with same edges in their respective lower and higher sections.
-	We show this for $t_1 > t_2$ and likewise it also holds for $t_1 < t_2$.
-	\[t_1 > t_2 \Leftrightarrow t_1 - t_2 > 0 \LeftrightarrowArg{(\ref{eq:split_property_cond_tolls_0})} t_1^\prime - t_2^\prime > 0 \Leftrightarrow t_1^\prime > t_2^\prime\]
-	%Also note that this property extends to the latencies, giving us
-	%\begin{equation}
-	%	\frac{l_1(x_1(t)) - l_2(x_2(t))}{l_1(x_1^\prime(t)) - l_2(x_2^\prime(t))} > 0
-	%	\label{eq:split_property_cond_latencies_0}
-	%\end{equation}
-	Now moving on to the prepositions, we focus on proving $(i)$ in the right-to-left direction; then the same steps can be followed backwards to prove left-to-right.
-	Finally proving $(ii)$ will be much easier as there are many steps symmetric to the ones for $(i)$.
-	
+	$ $
 	\paragraph{$(i)$}
-	Begin by noticing that $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \le 1 \Leftrightarrow |t_1 - t_2| \le |t_1^\prime - t_2^\prime|$ (opposite direction is ensured by $(\ref{eq:split_property_cond_tolls_0})$), i.e. the toll difference is increasing.
-	Assume w.l.o.g. that $x_1 < x_2$.
-	
-	If $x_1(t) = 0$ then
-	\[\as(t) = \frac{l_2(1)}{t_2 - t_1}, \as(t^\prime) = \frac{l_2(1)}{t_2^\prime - t_1^\prime}\] 
-	so obviously $t_2 - t_1 \le t_2^\prime - t_1^\prime \Rightarrow \as(t) \ge \as(t^\prime)$.
-	
-	If $x_1(t) > 0$ then we know [TODO: do we?] that the latency difference might also increase, with flow from the lower latency edge, if any, moving towards the slower one, i.e. $x_1(t) \ge x_1(t^\prime)$.
-	%\[|t_1 - t_2| \le |t_1^\prime - t_2^\prime| \Leftrightarrow |l_1(x_1(t)) - l_2(x_2(t))| \le |l_1(x_1(t^\prime)) - l_2(x_2(t^\prime))|\]
-	%\begin{equation}
-	%	|l_1(x_1(t)) - l_2(x_2(t))| \le |l_1(x_1(t^\prime)) - l_2(x_2(t^\prime))| \LeftrightarrowArg{(\ref{eq:split_property_cond_latencies_0})} \frac{l_1(x_1(t)) - l_2(x_2(t))}{|l_1(x_1(t^\prime)) - l_2(x_2(t^\prime))|} \le 1
-	%	\label{eq:split_property_cond_latencies_1}
-	%\end{equation}
-	If no flow moves then we can easily show that $\as(t) \ge \as(t^\prime)$ similarly to the case with $x_1(t) = 0$.
-	Otherwise we have $x_1(t) > x_1(t^\prime) \Rightarrow \exists \epsilon > 0: x_1(t) = x_1(t^\prime) + \epsilon$ and by carefully applying property $\ref{lemma:split_basic}(ii)$ we get
-	\[\as(t^\prime) \le \alpha(x_1(t^\prime) + \epsilon) = \alpha(x_1(t)) \le \as(t)\]
-	
+	Begin by noticing that $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \le 1 \Rightarrow |t_1 - t_2| \le |t_1^\prime - t_2^\prime|$, i.e. from $t$ to $t^\prime$ the toll difference is not decreasing, which means that the players in the upper link (i.e. the players who already prefer the higher latency and lower toll link) will still view their link as the best option.
+	Therefore only flow from the lower latency edge, if any, might move towards the slower one.
+	Assume w.l.o.g. that $t_1 > t_2$, giving us $x_1(t) \ge x_1(t^\prime)$ and $x_2(t) \le x_2(t^\prime)$.
+
+	If $x_1(t) = x_1(t^\prime)$, then looking at $\as$ we get
+	\[\as(t^\prime) = \frac{\ell_2(x_2(t^\prime)) - \ell_1(x_1(t^\prime))}{t_2^\prime - t_1^\prime} = \frac{\ell_2(x_2(t)) - \ell_1(x_1(t))}{t_2^\prime - t_1^\prime} = \as(t) \frac{t_2 - t_1}{t_2^\prime - t_1^\prime}\]
+	so obviously $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \le 1 \Leftrightarrow \as(t^\prime) \le \as(t)$.
+
+	If $x_1(t) > x_1(t^\prime)$ then there exists a player $p$ who is in link $1$ in the Nash equilibrium for $t$ and in link $2$ for the one for $t^\prime$, meaning that from Definition \ref{definition:alpha_flow_sets} we get
+	\[\inf A_2(t^\prime) \le \alpha(p) \le \sup A_1(t)\]
+	By now carefully applying  (twice) the property from Lemma $\ref{lemma:split_basic}(iv)$ we get
+	\[\as(t^\prime) \le \inf A_2(t^\prime) \le \sup A_1(t) \le \as(t)\]
+
 	\paragraph{$(ii)$}
-	Symmetrically to $(i)$ in this case the toll difference is decreasing, and therefore flow from the higher latency edge will move towards the lower one, i.e. $x_1(t) \le x_1(t^\prime)$ (assuming again $x_1 < x_2$).
+	Symmetrically to $(i)$ in this case the toll difference is non-increasing from $t$ to $t^\prime$, and therefore flow from the higher latency edge will move towards the lower one, i.e. $x_1(t) \le x_1(t^\prime)$ and $x_2(t) \ge x_2(t^\prime)$ (assuming again $t_1 > t_2$).
 	With a similar argument we then get $\as(t) \le \as(t^\prime)$.
+
+	\paragraph{$(iii)$}
+	Assume $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \ge 1$.
+	Then by $(ii)$ it would hold that $\as(t) \le \as(t^\prime)$ which is a contradiction.
+
+	\paragraph{$(iv)$}
+	Assume $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \le 1$.
+	Then by $(i)$ it would hold that $\as(t) \ge \as(t^\prime)$ which is a contradiction.
 \end{proof}
 
-The next lemma gives us some insight of the behavior of $\as(t)$ around its edge values.
+Finally, focusing on the asymptotic behavior or $\as$, we can easily check that when $t_d \rightarrow 0$ the flow approaches $x(0)$.
+However, if $t_1 > t_2$ then $x_1$ (otherwise $x_2$) is the lower split, and from Lemma \ref{lemma:split_basic}$(iv)$ we can see that $\as$ is between the highest value of the lower split and the lowest value of the upper split.
+Therefore the direction of $t_1 > t_2$ matters to as to which $\alpha$ value $\as$ approaches as $t_1 - t_2 \rightarrow 0$, a distinction which we can capture by using $t_1 - t_2 \rightarrow 0^-$ and $t_1 - t_2 \rightarrow 0^+$ accordingly.
+
+The next lemma sums up the above discussion and gives us some insight about the asymptotic behavior of $\as(t)$.
 \begin{lemma}
-	\label{lemma:split_bounds}
-	Given a 2-link parallel heterogeneous game with distribution function $\alpha$ and time-money sensitivity split function $\as$, the following hold:
+	\label{lemma:split_asymptotic}
+	Given a $([2], \ell, \alpha)$ toll game with $x_1(0), x_2(0) > 0$ and tolls $t \ne 0$, the following hold:
 	\begin{enumerate}[(i)]
-		\item if $\alpha(0) > 0$ then $\as(t) < \alpha(0) \Rightarrow x(t) = (0, 1)$ or $(1, 0)$
-		\item if $x_1(0), x_2(0) > 0$ and $\alpha(0) = 0$ with $0$ an accumulation point, then $x_1(t), x_2(t) > 0, \forall t \in \R_+^2$
-		\item $\lim_{|t_1 - t_2| \rightarrow +\infty}\as(t) = 0$
-		\item $\lim_{t_1 - t_2 \rightarrow 0^-} \as(t) = \alpha(x_1), \lim_{t_1 - t_2 \rightarrow 0^+} \as(t) = \alpha(x_2)$, where ($x_1, x_2)$ the optimal flow under no tolls
+		\item
+		\begin{flalign*}
+			\lim_{|t_1 - t_2| \rightarrow +\infty}\as(t) &= 0 &
+		\end{flalign*}
+		\item
+		\begin{flalign*}
+			\lim_{t_1 - t_2 \rightarrow 0^+} \as(t) &= \sup A_1^-(0) \qquad \text{and} \qquad \lim_{t_1 - t_2 \rightarrow 0^-} \as(t) = \sup A_2^-(0) &
+		\end{flalign*}
 	\end{enumerate}
 \end{lemma}
 
 \begin{proof}
 	$ $
 	\begin{enumerate}[(i)]
-		\item Direct consequence from the fact that all players $p$ with $\as(t) < \alpha(p)$ are in the low latency edge.
-		\item Since $\alpha(0) = 0$ and $0$ an accumulation point, then $\forall \delta > 0 \exists \epsilon > 0: p < \epsilon \Rightarrow \alpha(p) < \delta$.
-		Therefore $\forall t \in \R_+^2$ if $\delta = \as(t)$ then $\exists \epsilon > 0: p < \epsilon \Rightarrow \alpha(p) < \as(t)$, which means that the lower latency edge will always have flow some $\epsilon > 0$, and therefore $x_1(t), x_2(t) > 0$.
-		\item We only need to notice that $|l_1(x_1(t)) - l_2(x_2(t))| \le \max\{l_1(1), l_2(1)\} = L$ and we find
-		\[\lim_{|t_1 - t_2| \rightarrow +\infty}\as(t) = \lim_{|t_1 - t_2| \rightarrow +\infty}\frac{|l_1(x_1(t)) - l_2(x_2(t))|}{|t_1 - t_2|} \le \lim_{|t_1 - t_2| \rightarrow +\infty}\frac{L}{|t_1 - t_2|} = 0\]
+		\item We only need to notice that
+		\[|\ell_1(x_1(t)) - \ell_2(x_2(t))| \le \max\{\ell_1(1) - \ell_2(0), \ell_2(1) - \ell_1(0)\} = L\]
+		and we find
+		\[\lim_{|t_1 - t_2| \rightarrow +\infty}|\as(t)| = \lim_{|t_1 - t_2| \rightarrow +\infty}\frac{|\ell_1(x_1(t)) - \ell_2(x_2(t))|}{|t_1 - t_2|} \le \lim_{|t_1 - t_2| \rightarrow +\infty}\frac{L}{|t_1 - t_2|} = 0\]
 		and since $\as(t) > 0$ we get $\lim_{|t_1 - t_2| \rightarrow +\infty}\as(t) = 0$.
-		\item As $|t_1 - t_2| \rightarrow 0$ then also $|l_1(x_1(t)) - l_2(x_2(t))| \rightarrow 0$ as the game approaches the homogeneous case.
-		Then flow on the low latency edge will define the limit of $\as(t)$.
-			\begin{itemize}
-				\item For $t_1 > t_2$ we get lower latency edge $1$ with flow $x_1(t) \rightarrow x_1$ and therefore
-				\[\lim_{t_1 - t_2 \rightarrow 0^-} \as(t) = \alpha(x_1)\]
-				\item For $t_1 < t_2$ we get lower latency edge $2$ with flow $x_2(t) \rightarrow x_2$ and therefore
-				\[\lim_{t_1 - t_2 \rightarrow 0^+} \as(t) = \alpha(x_2)\]
-			\end{itemize}
+		\item We begin with the first equality.
+		Assume in $[0, x_1(0))$ an increasing sequence $(p_n)_{n \in \mathbb{N}}$ for which $p_n \rightarrow x_1(0)$.
+		From the fact that $x(t)$ is continuous (TODO: add ref?) and that if $x_1(t) < x_1(0)$ then link $1$ has the lower split by definition, we can see that for each $p_n$ we can find (not unique) tolls $t_n$ such that $x_1(t_n) = p_n$.
+		Indeed we can simply solve $\ell_1(p_n) + \alpha(p_n) \cdot t_{n, 1} = \ell_2(1 - p_n) + \alpha(p_n) \cdot t_{n, 2}$ which has as solution a unique toll difference for which $t_{n, 1} - t_{n, 2} > 0$.
+		Obviously $\as(t_n) = \alpha(p_n)$.
+
+		Now notice that, as $p_n$ increases, the toll difference is decreasing, which in turn means from Lemma \ref{lemma:split_monotonicity}$(ii)$, while adding that for $t_1 - t_2 \rightarrow 0^+$ condition \ref{eq:split_property_cond_tolls_0} also holds, that $\as$ is non-decreasing.
+		We can therefore find a non-decreasing sequence $(\as(t_n))_{n \in \mathbb{N}}$ where $t_{n, 1} - t_{n, 2} \rightarrow 0^-$ as $n \rightarrow +\infty$.
+		From all the above, and by observing that $p_n \in A_1^-(0), \forall n \in \mathbb{N}$, we get
+		\[\lim_{t_1 - t_2 \rightarrow 0^+}\as(t) = \lim_{t_{n, 1} - t_{n, 2} \rightarrow 0^+}\as(t_n) = \lim_{n \rightarrow +\infty}\alpha(p_n) = \sup A_1^-(0) \]
+
+		We can show the second equality with a similar argument, as all steps are symmetric for $t_1 - t_2 \rightarrow 0^-$.
 	\end{enumerate}
 \end{proof}
 
-From the above lemma we can also observe the following
-
 \begin{corollary}
-	Given a 2-link parallel heterogeneous game with distribution function $\alpha$ and time-money sensitivity split function $\as$ and $x = (x_1, x_2)$ the optimal flow in the game without tolls, then $\as(t) \le \max\{\alpha(x_1), \alpha(x_2)\}$.
+	\label{corollary:split_asymptotic_continuous}
+	Given a $([2], \ell, \alpha)$ toll game with $x_1(0), x_2(0) > 0$ and tolls $t \ne 0$, the following hold:
+	\begin{enumerate}[(i)]
+		\item if $\alpha$ continuous at $x_1(0)$, then
+		\[\lim_{t_1 - t_2 \rightarrow 0^+} \as(t) = \alpha(x_1(0))\]
+		\item if $\alpha$ continuous at $x_2(0)$, then
+		\[\lim_{t_1 - t_2 \rightarrow 0^-} \as(t) = \alpha(x_2(0))\]
+	\end{enumerate}
 \end{corollary}
 
-This corollary hints that all values of $\alpha$ above $\max\{x_1, x_2\}$ are irrelevant to the game.
-This will become more obvious later when calculating best responses as those values will never be used.
-[TODO: Maybe put this in its own Lemma and prove it?]
+All the above lemmas can now help us describe the behaviour of $\as$ for different tolls.
+On one side, as $t_d = t_1 - t_2 \rightarrow -\infty$ then $\as(t) \rightarrow 0$ (Lemma \ref{lemma:split_asymptotic}$(i)$), while afterwards as $t_d$ increases below $0$, meaning the difference (absolute) value is decreasing, then $\as(t)$ is non-decreasing (Lemma \ref{lemma:split_monotonicity}$(i)$), and finally as $t_d \rightarrow 0^-$, $\as(t)$ approaches $\sup A_2^-(0)$ (Lemma \ref{lemma:split_asymptotic}$(ii)$).
+On the other side from $t_d \rightarrow +\infty$ we get a symmetric behavior all the way ending up in $\sup A_1^-(0)$.
+The above show that $\as(t)$ is continuous for all $t \ne 0$ and any limit around $0$ has different left and right sides (apart from the very specific case where $x_1(0) = x_2(0)$).
+We proceed with an example to solidify this.
 
-\section{Profit maximisation and distribution function}
+\begin{example}
+	\label{example:simple_alpha}
+	Let $([2], \ell, \alpha)$ a toll game with latency functions $\ell_1(x) = 2x, \ell_2(x) = x + 1$ and distribution function $\alpha(p) = p + 1$.
+\end{example}
+TODO: Add figure of game graph.
+
+We have $x(0) = (2/3, 1/3)$.
+Then since $\alpha$ is continuous we get from \ref{corollary:split_asymptotic_continuous} that
+\[\lim_{t_1 - t_2 \rightarrow 0^-} \as(t) = \alpha(x_2(0)) = 4/3, \lim_{t_1 - t_2 \rightarrow 0^+} \as(t) = \alpha(x_1(0)) = 5/3\]
+Finally, for a more complete picture, we also calculate the max toll difference where $x(t) = (0, 1)$ or $(1, 0)$.
+If $t_1 > t_2$ then $x(t) = (1, 0)$ is impossible since we need $\ell_1(x_1(t)) \le \ell_2(x_2(t))$.
+We have $x(t) = (0, 1)$ when even the player with the least money sensitivity views the two edges' costs as equal, i.e.
+\[
+	\ell_1(0) + \alpha(0) \cdot t_1 = \ell_2(1) + \alpha(0) \cdot t_2 \Rightarrow t_1 - t_2 = 2
+\]
+Respectively, if $t_1 < t_2$ we have $x(t) = (1, 0)$ when
+\[
+	\ell_1(1) + \alpha(0) \cdot t_1 = \ell_2(0) + \alpha(0) \cdot t_2 \Rightarrow t_2 - t_1 = 1
+\]
+
+All the above give us the graph for $\as$ in Figure \ref{figure:split_example}.
+
+TODO: Add figure of $\as$ for different $t_d$.
+
+\section{Upper bound}
+
+Having now a good overview of the overall values $\as$, we notice that there exist values of $\alpha$ that will never be a value of $\as$.
+Do then those values actually affect our game in any way?
+We answer this in the theorem below, which is the main result of this chapter, preceded by a lemma to describe those missing values.
+
+\begin{lemma}
+	\label{lemma:as_upper_bound}
+	Let $([2], \ell, \alpha)$ a toll game with $x_1(0), x_2(0) > 0$.
+	For all $t \in \R_+^2 \setminus \{(a, a) | a \in \R_+\}$, let .
+	It holds that
+	\[\as(t) \le \max\{\sup A_1^-(0), \sup A_2^-(0)\}\]
+	or equivalently if $\alpha$ continuous at $x_1(0)$ and $x_2(0)$
+	\[\as(t) \le \max\{\alpha(x_1(0)), \alpha(x_2(0))\}\]
+\end{lemma}
+
+\begin{proof}
+	 From Lemmas \ref{lemma:split_asymptotic} and \ref{lemma:split_monotonicity} we get that $\as$, for $t_1 - t_2$ in $(-\infty, 0)$ and $(0, +\infty)$, is non-decreasing and non-increasing respectively.
+	 Therefore $\as$ is upper bounded by its sided limits as $t_1 - t_2 \rightarrow 0$, which means that for all $t \in \R_+^2 \setminus \{(a, a) | a \in \R_+\}$ we get
+	 \[\as(t) \le \max\left\{\lim_{t_1 - t_2 \rightarrow 0^-}\as(t), \lim_{t_1 - t_2 \rightarrow 0^+}\as(t)\right\}\]
+	 which in turn after applying Lemma \ref{lemma:split_asymptotic}$(ii)$ becomes
+	 \[\as(t) \le \max\{\sup A_2^-(0), \sup A_1^-(0)\}\]
+\end{proof}
+
+\begin{theorem}
+	\label{theorem:alpha_upper_irrelevant}
+	Let $([2], \ell, \alpha^{(1)})$ and $([2], \ell, \alpha^{(2)})$ two toll games with same latency functions, where $x_1(0), x_2(0) > 0$ for their common flow $x(0)$ and distribution functions $\alpha_1$ and $\alpha_2$ such that $\alpha^{(1)}(p) = \alpha^{(2)}(p), \forall p: p \le \max\{x_1(0), x_2(0)\}$.
+	Then the two games are equivalent.
+\end{theorem}
+
+\begin{proof}
+	For tolls $t \in \R_+^2$ let $x^{(1)}(t), x^{(2)}(t)$ the Nash equilibria for $t$ for each game respectively.
+	It suffices to show that $x^{(1)}(t) = x^{(2)}(t), \forall t \in \R_+^2$.
+	It's already stated that the equality holds for $t = 0$, i.e. for $t \in \{(a, a) | a \in \R_+\}$.
+	For the remaining $t$, assume w.l.o.g. that $t_1 > t_2$, which now makes it sufficient to show that the flow in the (common) lower split is equal, i.e $x_1^{(1)}(t) \ne x_1^{(2)}(t)$.
+
+	Assume that $x_1^{(1)}(t) \ne x_1^{(2)}(t)$ and again w.l.o.g. that $x_1^{(1)}(t) < x_1^{(2)}(t)$.
+	Then there exists a player $p$ such that $x_1^{(1)}(t) < p \le x_1^{(2)}(t)$ who is on link $2$ on the first game and on link $1$ for the second one.
+	Also note that since $p$ is in the lower split, it holds that $p < \max\{x_1(0), x_2(0)\}$ so by the hypothesis we get $\alpha^{(1)}(p) = \alpha^{(2)}(p)$.
+	With the above we get
+	\[x_1^{(1)}(t) < x_1^{(2)}(t) \Rightarrow x_1^{(1)}(t) + \alpha^{(1)}(p)t_1 < x_1^{(2)}(t) + \alpha^{(2)}(p)t_1 \Rightarrow c_1^{p, (1)}(t) < c_1^{p, (2)}(t)\]
+	and respectively
+	\[x_2^{(1)}(t) > x_2^{(2)}(t) \Rightarrow x_2^{(1)}(t) + \alpha^{(1)}(p)t_2 > x_2^{(2)}(t) + \alpha^{(2)}(p)t_2 \Rightarrow c_2^{p, (1)}(t) > c_2^{p, (2)}(t)\]
+	The above inequations mean that, between the first and the second game, for player $p$, the cost of link $1$ increased while the cost of link $2$ decreased, concluding that $p$ cannot be on link $2$ in the first but then change to link $1$ in the second, which is a contradiction.
+
+	Therefore $x_1^{(1)}(t) = x_1^{(2)}(t)$ for all $t \in \R_+^2 \setminus \{(a, a) | a \in \R_+\}$, and in turn also $x^{(1)}(t) = x^{(2)}(t)$ for all $t \in \R_+$.
+	To conclude, the two games are equivalent.
+\end{proof}
+We can see how this theorem applies to Example \ref{example:simple_alpha}, where since $x(0) = (2/3, 1/3)$ then $\max\{x_1(0), x_2(0)\} = 2/3$.
+Then even if we used a distribution function such as
+\[
+	\alpha(p) =
+	\begin{cases}
+		p + 1 & p \le 2/3 \\
+		p + 10 & p > 2/3
+	\end{cases}
+\]
+then $\as$ would still behave the same way as those $(2/3, 1]$ players will always be in the upper split regardless of their $\alpha$ value.
+
+It will become more apparent later when calculating best responses as even in the pricing games those higher values will never be used.
+We finish this section with a lemma about the behaviour of $\as$ when many players have money sensitivity close to 0.
+Note that it doesn't suffice to assume $\alpha(0) = 0$ as the behavior of that single player has no effect on the game, so we additionally assume that $0$ is an accumulation point in $\alpha$.
+\begin{lemma}
+	If for any $i = 1, 2 \; x_i(0) > 0$ and $\alpha(0) = 0$ with $0$ an accumulation point in $\alpha$, then $x_i(t) > 0, \forall t \in \R_+^2$
+\end{lemma}
+
+\begin{proof}
+	By the definition of an accumulation point, we get for $0$ in $\alpha$ that $\forall \delta > 0 \; \exists \epsilon > 0: p < \epsilon \Rightarrow \alpha(p) < \delta$.
+	Therefore $\forall t \in \R_+^2$ if $\delta = \as(t)$ then $\exists \epsilon > 0: p < \epsilon \Rightarrow \alpha(p) < \as(t)$, which means that the lower latency link will always have flow some $\epsilon > 0$, and therefore $x_1(t), x_2(t) > 0$.
+\end{proof}
+
+
+\chapter{Profit maximisation and distribution function}
 
 In this section we will examine how different distribution functions $\alpha$ can affect the profit maximisation game between the toll owners.
 [TODO: add framework for examining games]
