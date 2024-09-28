@@ -70,6 +70,7 @@
 \newcommand{\NE}{\mathrm{N.E.}}
 \newcommand{\as}{\mathrm{\alpha_s}}
 \newcommand{\R}{\mathbb{R}}
+\newcommand{\Gm}{\mathcal{G}}
 \DeclareMathOperator*{\argmax}{arg\,max}
 % \newcommand{\Exp}{\mathrm{Exp}}
 % \newcommand{\Expect}{{\rm I\kern-.3em E}}
@@ -661,6 +662,70 @@ In fact, this restriction proves necessary for our pricing game as well, since i
 We therefore need the restriction of $\alpha(p) > 0$ when $p > 0$ in order for our pricing game to have an equilibrium.
 
 \section{Fixed distribution function}
+
+For the case where the distribution function of our model is fixed, i.e. $\alpha(p) = c$ for some $c > 0$, then the game becomes homogeneous again, simply with a different -common- sensitivity to tolls.
+However, what interests us in this study is the relation between games for different $c > 0$, as it will prove crucial when analysing step distribution functions later.
+We start with formalising our base.
+
+\begin{lemma}
+	\label{lemma:a_fixed_base}
+	Let $\Gm_1 = ([2], \ell^{(1)}, c)$ a heterogeneous pricing game with distribution function $\alpha(p) = c$ for some $c > 0$ and $\Gm_2 = ([2], \ell^{(1)} / c, 1)$ a homogeneous pricing game with latencies $\ell^{(1)} / c$ for the same $c$.
+	Then the two games are equivalent.
+\end{lemma}
+
+\begin{proof}
+	It suffices to show that $x^{(1)}(t) = x^{(2)}(t), \; \forall t \in \R_+^2 \cup \{0\}$, where $x^{(1)}(t), x^{(2)}(t)$ the respective Nash Equilibrium for $t$ for $\Gm_1, \Gm_2$.
+	Begin by noticing that while $\Gm_1$ is heterogeneous, all its players have the same money sensitivity, and thus at an equilibrium they will all see the two edges as the same.
+	Therefore for all $t \in \R_+ \cup \{0\}$, $x^{(1)}(t)$ is the unique solution of the equation
+	\[
+		\ell_1^{(1)}(x_1^{(1)}(t)) + ct_1 = \ell_2^{(1)}(x_2^{(1)}(t)) + ct_2
+	\]
+	It is easy to check now that $x^{(2)}(t)$ is also a solution to the above equation, since in $\Gm_2$ it is the equivalent unique solution for
+	\[
+		\ell_1^{(1)}(x_1^{(2)}(t)) / c = \ell_2^{(1)}(x_2^{(2)}(t)) / c \Leftrightarrow \ell_1^{(1)}(x_1^{(2)}(t)) = \ell_2^{(1)}(x_2^{(2)}(t)) 
+	\]
+	Therefore $x^{(1)}(t) = x^{(2)}(t), \; \forall t \in \R_+^2 \cup \{0\}$, making $\Gm_1, \Gm_2$ equivalent.
+\end{proof}
+Intuitively, the above means that increasing the money sensitivity of the players in equivalent to analogously decreasing the traffic that flows create on all edges.
+Unfortunately this correspondence  disappears for non-fixed distribution functions, since, as we saw in Chapter 2, we loose the $1-1$ relation between the latency functions and the distribution function due to heterogeneity.
+
+Still, looking now at the relation between fixed distribution functions, Lemma \ref{lemma:a_fixed_base} gives us the following corollary.
+\begin{corollary}
+		Let $\Gm_1 = ([2], \ell, c_1)$ and $\Gm_2 = ([2], \ell, c_1)$ two heterogeneous pricing games with the same latency functions $\ell$ and distribution functions $\alpha(p) = c_1 > 0$ and $c_2 > 0$ respectively.
+		Then the following are true
+		\begin{enumerate}[$(i)$]
+			\item $x^{(1)}(0) = x^{(2)}(0)$
+			\item $x^{(1)}(t) = x^{(2)}\left(\frac{c_1}{c_2} \cdot t\right)$
+			\item $\Pi_i^{(1)}(t_i, t_{-i}) = \frac{c_2}{c_1} \cdot \Pi_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_i, \frac{c_1}{c_2} \cdot t_{-i}\right)$
+			\item $B_i^{(1)}(t_{-i}) = \frac{c_2}{c_1} \cdot B_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_{-i}\right)$
+		\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+	$ $
+	\begin{enumerate}[$(i)$]
+		\item Obvious since for $t = 0$ the flow in both $\Gm_1, \Gm_2$ play a homogeneous game with common latencies $\ell$, which makes the two games identical and therefore $x^{(1)}(0) = x^{(2)}(0)$.
+		\item With the same rational as in Lemma \ref{lemma:a_fixed_base}, looking at the respective cost equalities for the two games we see that starting from $\Gm_2$ for tolls $(c_1 / c_2)t$ we get
+		\begin{flalign*}
+			\ell_1&\left(x_1^{(2)}\left(\frac{c_1}{c_2} \cdot t\right)\right) + c_2 \cdot \left(\frac{c_1}{c_2} \cdot t_1\right) = \ell_2\left(x_2^{(2)}\left(\frac{c_1}{c_2} \cdot t\right)\right) + c_2 \cdot \left(\frac{c_1}{c_2} \cdot t_2\right) & \\
+			&\Rightarrow \ell_1\left(x_1^{(2)}\left(\frac{c_1}{c_2} \cdot t\right)\right) + c_1 t_1 = \ell_2\left(x_2^{(2)}\left(\frac{c_1}{c_2} \cdot t\right)\right) + c_1 t_2 &
+		\end{flalign*}
+		with the last equation being the one for edge equality in $\Gm_1$ with a unique solution at $x^{(1)}(t)$, leading us to $x^{(1)}(t) = x^{(2)}\left(\frac{c_1}{c_2} \cdot t\right)$
+		\item From $(ii)$ and the definition of $\Pi_i$ we get
+		\begin{flalign*}
+			\Pi_i^{(1)}(t_i, t_{-i}) &= x_i^{(1)}(t) \cdot t_i \stackrel{(ii)}{=} x_i^{(2)}\left(\frac{c_1}{c_2} \cdot t\right) \cdot t_i & \\
+			&= \frac{c_2}{c_1} \cdot \Pi_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_i, \frac{c_1}{c_2} \cdot t_{-i}\right) &
+		\end{flalign*}
+		\item From $(iii)$ and the definition of $B_i$ we get
+		\begin{flalign*}
+			B_i^{(1)}(t_{-i}) &= \argmax_{t_i > 0}\Pi_i^{(1)}(t_i, t_{-i}) \stackrel{(iii)}{=} \argmax_{t_i > 0}\frac{c_2}{c_1} \cdot \Pi_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_i, \frac{c_1}{c_2} \cdot t_{-i}\right) & \\
+			&= \frac{c_2}{c_1} \cdot B_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_{-i}\right) &
+		\end{flalign*}
+	\end{enumerate}
+\end{proof}
+
+While the above properties seem straightforward, they are of little use to us as they are.
+What we actually need to examine is how those two games react differently for an edge $i$ given a fixed $t_{-i}$.
 
 \section{Step distribution function}
 
