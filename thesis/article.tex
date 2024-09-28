@@ -30,7 +30,7 @@
 			\vtop{
 				\vspace{2cm}
 				\begin{flushleft}
-					\huge{\bf Profit Games in Heterogeneous 2-link Parallel Networks\\}
+					\huge{\bf Pricing Games in Heterogeneous 2-link Parallel Networks\\}
 					\vskip3cm
 					\Large  Thomas Pappas\\
 					AL1.18.0011\\
@@ -169,6 +169,8 @@ Adding tolls to a Network Game has began as a standard practice to regulate the 
 
 TODO
 
+\cleardoublepage
+
 
 \chapter{Preliminaries}
 
@@ -227,7 +229,7 @@ We describe this by adding a money-sensitivity weight $\alpha(p)$ on the toll co
 By also assuming that the players are sorted by money-sensitivity, we can describe their heterogeneity by defining a non-decreasing function $\alpha: [0, 1] \rightarrow [0, \infty]$.
 We call $\alpha$ a \textit{distribution function}.
 Even though the definition does allow functions that are not upper bounded with $\alpha(1) = +\infty$, we will always assume that $\alpha$ is finite on $[0, 1)$.
-Finally, we will assume that $\alpha(0) > 0$, since, as we'll see in more detail in Example \ref{example:a_0_0}, allowing many players close to $0$ breaks the pricing game.
+Finally, we will assume that $\alpha(0) > 0$, since, as we'll see in more detail in Lemma \ref{lemma:a_0_0}, allowing many players close to $0$ breaks the pricing game.
 
 We can therefore define an instance of a Heterogeneous Pricing Game as the tuple $(N, \ell, \alpha)$ with $N = \{1, 2, \dots, n\}$, $\ell = (\ell_i)_{i \in N}$ and $\alpha$ the distribution function.
 Then with all the above we can again define a Nash equilibrium for the game if $\forall i \in N$ and $\forall p \in [0, 1]$ it holds that
@@ -581,7 +583,7 @@ We answer this in the theorem below, which is the main result of this chapter, p
 
 \begin{theorem}
 	\label{theorem:alpha_upper_irrelevant}
-	Let $([2], \ell, \alpha^{(1)})$ and $([2], \ell, \alpha^{(2)})$ two toll games with same latency functions, where $x_1(0), x_2(0) > 0$ for their common flow $x(0)$ and distribution functions $\alpha_1$ and $\alpha_2$ such that $\alpha^{(1)}(p) = \alpha^{(2)}(p), \forall p: p \le \max\{x_1(0), x_2(0)\}$.
+	Let $([2], \ell, \alpha^{(1)})$ and $([2], \ell, \alpha^{(2)})$ two toll games with same latency functions, where $x_1(0), x_2(0) > 0$ for their common flow $x(0)$ and distribution functions $\alpha_1$ and $\alpha_2$ such that $\alpha^{(1)}(p) = \alpha^{(2)}(p), \forall p: p < \max\{x_1(0), x_2(0)\}$.
 	Then the two games are equivalent.
 \end{theorem}
 
@@ -626,30 +628,78 @@ Note that it doesn't suffice to assume $\alpha(0) = 0$ as the behavior of that s
 	Therefore $\forall t \in \R_+^2$ if $\delta = \as(t)$ then $\exists \epsilon > 0: p < \epsilon \Rightarrow \alpha(p) < \as(t)$, which means that the lower latency link will always have flow some $\epsilon > 0$, and therefore $x_1(t), x_2(t) > 0$.
 \end{proof}
 
+\cleardoublepage
 
-\chapter{Profit maximisation and distribution function}
 
-In this section we will examine how different distribution functions $\alpha$ can affect the profit maximisation game between the toll owners.
+\chapter{Equilibria in Pricing Games}
+
+In this section we introduce the pricing game to our model and examine how different distribution functions $\alpha$ can affect the profit maximisation game between the toll owners, specifically when $\alpha$ is fixed, step or continuous.
+We begin, though, with some necessary restrictions.
+
+\section{Problems with $0$ money sensitivity}
+
+In general having players with $\alpha(p) = 0$, i.e. players completely indifferent to tolls, creates issues.
+Even Cole et al. \cite{10.1145/780542.780618} assume $\alpha(p) > 0$ when $p > 0$ for their model to support optimal tolls.
+In fact, this restriction proves necessary for our pricing game as well, since its absence allows distribution functions with arbitrarily small flow all at $0$, which in turn, as we'll see in the following Lemma, breaks the pricing game, too.
+
+\begin{lemma}
+	\label{lemma:a_0_0}
+	Let $([2], \ell, \alpha)$ a pricing game for which it holds that $\exists \epsilon > 0: \alpha(p) = 0 \; \forall p < \epsilon$.
+	Then the best response functions $B_i(t_{-i})$ are unbounded.
+\end{lemma}
+
+\begin{proof}
+	All players $p$ with $\alpha(p) = 0$ will completely neglect the toll values and play the congestion game only considering the flow latencies, thus always selecting the fastest edge, regardless of the toll prices.
+
+	We have from assumption that $x_i(0) > 0$.
+	Consider $x_i^\prime = \min\{x_i(0), \epsilon\} > 0$.
+	Obviously $\alpha(p) = 0 \; \forall p < x_i$.
+	Then we can see that for all $t_i > t_{-i}$ where edge $i$ has the lower latency edge, all those players will be on that edge and will remain so regardless of how high is the value of $t_i$.
+	For the respective profit that means $\Pi_i(t_i, t_{-i}) \ge x_i t_i \; \forall t_i > t_{-i}$.
+	Consequently, as $t_i \rightarrow +\infty$ then so does $x_i t_i$ and $\Pi_i(t_i, t_{-i})$, making in turn $B_i(t_{-i}) \rightarrow +\infty$.
+\end{proof}
+We therefore need the restriction of $\alpha(p) > 0$ when $p > 0$ in order for our pricing game to have an equilibrium.
+
+\section{Fixed distribution function}
+
+\section{Step distribution function}
+
+\section{Continuous distribution function}
+
+For the continuous distribution function case, the previous restriction of $\alpha(p) > 0$ when $p > 0$ is not sufficient, as it still allows for distribution functions with many player values close to $0$ < Is that actually the problem?.
+Specifically the case of $\alpha(p) = cp$, for some $c > 0$, shows some interesting behavior, as it creates instances where $\Pi_i$ becomes either unbounded or fixed; in the first case then $B_i$ becomes unbounded, while in the second it becomes an an infinite set.
+This is showcased analytically in Example \ref{example:ap_p} in the Appendix, where for $\alpha(p) = p$ we see that the resulting best responses can indeed be undefined or unbounded.
+
+When does this happen?
+Is the problem $0$ being an accumulation point?
+\begin{lemma}[Conjecture]
+	If a distribution function has $\alpha(p) \le p \; \forall p$, then $\Pi_i$ becomes either unbounded or fixed.
+\end{lemma}
+
+We will avoid all the above bad behaviors by assuming in all further cases that $\alpha(0) > 0$.
+
+\cleardoublepage
+
+
+\chapter{Future work}
+
+
+\cleardoublepage
+
+\phantomsection
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliographystyle{plain}
+\bibliography{ref.bib}
+\cleardoublepage
+
+\phantomsection
+\addcontentsline{toc}{chapter}{Appendix}
+\chapter*{Appendix}
+
 [TODO: add framework for examining games]
-We will restrict our analysis on distribution functions such that $\alpha(0) > 0$, the reason being that we want to avoid two instances.
-The first is to ensure that $\alpha(p) > 0$ when $p > 0$, while the second is that $0$ is not an accumulation point.
-[TODO: maybe mention \cite{10.1145/780542.780618} where they also take the first restriction as it creates games with no optimal tolls]
-The following two examples demonstrate the issues that might occur if these restrictions are not met.
 
 \begin{example}
-	\label{example:a_0_0}
-	Consider a $2$-link parallel network pricing game with distribution function $\alpha$ for which it does not hold that $\alpha(p) > 0$ when $p > 0$.
-\end{example}
-
-The property not holding for $\alpha$ means that $\exists x_\epsilon > 0 : \alpha(x_\epsilon) = 0 \forall p < x_\epsilon$.
-That $x_\epsilon$ flow will completely neglect the tolls and play the congestion game only considering the flow latency, therefore they will always select the fastest edge regardless of the toll price.
-This in turn means that any toll owner can exploit it and set their toll to an arbitrary high value $T$ which will force all players with $\alpha(p) > 0$ to leave, thus making their own edge the fastest one.
-Even if the edge has a latency function with a high increasing rate, there will be at least a small flow $x_{\epsilon^\prime} \le x_\epsilon$ on that edge.
-Therefore the owner can achieve any arbitrary profit $P$ by setting their toll price as $T + P/\epsilon$.
-Since both player have that strategy available, we conclude that no equilibrium exists in the pricing game.
-
-\begin{example}
-	\label{example:a_0_ap}
+	\label{example:ap_p}
 	Consider a $2$-link parallel network pricing game with $l_1(x) = x, l_2(x) = 2x$ and distribution function $\alpha(p) = p$.
 \end{example}
 
@@ -742,7 +792,7 @@ Both toll owners have one thing in common, above a specific threshold $(t_2 > 3,
 Below that threshold, which will eventually occur from any starting point, they both get divergent best responses and thus a $\NE$ cannot be defined.
 
 \paragraph{The bad behaviors} are obviously having divergent or undefined best response functions, which we claim occur only when we allow $0$ to be an accumulation point in $\alpha$, since this allows players with arbitrarily low money-sensitivity to always stay on the expensive edge.
-Assume that in Example $\ref{example:a_0_ap}$ we use $\alpha(p) = p + 1$ as a distribution function.
+Assume that in Example $\ref{example:ap_p}$ we use $\alpha(p) = p + 1$ as a distribution function.
 Then we get the following best response functions
 \begin{align*}
 	B_1(t_2) &=
@@ -760,6 +810,7 @@ Then we get the following best response functions
 	\end{cases}
 \end{align*}
 which can be shown [TODO: currently done experimentally in python] that has a $\NE$ at $t \approx (1.1464, 0.9268)$.
+
 
 \begin{example}
 	Consider a $2$-link parallel network pricing game with $l_1(x) = x, l_2(x) = 2x$ and distribution function
@@ -930,7 +981,7 @@ Finally we get
 	\end{aligned}
 \end{equation*}
 
-\subparagraph{Combining} $B_1^>(t_2), B_1^<(t_2)$ and $B_2^>(t_1), B_2^<(t_1)$ the same way as in Example $\ref{example:a_0_ap}$ we get the final best response functions.
+\subparagraph{Combining} $B_1^>(t_2), B_1^<(t_2)$ and $B_2^>(t_1), B_2^<(t_1)$ the same way as in Example $\ref{example:ap_p}$ we get the final best response functions.
 \begin{equation*}
 	\begin{aligned}
 		B_1(t_2) =
@@ -956,24 +1007,5 @@ Finally we get
 \end{equation*}
 
 For the above functions we can show [TODO: currently done experimentally in python] that there is NO $\NE$ for the pricing game.
-
-
-\section{Equilibrium}
-
-In this section we will show that if the distribution function has the following properties
-\begin{itemize}
-	\item $\alpha(0) > 0$
-	\item $\alpha$ is onto
-\end{itemize}
-Then a $\NE$ for the pricing game exists ???
-
-
-\cleardoublepage
-\phantomsection
-\addcontentsline{toc}{chapter}{Bibliography}
-
-
-\bibliographystyle{plain}
-\bibliography{ref.bib}
 
 \end{document}
