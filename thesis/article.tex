@@ -220,6 +220,7 @@ Finally for affine latencies we can calculate $x(t)$.
 For $l_i(x_i) = a_i \cdot x_i + b_i, a_i > 0, b_i \geq 0$ and $t \in \R_+^N$ define $N(t) = \{i \in N | x_i(t) > 0\}$.
 Since $x(t)$ is an equilibrium for $t$ and $\sum_{i \in N(t)}x_i(t) = 1$ we solve the equations with regard to the common efficient cost $K$ and then we get for all $i \in N(t)$
 \begin{equation}
+	\label{eq:x_i}
 	x_i(t) = \frac{1 + \sum_{j \in N(t)}\frac{b_j + t_j - b_i - t_i}{a_j}}{\sum_{j \in N(t)}\frac{a_i}{a_j}}
 \end{equation}
 
@@ -278,6 +279,30 @@ Focusing on the model that will be used in this thesis, we simplify our network 
 The model can thus be defined as the tuple $([2], \ell, \alpha)$, where $[2] = \{1, 2\}$ the links, $\ell = (\ell_1, \ell_2)$ the latency functions and $\alpha$ the distribution function.
 [TODO: Add figure]
 When discussing properties of the model where the pricing game is not relevant, we will refer to a $([2], \ell, \alpha)$ instance as a toll game, and otherwise as a pricing game.
+We finish this section with a crucial property for homogeneous pricing games that we will need later.
+TODO: This property probably exists as a general theorem in convex programming or something, maybe with non-decreasing property instead of decreasing. Until then, we prove it analytically for affine latencies.
+
+\begin{lemma}
+	\label{lemma:tolls_diff}
+	Let $([2], \ell, 1)$ be a homogeneous pricing game, and let $D_i$ a function for each link $i$ where $D_i(t_{-i}) = B_i(t_{-i}) - t_{-i}$.
+	Then $D_i$ is decreasing for all links $i$.
+\end{lemma}
+
+\begin{proof}
+	From equation \ref{eq:x_i} for $2$ links we get
+	\[
+		x_i(t) = \frac{1 + \frac{b_{-i} + t_{-i} - b_i - t_i}{a_{-i}}}{\frac{a_i}{a_{-i}}} = \frac{a_{-i} + b_{-i} + t_{-i} - b_i - t_i}{a_i}
+	\]
+	from which by following the definitions and from first order conditions for quadratic functions we get
+	\[
+		B_i(t_{-i}) = \argmax_{t_i > 0}x_i(t) \cdot t_i = \frac{a_{-i} + b_{-i} + t_{-i} - b_i}{2}
+	\]
+	Finally
+	\[
+		D_i(t_{-i}) = -\frac{1}{2}t_{-i} + \frac{a_{-i} + b_{-i} - b_i}{2}
+	\]
+	which is obviously decreasing.
+\end{proof}
 
 
 \chapter{Money sensitivity split}
@@ -668,7 +693,7 @@ However, what interests us in this study is the relation between games for diffe
 We start with formalising our base.
 
 \begin{lemma}
-	\label{lemma:a_fixed_base}
+	\label{lemma:a_fixed_homogeneous}
 	Let $\Gm_1 = ([2], \ell^{(1)}, c)$ a heterogeneous pricing game with distribution function $\alpha(p) = c$ for some $c > 0$ and $\Gm_2 = ([2], \ell^{(1)} / c, 1)$ a homogeneous pricing game with latencies $\ell^{(1)} / c$ for the same $c$.
 	Then the two games are equivalent.
 \end{lemma}
@@ -689,23 +714,24 @@ We start with formalising our base.
 Intuitively, the above means that increasing the money sensitivity of the players in equivalent to analogously decreasing the traffic that flows create on all edges.
 Unfortunately this correspondence  disappears for non-fixed distribution functions, since, as we saw in Chapter 2, we loose the $1-1$ relation between the latency functions and the distribution function due to heterogeneity.
 
-Still, looking now at the relation between fixed distribution functions, Lemma \ref{lemma:a_fixed_base} gives us the following corollary.
+Still, looking now at the relation between fixed distribution functions, Lemma \ref{lemma:a_fixed_homogeneous} gives us the following corollary.
 \begin{corollary}
-		Let $\Gm_1 = ([2], \ell, c_1)$ and $\Gm_2 = ([2], \ell, c_1)$ two heterogeneous pricing games with the same latency functions $\ell$ and distribution functions $\alpha(p) = c_1 > 0$ and $c_2 > 0$ respectively.
-		Then the following are true
-		\begin{enumerate}[$(i)$]
-			\item $x^{(1)}(0) = x^{(2)}(0)$
-			\item $x^{(1)}(t) = x^{(2)}\left(\frac{c_1}{c_2} \cdot t\right)$
-			\item $\Pi_i^{(1)}(t_i, t_{-i}) = \frac{c_2}{c_1} \cdot \Pi_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_i, \frac{c_1}{c_2} \cdot t_{-i}\right)$
-			\item $B_i^{(1)}(t_{-i}) = \frac{c_2}{c_1} \cdot B_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_{-i}\right)$
-		\end{enumerate}
+	\label{corollary:a_fixed_c_relation}
+	Let $\Gm_1 = ([2], \ell, c_1)$ and $\Gm_2 = ([2], \ell, c_1)$ two heterogeneous pricing games with common latency functions $\ell$ and distribution functions $\alpha(p) = c_1 > 0$ and $c_2 > 0$ respectively.
+	Then the following are true
+	\begin{enumerate}[$(i)$]
+		%\item $x^{(1)}(0) = x^{(2)}(0)$
+		\item $x^{(1)}(t) = x^{(2)}\left(\frac{c_1}{c_2} \cdot t\right)$
+		\item $\frac{c_1}{c_2} \cdot \Pi_i^{(1)}(t_i, t_{-i}) = \Pi_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_i, \frac{c_1}{c_2} \cdot t_{-i}\right)$
+		\item $\frac{c_1}{c_2} \cdot B_i^{(1)}(t_{-i}) = B_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_{-i}\right)$
+	\end{enumerate}
 \end{corollary}
 
 \begin{proof}
 	$ $
 	\begin{enumerate}[$(i)$]
-		\item Obvious since for $t = 0$ the flow in both $\Gm_1, \Gm_2$ play a homogeneous game with common latencies $\ell$, which makes the two games identical and therefore $x^{(1)}(0) = x^{(2)}(0)$.
-		\item With the same rational as in Lemma \ref{lemma:a_fixed_base}, looking at the respective cost equalities for the two games we see that starting from $\Gm_2$ for tolls $(c_1 / c_2)t$ we get
+		%\item Obvious since for $t = 0$ the flow in both $\Gm_1, \Gm_2$ play a homogeneous game with common latencies $\ell$, which makes the two games identical and therefore $x^{(1)}(0) = x^{(2)}(0)$.
+		\item With the same rational as in Lemma \ref{lemma:a_fixed_homogeneous}, looking at the respective cost equalities for the two games we see that starting from $\Gm_2$ for tolls $(c_1 / c_2)t$ we get
 		\begin{flalign*}
 			\ell_1&\left(x_1^{(2)}\left(\frac{c_1}{c_2} \cdot t\right)\right) + c_2 \cdot \left(\frac{c_1}{c_2} \cdot t_1\right) = \ell_2\left(x_2^{(2)}\left(\frac{c_1}{c_2} \cdot t\right)\right) + c_2 \cdot \left(\frac{c_1}{c_2} \cdot t_2\right) & \\
 			&\Rightarrow \ell_1\left(x_1^{(2)}\left(\frac{c_1}{c_2} \cdot t\right)\right) + c_1 t_1 = \ell_2\left(x_2^{(2)}\left(\frac{c_1}{c_2} \cdot t\right)\right) + c_1 t_2 &
@@ -713,19 +739,159 @@ Still, looking now at the relation between fixed distribution functions, Lemma \
 		with the last equation being the one for edge equality in $\Gm_1$ with a unique solution at $x^{(1)}(t)$, leading us to $x^{(1)}(t) = x^{(2)}\left(\frac{c_1}{c_2} \cdot t\right)$
 		\item From $(ii)$ and the definition of $\Pi_i$ we get
 		\begin{flalign*}
-			\Pi_i^{(1)}(t_i, t_{-i}) &= x_i^{(1)}(t) \cdot t_i \stackrel{(ii)}{=} x_i^{(2)}\left(\frac{c_1}{c_2} \cdot t\right) \cdot t_i & \\
-			&= \frac{c_2}{c_1} \cdot \Pi_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_i, \frac{c_1}{c_2} \cdot t_{-i}\right) &
+			\frac{c_1}{c_2} \cdot \Pi_i^{(1)}(t_i, t_{-i}) &= \frac{c_1}{c_2} \cdot x_i^{(1)}(t) \cdot t_i \stackrel{(ii)}{=} \cdot x_i^{(2)}\left(\frac{c_1}{c_2} \cdot t\right) \cdot \left(\frac{c_1}{c_2} \cdot t_i\right) & \\
+			&= \Pi_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_i, \frac{c_1}{c_2} \cdot t_{-i}\right) &
 		\end{flalign*}
 		\item From $(iii)$ and the definition of $B_i$ we get
 		\begin{flalign*}
-			B_i^{(1)}(t_{-i}) &= \argmax_{t_i > 0}\Pi_i^{(1)}(t_i, t_{-i}) \stackrel{(iii)}{=} \argmax_{t_i > 0}\frac{c_2}{c_1} \cdot \Pi_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_i, \frac{c_1}{c_2} \cdot t_{-i}\right) & \\
-			&= \frac{c_2}{c_1} \cdot B_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_{-i}\right) &
+			\frac{c_1}{c_2} \cdot B_i^{(1)}(t_{-i}) &= \frac{c_1}{c_2} \cdot \argmax_{t_i > 0}\Pi_i^{(1)}(t_i, t_{-i}) \stackrel{(iii)}{=} \argmax_{t_i > 0}\Pi_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_i, \frac{c_1}{c_2} \cdot t_{-i}\right) & \\
+			&= B_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_{-i}\right) &
 		\end{flalign*}
 	\end{enumerate}
 \end{proof}
 
 While the above properties seem straightforward, they are of little use to us as they are.
 What we actually need to examine is how those two games react differently for an edge $i$ given a fixed $t_{-i}$.
+For this it is important to focus again on the fact that the flow is exclusively dependent on the toll difference, which is in turn non-increasing with regards to $t_{-i}$ (\ref{lemma:tolls_diff}).
+Therefore, as $t_{-i}$ increases, the best response gets decreasing difference with $t_{-i}$, thus taking more flow in $x_i$.
+Eventually there will be a smallest possible $t_{-i}$ where the best response is to take all flow, and henceforth any larger $t_{-i}$ will also result in a best response with the same toll difference and flow.
+We will use this property to describe the flow relation between the two games in the following lemma.
+
+\begin{lemma}
+	\label{lemma:a_fixed_t_iM_fixed}
+	Let $\Gm_1 = ([2], \ell, c_1)$ and $\Gm_2 = ([2], \ell, c_1)$ two heterogeneous pricing games with common latency functions $\ell$ and distribution functions $\alpha(p) = c_1$ and $c_2 > c_1 > 0$ respectively.
+	Also let $t_{-i_M}^{(1)}, t_{-i_M}^{(2)}$ the smallest possible $t_{-i}$ where $x_i(B_i(t_{-i}), t_{-i}) = 1$, respectively for each game.
+	Then the following hold.
+	\begin{enumerate}[$(i)$]
+		\item $t_{-i_M}^{(2)} < t_{-i_M}^{(1)}$
+		\item $x_i^{(1)}(B_i^{(1)}(0), 0) = x_i^{(2)}(B_i^{(2)}(0), 0)$
+		\item $x_i^{(1)}(B_i^{(1)}(t_{-i}), t_{-i}) = x_i^{(2)}(B_i^{(2)}(t_{-i}), t_{-i}) = 1$ for all $t_{-i} \ge t_{-i_M}^{(1)}$
+		\item $x_i^{(1)}(B_i^{(1)}(t_{-i}), t_{-i}) < x_i^{(2)}(B_i^{(2)}(t_{-i}), t_{-i})$, for all $t_{-i} \in (0, t_{-i_M}^{(1)})$
+		\item $x_i^{(1)}(B_i^{(1)}(t_{-i}), t_{-i}), x_i^{(2)}(B_i^{(2)}(t_{-i}), t_{-i})$ get max distance at $t_{-i_M}^{(2)}$ \\
+		\textit{(conjecture)}
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+	$ $
+	\begin{enumerate}[$(i)$]
+		\item Assume $t_{-i_M}^{(2)} \ge t_{-i_M}^{(1)}$.
+		Then from Corollary \ref{corollary:a_fixed_c_relation} we get
+		\begin{flalign*}
+			1 = &x_i^{(1)}(B_i^{(1)}(t_{-i_M}^{(1)}), t_{-i_M}^{(1)}) = x_i^{(2)}\left( \frac{c_1}{c_2} \cdot B_i^{(1)}(t_{-i_M}^{(1)}), \frac{c_1}{c_2} \cdot t_{-i_M}^{(1)}\right) & \\
+			&= x_i^{(2)}\left(B_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_{-i_M}^{(1)}\right), \frac{c_1}{c_2} \cdot t_{-i_M}^{(1)}\right) &
+		\end{flalign*}
+		which is a contradiction since $\frac{c_1}{c_2} t_{-i_M}^{(1)} < t_{-i_M}^{(1)} \le t_{-i_M}^{(2)}$ and $t_{-i_M}^{(2)}$ is the smallest value with that property.
+		Therefore the initial assumption is wrong and we get $t_{-i_M}^{(2)} < t_{-i_M}^{(1)}$.
+		\item With application of Corollary \ref{corollary:a_fixed_c_relation} we have
+		\[
+			x_i^{(1)}(B_i^{(1)}(0), 0) = x_i^{(2)}\left(\frac{c_1}{c_2} \cdot B_i^{(1)}(0), 0\right) = x_i^{(2)}(B_i^{(2)}(0), 0)
+		\]
+		\item Since from $(i)$ we have $t_{-i_M}^{(1)} = \max\{t_{-i_M}^{(1)}, t_{-i_M}^{(2)}\}$ then the property follows from the definitions of $t_{-i_M}^{(1)}, t_{-i_M}^{(2)}$.
+		\item For $t_{-i} \in (t_{-i_M}^{(2)}, t_{-i_M}^{(1)})$ obviously
+		\[
+			x_i^{(1)}(B_i^{(1)}(t_{-i}), t_{-i}) < 1 = x_i^{(2)}(B_i^{(2)}(t_{-i}), t_{-i})
+		\]
+		Then for $t_{-i} \in (0, t_{-i_M}^{(2)})$ with the same way we used Corollary \ref{corollary:a_fixed_c_relation} as in $(i)$ we see that
+		\[
+			x_i^{(1)}(B_i^{(1)}(t_{-i}), t_{-i}) = x_i^{(2)}\left(B_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_{-i}\right), \frac{c_1}{c_2} \cdot t_{-i}\right)
+		\]
+		where the second part is the flow in $\Gm_2$ at the best response of link owner $i$ against $\frac{c_1}{c_2} t_{-i}$.
+		Therefore their best response against $t_{-i} > \frac{c_1}{c_2} t_{-i}$ will have a lower toll difference to $t_{-i}$ (\ref{lemma:tolls_diff}) and thus more flow, arriving at
+		\[
+			x_i^{(2)}\left(B_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_{-i}\right), \frac{c_1}{c_2} \cdot t_{-i}\right) < x_i^{(2)}(B_i^{(2)}(t_{-i}), t_{-i})
+		\]
+	\end{enumerate}
+\end{proof}
+
+%\begin{lemma}
+%	\label{lemma:a_fixed_x12}
+%	Let $\Gm_1 = ([2], \ell, c_1)$ and $\Gm_2 = ([2], \ell, c_1)$ two heterogeneous pricing games with common latency functions $\ell$ and distribution functions $\alpha(p) = c_1$ and $c_2 > c_1 > 0$ respectively.
+%	Then the following hold.
+%	\begin{enumerate}[$(i)$]
+%		\item $x^{(1)}(0) = x^{(2)}(0)$
+%		\item $x_i^{(1)}(t) - x_i^{(2)}(t)$ is non-decreasing in relation to $t_i - t_{-i}$
+%	\end{enumerate}
+%\end{lemma}
+%Notice that the above Lemma also provides us with $x_i^{(1)}(t) < x_i^{(2)}(t)$ iff $t_i < t_{-i}$ and vice versa, as well as that this difference is expanded as $t_i - t_{-i}$ does.
+%We avoided using the affinity of the latency functions on purpose to get a more general notion between the two games.
+%Using latency functions now, we can get a calculated version of the above.
+%\begin{corollary}
+%	\label{lemma:a_fixed_x12_calc}
+%	Let $\Gm_1 = ([2], \ell, c_1)$ and $\Gm_2 = ([2], \ell, c_1)$ two heterogeneous pricing games with the same affine latency functions $\ell$ and distribution functions $\alpha(p) = c_1$ and $c_2 > c_1 > 0$ respectively.
+%	Then for some fixed number $K_i > 0$ it holds that
+%	\[x_i^{(1)}(t) - x_i^{(2)}(t) = K_i \cdot (t_i - t_{-i})\]
+%\end{corollary}
+%
+%\begin{proof}
+%	From equation \ref{eq:x_i} for $2$ links and under universal sensitivity $c_1, c_2$ respectively we get
+%	\begin{align*}
+%		x_i^{(1)}(t) - x_i^{(2)}(t) &= \frac{a_{-i} + b_{-i} + c_1t_{-i} - b_i - c_1t_i}{a_i} - \frac{a_{-i} + b_{-i} + c_2t_{-i} - b_i - c_2t_i}{a_i} \\
+%		&= \frac{(c_2 - c_1)(t_i - t_{-i})}{a_i}
+%	\end{align*}
+%	So the property holds for $K_i = \frac{c_2 - c_1}{a_i} > 0$.
+%\end{proof}
+
+We finally arrive at the main theorem of this section, which describes similar properties for the relative behaviour of the profit functions between the two games.
+Fist, let's remind ourselves that from Lemma \ref{lemma:tolls_diff} for each game $B_i(t_{-i}) - t_{-i}$ is decreasing as well as continuous.
+Therefore, given that best responses range from above and below $t_{-i}$ values, there exists some $t_{-i_0}$ for which $B_i(t_{-i_0}) = t_{-i_0}$.
+We state now our theorem.
+
+\begin{theorem}
+	\label{theorem:a_fixed_t_i0}
+	Let $\Gm_1 = ([2], \ell, c_1)$ and $\Gm_2 = ([2], \ell, c_1)$ two heterogeneous pricing games with the same latency functions $\ell$ and distribution functions $\alpha(p) = c_1$ and $c_2 > c_1 > 0$ respectively.
+	Also let $t_{-i_0}^{(1)}, t_{-i_0}^{(2)}$ the respective tolls for which $B_i^{(1)}(t_{-i_0}^{(1)}) = t_{-i_0}^{(1)}$ and $B_i^{(1)}(t_{-i_0}^{(2)}) = t_{-i_0}^{(2)}$.
+	Then for all links $i$ it holds that
+	\begin{enumerate}[$(i)$]
+		\item $t_{-i_0}^{(1)} > t_{-i_0}^{(2)}$
+		\item There exists $t_{-i_0} \in \left(t_{-i_0}^{(2)}, t_{-i_0}^{(1)}\right)$ such that
+		\[\max_{t_i > 0}\Pi_i^{(1)}(t_i, t_{-i_0}) = \max_{t_i > 0}\Pi_i^{(2)}(t_i, t_{-i_0})\]
+		\item $\max_{t_i > 0}\Pi_i^{(1)}(t_i, t_{-i}) - \max_{t_i > 0}\Pi_i^{(2)}(t_i, t_{-i})$ is non-increasing in relation to $t_{-i}$.
+		\item $t_{-i_0}$ is the geometric mean of $t_{-i_0}^{(1)}, t_{-i_0}^{(2)}$
+	\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+	$ $
+	\begin{enumerate}[$(i)$]
+		\item From Corollary \ref{corollary:a_fixed_c_relation}$(iii)$ we get
+		\[
+			B_i^{(1)}(t_{-i_0}^{(1)}) = t_{-i_0}^{(1)} \Rightarrow B_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_{-i_0}^{(1)}\right) = \frac{c_1}{c_2} \cdot t_{-i_0}^{(1)}
+		\]
+		and from the fact that $t_{-i_0}^{(1)}, t_{-i_0}^{(2)}$ are the unique solutions of their respective equations we get $t_{-i_0}^{(2)} = \frac{c_1}{c_2} \cdot t_{-i_0}^{(1)} < t_{-i_0}^{(1)}$.
+		\item Consider the function $\Pi_i(t_{-i}) = \max_{t_i > 0}\Pi_i^{(1)}(t_i, t_{-i}) - \max_{t_i > 0}\Pi_i^{(2)}(t_i, t_{-i})$.
+		Then for $t_{-i} = t_{-i_0}^{(2)}$ we see that in $\Gm_2$ the best response for link owner $i$ is to play the same toll as in the other link, therefore they get max profit at $x_i^{(2)}(0) \cdot t_{-i_0}^{(2)}$.
+		In $\Gm_1$ now, since $t_{-i_0}^{(2)} < t_{-i_0}^{(1)}$ then the best response for link owner $i$ is for some $t_i > t_{-i_0}^{(2)}$, and since from \ref{corollary:a_fixed_c_relation}$(i)$ the profit $x_i^{(1)}(0) = x_i^{(2)}(0) \cdot t_{-i_0}^{(2)}$ is also one of their options, it means that the profit at $t_i$ is greater, i.e.
+		\[
+			\max_{t_i > 0}\Pi_i^{(1)}(t_i, t_{-i_0}^{(2)}) > \max_{t_i > 0}\Pi_i^{(2)}(t_i, t_{-i_0}^{(2)}) \Rightarrow \Pi_i(t_{-i_0}^{(2)}) > 0
+		\]
+		Similarly we can show that $\Pi_i(t_{-i_0}^{(1)}) < 0$.
+		With all the above and given that we know from the analysis in Harkes et al. \cite{Harks_2019} that best response functions are continuous, from the Bolzano theorem (TODO: Is this the right theorem? Reference?) we get that there exists $t_{-i_0} \in \left(t_{-i_0}^{(2)}, t_{-i_0}^{(1)}\right)$ such that $\Pi_i(t_{-i_0}) = 0$, which gives us the desired proposition.
+		\item We will use the same $\Pi_i$ function as in $(ii)$, so we instead need to show that $\Pi_i(t_{-i})$ is non-decreasing in relation to $t_{-i}$.
+		For all $t_{-i} \ge t_{-i_M}^{(1)}$ from Lemma \ref{lemma:a_fixed_t_iM_fixed} we get $\Pi_i(t_{-i}) = 1 \cdot B_i^{(1)}(t_{-i}) - 1 \cdot B_i^{(2)}(t_{-i})$, where the best responses have fixed differences to $t_{-i}$ (and therefore to each other as well), making $\Pi_i(t_{-i})$ in turn fixed for all $t_{-i} \ge t_{-i_M}^{(1)}$.
+		TODO: Pending.
+		\item By using the $B_i(t_{-i})$ formula to find $t_{-i_0}^{(1)}, t_{-i_0}^{(2)}$ and then solve $\max_{t_i > 0}\Pi_i^{(1)}(t_i, t_{-i_0}) = \max_{t_i > 0}\Pi_i^{(2)}(t_i, t_{-i_0})$.
+		TODO: Either replace with a theoretical proof or write the calculations.
+	\end{enumerate}
+\end{proof}
+
+Finally, we can again calculate $t_{-i_0}$ using the closed formulas provided by the affine assumption.
+
+\begin{corollary}
+	\label{corollary:a_fixed_ti0_calc}
+	Let $\Gm_1 = ([2], \ell, c_1)$ and $\Gm_2 = ([2], \ell, c_1)$ two heterogeneous pricing games with the same latency functions $\ell$ and distribution functions $\alpha(p) = c_1$ and $c_2 > c_1 > 0$ respectively.
+	Then for $t_{-i_0}$ defined in Theorem \ref{theorem:a_fixed_t_i0} for the two games it holds that
+	\[t_{-i_0} = \frac{a_{-i} + b_{-i} - b_i}{\sqrt{c_1 c_2}}\]
+\end{corollary}
+
+\begin{proof}
+	We can easily calculate $t_{-i_0}^{(1)}$ and $t_{-i_0}^{(2)}$.
+	For $\Gm_1$ we have
+	\[B_i^{(1)}(t_{-i_0}^{(1)}) = t_{-i_0}^{(1)} \Rightarrow \frac{a_{-i} + b_{-i} - b_i + c_1 t_{-i_0}^{(1)}}{2 c_1} = t_{-i_0}^{(1)} \Rightarrow t_{-i_0}^{(1)} = \frac{a_{-i} + b_{-i} - b_i}{c_1}\]
+	Similarly for $\Gm_2$ we have $t_{-i_0}^{(2)} = \frac{a_{-i} + b_{-i} - b_i}{c_2}$, so finally from Theorem \ref{theorem:a_fixed_t_i0}$(iv)$ we get
+	\[t_{-i_0} = \sqrt{t_{-i_0}^{(1)} \cdot t_{-i_0}^{(2)}} = \frac{a_{-i} + b_{-i} - b_i}{\sqrt{c_1 c_2}}\]
+\end{proof}
+We have now gathered all necessary tools to start investigating step distribution functions.
 
 \section{Step distribution function}
 
@@ -748,6 +914,13 @@ We will avoid all the above bad behaviors by assuming in all further cases that 
 
 \chapter{Future work}
 
+A natural extension of the above would be to examine them for $[N]$ parallel graphs.
+Some of the properties naturally extend but for others more care is required.
+Special notice and expansion is certainly necessary for the split function, as it is only defined for two edges.
+On a first thought, it seems trivial to also order the edges on an equilibrium by latency and then define the split function on each consecutive pair, therefore also having an ordered set of split function values.
+Still, more investigation is needed to uncover the relation between those values, and its consequences to the flow's or the pricing game's behaviours.
+
+Putting the pricing games aside, it would also be interesting to expand the split function for series-parallel graphs.
 
 \cleardoublepage
 
