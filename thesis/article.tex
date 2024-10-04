@@ -679,7 +679,7 @@ In fact, this restriction proves necessary for our pricing game as well, since i
 
 	We have from assumption that $x_i(0) > 0$.
 	Consider $x_i^\prime = \min\{x_i(0), \epsilon\} > 0$.
-	Obviously $\alpha(p) = 0 \; \forall p < x_i$.
+	Obviously $\alpha(p) = 0 \; \forall p < x_i^\prime$.
 	Then we can see that for all $t_i > t_{-i}$ where edge $i$ has the lower latency edge, all those players will be on that edge and will remain so regardless of how high is the value of $t_i$.
 	For the respective profit that means $\Pi_i(t_i, t_{-i}) \ge x_i t_i \; \forall t_i > t_{-i}$.
 	Consequently, as $t_i \rightarrow +\infty$ then so does $x_i t_i$ and $\Pi_i(t_i, t_{-i})$, making in turn $B_i(t_{-i}) \rightarrow +\infty$.
@@ -694,7 +694,7 @@ We start with formalising our base.
 
 \begin{lemma}
 	\label{lemma:a_fixed_homogeneous}
-	Let $\Gm_1 = ([2], \ell^{(1)}, c)$ a heterogeneous pricing game with distribution function $\alpha(p) = c$ for some $c > 0$ and $\Gm_2 = ([2], \ell^{(1)} / c, 1)$ a homogeneous pricing game with latencies $\ell^{(1)} / c$ for the same $c$.
+	Let $\Gm_1 = ([2], \ell^{(1)}, c)$ a heterogeneous pricing game with distribution function $\alpha(p) = c$ for some $c > 0$ and $\Gm_2 = ([2], \frac{\ell^{(1)}}{c}, 1)$ a homogeneous pricing game with latencies $\ell^{(2)} = \frac{\ell^{(1)}}{c}$ for the same $c$.
 	Then the two games are equivalent.
 \end{lemma}
 
@@ -707,7 +707,7 @@ We start with formalising our base.
 	\]
 	It is easy to check now that $x^{(2)}(t)$ is also a solution to the above equation, since in $\Gm_2$ it is the equivalent unique solution for
 	\[
-		\ell_1^{(1)}(x_1^{(2)}(t)) / c = \ell_2^{(1)}(x_2^{(2)}(t)) / c \Leftrightarrow \ell_1^{(1)}(x_1^{(2)}(t)) = \ell_2^{(1)}(x_2^{(2)}(t)) 
+		\frac{\ell_1^{(1)}(x_1^{(2)}(t))}{c} + t_1 = \frac{\ell_2^{(1)}(x_2^{(2)}(t))}{c} + t_2 \Leftrightarrow \ell_1^{(2)}(x_1^{(2)}(t)) + t_1 = \ell_2^{(2)}(x_2^{(2)}(t)) + t_2
 	\]
 	Therefore $x^{(1)}(t) = x^{(2)}(t), \; \forall t \in \R_+^2 \cup \{0\}$, making $\Gm_1, \Gm_2$ equivalent.
 \end{proof}
@@ -737,21 +737,20 @@ Still, looking now at the relation between fixed distribution functions, Lemma \
 			&\Rightarrow \ell_1\left(x_1^{(2)}\left(\frac{c_1}{c_2} \cdot t\right)\right) + c_1 t_1 = \ell_2\left(x_2^{(2)}\left(\frac{c_1}{c_2} \cdot t\right)\right) + c_1 t_2 &
 		\end{flalign*}
 		with the last equation being the one for edge equality in $\Gm_1$ with a unique solution at $x^{(1)}(t)$, leading us to $x^{(1)}(t) = x^{(2)}\left(\frac{c_1}{c_2} \cdot t\right)$
-		\item From $(ii)$ and the definition of $\Pi_i$ we get
+		\item From $(i)$ and the definition of $\Pi_i$ we get
 		\begin{flalign*}
-			\frac{c_1}{c_2} \cdot \Pi_i^{(1)}(t_i, t_{-i}) &= \frac{c_1}{c_2} \cdot x_i^{(1)}(t) \cdot t_i \stackrel{(ii)}{=} \cdot x_i^{(2)}\left(\frac{c_1}{c_2} \cdot t\right) \cdot \left(\frac{c_1}{c_2} \cdot t_i\right) & \\
+			\frac{c_1}{c_2} \cdot \Pi_i^{(1)}(t_i, t_{-i}) &= \frac{c_1}{c_2} \cdot x_i^{(1)}(t) \cdot t_i \stackrel{(i)}{=} x_i^{(2)}\left(\frac{c_1}{c_2} \cdot t\right) \cdot \left(\frac{c_1}{c_2} \cdot t_i\right) & \\
 			&= \Pi_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_i, \frac{c_1}{c_2} \cdot t_{-i}\right) &
 		\end{flalign*}
-		\item From $(iii)$ and the definition of $B_i$ we get
+		\item From $(ii)$ and the definition of $B_i$ we get
 		\begin{flalign*}
-			\frac{c_1}{c_2} \cdot B_i^{(1)}(t_{-i}) &= \frac{c_1}{c_2} \cdot \argmax_{t_i > 0}\Pi_i^{(1)}(t_i, t_{-i}) \stackrel{(iii)}{=} \argmax_{t_i > 0}\Pi_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_i, \frac{c_1}{c_2} \cdot t_{-i}\right) & \\
+			\frac{c_1}{c_2} \cdot B_i^{(1)}(t_{-i}) &= \frac{c_1}{c_2} \cdot \argmax_{t_i > 0}\Pi_i^{(1)}(t_i, t_{-i}) \stackrel{(ii)}{=} \argmax_{t_i > 0}\Pi_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_i, \frac{c_1}{c_2} \cdot t_{-i}\right) & \\
 			&= B_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_{-i}\right) &
 		\end{flalign*}
 	\end{enumerate}
 \end{proof}
 
-While the above properties seem straightforward, they are of little use to us as they are.
-What we actually need to examine is how those two games react differently for an edge $i$ given a fixed $t_{-i}$.
+What we need to examine  next is how those two games react differently for an edge $i$ given a fixed $t_{-i}$.
 For this it is important to focus again on the fact that the flow is exclusively dependent on the toll difference, which is in turn non-increasing with regards to $t_{-i}$ (\ref{lemma:tolls_diff}).
 Therefore, as $t_{-i}$ increases, the best response gets decreasing difference with $t_{-i}$, thus taking more flow in $x_i$.
 Eventually there will be a smallest possible $t_{-i}$ where the best response is to take all flow, and henceforth any larger $t_{-i}$ will also result in a best response with the same toll difference and flow.
@@ -895,9 +894,158 @@ We have now gathered all necessary tools to start investigating step distributio
 
 \section{Step distribution function}
 
+Moving now to actual heterogeneous games, we will examine how the pricing game behaves when the distribution function is a step function, i.e. it takes finitely many values.
+There will be a strong connection with the fixed distribution function games we studied earlier, and that connection extends beyond the step function, which is why we will prove it here for any distribution function.
+
+\begin{lemma}
+	\label{lemma:heterogenous_flow_equiv_fixed}
+	Let $\Gm_1 = ([2], \ell, \alpha^{(1)})$ a heterogeneous game, $t \ne 0$ a given set of tolls and $x^{(1)}(t)$ the Nash equilibrium for $t$.
+	Now let $\Gm_2 = ([2], \ell, \as^{(1)}(t))$ a heterogeneous game with latency functions the same as $\Gm_1$ and fixed distribution function $\alpha^{(2)}(p) = \as^{(1)}(t)$.
+	Then $x^{(1)}(t) = x^{(2)}(t)$.
+\end{lemma}
+
+\begin{proof}
+	From definition, $\as^{(1)}(t)$ is the value for which any player that has such $\alpha^{(1)}$ value will view the two edge costs as equal.
+	Then, since the latency functions are the same between $\Gm_1, \Gm_2$, we get $x^{(1)}(t) = x^{(2)}(t)$, and since all players have money sensitivity $\as^{(1)}(t)$, they will all view the two edges equally with no one wishing to change.
+	We conclude that $x^{(1)}(t)$ is a Nash equilibrium for $t$ in $\Gm_2$ as well.
+\end{proof}
+
+\begin{corollary}
+	\label{corollary:heterogenous_profit_equiv_fixed}
+	Let $\Gm_1 = ([2], \ell, \alpha^{(1)})$ a heterogeneous game, $t \ne 0$ a given set of tolls, $\Gm_2 = ([2], \ell, \as^{(1)}(t))$ a heterogeneous game with latency functions the same as $\Gm_1$ and fixed distribution function $\alpha^{(2)}(p) = \as^{(1)}(t)$.
+	Then for each link owner $i$ it holds that $\Pi_i^{(1)}(t) = \Pi_i^{(2)}(t)$.
+\end{corollary}
+
+\begin{proof}
+	Natural conclusion from Lemma \ref{lemma:heterogenous_flow_equiv_fixed} and the definition of $\Pi_i$.
+\end{proof}
+
+For a game with step distribution function in particular, the above mean that we can "slice" its flow and respective profit depending on the money sensitivity of each flow section, and apply the properties we investigated earlier on fixed distribution function games.
+Combining it with the discussion around the values of $\as$ for different tolls, especially Theorem \ref{theorem:alpha_upper_irrelevant}, we can see that the game is played among a subset of $\alpha$ values, mirrored around the lower and upper splits.
+We visualise this idea in the following example.
+
+\begin{example}
+	\label{example:a_step_simple}
+	Let $([2], \ell, \alpha)$ be a heterogeneous pricing game where
+	\begin{align*}
+		\begin{aligned}
+			\ell_1 &= x + 1 \\
+			\ell_2 &= 2x
+		\end{aligned}
+		\qquad
+		\alpha(p) =
+		\begin{cases}
+			1 & p \le 1 / 5 \\
+			3 & p > 0
+		\end{cases}&
+	\end{align*}
+	TODO: Add flow and profit plots for a fixed $t_{-i}$.
+	In each case include all flow/profit for the game with $\alpha(p) = 1, 3$ and make bold the sub-intervals that are relevant.
+\end{example}
+
+In order to be able to describe the different profits on the different intervals of the step function, we introduce a definition of profit for a link owner within a flow section.
+
+\begin{definition}
+	\label{definition:profit_interval}
+	Let $([2], \ell, \alpha)$ be a heterogeneous pricing game.
+	For a flow interval $[a, b] \subset [0, 1]$ and a link owner $i$, we define the \textit{profit in $[a, b]$} $\Pi_{i, [a, b]}$ as the toll that maximises the link owner's profit against the opposing toll $t_{-i}$, with the flow $x_i(t)$ being within $[a, b]$.
+	More formally
+	\[
+		\Pi_{i, [a, b]}(t_{-i}) = \max_{\stackrel{t_i > 0}{x_i(t_i, t_{-i}) \in [a, b]}}\Pi_i(t_i, t_{-i})
+	\]
+	%from which we also get
+	%\[B_i(t_{-i}) = \argmax_{t_i > 0} \cup_{\forall [a, b] \subset [0, 1]}\Pi_{i, [a, b]}(t_{-i})\]
+\end{definition}
+
+From this definition it naturally follows that the best response of a link owner $i$ given $t_{-i}$ depends on the max profit value over any set of intervals that completely cover $[0, 1]$.
+For step distribution functions, this set can be the domains of each of its finitely different values $\alpha_1 < \ldots < \alpha_m$.
+As such $\forall k \in [m]$ we denote as $A_k$ the closed set of all players $p$ in $[0, 1]$ for whom $\alpha(p) = \alpha_k$.
+Obviously $\cup_{k=1}^m A_k = [0, 1]$ and from the assumption that $\alpha$ is non-decreasing we also get $A_k$ convex $\forall k \in [m]$.
+When looking at the flow (and consequently profit) of a specific link $i$, however, the split behaviour of the distribution function makes it possible for different flows having the same money sensitivity split.
+We will therefore use the money sensitivity split function to refer to the respective flows that follow it, and formalise the profit and respective best response of link owner $i$ in the following definition.
+
+\begin{definition}
+	Let $\Gm_1 = ([2], \ell, \alpha)$ a heterogeneous game where $\alpha$ is a step function and $(A_k)_{k \in [m]}$ the partition of $[0, 1]$ that is defined by the domain of $\alpha$.
+	Then for link owner $i$ the definition of $\Pi_i$ is extended for an interval $A_k$ as
+	\[
+		\Pi_{i, k}(t_{-i}) = \max_{\stackrel{t_i > 0}{\as(t_i, t_{-i}) = \alpha_k}}\Pi_i(t_i, t_{-i})
+	\]
+\end{definition}
+
+When it comes to maximising profit for the pricing games, those values included in all $\Pi_{i, k}$ are all we need, because if $\as(t)$ takes any other in-between value, then we are on an instance where no player views the two edge costs as equal, with players viewing a purely smaller cost in either edge.
+For the link owners, this means there at least one who can increase their toll and still keep the flow the same, achieving pure profit.
+This can also happen in edge cases of $\as(t) = \alpha_k$, so we move our full description of this behavior in the following lemma.
+
+\begin{lemma}
+	\label{lemma:a_step_gaps}
+	Let $\Gm_1 = ([2], \ell, \alpha)$ a heterogeneous game where $\alpha$ is a step function with values $(\alpha_k)_{k \in [m]}$.
+	If $t^\prime$ a set of tolls in the closure of $T_{-\alpha} = \{t | \as(t) \ne \alpha_k \; \forall k \in [m]\}$, then $t^\prime$ is not a Nash equilibrium for the pricing game.
+\end{lemma}
+
+\begin{proof}
+	It suffices to show that there exists link owner $i$ such that $B_i(t_{-i}^\prime) \ne t_i$.
+	First, notice that from \ref{lemma:split_basic} and \ref{theorem:alpha_upper_irrelevant} we get $\alpha_1 \le \as(t) \le \alpha_k$ for all $t$, and therefore $\as$ is always in-between some $\alpha_k, \alpha_{k+1}$.
+	Even if $\as(t) \ \alpha_k$ for some $k$, belonging in the closed border of $T_{-\alpha}$, it will be either the lowest or highest toll difference possible, ensuring there is always an edge where no players are viewing the two edges equally.
+
+	Let $i$ be that edge which we also assume is the lower split of the flow equilibrium, i.e. $t_i^\prime > t_{-i}^\prime$, and let $k \in [m - 1]$ such that $\alpha_k < \as(t^\prime) < \alpha_{k+1}$.
+	Then link owner $i$ can increase their toll to a $t_i^{\prime\prime} > t_i^\prime$, thus decreasing the value of $\as$, up to the point where $\alpha(t^{\prime\prime}, t_{-i}^\prime) = \alpha_k$.
+	Players in link $i$ will now view their edge as of either lower or equal cost value as the other, while the players in the other link will view theirs as of purely lower cost, making none wishing to change.
+	We therefore get that $x_i(t_i^{\prime\prime}, t_i^\prime) = x_i(t^\prime)$ making in turn $\Pi_i(t_i^{\prime\prime}, t_i^\prime) > \Pi_i(t^\prime)$ and finally $B_i(t_{-i}^\prime) \ne t_i$.
+
+	Similarly we can show that $B_{-i}(t_i^\prime) \ne t_{-i}$ if $i$ is the upper split of the flow equilibrium, decisively making $t^\prime$ a set of tolls where there never is a Nash equilibrium for the pricing game.
+\end{proof}
+
+We complete the picture now with correlation result for the Nash equilibrium of the pricing game.
+
+\begin{theorem}
+	\label{theorem:a_step_ne_equiv_fixed}
+	Let $\Gm_1 = ([2], \ell, \alpha)$ a heterogeneous game where $\alpha$ is a step function with values $(\alpha_k)_{k \in [m]}$.
+	If $\Gm_1$ has a Nash equilibrium for the pricing game at toll $t^*$, then the game $\Gm_2 = ([2], \ell, \as(t^*))$, with latency functions the same as $\Gm_1$ and fixed distribution function $\alpha(p) = \as(t^*)$, also has its unique Nash equilibrium for the pricing game at $t^*$.
+\end{theorem}
+
+\begin{proof}
+	First observe that from Lemma \ref{lemma:a_step_gaps} we get $t^*$ is not in the closure of $T_{-\alpha}$, otherwise it couldn't be a Nash equilibrium, therefore $\as(t^*) = \alpha_k$ for some $k \in [m]$.
+	Then, again due to $t^*$ being a Nash equilibrium, it holds that $\Pi_i(t^*) \ge \Pi_i(t_i, t_{-i}^*)$ for all $t_i > 0$.
+
+	Now it is important to note that from the analysis in Harks et al. \cite{Harks_2019} we know that for homogeneous games the profit functions $\Pi_i$ are concave, making them have unique maximum.
+	Therefore when restricting the domain to an interval, either that same maximum is within that interval or a lower maximum of the interval is achieved at its corners.
+	The restriction of $t^*$ not belonging in the closure of $T_{-\alpha}$ also forbids the latter case, making $\Pi_i(t^*)$ also the global maximum for $\Gm_2$.
+	That condition holds for all link owners $i \in [2]$, therefore $t^*$ is a Nash equilibrium for the pricing game in $\Gm_2$.
+\end{proof}
+
+The most important corollary from that lemma comes from the fact that, as stated in \ref{lemma:a_fixed_ne}, for any $c > 0$ the flow for which the Nash Equilibrium emerges is always the same.
+Consequently for any step function assigned to a pricing game with fixed latency functions, if a Nash Equilibrium exists then it needs to be on the same flow as the one emerging in the respective homogeneous pricing game.
+
+With such a strong notion of the pricing Nash equilibrium, we can now see a potential algorithm that can be used to query its existence or not as well as calculate it.
+We present it here.
+
+\begin{definition}[Algorithm]
+	Let $\Gm = ([2], \ell, \alpha)$ a heterogeneous game where $\alpha$ is a step function with values $(\alpha_k)_{k \in [m]}$.
+	Then we define the following algorithm that takes as input a game's parameters and returns the Nash Equilibrium of the pricing game, if any.
+	\begin{enumerate}
+		\item Consider $\Gm^\prime = ([2], \ell, 1)$ the homogeneous pricing game with latency functions same as in $\Gm$, and calculate its Nash equilibrium $t^*$.
+		\item Calculate $\as(t^*)$.
+		\begin{enumerate}
+			\item[2.1] If $t^*$ in the closure of $T_{-a}$, then there is no Nash equilibrium for the pricing game in $\Gm$.
+			\item[2.2] Otherwise, calculate $\Pi_{i, k}$ for all link owners $i$ and $\alpha_k$ values.
+			\begin{enumerate}
+				\item[2.2.1] If $\Pi_i(t^*) \ge \Pi_{i, k}$ for all $k \in [m]$ and for all $i \in [2]$ then $t^*$ is a Nash equilibrium in $\Gm$.
+				\item[2.2.2] Otherwise, there is no Nash equilibrium in $\Gm$.
+			\end{enumerate}
+		\end{enumerate}
+	\end{enumerate}
+\end{definition}
+
+Given the restrictions of the possible positions for Nash equilibrium tolls, it would be tempting to try and calculate exact conditions for it.
+Those conditions would depend on latencies and the distance of the step function's $k$ values.
+
+Unfortunately the results do not scale for $[N]$ parallel networks.
+
+We will conclude this chapter with some investigation on games with continuous distribution function.
+
 \section{Continuous distribution function}
 
-For the continuous distribution function case, the previous restriction of $\alpha(p) > 0$ when $p > 0$ is not sufficient, as it still allows for distribution functions with many player values close to $0$ < Is that actually the problem?.
+For the continuous distribution function case, the previous restriction of $\alpha(p) > 0$ when $p > 0$ is not sufficient, as it still allows for distribution functions with many player values close to $0$ $\rightarrow$ Is that actually the problem?.
 Specifically the case of $\alpha(p) = cp$, for some $c > 0$, shows some interesting behavior, as it creates instances where $\Pi_i$ becomes either unbounded or fixed; in the first case then $B_i$ becomes unbounded, while in the second it becomes an an infinite set.
 This is showcased analytically in Example \ref{example:ap_p} in the Appendix, where for $\alpha(p) = p$ we see that the resulting best responses can indeed be undefined or unbounded.
 
