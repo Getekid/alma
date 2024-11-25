@@ -30,7 +30,7 @@
 			\vtop{
 				\vspace{2cm}
 				\begin{flushleft}
-					\huge{\bf Pricing Games in Heterogeneous 2-link Parallel Networks\\}
+					\huge{\bf Pricing Games in Heterogeneous Parallel Networks\\}
 					\vskip3cm
 					\Large  Thomas Pappas\\
 					AL1.18.0011\\
@@ -108,13 +108,13 @@
 \thispagestyle{empty}
 \pagenumbering{gobble}
 \chapter*{Abstract}
-In this masters thesis we study a $2$-level optimisation problem where, on a $2$-link network from a source $s$ to a target $t$, a unit of flow wants to move from $s$ to $t$ using the link with the lowest cost, while the two link owners compete for profit by assigning tolls to links and thus creating a toll congestion game.
+In this masters thesis we study a $2$-level optimisation problem where, on an $n$-link network from a source $s$ to a target $t$, a unit of flow wants to move from $s$ to $t$ using the link with the lowest cost, while the link owners compete for profit by assigning tolls to links and thus creating a toll congestion game.
 We examine only affine latencies for the links.
 In addition, each flow player responds to tolls in a heterogeneous way, i.e. each flow player $p$ has a different money-time sensitivity value, which is described by a distribution function $\alpha(p)$.
 First we present some basic definitions and properties of profit homogeneous games.
-Using them as base, we examine cases of fixed and step distribution functions, where for the latter we present strict conditions for the existence or not of a Nash Equilibrium.
+Using them as base, we examine cases of fixed and step distribution functions, where for the latter we first restrict our model to $2$-link instances and then we present strict conditions for the existence or not of a Nash Equilibrium.
 We then introduce a new term, the split function $\as(t)$, defined as the time-money sensitivity value for which the $2$ link costs are equal for a given set of tolls $t$. With the help of $\as$ we will describe and prove some properties of the heterogeneous games for continuous distribution functions.
-In our main result, we generalise the conditions necessary for the existence of a Nash Equilibrium in the profit game between the toll owners, and finally we discuss some extensions to $n$-link parallel networks.
+In our main result, we generalise the conditions necessary for the existence of a Nash Equilibrium in the profit game between two toll owners, and finally we discuss some extensions to $n$-link parallel networks.
 \clearpage
 
 \thispagestyle{empty}
@@ -124,13 +124,14 @@ In our main result, we generalise the conditions necessary for the existence of 
 \thispagestyle{empty}
 \pagenumbering{gobble}
 \chapter*{Συνοψη}
-Σε αυτή τη διπλωματική μεταπτυχιακού μελετάμε ένα πρόβλημα βελτιστοποίησης $2$ επιπέδων, όπου σε ένα δίκτυο με $2$ ακμές από μια πηγή $s$ σε ένα στόχο $t$, μια μονάδα ροής θέλει να μετακινηθεί από το $s$ στο $t$ χρησιμοποιώντας την ακμή με το χαμηλότερο κόστος, ενώ οι δύο ιδιοκτήτες των ακμών ανταγωνίζονται για κέρδος βάζοντας δίοδια στις ακμές και δημιουργώντας έτσι ένα παίγνιο συμφόρησης με διόδια.
+Σε αυτή τη διπλωματική μεταπτυχιακού μελετάμε ένα πρόβλημα βελτιστοποίησης $2$ επιπέδων, όπου σε ένα δίκτυο με $n$ ακμές από μια πηγή $s$ σε ένα στόχο $t$, μια μονάδα ροής θέλει να μετακινηθεί από το $s$ στο $t$ χρησιμοποιώντας την ακμή με το χαμηλότερο κόστος, ενώ οι δύο ιδιοκτήτες των ακμών ανταγωνίζονται για κέρδος βάζοντας δίοδια στις ακμές και δημιουργώντας έτσι ένα παίγνιο συμφόρησης με διόδια.
 Εξετάζουμε μόνο αφινικές καθυστερήσεις για τις ακμές.
 Επιπλέον, ο κάθε παίκτης ροής αντιδρά στα διόδια με ετερογενή τρόπο, δηλ. ο κάθε παίκτης ροής $p$ έχει διαφορετική τιμή ευαισθησίας χρόνου-χρήματος, η οποία περιγράφεται από μια συνάρτηση κατανομής $\alpha(p)$.
-Πρώτα παρουσιάζουμε κάποιους βασικούς ορισμούς και ιδιότητες των ομογενών παιγνίων κέρδους. Mε αυτά ως βάση, εξετάζουμε περιπτώσεις σταθερών και βηματικών συναρτήσεων κατανομής, όπου για το τελευταίο παρουσιάζουμε αυστηρές συνθήκες για την ύπαρξη ή μη σημείου ισορροπίας Nash.
+Πρώτα παρουσιάζουμε κάποιους βασικούς ορισμούς και ιδιότητες των ομογενών παιγνίων κέρδους.
+Mε αυτά ως βάση, εξετάζουμε περιπτώσεις σταθερών και βηματικών συναρτήσεων κατανομής, όπου για το τελευταίο πρώτα περιοριζόμαστε σε στιγμιότυπα $2$ ακμών και παρουσιάζουμε αυστηρές συνθήκες για την ύπαρξη ή μη σημείου ισορροπίας Nash.
 Μετά εισαγάγουμε έναν νέο όρο, τη συνάρτηση διαχωρισμού $\as(t)$, ορισμένη ως η τιμή ευαισθησίας χρόνου-χρήματος για την οποία τα κόστη των $2$ ακμών είναι ίσα για ένα δοσμένο σετ διοδίων $t$.
 Με τη βοήθεια της $\as$ θα περιγράψουμε και θα αποδείξουμε μερικές ιδιότητες των ετερογενών παιγνίων με συνεχή συνάρτηση κατανομής.
-Στο κύριο αποτέλεσμά μας, γενικοποιούμε τις συνθήκες που είναι απαραίτητες για την ύπαρξη ισορροπίας Nash στο παίγνιο κέρδους μεταξύ των ιδιοκτητών των ακμών, και τελικώς συζητάμε κάποιες επεκτάσεις για δίκτυα με $n$ ακμές.
+Στο κύριο αποτέλεσμά μας, γενικοποιούμε τις συνθήκες που είναι απαραίτητες για την ύπαρξη ισορροπίας Nash στο παίγνιο κέρδους μεταξύ δύο ιδιοκτητών ακμών, και τελικώς συζητάμε κάποιες επεκτάσεις για δίκτυα με $n$ ακμές.
 \clearpage
 
 \thispagestyle{empty}
@@ -151,32 +152,70 @@ In our main result, we generalise the conditions necessary for the existence of 
 
 
 \chapter{Introduction}
+\label{chapter:intro}
 
-In this thesis we study a three level optimisation problem.
-On the basis there is a 2-node $(s, t)$, 2-link $s-t$ network, each link with a non-decreasing latency function that defines how the traffic increases as more players flow into that link.
-On the first level a flow $[0, 1]$ wants to move from $s$ to $t$ and experience the minimum latency (traffic).
-On the second level, the links might also have tolls which impose an additional cost to the flow players, plus in our case (heterogeneous users) each player has a different money-time trade-off and thus see the link costs differently.
-Finally on the third level (are the levels really that way?), the tolls are owned by players who profit on the flow that uses that link and compete to maximise it.
+In this thesis we study a two level optimisation problem.
+On the basis there is a network with 2 nodes $(s, t)$ and $n$ links, each link directed from $s$ to $t$ and weighted by a non-decreasing latency function that defines how the traffic increases as more players flow into that link.
+On the first level, a flow $[0, 1]$ wants to move from $s$ to $t$ using one of the $n$ links and experience minimum latency (traffic).
+On the second level, each link is owned by a different owner who can add a toll to their link and gain profit proportional to the flow that uses it.
+The tolls impose an additional cost to the flow players, affecting the first level game, and the link owners compete with each other to maximise their profit.
+In our case we will additionally assume that the flow users behave in a heterogeneous way when it comes to tolls, meaning that each player has a different money-time trade-off and thus see the link costs differently.
 
-We know from Cole et al. \cite{10.1145/780542.780618} that regardless of the distribution function $a$ or the latency functions (as long as they are non-decreasing) a $\NE$ always exists.
-In that $\NE$ the users are split with the money-sensitive ones on the link with the lower toll and the time-sensitive ones on the higher toll one, each one seeing their link as either lower or equal cost with the other (while they all see traffic equally).
+The structure of this thesis is as such.
+We finish this chapter by briefly presenting previous work in this field, all while examining some of the different models and properties that have been researched in the literature so far.
+This will also serve as a bridge to Chapter \ref{chapter:preliminaries} were we will set our basis for the rest of the study.
+This includes formal definitions of the models and properties we introduced from previous work as well as some additional -but still basic- properties of the models, with heavy focus on the money-time user sensitivity, captured by a distribution function $\alpha$.
 
-We introduce a new term $\as=\frac{l_1(x)-l_2(1-x)}{t_2-t_1}$ which is the $a(p)$ value of a user $p$ which sees the link costs equally.
+Entering the main body of our work, in Chapter \ref{chapter:split} we introduce a new term regarding any two links of the network, called \textit{money-time sensitivity split}, which captures the notion of a (potentially non-existent) player whose money-time sensitivity makes them view the two links as equal.
+We will then analyse that notion and provide properties and bounds for its values.
+Finally, in the chapter's main result, we prove a general property of homogeneous network games as, due to the previously found bounds, there might be a portion of users whose sensitivity value can be arbitrarily large without affecting the game.
+
+Having arrived at our main results in this work, in Chapter \ref{chapter:pricing_equilibria} we investigate the pricing competition game between the link owners of a network with heterogeneous users.
+We begin by examining a class of games where the distribution function is fixed across all users, which, as we'll formally describe, makes the game \textit{pseudo-heterogeneous}.
+Particular interest in the above class is the relation between games with identical setup but with different fixed distribution functions.
+We describe and prove some properties for them, and using those we then tackle step distribution functions (where the user sensitivity can take values out of a finite set).
+At this point we restrict our model to instances with $2$ links, and provide strict restrictions for equilibrium existence for the pricing competition game.
+
+We conclude this thesis with a short discussion around the main outtakes of this study, while also presenting potential directions for future work.
 
 
 \section{Related Work}
+\label{section:related_work}
 
-Adding tolls to a Network Game has began as a standard practice to regulate the network flow, as it is well known that the equilibrium that occurs by the game is not guarranteed to be the most efficient.
+Selfish routing has a vast history of literature as it's been proven useful in solving a variety of real-world problems in economics \cite{pigou1920economics}, transportation \cite{beckmann1956studies} and more (see \cite{roughgarden2002sr} and \cite{roughgarden2005slpoa} for more references).
+It has been well-established, at least as early as 1920 from the work of Pigou \cite{pigou1920economics}, that selfish behavior in congested networks can create (arbitrary) inefficiencies with regard to the total latency experienced by all users.
+A long-standing practice to solve these inefficiencies has been to regulate the network by adding tolls to the links, thus altering the cost of the link usage.
+A classical result on this is the use of marginal tolls (Beckman et al. \cite{beckmann1956studies}), where each link user is charged a toll corresponding to their externality, i.e. the added congestion effect caused by their participation in the network.
+This technique can eradicate the inefficiencies and create optimal flow in the network, however it assumes a strong homogeneity among the users.
+Marginal cost pricing has been investigated in networks with homogeneous users (e.g. Dafermos \cite{dafermos1973toll}), with the resulting payment required by users on same links being different, an unwanted and non-practical approach, which also requires knowledge of the users' sensitivity beforehand.
 
-TODO
+One of the major contributions in this field has been the introduction of the concept of a Nash Equilibrium for networks, defined as Wardrop equilibrium \cite{wardrop_theoretical_1952}.
+
+Congestion games were formally introduced by Rosenthal \cite{Rosenthal1973ACO} who also proved that in those games a pure Nash Equilibrium always exists.
+Later, Monterer-Shapely \cite{MONDERER1996124} defined the class of potential games (games where the incentive for all players to change their strategy can be expressed with a global function) and proved that congestion games are equivalent to exact potential games (potential games where a change in strategy from any player alter the potential function the exact way it alters the player's cost).
+Milchtaich \cite{MILCHTAICH1996111} then investigated the different pay-offs 
+Given the above, with the existence of a Nash equilibrium always existing, later research focused on investigating the quality of an equilibrium by using the notion of \textit{Price of Anarchy}, introduced by Koutsoupias-Papadimitriou \cite{KOUTSOUPIAS200965}.
+The Price of Anarchy describes the ratio between a Nash Equilibrium and the most cost-efficient solution, therefore lower values denote a qualitative equilibrium while a lower value denotes a bad one.
+Finally, in terms of complexity, Fabrikant et al. \cite{10.1145/1007352.1007445} have shown that calculating a pure Nash Equilibrium for congestion games is PLS-complete in the general case.
+
+Heterogeneity has been studied by Schmeilder \cite{1973JSP.....7..295S} and Milchtaich \cite[Prop 3.3]{doi:10.1287/moor.25.3.349.12220} has contributed through with work on the more general crowding games, a class of games where the cost assigned to each player is affected only by the number of players selecting the same action (or strategy).
+Large crowding games are basically less restrictive $n$-link parallel congestion games.
+
+Discussing more the algorithmic aspect of toll computation, there has been significant research in finding optimal tolls for homogeneous network users.
+Marginal cost prices can be computed using convex programming \cite{beckmann1956studies}, 
+
+Acemoglu and Ozdaglar were the first to introduce pricing competition between link owners to the above model \cite{10.1287/moor.1060.0231}.
+They showed that increasing the competition among operators from a monopoly to an oligopoly may reduce the efficiency of the network, achieving tight bounds on the Price of Anarchy.
+In a follow-up work \cite{10.1109/JSAC.2007.070812}, they generalised the above by assuming more general topologies where links can also be linked serially (series-parallel networks).
 
 \cleardoublepage
 
 
 \chapter{Preliminaries}
+\label{chapter:preliminaries}
 
 In this section we will describe the model utilised throughout this thesis.
-If we attempted to call that model by including all of it's properties, the result would be a Heterogeneous Non-atomic 2-link Parallel Network Toll Congestion Pricing Game, so while we will describe each of those properties, we will eventually focus on heterogeneity and the pricing competition, thus calling it a Heterogeneous Pricing Game.
+If we attempted to call that model by including all of its properties, the result would be a Heterogeneous Non-atomic 2-link Parallel Network Toll Congestion Pricing Game, so while we will describe each of those properties, we will eventually focus on heterogeneity and the pricing competition, thus calling it a Heterogeneous Pricing Game.
 
 \section*{Non-atomic Parallel Network Games}
 
@@ -191,6 +230,7 @@ Hence we get flow as a (stochastic) vector $x = (x_i)_{i \in N}$ where $x_i$ is 
 The flow then creates congestion on the links, each described by a non-decreasing latency function $(\ell_i)_{i \in N}$ which we assume to be affine.
 We denote by $\mathcal{L}_d$ the class of polynomial latency functions with nonnegative coefficients and degree at most $d$, and as such $\mathcal{L}_1$ becomes the class of affine latency functions.
 Finally, the network can also be extended by allowing a set of tolls $t = (t_i)_{i \in N}$ to be assigned to each link, which in turn adds to the effective cost of a player using them.
+At this point we should also mention that we will freely use, when needed, the standard game-theoretical notation of $t_{-i} = t \setminus \{t_i\}$.
 
 The above set-up creates a Non-atomic Parallel Network Game with tolls where each player will select the edge that minimises their \textit{individual} traffic latency.
 We consider two cases where players either react to tolls in a \textit{homogeneous} or a \textit{heterogeneous} manner.
@@ -199,52 +239,64 @@ We consider two cases where players either react to tolls in a \textit{homogeneo
 
 In the homogeneous case all players have an equal reaction to tolls, and therefore the effective cost of a player using link $i$ becomes $\ell_i(x_i) + t_i$.
 For a given set of tolls $t$, a flow $x$ is a \textit{Wardrop equilibrium for $t$} if $\forall i, j \in N$ with $x_i > 0$ it holds that
-\begin{equation}
-	\label{wardrop_inequality_cost}
+\begin{equation*}
 	\ell_i(x_i) + t_i \leq \ell_j(x_j) + t_j
-\end{equation}
+\end{equation*}
 In that case, all links with $x_i > 0$ have equal effective costs, i.e. there exists some $K > 0$ such that $\ell_i(x_1) + t_i = K$ for all links $i$ with $x_i > 0$.
-From a well-known result from Beckman et al. \cite{beckmann1956studies} and Dafermos and Sparrow \cite{1363388843888284416}, such and an equilibrium for $t$ exists and is unique, therefore for a toll vector $t$ we can denote by $x(t)$ the flow occurring on  that unique equilibrium for the given toll $t$.
-We will freely use when needed the general game-theoretical notation of $x(t_i, t_{-i})$ where $t_{-i} = t \setminus \{t_i\}$.
-We copy Lemma 2.1 from Harkes et al \cite{Harks_2019} as is for later use.
+From a well-known result from Beckman et al. \cite{beckmann1956studies} and Dafermos and Sparrow \cite{1363388843888284416}, such and an equilibrium for $t$ exists, is unique with regard to costs and can be described by the following inequality.
 \begin{lemma}
 	\label{lemma:wardrop_equilibrium}
 	A flow $x$ is a Wardrop equilibrium for $t$ if and only if for all feasible flows $x^\prime$,
 	\[\sum_{i \in N} (\ell_i(x_i) + t_i) \cdot (x_i - x_i^\prime) \leq 0\]
 \end{lemma}
+
+We can therefore denote by $x(t)$ the flow occurring on that unique equilibrium for a given toll $t$.
 If $t = 0$ then the equilibrium is called the \textit{Wardrop equilibrium}.
-It's also worth noting that looking at \eqref{wardrop_inequality_cost}, we can see that what actually matters, with regard to the flow, is the relative difference among the tolls.
-I.e. if we consider any $c \in \R_+$ (or even $c \geq -\min_{i \in N} t_i$) then for $t^\prime = t + c$ the inequalities remain true for all $i, j \in N$ and thus the network game for the flow between tolls $t$ and $t^\prime$ is the same.
+It's also worth noting that looking at Lemma \ref{lemma:wardrop_equilibrium}, we can see that what actually matters, with regard to the flow, is the relative difference among the tolls, and not their actual values.
+To demonstrate this, if we consider an arbitrary $c \in \R_+$ and tolls $t^\prime = t + c$ then for the same flow $x$ and any other flow $x^\prime$ the sum becomes
+\begin{flalign*}
+	\sum_{i \in N} (\ell_i(x_i) + t_i + c) (x_i - x_i^\prime) &= \sum_{i \in N} (\ell_i(x_i) + t_i) (x_i - x_i^\prime) + c \left(\sum_{i \in N} x_i - \sum_{i \in N} x_i^\prime\right) \\
+	&= \sum_{i \in N} (\ell_i(x_i) + t_i) (x_i - x_i^\prime) \leq 0
+\end{flalign*}
+which makes $x$ the Wardrop equilibrium for $t^\prime$ as well.
+The last equality holds because $x_i, x_i^\prime$ are flows of the network and therefore $\sum_{i \in N} x_i = \sum_{i \in N} x_i^\prime = 1$.
+Also, this reasoning is still valid for $c < 0$ as long as $t_i + c \ge 0$ for all $i \in N$, or in other words, as long as $c \ge -\min_{i \in N}{t_i}$.
 
 Finally for affine latencies we can calculate $x(t)$.
-For $l_i(x_i) = a_i \cdot x_i + b_i, a_i > 0, b_i \geq 0$ and $t \in \R_+^N$ define $N(t) = \{i \in N | x_i(t) > 0\}$.
-Since $x(t)$ is an equilibrium for $t$ and $\sum_{i \in N(t)}x_i(t) = 1$ we solve the equations with regard to the common efficient cost $K$ and then we get for all $i \in N(t)$
+For $\ell_i(x_i) = a_i x_i + b_i$ with $a_i > 0, b_i \geq 0$ and $t \in \R_+^N$, define $N(t) = \{i \in N | x_i(t) > 0\}$.
+Since $x(t)$ is an equilibrium for $t$ then for all $i \in N(t)$ we get $\ell_i(x_i) + t_i = K$ for some common efficient cost $K$.
+By also using the fact that $\sum_{j \in N(t)} x_i = 1$ we solve the equations with regard to $K$ and eventually we get for all $i \in N(t)$
 \begin{equation}
-	\label{eq:x_i}
+	\label{eq:homogeneous_x_i}
 	x_i(t) = \frac{1 + \sum_{j \in N(t)}\frac{b_j + t_j - b_i - t_i}{a_j}}{\sum_{j \in N(t)}\frac{a_i}{a_j}}
 \end{equation}
 
+It is important to note here that formula \ref{eq:homogeneous_x_i} is valid only for $t$ such that the result is in $[0, 1]$.
+If we allow any arbitrary $t \in \R_+^N$ then we can find extreme instances of the game, which wouldn't occur in the optimal play of the link owners anyway.
+For example, if for tolls $t$ link owner $i$ has $t_i$ large enough such that $x_i(t) = 0$, then for any $t_i^\prime > t_i$ it also holds that $x_i(t_i^\prime, t_{-i}) = 0$, while formula \ref{eq:homogeneous_x_i} would decrease.
+Since we assume that link owners play optimally, we will also assume that tolls $t$ are within the bounds where formula \ref{eq:homogeneous_x_i} is valid.
+
 \subsection*{Heterogeneous players}
 
-In the heterogeneous case, each player $p$ reacts differently to tolls, presumably due to different money/time valuation ratios.
+In the heterogeneous case, each player $p$ reacts differently to tolls, presumably due to different money-time sensitivity values.
 We describe this by adding a money-sensitivity weight $\alpha(p)$ on the toll costs experienced by the player, making them see the cost of each edge as $c_i^p(t) = \ell_i(x_i(t)) + \alpha(p) \cdot t_i$ and then seek the shortest link among them.
 By also assuming that the players are sorted by money-sensitivity, we can describe their heterogeneity by defining a non-decreasing function $\alpha: [0, 1] \rightarrow [0, \infty]$.
 We call $\alpha$ a \textit{distribution function}.
 Even though the definition does allow functions that are not upper bounded with $\alpha(1) = +\infty$, we will always assume that $\alpha$ is finite on $[0, 1)$.
-Finally, we will assume that $\alpha(0) > 0$, since, as we'll see in more detail in Lemma \ref{lemma:a_0_0}, allowing many players close to $0$ breaks the pricing game.
+%Finally, we will assume that $\alpha(0) > 0$, since, as we'll see in more detail in Lemma \ref{lemma:a_0_0}, allowing many players close to $0$ breaks the pricing game.
 
-We can therefore define an instance of a Heterogeneous Pricing Game as the tuple $(N, \ell, \alpha)$ with $N = \{1, 2, \dots, n\}$, $\ell = (\ell_i)_{i \in N}$ and $\alpha$ the distribution function.
+We can therefore define an instance of a Heterogeneous Pricing Game as the tuple $(N, \ell, \alpha)$ with $N = \{1, 2, \dots, n\}$, $\ell = (\ell_i)_{i \in N}$ and $\alpha$ a non-decreasing distribution function.
 Then with all the above we can again define a Nash equilibrium for the game if $\forall i \in N$ and $\forall p \in [0, 1]$ it holds that
 \[c_{f(p)}^p(t) \leq c_i^p(t)\]
-Existence of an equilibrium is guaranteed by the more general results of Schmeidler \cite[Thm 2]{1973JSP.....7..295S}, while uniqueness is covered by Milchtaich \cite[Prop 3.3]{doi:10.1287/moor.25.3.349.12220}; for a more detailed coverage of those look at the definitions and propositions of Cole et al. \cite[\S2]{10.1145/780542.780618}.
-Therefore can extend the definition for $x(t)$ similarly as in the homogeneous case.
+Existence of an equilibrium is guaranteed by the more general results of Schmeidler \cite[Thm 2]{1973JSP.....7..295S}, while uniqueness is covered by Milchtaich \cite[Prop 3.3]{doi:10.1287/moor.25.3.349.12220} (see Related Work \ref{section:related_work}); for a more detailed coverage of those look at the definitions and propositions of Cole et al. \cite[\S2]{10.1145/780542.780618}.
+We can therefore also extend the definition of $x(t)$, being the Nash Equilibrium for $t$, similarly as in the homogeneous case.
 
 Finally, we will prove here a general property of parallel networks which capture the relationship between latencies and tolls.
 It is trivial for homogeneous games that higher tolls create lower latencies on the respective edges, but for the heterogeneous case it is not straightforward so we'll prove it.
 
 \begin{lemma}
 	\label{lemma:latencies_tolls}
-	For a Heterogeneous Parallel Game $(N, \ell, \alpha)$ with tolls $t$ and Nash equilibrium for $t$ flow $x(t)$, it holds that for all $i, j \in N$ with $x_i(t), x_j(t) > 0$
+	For a Heterogeneous Parallel Game $(N, \ell, \alpha)$ with tolls $t$ and flow $x(t)$ the Nash equilibrium for $t$, it holds for all $i, j \in N$ with $x_i(t), x_j(t) > 0$ that
 	\begin{enumerate}[(i)]
 		\item $\ell_i(x_i(t)) < \ell_j(x_j(t))$ iff $t_i > t_j$
 		\item $\ell_i(x_i(t)) = \ell_j(x_j(t))$ iff $t_i = t_j$
@@ -256,56 +308,80 @@ It is trivial for homogeneous games that higher tolls create lower latencies on 
 	We will prove $(i)$ and the rest follow similarly.
 	For the left-to-right direction we assume that $\ell_i(x_i(t)) < \ell_j(x_j(t))$.
 	If now $t_i \le t_j$ then for all players $p$ we get $\ell_i(x_i(t)) + \alpha(p) \cdot t_i < \ell_j(x_j(t)) + \alpha(p) \cdot t_j \Rightarrow c_i^p(t) < c_j^p(t)$.
-	Therefore there exist players $p_j$ on link $j$ for which $c_{f(p_j)}^{p_j}(t) = c_j^{p_j}(t) > c_i^{p_j}(t)$, which is a contradiction since $x(t)$ is a Nash equilibrium.
+	Since $x_j(t) > 0$ there exist players $p_j$ on link $j$ for which $c_{f(p_j)}^{p_j}(t) = c_j^{p_j}(t) > c_i^{p_j}(t)$, which is a contradiction since $x(t)$ is a Nash equilibrium.
 	The opposite direction is also proved similarly.
 \end{proof}
 
-\section*{Pricing Games}
+\section*{Pricing Games (our model)}
 
-While keeping the above Network Game model, we introduce $n$ agents who each own one link of the network and can thus assign its toll and profit from it.
-The profit is defined for each link owner $i$ as $\Pi_i = x_i \cdot t_i$ which, since we defined $x(t)$ above, we can extend the definition to $\Pi_i(t) = x_i(t) \cdot t_i$ describing the profit at the equilibrium for given toll $t$.
+Arriving at the main model that will be used in this thesis, we keep the above Network Game model and introduce $n = |N|$ agents who each own one link of the network and can thus assign toll to it and gain profit.
+For each link owner $i$, their profit $\Pi_i$ is defined as $\Pi_i = x_i \cdot t_i$, and since we have defined $x(t)$ we can extend $\Pi_i$ to $\Pi_i(t) = x_i(t) \cdot t_i$, which describes the profit of link owner $i$ at the Nash equilibrium for a given toll $t$.
 The link owners compete with each other for profit, each selfishly selecting the toll $t_i$ that will maximise their profit given the remaining tolls $t_{-i}$.
 We describe this best response as $B_i(t_{-i}) = \argmax_{t_i \geq 0} \Pi_i(t_i, t_{-i})$.
 Consequently, a toll vector $t$ is a \textit{Nash Equilibrium} for the pricing game, if $\forall i \in N$ and $\forall t_i^\prime \in \R$ it holds that
 \[\Pi_i(t_i, t_{-i}) \geq \Pi_i(t_i^\prime, t_{-i})\]
+We will denote this toll equilibrium as $t^*$ when relevant.
+
+\begin{example}
+	[TODO: Add figure]
+\end{example}
 
 \subsection*{Homogeneous players}
 
-For homogeneous players and affine latencies we can calculate the best response functions for each link owner by solving first order conditions on $\Pi_i(t_i, t_{-i})$ for $t_i$. TODO
+For homogeneous players and affine latencies we can calculate the best response functions $B_i(t_{-i})$.
+For each link owner $i$, by solving first order conditions on $\Pi_i(t_i, t_{-i})$ for $t_i$ we get
+\begin{equation}
+	\label{eq:homogeneous_br_i}
+	B_i(t_{-i}) = \frac{1 + \sum_{j \in N(t) : j \ne i}\frac{b_j + t_j - b_i}{a_j}}{\sum_{j \in N(t) : j \ne i}\frac{2}{a_j}}
+\end{equation}
 
-\section*{2-link Heterogeneous Pricing Games (our model)}
+Similarly to \ref{eq:homogeneous_x_i}, this formula is valid only for tolls in a bounded subset of $\R_+^N$.
 
-Focusing on the model that will be used in this thesis, we simplify our network by only having $2$ links, and then consider that the flow is acting in a heterogeneous way.
-The model can thus be defined as the tuple $([2], \ell, \alpha)$, where $[2] = \{1, 2\}$ the links, $\ell = (\ell_1, \ell_2)$ the latency functions and $\alpha$ the distribution function.
-[TODO: Add figure]
-When discussing properties of the model where the pricing game is not relevant, we will refer to a $([2], \ell, \alpha)$ instance as a toll game, and otherwise as a pricing game.
+%In the extreme cases where the toll differences are arbitrarily large, the best response of some players will be to lower their toll and take all available flow.
+
+%From Harkes et al. \cite[Lemma 3.3]{Harks_2019} we can also get an equation for the Nash Equilibrium of the pricing game.
+%\begin{equation}
+%	\label{eq:homogeneous_ne_br_i}
+%	t_i^* = \left(a_i + \frac{1}{\sum_{j \ne i} \frac{1}{a_j}}\right) \cdot x_i(t^*)
+%\end{equation}
+
 We finish this section with a crucial property for homogeneous pricing games that we will need later.
-TODO: This property probably exists as a general theorem in convex programming or something, maybe with non-decreasing property instead of decreasing. Until then, we prove it analytically for affine latencies.
-
 \begin{lemma}
 	\label{lemma:tolls_diff}
-	Let $([2], \ell, 1)$ be a homogeneous pricing game, and let $D_i$ a function for each link $i$ where $D_i(t_{-i}) = B_i(t_{-i}) - t_{-i}$.
-	Then $D_i$ is decreasing for all links $i$.
+	Let $(N, \ell, 1)$ be a homogeneous pricing game, and let $D_i$ a function for each link $i$ where $D_i(t_{-i}) = B_i(t_{-i}) - t_{-i}$, a vector of $t_i - t_j$ values for all $t_j \in t_{-i}$.
+	Then $D_i$ is decreasing with regard to any $t_j \in t_{-i}$.
 \end{lemma}
 
 \begin{proof}
-	From equation \ref{eq:x_i} for $2$ links we get
+	For any link $i$ and any $t_j \in t_{-i}$ consider the respective element of $D_i$, which is $B_i(t_{-i}) - t_j$.
+	From formula \ref{eq:homogeneous_br_i} after some calculations we get
 	\[
-		x_i(t) = \frac{1 + \frac{b_{-i} + t_{-i} - b_i - t_i}{a_{-i}}}{\frac{a_i}{a_{-i}}} = \frac{a_{-i} + b_{-i} + t_{-i} - b_i - t_i}{a_i}
+		B_i(t_{-i}) - t_j = \left(\frac{1}{\sum_{k \ne i} \frac{2a_j}{a_k}} - 1\right)t_j + \frac{1 + \frac{b_j - b_i}{a_j} + \sum_{k \ne i, j}\frac{b_k + t_k - b_i}{a_k}}{\sum_{k \ne i} \frac{2}{a_k}}
 	\]
-	from which by following the definitions and from first order conditions for quadratic functions we get
+	which decreasing with regards to $t_j$ if and only if its coefficient is negative.
+	Indeed, since $a_i > 0$ for all $i$, we get
 	\[
-		B_i(t_{-i}) = \argmax_{t_i > 0}x_i(t) \cdot t_i = \frac{a_{-i} + b_{-i} + t_{-i} - b_i}{2}
+		\frac{1}{\sum_{k \ne i} \frac{2a_j}{a_k}} - 1 = \frac{1}{2 \left(1 + \sum_{k \ne i, j} \frac{a_j}{a_k}\right)} - 1 \leq \frac{1}{2} - 1 < 0
 	\]
-	Finally
-	\[
-		D_i(t_{-i}) = -\frac{1}{2}t_{-i} + \frac{a_{-i} + b_{-i} - b_i}{2}
-	\]
-	which is obviously decreasing.
 \end{proof}
 
+\section*{Game equivalence}
+
+Another notion we will need in our analysis is when two games are equivalent.
+This concept will be helpful because in some cases, even though the parameters of a game might change, the players' utilities and respective strategies do not, making the two instances in practice identical.
+For example, similarly to our analysis of toll differences using Lemma \ref{lemma:wardrop_equilibrium}, if we consider the two homogeneous games $(N, \ell, 1)$ and $(N, \ell + c, 1)$ for some $c > 0$, then the flow's behavior will be the same in both of them, resulting in equivalent instances.
+We give here a formal definition.
+
+\begin{definition}[Game equivalence]
+	\label{definition:game_equivalence}
+	Let $\Gm_1, \Gm_2$ be two $n$-link Network Congestion Games.
+	$\Gm_1$ and $\Gm_2$ are called \textbf{equivalent} if and only if for all tolls $t \in \R_+$ it holds that $x^{(1)}(t) = x^{(2)}(t)$, with $x^{(1)}(t), x^{(2)}(t)$ being the Nash Equilibria for $t$ in $\Gm_1, \Gm_2$ respectively.
+\end{definition}
+
+It trivially follows from this definition that the two pricing competition games played on two equivalent network congestion games are identical.
 
 \chapter{Money sensitivity split}
+\label{chapter:split}
 
 \section{Introduction}
 
@@ -658,6 +734,7 @@ Note that it doesn't suffice to assume $\alpha(0) = 0$ as the behavior of that s
 
 
 \chapter{Equilibria in Pricing Games}
+\label{chapter:pricing_equilibria}
 
 In this section we introduce the pricing game to our model and examine how different distribution functions $\alpha$ can affect the profit maximisation game between the toll owners, specifically when $\alpha$ is fixed, step or continuous.
 We begin, though, with some necessary restrictions.
@@ -823,7 +900,7 @@ We will use this property to describe the flow relation between the two games in
 %\end{corollary}
 %
 %\begin{proof}
-%	From equation \ref{eq:x_i} for $2$ links and under universal sensitivity $c_1, c_2$ respectively we get
+%	From equation \ref{eq:homogeneous_x_i} for $2$ links and under universal sensitivity $c_1, c_2$ respectively we get
 %	\begin{align*}
 %		x_i^{(1)}(t) - x_i^{(2)}(t) &= \frac{a_{-i} + b_{-i} + c_1t_{-i} - b_i - c_1t_i}{a_i} - \frac{a_{-i} + b_{-i} + c_2t_{-i} - b_i - c_2t_i}{a_i} \\
 %		&= \frac{(c_2 - c_1)(t_i - t_{-i})}{a_i}
