@@ -242,7 +242,7 @@ For a given set of tolls $t$, a flow $x$ is a \textit{Wardrop equilibrium for $t
 \begin{equation*}
 	\ell_i(x_i) + t_i \leq \ell_j(x_j) + t_j
 \end{equation*}
-In that case, all links with $x_i > 0$ have equal effective costs, i.e. there exists some $K > 0$ such that $\ell_i(x_1) + t_i = K$ for all links $i$ with $x_i > 0$.
+In that case, all links with $x_i > 0$ have equal effective costs, i.e. there exists some $K > 0$ such that for all those links $i$ it holds that $\ell_i(x_1) + t_i = K$.
 From a well-known result from Beckman et al. \cite{beckmann1956studies} and Dafermos and Sparrow \cite{1363388843888284416}, such and an equilibrium for $t$ exists, is unique with regard to costs and can be described by the following inequality.
 \begin{lemma}
 	\label{lemma:wardrop_equilibrium}
@@ -251,7 +251,7 @@ From a well-known result from Beckman et al. \cite{beckmann1956studies} and Dafe
 \end{lemma}
 
 We can therefore denote by $x(t)$ the flow occurring on that unique equilibrium for a given toll $t$.
-If $t = 0$ then the equilibrium is called the \textit{Wardrop equilibrium}.
+If $t = 0^N$ then the equilibrium is called the \textit{Wardrop equilibrium}.
 It's also worth noting that looking at Lemma \ref{lemma:wardrop_equilibrium}, we can see that what actually matters, with regard to the flow, is the relative difference among the tolls, and not their actual values.
 To demonstrate this, if we consider an arbitrary $c \in \R_+$ and tolls $t^\prime = t + c$ then for the same flow $x$ and any other flow $x^\prime$ the sum becomes
 \begin{flalign*}
@@ -262,19 +262,17 @@ which makes $x$ the Wardrop equilibrium for $t^\prime$ as well.
 The last equality holds because $x_i, x_i^\prime$ are flows of the network and therefore $\sum_{i \in N} x_i = \sum_{i \in N} x_i^\prime = 1$.
 Also, this reasoning is still valid for $c < 0$ as long as $t_i + c \ge 0$ for all $i \in N$, or in other words, as long as $c \ge -\min_{i \in N}{t_i}$.
 
+With this observation we can see that the case of $t = 0^N$ is equivalent to any toll instance such that $t_1 = t_2 = \dots = t_n$.
+We will therefore simplify our notation and write $t = 0$ when talking about the game without tolls, though we will in fact mean the entire class $\{t = (c)_{i \in N}, c \in \R_+\}$.
+
 Finally for affine latencies we can calculate $x(t)$.
 For $\ell_i(x_i) = a_i x_i + b_i$ with $a_i > 0, b_i \geq 0$ and $t \in \R_+^N$, define $N(t) = \{i \in N | x_i(t) > 0\}$.
-Since $x(t)$ is an equilibrium for $t$ then for all $i \in N(t)$ we get $\ell_i(x_i) + t_i = K$ for some common efficient cost $K$.
-By also using the fact that $\sum_{j \in N(t)} x_i = 1$ we solve the equations with regard to $K$ and eventually we get for all $i \in N(t)$
+Since $x(t)$ is an equilibrium for $t$ then for all $i \in N(t)$ we get $\ell_i(x_i) + t_i = K$ for some common effective cost $K$.
+By also using the fact that $\sum_{j \in N(t)} x_i = 1$ we solve the equations with regard to $K$ and eventually get for all $i \in N(t)$
 \begin{equation}
 	\label{eq:homogeneous_x_i}
 	x_i(t) = \frac{1 + \sum_{j \in N(t)}\frac{b_j + t_j - b_i - t_i}{a_j}}{\sum_{j \in N(t)}\frac{a_i}{a_j}}
 \end{equation}
-
-It is important to note here that formula \ref{eq:homogeneous_x_i} is valid only for $t$ such that the result is in $[0, 1]$.
-If we allow any arbitrary $t \in \R_+^N$ then we can find extreme instances of the game, which wouldn't occur in the optimal play of the link owners anyway.
-For example, if for tolls $t$ link owner $i$ has $t_i$ large enough such that $x_i(t) = 0$, then for any $t_i^\prime > t_i$ it also holds that $x_i(t_i^\prime, t_{-i}) = 0$, while formula \ref{eq:homogeneous_x_i} would decrease.
-Since we assume that link owners play optimally, we will also assume that tolls $t$ are within the bounds where formula \ref{eq:homogeneous_x_i} is valid.
 
 \subsection*{Heterogeneous players}
 
@@ -322,22 +320,21 @@ Consequently, a toll vector $t$ is a \textit{Nash Equilibrium} for the pricing g
 \[\Pi_i(t_i, t_{-i}) \geq \Pi_i(t_i^\prime, t_{-i})\]
 We will denote this toll equilibrium as $t^*$ when relevant.
 
-\begin{example}
-	[TODO: Add figure]
-\end{example}
-
 \subsection*{Homogeneous players}
 
-For homogeneous players and affine latencies we can calculate the best response functions $B_i(t_{-i})$.
+For homogeneous players, from the work of Harkes et al. \cite[Example 4.2]{Harks_2019}, we know that uniqueness of $t^*$ is guaranteed only when $x_i(0) > 0$ for all $i \in N$, a property called the \textit{full Wardrop support assumption}.
+This is seemingly not as much restrictive in practice, as there would be little motivation to add tolls to a route with no traffic.
+From the same work we also get that if the full Wardrop support assumption holds, then $t^*$ is unique \cite[Lemma 3.3]{Harks_2019} and $x_i(t^*) > 0$ and $t_i^* > 0$ for all $i \in N$ \cite[Lemma 3.2]{Harks_2019}.
+
+Also, for affine latencies, we can calculate the best response functions $B_i(t_{-i})$.
 For each link owner $i$, by solving first order conditions on $\Pi_i(t_i, t_{-i})$ for $t_i$ we get
 \begin{equation}
 	\label{eq:homogeneous_br_i}
-	B_i(t_{-i}) = \frac{1 + \sum_{j \in N(t) : j \ne i}\frac{b_j + t_j - b_i}{a_j}}{\sum_{j \in N(t) : j \ne i}\frac{2}{a_j}}
+	B_i(t_{-i}) = \frac{1 + \sum_{j \ne i}\frac{b_j + t_j - b_i}{a_j}}{\sum_{j \ne i}\frac{2}{a_j}}
 \end{equation}
 
-Similarly to \ref{eq:homogeneous_x_i}, this formula is valid only for tolls in a bounded subset of $\R_+^N$.
-
 %In the extreme cases where the toll differences are arbitrarily large, the best response of some players will be to lower their toll and take all available flow.
+
 
 %From Harkes et al. \cite[Lemma 3.3]{Harks_2019} we can also get an equation for the Nash Equilibrium of the pricing game.
 %\begin{equation}
@@ -345,7 +342,7 @@ Similarly to \ref{eq:homogeneous_x_i}, this formula is valid only for tolls in a
 %	t_i^* = \left(a_i + \frac{1}{\sum_{j \ne i} \frac{1}{a_j}}\right) \cdot x_i(t^*)
 %\end{equation}
 
-We finish this section with a crucial property for homogeneous pricing games that we will need later.
+To describe more properties of homogeneous pricing games we will need the following crucial Lemma.
 \begin{lemma}
 	\label{lemma:tolls_diff}
 	Let $(N, \ell, 1)$ be a homogeneous pricing game, and let $D_i$ a function for each link $i$ where $D_i(t_{-i}) = B_i(t_{-i}) - t_{-i}$, a vector of $t_i - t_j$ values for all $t_j \in t_{-i}$.
@@ -358,12 +355,20 @@ We finish this section with a crucial property for homogeneous pricing games tha
 	\[
 		B_i(t_{-i}) - t_j = \left(\frac{1}{\sum_{k \ne i} \frac{2a_j}{a_k}} - 1\right)t_j + \frac{1 + \frac{b_j - b_i}{a_j} + \sum_{k \ne i, j}\frac{b_k + t_k - b_i}{a_k}}{\sum_{k \ne i} \frac{2}{a_k}}
 	\]
-	which decreasing with regards to $t_j$ if and only if its coefficient is negative.
+	which is decreasing with regards to $t_j$ if and only if its coefficient is negative.
 	Indeed, since $a_i > 0$ for all $i$, we get
 	\[
 		\frac{1}{\sum_{k \ne i} \frac{2a_j}{a_k}} - 1 = \frac{1}{2 \left(1 + \sum_{k \ne i, j} \frac{a_j}{a_k}\right)} - 1 \leq \frac{1}{2} - 1 < 0
 	\]
 \end{proof}
+
+\subsection*{Heterogeneous players}
+
+
+
+\begin{example}
+	[TODO: Add figure]
+\end{example}
 
 \section*{Game equivalence}
 
@@ -385,8 +390,8 @@ It trivially follows from this definition that the two pricing competition games
 
 \section{Introduction}
 
-Consider a $([2], \ell, \alpha)$ toll game such that $x_1(0), x_2(0) > 0$ with tolls $t = (t_1, t_2)$ assigned to them and  $x(t) = (x_1(t), x_2(t))$ the Nash equilibrium for $t$.
-Without loss of generality we assume $t_1 > t_2$ which from Lemma \ref{lemma:latencies_tolls} follows that $\ell_1(x_1(t)) < \ell_2(x_2(t))$.
+Consider a $([2], \ell, \alpha)$ heterogeneous parallel game with links $[2] = \{1, 2\}$ such that $x_1(0), x_2(0) > 0$ with tolls $t = (t_1, t_2)$ assigned to them and  $x(t) = (x_1(t), x_2(t))$ the Nash equilibrium for $t$.
+Without loss of generality we assume $t_1 > t_2$ which from Lemma \ref{lemma:latencies_tolls} leads to $\ell_1(x_1(t)) < \ell_2(x_2(t))$.
 For the $2$ edges of the game we introduce the term money sensitivity split $\as(t)$ as the value of $\alpha$ for which if any player $p$ has $\alpha(p)=\as(t)$ then that player sees the $2$ edges' total latencies as equal.
 More specifically, $\as(t)$ is the value of the distribution function $\alpha$ for which it holds
 \[\ell_1(x_1(t)) + \as(t) \cdot t_1 = \ell_2(x_2(t)) + \as(t) \cdot t_2\]
@@ -432,69 +437,82 @@ We can now formally define $\as$ and prove some of its properties.
 
 \begin{definition}
 	\label{definition:split_function}
-	Given a $([2], \ell, \alpha)$ toll game with $x_1(0), x_2(0) > 0$, tolls $t = (t_1, t_2), t_1 \ne t_2$ and $x(t) = (x_1(t), x_2(t))$ the Nash equilibrium for $t$, we define the \textit{money sensitivity split function} $\as: \R_+^2 \setminus \{(a, a) | a \in \R_+\} \rightarrow (0, +\infty)$ as follows 
-	\[\as(t) = \frac{\ell_2(x_2(t)) - \ell_1(x_1(t))}{t_1 - t_2}\]
+	Let $(N, \ell, \alpha)$ a heterogeneous parallel game, tolls $t$ where $t_i \ne t_j$ for links $i, j \in N$ and $x(t)$ the Nash equilibrium for $t$.
+	We define the \textit{money sensitivity split function} $\as^{(i, j)}: \{t \in \R_+^N|t_i \ne t_j\} \rightarrow (0, +\infty)$ as
+	\[\as^{(i, j)}(t) = \frac{\ell_j(x_j(t)) - \ell_i(x_i(t))}{t_i - t_j}\]
 \end{definition}
 
+For $t_i = t_j$ any split value will work, so the function is not well-defined for this case.
 We will also give a more formal definition to the lower-upper split intuition we described above.
 \begin{definition}
 	\label{definition:split_lower_upper}
-	Given a $([2], \ell, \alpha)$ toll game with $x_1(0), x_2(0) > 0$, tolls $t \ne 0$ and $x(t)$ the Nash equilibrium for $t$, and also assuming w.l.o.g. that $t_1 > t_2$, we define as \textit{lower split} the (possibly zero) flow $x_1(t)$ and as \textit{upper split} the remaining flow $x_2(t)$. 
+	Let $(N, \ell, \alpha)$ a heterogeneous parallel game, tolls $t$ where $t_i \ne t_j$ for links $i, j \in N$ and $x(t)$ the Nash equilibrium for $t$.
+	Assuming w.l.o.g. that $t_i > t_j$, we define as \textit{lower split} the (possibly empty) flow $x_i(t)$ and as \textit{upper split} the (possibly empty) flow $x_j(t)$. 
 \end{definition}
 
 \begin{corollary}
 	\label{corollary:split_to_alpha}
-	Given a $([2], \ell, \alpha)$ toll game with $x_1(0), x_2(0) > 0$ and tolls $t \ne 0$, it holds that
+	Let $(N, \ell, \alpha)$ a heterogeneous parallel game and tolls $t$ where $t_i \ne t_j$ for links $i, j \in N$.
+	It holds that
 	\begin{itemize}
-		\item $\alpha(p) \le \as(t)$, for all players $p$ in the lower split
-		\item $\alpha(p) \ge \as(t)$, for all players $p$ in the upper split
+		\item $\alpha(p) \le \as^{(i, j)}(t)$, for all players $p$ in the lower split
+		\item $\alpha(p) \ge \as^{(i, j)}(t)$, for all players $p$ in the upper split
 	\end{itemize}
 \end{corollary}
 
 \begin{proof}
-	Let again w.l.o.g. assume $t_1 > t_2 \LeftrightarrowArg{\ref{lemma:latencies_tolls}} \ell_1(x_1(t)) < \ell_2(x_2(t))$, making by definition \ref{definition:split_lower_upper} a player $p$ in the lower split be in link $1$.
+	Let again w.l.o.g. assume $t_i > t_j$, making by definition \ref{definition:split_lower_upper} a player $p$ in the lower split be in link $i$.
 	Since $x$ is a Nash equilibrium we have
 	\begin{align*}
-		c_1^p(t) &\le c_2^p(t) \Rightarrow \ell_1(x_1(t)) + \alpha(p) \cdot t_1 \le \ell_2(x_2(t)) + \alpha(p) \cdot t_2 \\
-		&\RightarrowArg{t_1 > t_2} \alpha(p) \le \frac{\ell_2(x_2(t)) - \ell_1(x_1(t))}{t_1 - t_2} \RightarrowArg{\ref{definition:split_function}} \alpha(p) \le \as(t)
+		c_i^p(t) &\le c_j^p(t) \Rightarrow \ell_i(x_i(t)) + \alpha(p) \cdot t_i \le \ell_j(x_j(t)) + \alpha(p) \cdot t_j \\
+		&\RightarrowArg{t_i > t_j} \alpha(p) \le \frac{\ell_j(x_j(t)) - \ell_i(x_i(t))}{t_i - t_j} \RightarrowArg{\ref{definition:split_function}} \alpha(p) \le \as^{(i, j)}(t)
 	\end{align*}
-	Similarly we can show that $\alpha(p) \ge \as(t)$, for all players $p$ in the upper split.
+	Similarly we can show that $\alpha(p) \ge \as^{(i, j)}(t)$, for all players $p$ in the upper split.
 \end{proof}
 
-At this point in our analysis, we will additionally need the notion of the lowest and highest $\alpha$ value in a flow of players.
-
+At this point in our analysis, we will need to describe the notion of the lowest and highest $\alpha$ value in a flow of players.
 In general, since we're working with a Lebesque-measurable flow, it is natural to not bother with distinguishing between a flow $[0, x_1]$ or $[0, x_1)$, as the player $x_1$ can be arbitrarily placed at any link without affecting the game.
-In a heterogeneous setting, however, the existence or not of that player matters, as its $\alpha(x_1)$ value might be different from the rest of the players in the flow, depending on how $\alpha$ is defined.
-We bypass this issue by instead using set border bounds.
+In a heterogeneous setting, however, the player's $\alpha(x_1)$ might deterministically put him in a specific link depending on how $\alpha$ is defined, so we need to be careful with our notation.
+We will define the $\alpha$ values of a link's flow in a set and then use border bounds which covers both open and closed intervals.
+
+One difficulty we need to consider with this approach are cases where $t_i = t_j$ for some links $i, j \in N$.
+For such tolls $t$, even though $x(t)$ is uniquely defined, we get for all players $p$ that $c_i^p(t) = c_j^p(t)$, and thus the players in links $i$ and $j$ can be put arbitrarily in any of the two, regardless of the $\alpha$ value.
+Even if we attempted to put them orderly, it actually matters which edge we will put first, as the link might have different flow volume resulting in different $\alpha$ values within.
+For this reason we will assume our sets contain all possible $\alpha$ values of any player that might use a link.
+We therefore loose the information about the actual flow splits among those links and keep only the ones among links with different toll values (and in consequence different latencies, Lemma \ref{lemma:latencies_tolls}).
+Still, even with this information loss, we can still observe that
+\begin{enumerate}
+	\item The notion of $\as$ as the $\alpha$ value that views two links as equal is still valid, since such a player will also view as equal any other link with the same toll value as any of the initial two.
+	\item If we limit our scope to only include the links with equal tolls, we actually get a homogeneous sub-game for the total flow in those links.
+\end{enumerate}
+With the above we arrive at the following definition.
 
 \begin{definition}
 	\label{definition:alpha_flow_sets}
-	Let $([2], \ell, \alpha)$ a toll game with $x_1(0), x_2(0) > 0$, tolls $t \ne 0$ and $x(t)$ the Nash equilibrium for $t$.
-	We define as $A_i(t)$ the set of $\alpha(p)$ values for players $p$ on edge $i$ in the Nash equilibrium for $t$.
-	More formally, we define a set function $A_i: \R_+^2 \setminus \{(a, a) | a \in \R_+\} \rightarrow \mathcal{P}(\R_+)$ such that
-	\[A_i(t) = \{\alpha(p)|p \text{ in edge } i \textit{ for } x(t) \}\]
-	For tolls where $t_1 = t_2$ we cannot define lower and upper split, but we will extend the definition of $A_i$ for those tolls with a sign to specify which split we assume the link to have.
-	Therefore we define $A_i^-(0)$ and $A_i^+(0)$ respectively as
-	\[A_i^-(0) = \{\alpha(p)|p \in [0, x_i(0))\} \qquad A_i^+(0) = \{\alpha(p)|p \in (x_i(0), 1]\}\]
-	%\[A_i^-(0) = \lim_{t_1 - t_2 \rightarrow 0^-}A_i(t) \qquad A_i^+(0) = \lim_{t_1 - t_2 \rightarrow 0^+}A_i(t)\]
+	Let $(N, \ell, \alpha)$ a heterogeneous parallel game, tolls $t$ and $x(t)$ the Nash equilibrium for $t$.
+	We define as $A_i(t)$ the set of all possible $\alpha(p)$ values of players $p$ using link $i$ in the Nash equilibrium for $t$.
+	More formally, we define a set function $A_i: \R_+^N \rightarrow \mathcal{P}(\R_+)$, where $\mathcal{P}(\R_+)$ is the powerset of $\R_+$, such that
+	\[A_i(t) = \{\alpha(p)|p \text{ in edge } j \text{ for } x(t) \text{ where } t_j = t_i\}\]
 \end{definition}
 
-We ignore all $\alpha(x_i(0))$ values in order to avoid any confusion, since they are arbitrarily placed in any edge and their $\alpha$ value could change the sets' properties.
-It doesn't affect our analysis, however, since having a split on that player is only possible for $t = 0$ and $\as(0)$ is undefined, plus as we'll show in the next section neither it's limit exists, making the $\alpha$ value of player $x_i(0)$ (in each assumingly split case) irrelevant.
-
+Notice that with this definition it follows that $A_i(0)$ is the entire domain of $\alpha$ for all $i \in N$.
 We continue with describing some basic properties around the values of $\as$.
+
+%We ignore all $\alpha(x_i(0))$ values in order to avoid any confusion, since they are arbitrarily placed in any edge and their $\alpha$ value could change the sets' properties.
+%It doesn't affect our analysis, however, since having a split on that player is only possible for $t = 0$ and $\as(0)$ is undefined, plus as we'll show in the next section neither it's limit exists, making the $\alpha$ value of player $x_i(0)$ (in each assumingly split case) irrelevant.
 
 \section{Properties and analysis}
 
 \begin{lemma}
 	\label{lemma:split_basic}
-	Given a $([2], \ell, \alpha)$ toll game with $x_1(0), x_2(0) > 0$ and tolls $t \ne 0$, the following hold:
+	Let $(N, \ell, \alpha)$ a heterogeneous parallel game and tolls $t$ where $t_i \ne t_j$ and $x_i(t), x_j(t) > 0$ for some links $i, j \in N$.
+	Then the following hold:
 	\begin{enumerate}[(i)]
-		\item $\as(t) > 0$
-		\item if $x_1(t), x_2(t) > 0$ then $\as(t) \in [\alpha(0), \alpha(1)]$
-		\item if $\as(t) < \alpha(0)$ or $\as(t) > \alpha(1)$ then $x(t) = (0, 1)$ or $(1, 0)$
-		\item if $x_1(t), x_2(t) > 0$ with $\ell_1(x_1(t)) < \ell_2(x_2(t))$ then\\
-		$\sup A_1(t) \le \as(t) \le \inf A_2(t)$
+		\item $\as^{(i, j)}(t) > 0$
+		\item $\as^{(i, j)}(t) \in [\alpha(0), \alpha(1)]$
+		%\item if $\as^{(i, j)}(t) < \alpha(0)$ (or $\as^{(i, j)}(t) > \alpha(1)$) then $x(t) = (0, 1)$ (or $(1, 0)$)
+		\item if $\ell_i(x_i(t)) < \ell_j(x_j(t))$ then
+		$\sup A_i(t) \le \as^{(i, j)}(t) \le \inf A_j(t)$
 	\end{enumerate}
 \end{lemma}
 
@@ -502,18 +520,19 @@ We continue with describing some basic properties around the values of $\as$.
 	$ $ % Just to make a line break after "Proof".
 	\begin{enumerate}[(i)]
 		\item Trivial application of Lemma \ref{lemma:latencies_tolls}.
-		Since we have $t_1 \ne t_2$ it follows that $\ell_1(x_1(t)) \ne \ell_2(x_2(t))$ and therefore $\as(t) \ne 0$.
-		Then we only need to notice that $\ell_1(x_1(t)) < \ell_2(x_2(t)) \Leftrightarrow t_1 > t_2$ and we get $\as(t) > 0$ from Definition \ref{definition:split_function}.
-		\item Since $x_1(t), x_2(t) > 0$ then $\exists p_1, p_2 \in [0, 1]$ each on a different link, for which we assume w.l.o.g. that $\alpha(p_1) \le \alpha(p_2)$.
-		It holds from \ref{corollary:split_to_alpha} that $\alpha(p_1) \le \as(t) \le \alpha(p_2)$ so with $\alpha$ being non-decreasing it follows
-		\[\alpha(0) \le \alpha(p_1) \le \as(t) \le \alpha(p_2) \le \alpha(1) \Rightarrow \as(t) \in [\alpha(0), \alpha(1)]\]
-		\item Inverse logic statement of $(ii)$ ($(P \rightarrow Q) \rightarrow (\neg Q \rightarrow \neg P)$).
+		Since we have $t_i \ne t_j$ it follows that $\ell_i(x_i(t)) \ne \ell_j(x_j(t))$ and therefore $\as^{(i, j)}(t) \ne 0$.
+		Then we only need to notice that $\ell_i(x_i(t)) < \ell_j(x_j(t)) \Leftrightarrow t_i > t_j$ and we get $\as^{(i, j)}(t) > 0$ from Definition \ref{definition:split_function}.
+		\item Since $x_i(t), x_j(t) > 0$ then $\exists p_i, p_j \in [0, 1]$ each on a different link, for which we assume w.l.o.g. that $\alpha(p_i) \le \alpha(p_j)$.
+		Then from Corollary \ref{corollary:split_to_alpha} It holds that $\alpha(p_i) \le \as^{(i, j)}(t) \le \alpha(p_j)$.
+		With $\alpha$ being non-decreasing it follows
+		\[\alpha(0) \le \alpha(p_i) \le \as^{(i, j)}(t) \le \alpha(p_j) \le \alpha(1) \Rightarrow \as(t) \in [\alpha(0), \alpha(1)]\]
+		%\item Inverse logic statement of $(ii)$ ($(P \rightarrow Q) \rightarrow (\neg Q \rightarrow \neg P)$).
 		\item Natural consequence from Corollary \ref{corollary:split_to_alpha} and Definition \ref{definition:alpha_flow_sets}.
 	\end{enumerate}
 \end{proof}
 
-At this point we should notice that $\as$, similarly to $x$, depends only on the toll difference $t_1 - t_2$ and whether $t_1 < t_2$ or otherwise.
-In order to emphasise on this, let's point out that we could alternatively have defined both $x$ and $\as$ as single variable functions with a domain of values $t_d = t_1 - t_2 \in \R$ and function values as such
+At this point we should notice that $\as$, similarly to $x$, depends only on the toll differences and on the toll ordering of the links.
+In order to emphasise on this, let's restrict ourselves to $2$ links and point out that we could alternatively have defined both $x$ and $\as$ as single variable functions with a domain of values $t_d = t_1 - t_2 \in \R$ and function values as such
 \[
 	x(t_d) =
 	\begin{cases*}
@@ -521,76 +540,79 @@ In order to emphasise on this, let's point out that we could alternatively have 
 		x((0, -t_d)) & $t_d < 0$ \\
 	\end{cases*}
 \]
-We will not utilise this definition as is in this work, however displaying it helps with the intuition that the flow, and consequently $\as$, actually changes as the toll difference does in $\R$.
+We will not utilise this definition as is in this work as it gets more complex for games with $n$ links, however displaying it helps with the intuition that the flow, and consequently $\as$, actually changes as the toll differences do in $\R^{N - 1}$.
 
-With that in mind, we will investigate the monotonicity of $\as(t)$ in relation to toll differences (and in extension to latency differences).
-For this we will need to compare different tolls that create lower-upper splits in the same edges, or in other words for tolls $t, t^\prime$ to hold that if $t_1 > t_2$ then also $t_1^\prime > t_2^\prime$ and vice-versa.
+With that in mind, we will investigate the monotonicity of $\as$ in relation to toll differences (and in extension to latency differences) and only when the ordering does not change.
+For this we will need to compare different tolls that create lower-upper splits in the same edges, or in other words for tolls $t, t^\prime$ to hold that if $t_i > t_j$ then also $t_i^\prime > t_j^\prime$ and vice-versa.
 We will capture this with the following condition
 \begin{equation}
 	\label{eq:split_property_cond_tolls_0}
-	\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} > 0
+	\frac{t_i - t_j}{t_i^\prime - t_j^\prime} > 0
 \end{equation}
-where indeed if $t_1 > t_2$ then
-\[t_1 > t_2 \Leftrightarrow t_1 - t_2 > 0 \LeftrightarrowArg{(\ref{eq:split_property_cond_tolls_0})} t_1^\prime - t_2^\prime > 0 \Leftrightarrow t_1^\prime > t_2^\prime\]
-and likewise we also get $t_1 < t_2 \Leftrightarrow t_1^\prime < t_2^\prime$.
-Also note that this property also holds for the respective latencies.
+where indeed if $t_i > t_j$ then
+\[t_i > t_j \Leftrightarrow t_i - t_j > 0 \LeftrightarrowArg{(\ref{eq:split_property_cond_tolls_0})} t_i^\prime - t_j^\prime > 0 \Leftrightarrow t_i^\prime > t_j^\prime\]
+and likewise we also get $t_i < t_j \Leftrightarrow t_i^\prime < t_j^\prime$.
+Also note that this property also holds for the respective latencies, meaning that if $t$ and $t^\prime$ define the same link toll ordering, then $\frac{\ell_i(x_i(t_i)) - \ell_j(x_j(t_j))}{\ell_i(x_i(t_i^\prime)) - \ell_j(x_j(t_j^\prime))} > 0$.
 
 \begin{lemma}
 	\label{lemma:split_monotonicity}
-	Given a $([2], \ell, \alpha)$ toll game with $x_1(0), x_2(0) > 0$ and tolls $t, t^\prime \ne 0$ such that $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} > 0$, the following hold:
+	Let $(N, \ell, \alpha)$ a heterogeneous parallel game and tolls $t, t^\prime$ such that for some links $i, j \in N$ it holds that $t_i \ne t_j, t_i^\prime \ne t_j^\prime$ and $t_k = t_k^\prime$ for all other $k \in N \setminus \{i, j\}$.
+	If it also holds that $x_i(t), x_j(t), x_i(t^\prime), x_j(t^\prime) > 0$ and $\frac{t_i - t_j}{t_i^\prime - t_j^\prime} > 0$, then the following are true:
 	\begin{enumerate}[(i)]
-		\item if $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \le 1$ then $\as(t) \ge \as(t^\prime)$
-		\item if $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \ge 1$ then $\as(t) \le \as(t^\prime)$
-		\item if $\as(t) > \as(t^\prime)$ then $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} < 1$
-		\item if $\as(t) < \as(t^\prime)$ then $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} > 1$
+		\item if $\frac{t_i - t_j}{t_i^\prime - t_j^\prime} \le 1$ then $\as^{(i, j)}(t) \ge \as^{(i, j)}(t^\prime)$
+		\item if $\frac{t_i - t_j}{t_i^\prime - t_j^\prime} \ge 1$ then $\as^{(i, j)}(t) \le \as^{(i, j)}(t^\prime)$
+		\item if $\as^{(i, j)}(t) > \as^{(i, j)}(t^\prime)$ then $\frac{t_i - t_j}{t_i^\prime - t_j^\prime} < 1$
+		\item if $\as^{(i, j)}(t) < \as^{(i, j)}(t^\prime)$ then $\frac{t_i - t_j}{t_i^\prime - t_j^\prime} > 1$
 	\end{enumerate}
 \end{lemma}
 
 \begin{proof}
 	$ $
 	\paragraph{$(i)$}
-	Begin by noticing that $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \le 1 \Rightarrow |t_1 - t_2| \le |t_1^\prime - t_2^\prime|$, i.e. from $t$ to $t^\prime$ the toll difference is not decreasing, which means that the players in the upper link (i.e. the players who already prefer the higher latency and lower toll link) will still view their link as the best option.
+	Begin by noticing that $\frac{t_i - t_j}{t_i^\prime - t_j^\prime} \le 1 \Rightarrow |t_i - t_j| \le |t_i^\prime - t_j^\prime|$, i.e. from $t$ to $t^\prime$ the toll difference is not decreasing, which means that the players in the upper link (i.e. the players who already prefer the higher latency and lower toll link, non-empty from assumption) will still view their link as the best option.
 	Therefore only flow from the lower latency edge, if any, might move towards the slower one.
-	Assume w.l.o.g. that $t_1 > t_2$, giving us $x_1(t) \ge x_1(t^\prime)$ and $x_2(t) \le x_2(t^\prime)$.
+	Assume w.l.o.g. that $t_i > t_j$, giving us $x_i(t) \ge x_i(t^\prime)$ and $x_j(t) \le x_j(t^\prime)$.
 
-	If $x_1(t) = x_1(t^\prime)$, then looking at $\as$ we get
-	\[\as(t^\prime) = \frac{\ell_2(x_2(t^\prime)) - \ell_1(x_1(t^\prime))}{t_2^\prime - t_1^\prime} = \frac{\ell_2(x_2(t)) - \ell_1(x_1(t))}{t_2^\prime - t_1^\prime} = \as(t) \frac{t_2 - t_1}{t_2^\prime - t_1^\prime}\]
-	so obviously $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \le 1 \Leftrightarrow \as(t^\prime) \le \as(t)$.
+	If $x_i(t) = x_i(t^\prime)$, then looking at $\as^{(i, j)}$ we get
+	\[\as^{(i, j)}(t^\prime) = \frac{\ell_j(x_j(t^\prime)) - \ell_i(x_i(t^\prime))}{t_j^\prime - t_i^\prime} = \frac{\ell_j(x_j(t)) - \ell_i(x_i(t))}{t_j^\prime - t_i^\prime} = \as^{(i, j)}(t) \frac{t_j - t_i}{t_j^\prime - t_i^\prime}\]
+	so obviously $\frac{t_i - t_j}{t_i^\prime - t_j^\prime} \le 1 \Leftrightarrow \as^{(i, j)}(t^\prime) \le \as^{(i, j)}(t)$.
 
-	If $x_1(t) > x_1(t^\prime)$ then there exists a player $p$ who is in link $1$ in the Nash equilibrium for $t$ and in link $2$ for the one for $t^\prime$, meaning that from Definition \ref{definition:alpha_flow_sets} we get
-	\[\inf A_2(t^\prime) \le \alpha(p) \le \sup A_1(t)\]
-	By now carefully applying  (twice) the property from Lemma $\ref{lemma:split_basic}(iv)$ we get
-	\[\as(t^\prime) \le \inf A_2(t^\prime) \le \sup A_1(t) \le \as(t)\]
+	If $x_i(t) > x_i(t^\prime)$ then there exists a player $p$ who is in link $i$ in the Nash equilibrium for $t$ and in link $j$ for the one for $t^\prime$, meaning that from Definition \ref{definition:alpha_flow_sets} we get
+	\[\inf A_j(t^\prime) \le \alpha(p) \le \sup A_i(t)\]
+	By now carefully applying  (twice) the property from Lemma $\ref{lemma:split_basic}(iii)$ we get
+	\[\as^{(i, j)}(t^\prime) \le \inf A_j(t^\prime) \le \sup A_i(t) \le \as^{(i, j)}(t)\]
 
 	\paragraph{$(ii)$}
-	Symmetrically to $(i)$ in this case the toll difference is non-increasing from $t$ to $t^\prime$, and therefore flow from the higher latency edge will move towards the lower one, i.e. $x_1(t) \le x_1(t^\prime)$ and $x_2(t) \ge x_2(t^\prime)$ (assuming again $t_1 > t_2$).
-	With a similar argument we then get $\as(t) \le \as(t^\prime)$.
+	Symmetrically to $(i)$ in this case the toll difference is non-increasing from $t$ to $t^\prime$, and therefore flow from the higher latency edge will move towards the lower one, i.e. $x_i(t) \le x_i(t^\prime)$ and $x_j(t) \ge x_j(t^\prime)$ (assuming again $t_i > t_j$).
+	With a similar argument we then get $\as^{(i, j)}(t) \le \as^{(i, j)}(t^\prime)$.
 
 	\paragraph{$(iii)$}
-	Assume $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \ge 1$.
-	Then by $(ii)$ it would hold that $\as(t) \le \as(t^\prime)$ which is a contradiction.
+	Assume $\frac{t_i - t_j}{t_i^\prime - t_j^\prime} \ge 1$.
+	Then by $(ii)$ it would hold that $\as^{(i, j)}(t) \le \as^{(i, j)}(t^\prime)$ which is a contradiction.
 
 	\paragraph{$(iv)$}
-	Assume $\frac{t_1 - t_2}{t_1^\prime - t_2^\prime} \le 1$.
-	Then by $(i)$ it would hold that $\as(t) \ge \as(t^\prime)$ which is a contradiction.
+	Assume $\frac{t_i - t_j}{t_i^\prime - t_j^\prime} \le 1$.
+	Then by $(i)$ it would hold that $\as^{(i, j)}(t) \ge \as^{(i, j)}(t^\prime)$ which is a contradiction.
 \end{proof}
 
-Finally, focusing on the asymptotic behavior or $\as$, we can easily check that when $t_d \rightarrow 0$ the flow approaches $x(0)$.
-However, if $t_1 > t_2$ then $x_1$ (otherwise $x_2$) is the lower split, and from Lemma \ref{lemma:split_basic}$(iv)$ we can see that $\as$ is between the highest value of the lower split and the lowest value of the upper split.
-Therefore the direction of $t_1 > t_2$ matters to as to which $\alpha$ value $\as$ approaches as $t_1 - t_2 \rightarrow 0$, a distinction which we can capture by using $t_1 - t_2 \rightarrow 0^-$ and $t_1 - t_2 \rightarrow 0^+$ accordingly.
+Finally, focusing on the asymptotic behavior or $\as$, we can easily check that when $t \rightarrow 0$ the flow approaches $x(0)$.
+However, if $t_i > t_j$ then $x_i$ (otherwise $x_j$) is the lower split, and from Lemma \ref{lemma:split_basic}$(iii)$ we can see that $\as$ is between the highest value of the lower split and the lowest value of the upper split.
+Therefore the direction of $t_i > t_j$ matters to as to which $\alpha$ value $\as^{(i, j)}$ approaches as $t_i - t_j \rightarrow 0$, a distinction which we can capture by using $t_i - t_j \rightarrow 0^-$ and $t_i - t_j \rightarrow 0^+$ accordingly.
+However, since $t_i - t_j \rightarrow 0^+$ is equivalent to $t_j - t_i \rightarrow 0^-$, we will focus on the latter.
 
 The next lemma sums up the above discussion and gives us some insight about the asymptotic behavior of $\as(t)$.
 \begin{lemma}
 	\label{lemma:split_asymptotic}
-	Given a $([2], \ell, \alpha)$ toll game with $x_1(0), x_2(0) > 0$ and tolls $t \ne 0$, the following hold:
+	Let $(N, \ell, \alpha)$ a heterogeneous parallel game and tolls $t$ where $t_i \ne t_j$ and $x_i(t), x_j(t) > 0$ for some links $i, j \in N$.
+	Then the following hold:
 	\begin{enumerate}[(i)]
 		\item
 		\begin{flalign*}
-			\lim_{|t_1 - t_2| \rightarrow +\infty}\as(t) &= 0 &
+			\lim_{|t_i - t_j| \rightarrow +\infty}\as^{(i, j)}(t) &= 0 &
 		\end{flalign*}
 		\item
 		\begin{flalign*}
-			\lim_{t_1 - t_2 \rightarrow 0^+} \as(t) &= \sup A_1^-(0) \qquad \text{and} \qquad \lim_{t_1 - t_2 \rightarrow 0^-} \as(t) = \sup A_2^-(0) &
+			\lim_{t_i - t_j \rightarrow 0^+} \as^{(i, j)}(t) &= \limsup_{t_i - t_j \rightarrow 0^+} A_i(t) &
 		\end{flalign*}
 	\end{enumerate}
 \end{lemma}
@@ -599,38 +621,61 @@ The next lemma sums up the above discussion and gives us some insight about the 
 	$ $
 	\begin{enumerate}[(i)]
 		\item We only need to notice that
-		\[|\ell_1(x_1(t)) - \ell_2(x_2(t))| \le \max\{\ell_1(1) - \ell_2(0), \ell_2(1) - \ell_1(0)\} = L\]
+		\[|\ell_i(x_i(t)) - \ell_j(x_j(t))| \le \max\{\ell_i(1) - \ell_j(0), \ell_j(1) - \ell_i(0)\} = L\]
 		and we find
-		\[\lim_{|t_1 - t_2| \rightarrow +\infty}|\as(t)| = \lim_{|t_1 - t_2| \rightarrow +\infty}\frac{|\ell_1(x_1(t)) - \ell_2(x_2(t))|}{|t_1 - t_2|} \le \lim_{|t_1 - t_2| \rightarrow +\infty}\frac{L}{|t_1 - t_2|} = 0\]
-		and since $\as(t) > 0$ we get $\lim_{|t_1 - t_2| \rightarrow +\infty}\as(t) = 0$.
-		\item We begin with the first equality.
-		Assume in $[0, x_1(0))$ an increasing sequence $(p_n)_{n \in \mathbb{N}}$ for which $p_n \rightarrow x_1(0)$.
-		From the fact that $x(t)$ is continuous (TODO: add ref?) and that if $x_1(t) < x_1(0)$ then link $1$ has the lower split by definition, we can see that for each $p_n$ we can find (not unique) tolls $t_n$ such that $x_1(t_n) = p_n$.
-		Indeed we can simply solve $\ell_1(p_n) + \alpha(p_n) \cdot t_{n, 1} = \ell_2(1 - p_n) + \alpha(p_n) \cdot t_{n, 2}$ which has as solution a unique toll difference for which $t_{n, 1} - t_{n, 2} > 0$.
-		Obviously $\as(t_n) = \alpha(p_n)$.
-
-		Now notice that, as $p_n$ increases, the toll difference is decreasing, which in turn means from Lemma \ref{lemma:split_monotonicity}$(ii)$, while adding that for $t_1 - t_2 \rightarrow 0^+$ condition \ref{eq:split_property_cond_tolls_0} also holds, that $\as$ is non-decreasing.
-		We can therefore find a non-decreasing sequence $(\as(t_n))_{n \in \mathbb{N}}$ where $t_{n, 1} - t_{n, 2} \rightarrow 0^-$ as $n \rightarrow +\infty$.
-		From all the above, and by observing that $p_n \in A_1^-(0), \forall n \in \mathbb{N}$, we get
-		\[\lim_{t_1 - t_2 \rightarrow 0^+}\as(t) = \lim_{t_{n, 1} - t_{n, 2} \rightarrow 0^+}\as(t_n) = \lim_{n \rightarrow +\infty}\alpha(p_n) = \sup A_1^-(0) \]
-
-		We can show the second equality with a similar argument, as all steps are symmetric for $t_1 - t_2 \rightarrow 0^-$.
+		\begin{flalign*}
+			\lim_{|t_i - t_j| \rightarrow +\infty}|\as^{(i, j)}(t)| &= \lim_{|t_i - t_j| \rightarrow +\infty}\frac{|\ell_i(x_i(t)) - \ell_j(x_j(t))|}{|t_i - t_j|}\\
+			&\le \lim_{|t_i - t_j| \rightarrow +\infty}\frac{L}{|t_i - t_j|} = 0
+		\end{flalign*}
+		and since from Lemma \ref{lemma:split_basic}$(i)$ we have $\as^{(i, j)}(t) > 0$ we get
+		\[\lim_{|t_i - t_j| \rightarrow +\infty}\as^{(i, j)}(t) = 0\]
+		\item Denote by $P(x_i)$ the set of all players in link $i$, i.e. $P(x_i) = \{p \in [0, 1] | f(p) = i\}$ (using the definition of flow $f$ from Preliminaries).
+		Let $(p_n)_{n \in \mathbb{N}}$ be an increasing sequence of players from $P(x_i(t))$, which is non-empty since $x_i(t) > 0$, such that $p_n \rightarrow \sup P(x_i(t))$.
+		It is simple to see that if $t_i$ increases to $t_i^\prime > t_i$, then $x_i(t_i^\prime, t_{-i}) \le x_i(t)$.
+		%and the fact that $x(t)$ is continuous (TODO: ref?)
+		%\footnote{Harkes et al. \cite[Lemma 3.1]{Harks_2019} prove a more general property where also $x_j(t_i^\prime, t_{-i}) \le x_j(t)$ for all $j \ne i$. Though it seems that also holds for heterogeneous users, since we don't need the latter property and proving it seems tricky, we omit it from this study.}
+		Therefore we can find a decreasing sequence of $(t_n)_{n \in \mathbb{N}}$ with $t_n \rightarrow t_i$, such that $\max P(x_i(t_n, t_{-i})) = p_n$.
+		Such a $t_n$ might not be unique, though since $t_n > t_i > t_j$, link $i$ always remains the lower split.
+		If $t_n$ is unique, then from the monotonicity of $\as$ (Lemma \ref{lemma:split_monotonicity}) we get $\as^{(i, j)}(t_n, t_{-i}) = \alpha(p_n)$. 
+		Otherwise, it means there is a range of $t_n$ such that $\as^{(i, j)}(t_n, t_{-i}) \ge \alpha(p_n)$, so we select the highest one for which we get equality.
+		Considering all the above, we finally get
+		\begin{flalign*}
+			\lim_{t_i - t_j \rightarrow 0^+} \as^{(i, j)}(t) &= \lim_{t_i - t_j \rightarrow 0^+} \left(\lim_{n \rightarrow +\infty} \as^{(i, j)}(t_n, t_{-i})\right) \\
+			&= \lim_{t_i - t_j \rightarrow 0^+} \left(\lim_{n \rightarrow +\infty} \alpha(p_n)\right) \\
+			&= \lim_{t_i - t_j \rightarrow 0^+} \alpha(\sup P(x_i(t))) \\
+			&= \limsup_{t_i - t_j \rightarrow 0^+} A_i(t)
+		\end{flalign*}
 	\end{enumerate}
 \end{proof}
 
+All the above lemmas can now help us describe the behaviour of $\as$ for different tolls.
+Still, there is a lot of complexity in the properties, mostly due to having many links in our network.
+In order to help with the intuition, we will restrict our final analysis and examples to $2$-link networks, where we get the additional property of interchanging $\limsup_{t_1 - t_2 \rightarrow 0^+} A_1(t)$ with $\alpha(x_1(0))$ (see next corollary).
+Also, the concepts presented here are still valid for $n$-link networks, by simply focusing on the two relevant links and the flow between them.
+We start with the following corollary.
+
 \begin{corollary}
 	\label{corollary:split_asymptotic_continuous}
-	Given a $([2], \ell, \alpha)$ toll game with $x_1(0), x_2(0) > 0$ and tolls $t \ne 0$, the following hold:
-	\begin{enumerate}[(i)]
-		\item if $\alpha$ continuous at $x_1(0)$, then
-		\[\lim_{t_1 - t_2 \rightarrow 0^+} \as(t) = \alpha(x_1(0))\]
-		\item if $\alpha$ continuous at $x_2(0)$, then
-		\[\lim_{t_1 - t_2 \rightarrow 0^-} \as(t) = \alpha(x_2(0))\]
-	\end{enumerate}
+	Let $([2], \ell, \alpha)$ a heterogeneous parallel game and tolls $t$ where $t_1 \ne t_2$ and $x_1(t), x_2(t) > 0$.
+	If $\alpha$ is continuous at $x_i(0)$, then
+	\[
+		\lim_{t_1 - t_2 \rightarrow 0^+} \as(t) = \alpha(x_1(0)) \qquad \text{ and } \qquad \lim_{t_2 - t_1 \rightarrow 0^+} \as(t) = \alpha(x_2(0))
+	\]
 \end{corollary}
 
-All the above lemmas can now help us describe the behaviour of $\as$ for different tolls.
-On one side, as $t_d = t_1 - t_2 \rightarrow -\infty$ then $\as(t) \rightarrow 0$ (Lemma \ref{lemma:split_asymptotic}$(i)$), while afterwards as $t_d$ increases below $0$, meaning the difference (absolute) value is decreasing, then $\as(t)$ is non-decreasing (Lemma \ref{lemma:split_monotonicity}$(i)$), and finally as $t_d \rightarrow 0^-$, $\as(t)$ approaches $\sup A_2^-(0)$ (Lemma \ref{lemma:split_asymptotic}$(ii)$).
+\begin{proof}
+	Using the $P$ set function from the proof of Lemma \ref{lemma:split_asymptotic}$(ii)$, since our network has $2$ links, meaning the flow will either be in link $1$ or $2$, we get that $P(x_1(t)) = [0, x_1(t)]$ or $[1 - x_1(t), 1]$, depending on whether link $1$ is the lower or upper split respectively.
+	Therefore, for $t_1 > t_2$, link $1$ is the lower split and we get $P(x_1(t)) = [0, x_1(t)]$, which also means from Definition \ref{definition:alpha_flow_sets} that $\sup A_1(t) = \alpha(x_1(t))$.
+	Since $\alpha$ is continuous at $x_i(0)$ and $x(t)$ continuous at $t = 0$, we get
+	\[
+		\lim_{t_1 - t_2 \rightarrow 0^+} \as(t) = \limsup_{t_1 - t_2 \rightarrow 0^+} A_1(t) = \lim_{t_1 - t_2 \rightarrow 0^+} \alpha(x_1(t)) = \alpha(x_1(0))
+	\]
+	The second equation follows from a similar argument on link $2$ for $t_1 < t_2$.
+\end{proof}
+
+\subsection{Function characterisation}
+
+Beginning with the function's characterisation, on one side, as $t_d = t_1 - t_2 \rightarrow -\infty$ then $\as(t) \rightarrow 0$ (Lemma \ref{lemma:split_asymptotic}$(i)$), while afterwards as $t_d$ increases below $0$, meaning the difference (absolute) value is decreasing, then $\as(t)$ is non-decreasing (Lemma \ref{lemma:split_monotonicity}$(i)$), and finally as $t_d \rightarrow 0^-$, $\as(t)$ approaches $\sup A_2^-(0)$ (Lemma \ref{lemma:split_asymptotic}$(ii)$).
 On the other side from $t_d \rightarrow +\infty$ we get a symmetric behavior all the way ending up in $\sup A_1^-(0)$.
 The above show that $\as(t)$ is continuous for all $t \ne 0$ and any limit around $0$ has different left and right sides (apart from the very specific case where $x_1(0) = x_2(0)$).
 We proceed with an example to solidify this.
