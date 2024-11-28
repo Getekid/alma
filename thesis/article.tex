@@ -364,7 +364,21 @@ To describe more properties of homogeneous pricing games we will need the follow
 
 \subsection*{Heterogeneous players}
 
+TODO: Tolls define ordering $t_1 \ge t_2 \ge \dots t_n$ and $\ell_1(x_1(t)) \le \ell_2(x_2(t)) \le \dots \le \ell_n(x_n(t))$.
 
+\begin{lemma}
+	\label{lemma:xn_xn0_lower_bound}
+	Let $(N, \ell, \alpha)$ a heterogeneous parallel game.
+	For tolls $t \in \R_+^N$ consider the links in decreasing toll ordering.
+	It holds that $x_n(t) \ge x_n(0)$.
+\end{lemma}
+
+\begin{proof}
+	From assumption we have $t_n = \min_{i \in N} t_i$, which makes tolls $t^\prime = t - t_n$ be in $\R_+^N$ with $t_n^\prime = 0$.
+	Since the flow equilibrium $x(t)$ is dependent only on the toll differences, we get $x(t) = x(t^\prime)$.
+	Also, comparing $t^\prime$ with $t = 0$, no additional tolls have been added to link $n$, making $x_n(t^\prime) \ge x_n(0)$.
+	The proposition follows naturally from the previous two statements.
+\end{proof}
 
 \begin{example}
 	[TODO: Add figure]
@@ -712,45 +726,51 @@ We answer this in the theorem below, which is the main result of this chapter, p
 
 \begin{lemma}
 	\label{lemma:as_upper_bound}
-	Let $([2], \ell, \alpha)$ a toll game with $x_1(0), x_2(0) > 0$.
-	For all $t \in \R_+^2 \setminus \{(a, a) | a \in \R_+\}$, let .
-	It holds that
-	\[\as(t) \le \max\{\sup A_1^-(0), \sup A_2^-(0)\}\]
-	or equivalently if $\alpha$ continuous at $x_1(0)$ and $x_2(0)$
-	\[\as(t) \le \max\{\alpha(x_1(0)), \alpha(x_2(0))\}\]
+	Let $(N, \ell, \alpha)$ a heterogeneous parallel game.
+	For all $i, j \in N, i \ne j$ it holds that
+	\[\as^{(i, j)}(t) \le \max\left\{\limsup_{t_i - t_j \rightarrow 0^+} A_i(t), \limsup_{t_j - t_i \rightarrow 0^+} A_j(t)\right\}\]
+	%or equivalently if $\alpha$ continuous at $x_1(0)$ and $x_2(0)$
+	%\[\as(t) \le \max\{\alpha(x_1(0)), \alpha(x_2(0))\}\]
 \end{lemma}
 
 \begin{proof}
-	 From Lemmas \ref{lemma:split_asymptotic} and \ref{lemma:split_monotonicity} we get that $\as$, for $t_1 - t_2$ in $(-\infty, 0)$ and $(0, +\infty)$, is non-decreasing and non-increasing respectively.
-	 Therefore $\as$ is upper bounded by its sided limits as $t_1 - t_2 \rightarrow 0$, which means that for all $t \in \R_+^2 \setminus \{(a, a) | a \in \R_+\}$ we get
-	 \[\as(t) \le \max\left\{\lim_{t_1 - t_2 \rightarrow 0^-}\as(t), \lim_{t_1 - t_2 \rightarrow 0^+}\as(t)\right\}\]
-	 which in turn after applying Lemma \ref{lemma:split_asymptotic}$(ii)$ becomes
-	 \[\as(t) \le \max\{\sup A_2^-(0), \sup A_1^-(0)\}\]
+	 From Lemmas \ref{lemma:split_asymptotic} and \ref{lemma:split_monotonicity} (also look the discussion at the function characterisation above) we get that $\as$, for $t_i - t_j$ in $(-\infty, 0)$ and $(0, +\infty)$, is non-decreasing and non-increasing respectively.
+	 Therefore $\as$ is upper bounded by its sided limits as $t_i - t_j \rightarrow 0$, which means that for all $t$ in the domain of $\as$ we get
+	 \[\as^{(i j)}(t) \le \max\left\{\lim_{t_i - t_j \rightarrow 0^+} \as^{(i, j)}(t), \lim_{t_i - t_j \rightarrow 0^-} \as^{(i, j)}(t)\right\}\]
+	 which in turn, since $t_i - t_j \rightarrow 0^-$ is equivalent to $t_j - t_i \rightarrow 0^+$ and after applying Lemma \ref{lemma:split_asymptotic}$(ii)$, becomes
+	 \[\as^{(i j)}(t) \le \max\left\{\limsup_{t_i - t_j \rightarrow 0^+} A_i(t), \limsup_{t_j - t_i \rightarrow 0^+} A_j(t)\right\}\]
 \end{proof}
 
 \begin{theorem}
 	\label{theorem:alpha_upper_irrelevant}
-	Let $([2], \ell, \alpha^{(1)})$ and $([2], \ell, \alpha^{(2)})$ two toll games with same latency functions, where $x_1(0), x_2(0) > 0$ for their common flow $x(0)$ and distribution functions $\alpha_1$ and $\alpha_2$ such that $\alpha^{(1)}(p) = \alpha^{(2)}(p), \forall p: p < \max\{x_1(0), x_2(0)\}$.
-	Then the two games are equivalent.
+	Let $\Gm_1 = (N, \ell, \alpha^{(1)})$ and $\Gm_2 = (N, \ell, \alpha^{(2)})$ be two heterogeneous parallel games with the common number of links $n = |N|$  and latency functions $\ell$.
+	For $x^{(1)}(t), x^{(2)}(t)$ the Nash equilibria for $t \in \R_+^N$ in $\Gm_1, \Gm_2$ respectively, denote as $x(0) = x^{(1)}(0) = x^{(2)}(0)$ the common flow on link of $\Gm_1$ and $\Gm_2$ for $t = 0$.
+	If the distribution functions $\alpha^{(1)}$ and $\alpha^{(2)}$ are such that $\alpha^{(1)}(p) = \alpha^{(2)}(p), \forall p: p < 1 - \min_{i \in N}\{x_i(0)\}$, then $\Gm_1$ and $\Gm_2$ are equivalent.
 \end{theorem}
 
 \begin{proof}
-	For tolls $t \in \R_+^2$ let $x^{(1)}(t), x^{(2)}(t)$ the Nash equilibria for $t$ for each game respectively.
-	It suffices to show that $x^{(1)}(t) = x^{(2)}(t), \forall t \in \R_+^2$.
-	It's already stated that the equality holds for $t = 0$, i.e. for $t \in \{(a, a) | a \in \R_+\}$.
-	For the remaining $t$, assume w.l.o.g. that $t_1 > t_2$, which now makes it sufficient to show that the flow in the (common) lower split is equal, i.e $x_1^{(1)}(t) \ne x_1^{(2)}(t)$.
+	It suffices to show that $x^{(1)}(t) = x^{(2)}(t), \forall t \in \R_+^N$.
+	It's already stated that the equality holds for $t = 0$.
+	%assume w.l.o.g. that $t_1 > t_2$, which now makes it sufficient to show that the flow in the (common) lower split is equal, i.e $x_1^{(1)}(t) \ne x_1^{(2)}(t)$.
+	For $t \ne 0$, assume for simplicity that all $t_i \ne t_j$ for all $i, j \in N$.
+	Note that since we apply the same tolls $t$ to both game, the ordering they impose on the links is the same.
+	We denote as $i = i^{(1)} = i^{(2)}$ the common corresponding link $i$ between the two games.
 
-	Assume that $x_1^{(1)}(t) \ne x_1^{(2)}(t)$ and again w.l.o.g. that $x_1^{(1)}(t) < x_1^{(2)}(t)$.
-	Then there exists a player $p$ such that $x_1^{(1)}(t) < p \le x_1^{(2)}(t)$ who is on link $2$ on the first game and on link $1$ for the second one.
-	Also note that since $p$ is in the lower split, it holds that $p < \max\{x_1(0), x_2(0)\}$ so by the hypothesis we get $\alpha^{(1)}(p) = \alpha^{(2)}(p)$.
+	Assume that the theorem does not hold, i.e. $x^{(1)}(t) \ne x^{(2)}(t)$.
+	Then there exists some link $i \in N$ such that $x_i^{(1)}(t) > x_i^{(2)}(t)$, and therefore there exists a player $p$ who is on link $i$ in $\Gm_1$ but not in $\Gm_2$.
+	We can assume that for the link $j$ this player went to in $\Gm_2$ it holds $x_j^{(1)}(t) \le x_j^{(2)}(t)$; if not, then select $j$ and start the same reasoning from the beginning.
+
+	If we consider now the split between $i$ and $j$, player $p$ exist in the lower split for one game and on the upper one for the other, let w.l.o.g. those game be $\Gm_1$ and $\Gm_2$ respectively.
+	So if we take $\Gm_1$ where $p$ in the lower split, then it holds that $p$ is not in $x_n^{(1)}$, since the link with the highest toll is always the upper split with regard to all others.
+	Therefore $p < 1 - x_n^{(1)}$ and from Lemma \ref{lemma:xn_xn0_lower_bound} we then get $p < 1 - x_n(0) < 1 - \min_{i \in N}\{x_i(0)\}$, which from the hypothesis leads us to $\alpha^{(1)}(p) = \alpha^{(2)}(p)$.
+
 	With the above we get
-	\[x_1^{(1)}(t) < x_1^{(2)}(t) \Rightarrow x_1^{(1)}(t) + \alpha^{(1)}(p)t_1 < x_1^{(2)}(t) + \alpha^{(2)}(p)t_1 \Rightarrow c_1^{p, (1)}(t) < c_1^{p, (2)}(t)\]
+	\[x_i^{(1)}(t) > x_i^{(2)}(t) \Rightarrow x_i^{(1)}(t) + \alpha^{(1)}(p)t_i > x_i^{(2)}(t) + \alpha^{(2)}(p)t_i \Rightarrow c_i^{p, (1)}(t) > c_i^{p, (2)}(t)\]
 	and respectively
-	\[x_2^{(1)}(t) > x_2^{(2)}(t) \Rightarrow x_2^{(1)}(t) + \alpha^{(1)}(p)t_2 > x_2^{(2)}(t) + \alpha^{(2)}(p)t_2 \Rightarrow c_2^{p, (1)}(t) > c_2^{p, (2)}(t)\]
-	The above inequations mean that, between the first and the second game, for player $p$, the cost of link $1$ increased while the cost of link $2$ decreased, concluding that $p$ cannot be on link $2$ in the first but then change to link $1$ in the second, which is a contradiction.
+	\[x_j^{(1)}(t) \le x_j^{(2)}(t) \Rightarrow x_j^{(1)}(t) + \alpha^{(1)}(p)t_j \le x_j^{(2)}(t) + \alpha^{(2)}(p)t_j \Rightarrow c_j^{p, (1)}(t) \le c_j^{p, (2)}(t)\]
+	The above inequations mean that, between $\Gm_1$ and $\Gm_2$, for player $p$, the cost of link $i$ decreased while the cost of link $j$ didn't, concluding that $p$ cannot be on link $i$ in $\Gm_1$ but then change to link $j$ in $\Gm_2$, which is a contradiction.
 
-	Therefore $x_1^{(1)}(t) = x_1^{(2)}(t)$ for all $t \in \R_+^2 \setminus \{(a, a) | a \in \R_+\}$, and in turn also $x^{(1)}(t) = x^{(2)}(t)$ for all $t \in \R_+$.
-	To conclude, the two games are equivalent.
+	Therefore $x^{(1)}(t) = x^{(2)}(t)$ for all $t \in \R_+$ and from Definition \ref{definition:game_equivalence} the two games are equivalent.
 \end{proof}
 We can see how this theorem applies to Example \ref{example:simple_alpha}, where since $x(0) = (2/3, 1/3)$ then $\max\{x_1(0), x_2(0)\} = 2/3$.
 Then even if we used a distribution function such as
@@ -765,15 +785,17 @@ then $\as$ would still behave the same way as those $(2/3, 1]$ players will alwa
 
 It will become more apparent later when calculating best responses as even in the pricing games those higher values will never be used.
 We finish this section with a lemma about the behaviour of $\as$ when many players have money sensitivity close to 0.
-Note that it doesn't suffice to assume $\alpha(0) = 0$ as the behavior of that single player has no effect on the game, so we additionally assume that $0$ is an accumulation point in $\alpha$.
+Note that it doesn't suffice to assume $\alpha(0) = 0$ as the behavior of a single player has no effect on the game, so we additionally assume that $0$ is an accumulation point in $\alpha$.
 \begin{lemma}
-	If for any $i = 1, 2 \; x_i(0) > 0$ and $\alpha(0) = 0$ with $0$ an accumulation point in $\alpha$, then $x_i(t) > 0, \forall t \in \R_+^2$
+	Let $(N, \ell, \alpha)$ a heterogeneous parallel game with distribution function $\alpha$ such that $\alpha(0) = 0$ and $0$ is an accumulation point.
+	If for any $i \in N$ it holds that $x_i(0) > 0$, then $x_i(t) > 0, \forall t \in \R_+^N$
 \end{lemma}
 
 \begin{proof}
 	By the definition of an accumulation point, we get for $0$ in $\alpha$ that $\forall \delta > 0 \; \exists \epsilon > 0: p < \epsilon \Rightarrow \alpha(p) < \delta$.
-	Therefore $\forall t \in \R_+^2$ if $\delta = \as(t)$ then $\exists \epsilon > 0: p < \epsilon \Rightarrow \alpha(p) < \as(t)$, which means that the lower latency link will always have flow some $\epsilon > 0$, and therefore $x_1(t), x_2(t) > 0$.
+	Therefore $\forall t \in \R_+^N$ if $\delta = \min_{j \in N \setminus \{i\}}\as^{(i, j)}(t)$ then $\exists \epsilon > 0: p < \epsilon \Rightarrow \alpha(p) < \as^{(i, j)}(t)$ for all $j \in N \setminus \{i\}$, which means that the lower latency link will always have flow some $\epsilon > 0$, and therefore $x_i(t) > 0$.
 \end{proof}
+Intuitively, the property describes the fact that having almost no toll fear makes a player not motivated to leave the edge, which in turn makes the network having little control over those players using toll regulations.
 
 \cleardoublepage
 
