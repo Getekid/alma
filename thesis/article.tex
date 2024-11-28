@@ -17,8 +17,9 @@
 %\usepackage{tabularx}
 %\usepackage[normalem]{ulem}
 
-%\usepackage{tikz}
 \usepackage{enumerate}
+\usepackage{tikz}
+\usepackage{multicol}
 \usepackage{natbib}
 
 \renewcommand{\maketitle}{
@@ -189,24 +190,36 @@ A classical result on this is the use of marginal tolls (Beckman et al. \cite{be
 This technique can eradicate the inefficiencies and create optimal flow in the network, however it assumes a strong homogeneity among the users.
 Marginal cost pricing has been investigated in networks with homogeneous users (e.g. Dafermos \cite{dafermos1973toll}), with the resulting payment required by users on same links being different, an unwanted and non-practical approach, which also requires knowledge of the users' sensitivity beforehand.
 
-One of the major contributions in this field has been the introduction of the concept of a Nash Equilibrium for networks, defined as Wardrop equilibrium \cite{wardrop_theoretical_1952}.
-
 Congestion games were formally introduced by Rosenthal \cite{Rosenthal1973ACO} who also proved that in those games a pure Nash Equilibrium always exists.
 Later, Monterer-Shapely \cite{MONDERER1996124} defined the class of potential games (games where the incentive for all players to change their strategy can be expressed with a global function) and proved that congestion games are equivalent to exact potential games (potential games where a change in strategy from any player alter the potential function the exact way it alters the player's cost).
-Milchtaich \cite{MILCHTAICH1996111} then investigated the different pay-offs 
+One of the major contributions in this field has been the introduction of the Wardrop equilibrium \cite{wardrop_theoretical_1952}, a notion of Nash equilibrium for potential games, where the Wardrop principles provide a framework to describe and analyse those equilibria.
+Milchtaich \cite{MILCHTAICH1996111} then investigated different pay-off functions for congestion games, where he showed that even though some best-reply strategies may end up in a cyclic path, there is always a path that leads to Nash equilibrium with pure strategies.
+
 Given the above, with the existence of a Nash equilibrium always existing, later research focused on investigating the quality of an equilibrium by using the notion of \textit{Price of Anarchy}, introduced by Koutsoupias-Papadimitriou \cite{KOUTSOUPIAS200965}.
 The Price of Anarchy describes the ratio between a Nash Equilibrium and the most cost-efficient solution, therefore lower values denote a qualitative equilibrium while a lower value denotes a bad one.
 Finally, in terms of complexity, Fabrikant et al. \cite{10.1145/1007352.1007445} have shown that calculating a pure Nash Equilibrium for congestion games is PLS-complete in the general case.
 
+Regarding the model properties, there is a multitude of variations in the classical selfish routing model.
+Beginning with the network topology, one can distinguish between parallel networks (our case) or series-parallel ones.
+In addition the flow traversing through the network can either be atomic (finite number of players, each contributing to congestion equally or weighted) or non-atomic (infinite number of players, each contributing to congestion by an non-influencing infinitesimal amount).
+Also the model might admit elastic demand (e.g. \cite{10.1287/moor.1060.0231}, \cite{Hearn1998}), a property where the users have a bound on the cost they're willing to pay, making instances having potential players not participating in the flow.
+
+Most work considers homogeneous network users.
 Heterogeneity has been studied by Schmeilder \cite{1973JSP.....7..295S} and Milchtaich \cite[Prop 3.3]{doi:10.1287/moor.25.3.349.12220} has contributed through with work on the more general crowding games, a class of games where the cost assigned to each player is affected only by the number of players selecting the same action (or strategy).
 Large crowding games are basically less restrictive $n$-link parallel congestion games.
+Also, Cole et al. \cite{10.1145/780542.780618} in their work showed that even general heterogeneous networks can be priced so that an optimal routing emerges while computing those efficient tolls can be done in polynomial time for convex latency functions and distribution functions with only finitely many values.
+The latter paper has been one of the main pillars of this thesis.
 
 Discussing more the algorithmic aspect of toll computation, there has been significant research in finding optimal tolls for homogeneous network users.
-Marginal cost prices can be computed using convex programming \cite{beckmann1956studies}, 
+Marginal cost prices can be computed using convex programming \cite{beckmann1956studies}, while the transportation community has made significant progress in optimising efficient computation and characterisating minimum-latency tolls (\cite{10.1007/978-3-642-59179-2_4}, \cite{Hearn1998}, \cite{Hearn2002}).
 
 Acemoglu and Ozdaglar were the first to introduce pricing competition between link owners to the above model \cite{10.1287/moor.1060.0231}.
 They showed that increasing the competition among operators from a monopoly to an oligopoly may reduce the efficiency of the network, achieving tight bounds on the Price of Anarchy.
 In a follow-up work \cite{10.1109/JSAC.2007.070812}, they generalised the above by assuming more general topologies where links can also be linked serially (series-parallel networks).
+Correa et al. \cite{correa2018pricing} showed pricing games may not exist, may not be unique and can be arbitrarily inefficient, but regulating the network with toll caps can solve all three issues.
+Harkes et al. \cite{Harks_2019} then showed that the same is true for uniform toll caps, which is stronger in practice as toll discrimination is often not allowed.
+The latter two papers have also been main pillars of the current work.
+
 
 \cleardoublepage
 
@@ -310,6 +323,90 @@ It is trivial for homogeneous games that higher tolls create lower latencies on 
 	The opposite direction is also proved similarly.
 \end{proof}
 
+This property shows us that for a give $t \in \R_+^N$, if we order the links according to decreasing tolls, then the latencies are ordered in increasing order (and vice-versa).
+It's easy to show that the players in each link are also ordered according to their $\alpha$ value increasing.
+Therefore tolls define an ordering $t_1 \ge t_2 \ge \dots t_n$ where also $\ell_1(x_1(t)) \le \ell_2(x_2(t)) \le \dots \le \ell_n(x_n(t))$ and if we select player representatives from each link $p_1, p_2, \dots, p_n$ we also get $\alpha(p_1) \le \alpha(p_2) \le \dots \le \alpha(p_n)$.
+We continue with the follow lemma which describes a property for the last link in an ordering.
+
+\begin{lemma}
+	\label{lemma:xn_xn0_lower_bound}
+	Let $(N, \ell, \alpha)$ a heterogeneous parallel game.
+	For tolls $t \in \R_+^N$ consider the links in decreasing toll ordering.
+	It holds that $x_n(t) \ge x_n(0)$.
+\end{lemma}
+
+\begin{proof}
+	From assumption we have $t_n = \min_{i \in N} t_i$, which makes tolls $t^\prime = t - t_n$ be in $\R_+^N$ with $t_n^\prime = 0$.
+	Since the flow equilibrium $x(t)$ is dependent only on the toll differences, we get $x(t) = x(t^\prime)$.
+	Also, comparing $t^\prime$ with $t = 0$, no additional tolls have been added to link $n$, making $x_n(t^\prime) \ge x_n(0)$.
+	The proposition follows naturally from the previous two statements.
+\end{proof}
+
+Finally we need to discuss again toll differences.
+While the definition for $t \in \R_+^N$ allows any arbitrary value, there are some edge cases which have little meaning for any game setup.
+Assume that for a toll $t$ where for some link $i \in N$ we have $t_i$ so low that $x_i(t) = 1$ and $x_j(t) = 0$ for all other links $j \ne i$.
+Decreasing $t_i$ further changes nothing, plus in any setup (optimality, maximal profit, etc.) those cases never come into play. Same reasoning can be done for increasing $t_i$ to the degree where $x_i(t) = 0$.
+We can therefore see that the valid max toll difference is that which covers the latency imposed on that link by all flow.
+Since we are in a heterogeneous setup, we also need to account for sensitivity, and since we need all players to move in (or out) of a link, it's enough that the least sensitive player is covered.
+In other words, assuming $\alpha(0) > 0$ we get
+\[t_i - t_j \le \alpha(0) \cdot (\ell_i(1) - \ell_j(0)) \qquad t_j - t_i \le \alpha(0) \cdot (\ell_j(1) - \ell_i(0))\]
+for $t_i > t_j$ and $t_j > t_i$ respectively.
+We give an example to solidify all the above.
+
+\begin{example}
+	\label{example:simple_alpha}
+	Let $([2], \ell, \alpha)$ a toll game with latency functions $\ell_1(x) = 2x, \ell_2(x) = x + 1$ and distribution function $\alpha(p) = p + 1$.
+\end{example}
+
+\begin{center}
+	\begin{multicols}{2}
+		% Left Column: Network Graph
+		\begin{tikzpicture}[scale=1.4, every node/.style={font=\small}]
+			% Nodes
+			\node[circle, draw, fill=blue!20, minimum size=1cm] (s) at (0,0) {$s$};
+			\node[circle, draw, fill=blue!20, minimum size=1cm] (t) at (4,0) {$t$};
+
+			% Edges
+			\draw[->, thick] (s) to[bend left=35] node[midway, above] {$2x$} (t);
+			\draw[->, thick] (s) to[bend right=35] node[midway, below] {$x + 1$} (t);
+
+			% Description
+			\node[align=center] at (2, -2) {Network of Example \ref{example:simple_alpha}};
+		\end{tikzpicture}
+
+		% Right Column: Distribution function Graph
+		\begin{tikzpicture}[x=3cm, y=1.5cm, every node/.style={font=\small}]
+			% Axes
+			\draw[->] (0,0) -- (1.2,0) node[right] {$p$};
+			\draw[->] (0,0) -- (0,2.2) node[above] {$a(p)$};
+
+			% Tick marks
+			\draw (0,0) -- (0,-0.05) node[below] {$0$};
+			\draw (1,0) -- (1,-0.05) node[below] {$1$};
+			\draw (0,1) -- (-0.05,1) node[left] {$1$};
+			\draw (0,2) -- (-0.05,2) node[left] {$2$};
+
+			% Function graph
+			\draw[thick] (0,1) -- (1,2);
+
+			% Description
+			\node[align=center] at (0.7, -0.7) {Distribution function of\\Example \ref{example:simple_alpha}};
+		\end{tikzpicture}
+	\end{multicols}
+\end{center}
+
+We have $x(0) = (2/3, 1/3)$.
+We also calculate the max toll difference where $x(t) = (0, 1)$ or $(1, 0)$.
+If $t_1 > t_2$ then $x(t) = (1, 0)$ is impossible since we need $\ell_1(x_1(t)) \le \ell_2(x_2(t))$.
+We have $x(t) = (0, 1)$ when even the player with the least money sensitivity views the two edges' costs as equal, i.e.
+\[
+\ell_1(0) + \alpha(0) \cdot t_1 = \ell_2(1) + \alpha(0) \cdot t_2 \Rightarrow t_1 - t_2 = 2
+\]
+Respectively, if $t_1 < t_2$ we have $x(t) = (1, 0)$ when
+\[
+\ell_1(1) + \alpha(0) \cdot t_1 = \ell_2(0) + \alpha(0) \cdot t_2 \Rightarrow t_2 - t_1 = 1
+\]
+
 \section*{Pricing Games (our model)}
 
 Arriving at the main model that will be used in this thesis, we keep the above Network Game model and introduce $n = |N|$ agents who each own one link of the network and can thus assign toll to it and gain profit.
@@ -334,7 +431,6 @@ For each link owner $i$, by solving first order conditions on $\Pi_i(t_i, t_{-i}
 \end{equation}
 
 %In the extreme cases where the toll differences are arbitrarily large, the best response of some players will be to lower their toll and take all available flow.
-
 
 %From Harkes et al. \cite[Lemma 3.3]{Harks_2019} we can also get an equation for the Nash Equilibrium of the pricing game.
 %\begin{equation}
@@ -361,28 +457,6 @@ To describe more properties of homogeneous pricing games we will need the follow
 		\frac{1}{\sum_{k \ne i} \frac{2a_j}{a_k}} - 1 = \frac{1}{2 \left(1 + \sum_{k \ne i, j} \frac{a_j}{a_k}\right)} - 1 \leq \frac{1}{2} - 1 < 0
 	\]
 \end{proof}
-
-\subsection*{Heterogeneous players}
-
-TODO: Tolls define ordering $t_1 \ge t_2 \ge \dots t_n$ and $\ell_1(x_1(t)) \le \ell_2(x_2(t)) \le \dots \le \ell_n(x_n(t))$.
-
-\begin{lemma}
-	\label{lemma:xn_xn0_lower_bound}
-	Let $(N, \ell, \alpha)$ a heterogeneous parallel game.
-	For tolls $t \in \R_+^N$ consider the links in decreasing toll ordering.
-	It holds that $x_n(t) \ge x_n(0)$.
-\end{lemma}
-
-\begin{proof}
-	From assumption we have $t_n = \min_{i \in N} t_i$, which makes tolls $t^\prime = t - t_n$ be in $\R_+^N$ with $t_n^\prime = 0$.
-	Since the flow equilibrium $x(t)$ is dependent only on the toll differences, we get $x(t) = x(t^\prime)$.
-	Also, comparing $t^\prime$ with $t = 0$, no additional tolls have been added to link $n$, making $x_n(t^\prime) \ge x_n(0)$.
-	The proposition follows naturally from the previous two statements.
-\end{proof}
-
-\begin{example}
-	[TODO: Add figure]
-\end{example}
 
 \section*{Game equivalence}
 
@@ -692,31 +766,40 @@ We start with the following corollary.
 Beginning with the function's characterisation, on one side, as $t_d = t_1 - t_2 \rightarrow -\infty$ then $\as(t) \rightarrow 0$ (Lemma \ref{lemma:split_asymptotic}$(i)$), while afterwards as $t_d$ increases below $0$, meaning the difference (absolute) value is decreasing, then $\as(t)$ is non-decreasing (Lemma \ref{lemma:split_monotonicity}$(i)$), and finally as $t_d \rightarrow 0^-$, $\as(t)$ approaches $\sup A_2^-(0)$ (Lemma \ref{lemma:split_asymptotic}$(ii)$).
 On the other side from $t_d \rightarrow +\infty$ we get a symmetric behavior all the way ending up in $\sup A_1^-(0)$.
 The above show that $\as(t)$ is continuous for all $t \ne 0$ and any limit around $0$ has different left and right sides (apart from the very specific case where $x_1(0) = x_2(0)$).
-We proceed with an example to solidify this.
 
-\begin{example}
-	\label{example:simple_alpha}
-	Let $([2], \ell, \alpha)$ a toll game with latency functions $\ell_1(x) = 2x, \ell_2(x) = x + 1$ and distribution function $\alpha(p) = p + 1$.
-\end{example}
-TODO: Add figure of game graph.
-
-We have $x(0) = (2/3, 1/3)$.
-Then since $\alpha$ is continuous we get from \ref{corollary:split_asymptotic_continuous} that
+We apply this on Example \ref{example:simple_alpha} to solidify this.
+Since $\alpha$ is continuous we get from \ref{corollary:split_asymptotic_continuous} that
 \[\lim_{t_1 - t_2 \rightarrow 0^-} \as(t) = \alpha(x_2(0)) = 4/3, \lim_{t_1 - t_2 \rightarrow 0^+} \as(t) = \alpha(x_1(0)) = 5/3\]
-Finally, for a more complete picture, we also calculate the max toll difference where $x(t) = (0, 1)$ or $(1, 0)$.
-If $t_1 > t_2$ then $x(t) = (1, 0)$ is impossible since we need $\ell_1(x_1(t)) \le \ell_2(x_2(t))$.
-We have $x(t) = (0, 1)$ when even the player with the least money sensitivity views the two edges' costs as equal, i.e.
-\[
-	\ell_1(0) + \alpha(0) \cdot t_1 = \ell_2(1) + \alpha(0) \cdot t_2 \Rightarrow t_1 - t_2 = 2
-\]
-Respectively, if $t_1 < t_2$ we have $x(t) = (1, 0)$ when
-\[
-	\ell_1(1) + \alpha(0) \cdot t_1 = \ell_2(0) + \alpha(0) \cdot t_2 \Rightarrow t_2 - t_1 = 1
-\]
 
-All the above give us the graph for $\as$ in Figure \ref{figure:split_example}.
+All the above give us the graph for $\as$ in Figure \ref{figure:apha_simple:split_example}.
+\begin{center}
+\begin{tikzpicture}[x=5cm, y=2cm, every node/.style={font=\small}]
+	\label{figure:apha_simple:split_example}
 
-TODO: Add figure of $\as$ for different $t_d$.
+	% Axes
+	\draw[->] (0,0) -- (1.2,0) node[right] {$t_1$};
+	\draw[->] (0,0) -- (0,2.2) node[above] {$\as(t)$};
+
+	% Tick marks
+	\draw (0,0) -- (0,-0.05) node[below] {$0$};
+	\draw (0.5,0) -- (0.5,-0.05) node[below] {$t_2$};
+	\draw (0,4/3) -- (-0.05,4/3) node[left] {$4/3$};
+	\draw (0,5/3) -- (-0.05,5/3) node[left] {$5/3$};
+
+	% Function graph
+	\draw[thick] (0,0.1) -- (0.5,4/3);
+	\draw[thick] (0.5,5/3) -- (1,0.1);
+
+	% Dots
+	\fill[white] (0.5,4/3) ellipse (0.02 and 0.04);
+	\draw[black] (0.5,4/3) ellipse (0.02 and 0.04);
+	\fill[white] (0.5,5/3) ellipse (0.02 and 0.04);
+	\draw[black] (0.5,5/3) ellipse (0.02 and 0.04);
+
+	% Description
+	\node[align=center] at (0.7, -0.7) {\textbf{Figure \ref*{figure:apha_simple:split_example}:} Split function of Example \ref{example:simple_alpha}};
+\end{tikzpicture}
+\end{center}
 
 \section{Upper bound}
 
@@ -772,6 +855,7 @@ We answer this in the theorem below, which is the main result of this chapter, p
 
 	Therefore $x^{(1)}(t) = x^{(2)}(t)$ for all $t \in \R_+$ and from Definition \ref{definition:game_equivalence} the two games are equivalent.
 \end{proof}
+
 We can see how this theorem applies to Example \ref{example:simple_alpha}, where since $x(0) = (2/3, 1/3)$ then $\max\{x_1(0), x_2(0)\} = 2/3$.
 Then even if we used a distribution function such as
 \[
@@ -1183,23 +1267,15 @@ We present it here.
 Given the restrictions of the possible positions for Nash equilibrium tolls, it would be tempting to try and calculate exact conditions for it.
 Those conditions would depend on latencies and the distance of the step function's $k$ values.
 
-Unfortunately the results do not scale for $[N]$ parallel networks.
+Unfortunately the results do not scale for $n$-link parallel networks.
 
-We will conclude this chapter with some investigation on games with continuous distribution function.
-
-\section{Continuous distribution function}
-
-For the continuous distribution function case, the previous restriction of $\alpha(p) > 0$ when $p > 0$ is not sufficient, as it still allows for distribution functions with many player values close to $0$ $\rightarrow$ Is that actually the problem?.
-Specifically the case of $\alpha(p) = cp$, for some $c > 0$, shows some interesting behavior, as it creates instances where $\Pi_i$ becomes either unbounded or fixed; in the first case then $B_i$ becomes unbounded, while in the second it becomes an an infinite set.
-This is showcased analytically in Example \ref{example:ap_p} in the Appendix, where for $\alpha(p) = p$ we see that the resulting best responses can indeed be undefined or unbounded.
-
-When does this happen?
-Is the problem $0$ being an accumulation point?
-\begin{lemma}[Conjecture]
-	If a distribution function has $\alpha(p) \le p \; \forall p$, then $\Pi_i$ becomes either unbounded or fixed.
-\end{lemma}
-
-We will avoid all the above bad behaviors by assuming in all further cases that $\alpha(0) > 0$.
+%Specifically the case of $\alpha(p) = cp$, for some $c > 0$, shows some interesting behavior, as it creates instances where $\Pi_i$ becomes either unbounded or fixed; in the first case then $B_i$ becomes unbounded, while in the second it becomes an an infinite set.
+%This is showcased analytically in Example \ref{example:ap_p} in the Appendix, where for $\alpha(p) = p$ we see that the resulting best responses can indeed be undefined or unbounded.
+%When does this happen?
+%Is the problem $0$ being an accumulation point?
+%\begin{lemma}[Conjecture]
+%	If a distribution function has $\alpha(p) \le p \; \forall p$, then $\Pi_i$ becomes either unbounded or fixed.
+%\end{lemma}
 
 \cleardoublepage
 
