@@ -7,3 +7,10 @@
 *.out
 *.bbl
 *.blg
+# Beamer-specific?
+*.nav
+*.snm
+*.run.xml
+
+# Ignore biblatex generated files.
+*-blx.bib

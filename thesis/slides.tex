@@ -1,0 +1,86 @@
+\documentclass{beamer}
+\usepackage[style=authoryear,backend=bibtex]{biblatex}
+\addbibresource{ref.bib}
+
+\mode<presentation>
+{
+	\usetheme[progressbar=foot,numbering=fraction,background=light,block=fill]{metropolis}
+	\usecolortheme{default}
+	\usefonttheme{default}
+	\setbeamertemplate{navigation symbols}{}
+	\setbeamertemplate{caption}[numbered]
+	\setbeamertemplate{frame footer}{Thomas Pappas | ALMA }
+}
+
+\title[]{Pricing Games in Heterogeneous Parallel Networks}
+\author[Thomas Pappas]{Thomas Pappas}
+\institute[ALMA]{
+	\begin{columns}
+		\column{0.4\textwidth}
+		\begin{figure}
+			\centering
+			\includegraphics[scale=0.1]{alma.png}
+		\end{figure}
+		\column{0.5\textwidth}
+		ALMA \\
+		\tiny{INTER-INSTITUTIONAL GRADUATE PROGRAM \\
+			"ALGORITHMS, LOGIC AND DISCRETE MATHEMATICS"}
+	\end{columns}
+}
+\date{\today}
+
+\begin{document}
+\AtBeginSection[]{
+  \begin{frame}[noframenumbering,plain]
+	  \vfill
+	  \centering
+	  \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+	    \usebeamerfont{title}\insertsectionhead\par
+	  \end{beamercolorbox}
+	  \vfill
+  \end{frame}
+}
+
+
+\begin{frame}[noframenumbering,plain]
+  \titlepage
+\end{frame}
+
+\begin{frame}[noframenumbering,plain]
+    \frametitle{Agenda}
+    \tableofcontents[hideallsubsections]
+\end{frame}
+
+
+\section{History}
+
+\begin{frame}{History}
+	\begin{itemize}
+		\item Selfish routing \footcite{pigou1920economics}
+		\item Congestion games \footcite{Rosenthal1973ACO}
+		\item Wardrop equilibrium \footcite{wardrop_theoretical_1952}
+		\item Pricing competition \footcite{10.1287/moor.1060.0231}
+		\begin{itemize}
+			\item Homogeneous case with toll caps \footcite{Harks_2019}
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\section{Homogeneous Pricing Games}
+
+\section{Sensitivity split}
+
+\section{Pseudo-heterogeneous Pricing Games}
+
+\section{Step distribution function}
+
+\section{Future work}
+
+\begin{frame}[noframenumbering,plain]{}
+	\centering
+    \huge Thank you!\\
+    \normalsize Thomas Pappas\\
+    thpappas@di.uoa.gr
+\end{frame}
+
+\end{document}
