@@ -289,7 +289,7 @@ With this observation we can see that the case of $t = 0^N$ is equivalent to any
 We will therefore simplify our notation and write $t = 0$ when talking about the game without tolls, though we will in fact mean the entire class $\{t = (c)_{i \in N}, c \in \R_+\}$.
 
 Finally for affine latencies we can calculate $x(t)$ by following the same reasoning as \cite[Prop $3.1$]{Harks_2019}.
-For $\ell_i(x_i) = a_i x_i + b_i$ with $a_i > 0, b_i \geq 0$ and $t \in \R_+^N$, define $N(t) = \{i \in N | x_i(t) > 0\}$.
+For $\ell_i(x_i) = a_i x_i + b_i$ with $a_i > 0, b_i \geq 0$ and $t \in \R_+^{|N|}$, define $N(t) = \{i \in N | x_i(t) > 0\}$.
 Since $x(t)$ is an equilibrium for $t$ then for all $i \in N(t)$ we get $\ell_i(x_i) + t_i = K$ for some common effective cost $K$.
 By also using the fact that $\sum_{j \in N(t)} x_i = 1$ we solve the equations with regard to $K$ and eventually get for all $i \in N(t)$
 \begin{equation}
@@ -335,7 +335,7 @@ It is trivial for homogeneous games that higher tolls create lower latencies on 
 	The opposite direction is also proved similarly.
 \end{proof}
 
-This property shows us that for a given $t \in \R_+^N$, if we order the links according to decreasing toll values, then the same link order will have latencies ordered in increasing values (and vice-versa).
+This property shows us that for a given $t \in \R_+^{|N|}$, if we order the links according to decreasing toll values, then the same link order will have latencies ordered in increasing values (and vice-versa).
 It is then easy to show that the players using each such link are also ordered with regard to their $\alpha$ values in increasing order.
 Therefore a given set of tolls can define an ordering of links where $t_1 \ge t_2 \ge \dots \ge t_n$ and $\ell_1(x_1(t)) \le \ell_2(x_2(t)) \le \dots \le \ell_n(x_n(t))$, while if we were to pick player representatives from each link with positive flow $p_1, p_2, \dots, p_k$, we also get $\alpha(p_1) \le \alpha(p_2) \le \dots \le \alpha(p_k)$.
 Note that the ordering is unique only when the inequalities are strict, as had we had $t_i = t_j$ for any $i, j \in N$ then $i$ and $j$ can be ordered arbitrarily.
@@ -345,20 +345,20 @@ We continue with the following lemma which describes a property for the last lin
 \begin{lemma}
 	\label{lemma:xn_xn0_lower_bound}
 	Let $(N, \ell, \alpha)$ a heterogeneous parallel game.
-	For tolls $t \in \R_+^N$ consider the links in decreasing toll ordering.
+	For tolls $t \in \R_+^{|N|}$ consider the links in decreasing toll ordering.
 	It holds that $x_n(t) \ge x_n(0)$.
 \end{lemma}
 
 \begin{proof}
 	Consider $t^\prime = t - t_n$.
-	From assumption we have $t_n = \min_{i \in N} t_i$, which makes $t^\prime \in \R_+^N$ with $t_n^\prime = 0$.
+	From assumption we have $t_n = \min_{i \in N} t_i$, which makes $t^\prime \in \R_+^{|N|}$ with $t_n^\prime = 0$.
 	Since the flow equilibrium $x(t)$ is dependent only on the toll differences, we get $x(t) = x(t^\prime)$.
 	Also, by now comparing $t^\prime$ with $t = 0$, no additional tolls have been added to link $n$, making $x_n(t^\prime) \ge x_n(0)$.
 	The proposition follows naturally from the previous two statements.
 \end{proof}
 
 Finally we need to discuss about toll differences again.
-While the definition for $t \in \R_+^N$ allows any arbitrary value, the meaningful ones actually reside in a more limited space.
+While the definition for $t \in \R_+^{|N|}$ allows any arbitrary value, the meaningful ones actually reside in a more limited space.
 Assume for example that a toll $t$ is such that $x_i(t) = 1$ for some link $i \in N$ with $t_i > 0$ and $x_j(t) = 0$ for all other links $j \ne i$.
 It's obvious that further decreasing $t_i$ changes nothing for the flow, which is why in any optimisation setup (minimum total cost, maximal profit, etc.) those cases never come into play. Same reasoning can be done for increasing $t_i$ in tolls $t$ where $x_i(t) = 0$.
 Therefore there exists an upper bound for the valid toll difference between any two links $i, j \in N$, which can be calculated as the toll difference which even the least sensitive player $0$ (to account for heterogeneity) will view the link with the lowest toll (and all flow) as the one with the lowest cost.
@@ -533,7 +533,7 @@ We can now formally define $\as$ and prove some of its properties.
 \begin{definition}
 	\label{definition:split_function}
 	Let $(N, \ell, \alpha)$ a heterogeneous parallel game, tolls $t$ where $t_i \ne t_j$ for links $i, j \in N$ and $x(t)$ the Nash equilibrium for $t$.
-	We define the \textit{money sensitivity split function} $\as^{(i, j)}: \{t \in \R_+^N|t_i \ne t_j\} \rightarrow (0, +\infty)$ as
+	We define the \textit{money sensitivity split function} $\as^{(i, j)}: \{t \in \R_+^{|N|}|t_i \ne t_j\} \rightarrow (0, +\infty)$ as
 	\[\as^{(i, j)}(t) = \frac{\ell_j(x_j(t)) - \ell_i(x_i(t))}{t_i - t_j}\]
 \end{definition}
 We can easily see that if any flow user $p$ has $\alpha(p) = \as^{(i, j)}(t)$ then $c_i(p) = c_j(p)$.
@@ -591,7 +591,7 @@ With all the above we arrive at the following definition.
 	\label{definition:alpha_flow_sets}
 	Let $(N, \ell, \alpha)$ a heterogeneous parallel game, tolls $t$ and $x(t)$ the Nash equilibrium for $t$.
 	We define as $A_i(t)$ the set of all possible $\alpha(p)$ values of players $p$ using link $i$ in the Nash equilibrium for $t$.
-	More formally, we define a set function $A_i: \R_+^N \rightarrow \mathcal{P}(\R_+)$, where $\mathcal{P}(\R_+)$ is the powerset of $\R_+$, such that
+	More formally, we define a set function $A_i: \R_+^{|N|} \rightarrow \mathcal{P}(\R_+)$, where $\mathcal{P}(\R_+)$ is the powerset of $\R_+$, such that
 	\[A_i(t) = \{\alpha(p) | f(p) = j \wedge t_j = t_i\}\]
 \end{definition}
 
@@ -640,7 +640,7 @@ In order to emphasise on this, let's restrict ourselves to $2$ links and point o
 		x(0, -t_d) & $t_d < 0$ \\
 	\end{cases*}
 \]
-We will not utilise this definition as is in this work as it gets more complex for games with $n$ links, however displaying it helps with the intuition that the flow, and consequently $\as$, actually changes as the toll differences do in $\R^{N - 1}$.
+We will not utilise this definition as is in this work as it gets more complex for games with $n$ links, however displaying it helps with the intuition that the flow, and consequently $\as$, actually changes as the toll differences do in $\R^{|N| - 1}$.
 
 With that in mind, we will investigate the monotonicity of $\as$ in relation to toll differences (and in extension to latency differences) and only when the ordering does not change.
 For this we will need to compare different tolls that create lower-upper splits in the same links, or in other words for tolls $t, t^\prime$ to hold that if $t_i > t_j$ then also $t_i^\prime > t_j^\prime$ and vice-versa.
@@ -862,14 +862,14 @@ We answer this in the theorem below, which is the main result of this chapter, p
 \begin{theorem}
 	\label{theorem:alpha_upper_irrelevant}
 	Let $\Gm_1 = (N, \ell, \alpha^{(1)})$ and $\Gm_2 = (N, \ell, \alpha^{(2)})$ be two heterogeneous parallel games with the same number of links $n = |N|$  and latency functions $\ell$.
-	For $x^{(1)}(t), x^{(2)}(t)$ the Nash equilibria for $t \in \R_+^N$ in $\Gm_1, \Gm_2$ respectively, denote as $x(0) = x^{(1)}(0) = x^{(2)}(0)$ the equal flow on paths between $\Gm_1$ and $\Gm_2$ for $t = 0$.
+	For $x^{(1)}(t), x^{(2)}(t)$ the Nash equilibria for $t \in \R_+^{|N|}$ in $\Gm_1, \Gm_2$ respectively, denote as $x(0) = x^{(1)}(0) = x^{(2)}(0)$ the equal flow on paths between $\Gm_1$ and $\Gm_2$ for $t = 0$.
 	If the distribution functions $\alpha^{(1)}$ and $\alpha^{(2)}$ are such that
 	\[\alpha^{(1)}(p) = \alpha^{(2)}(p), \forall p: p < 1 - \min_{i \in N}\{x_i(0)\}\]
 	then $\Gm_1$ and $\Gm_2$ are equivalent.
 \end{theorem}
 
 \begin{proof}
-	It suffices to show that $x^{(1)}(t) = x^{(2)}(t), \forall t \in \R_+^N$.
+	It suffices to show that $x^{(1)}(t) = x^{(2)}(t), \forall t \in \R_+^{|N|}$.
 	It's already stated that the equality holds for $t = 0$.
 	%assume w.l.o.g. that $t_1 > t_2$, which now makes it sufficient to show that the flow in the (common) lower split is equal, i.e $x_1^{(1)}(t) \ne x_1^{(2)}(t)$.
 	For $t \ne 0$, assume for simplicity that all $t_i \ne t_j$ for all $i, j \in N$.
@@ -910,12 +910,12 @@ We finish this section with a lemma about the behaviour of $\as$ when many playe
 Note that since the behavior of a single player has no effect on the game, it doesn't suffice to assume $\alpha(0) = 0$ just for player $0$, so in order to capture the notion of having many players with $\alpha$ values close to $0$ we additionally assume that $0$ is an accumulation point in $\alpha$.
 \begin{lemma}
 	Let $(N, \ell, \alpha)$ a heterogeneous parallel game with distribution function $\alpha$ such that $\alpha(0) = 0$ and $0$ is an accumulation point.
-	Then $x_1(t) > 0, \forall t \in \R_+^N$
+	Then $x_1(t) > 0, \forall t \in \R_+^{|N|}$
 \end{lemma}
 
 \begin{proof}
 	By the definition of an accumulation point, we get for $0$ in $\alpha$ that $\forall \delta > 0 \; \exists \epsilon > 0: p < \epsilon \Rightarrow \alpha(p) < \delta$.
-	Therefore $\forall t \in \R_+^N$ if $\delta = \min_{j \in N \setminus \{i\}}\as^{(i, j)}(t)$ then $\exists \epsilon > 0: p < \epsilon \Rightarrow \alpha(p) < \as^{(i, j)}(t)$ for all $j \in N \setminus \{i\}$, which means that the lower-latency link will always have flow some $\epsilon > 0$, and therefore $x_1(t) > 0$.
+	Therefore $\forall t \in \R_+^{|N|}$ if $\delta = \min_{j \in N \setminus \{i\}}\as^{(i, j)}(t)$ then $\exists \epsilon > 0: p < \epsilon \Rightarrow \alpha(p) < \as^{(i, j)}(t)$ for all $j \in N \setminus \{i\}$, which means that the lower-latency link will always have flow some $\epsilon > 0$, and therefore $x_1(t) > 0$.
 \end{proof}
 The main interest in the above lemma is the fact that it affects the lowest-latency, and therefore highest-toll, link, meaning that regardless of how high the highest toll is, some players will always remain in that link.
 Intuitively, it describes the fact that having almost no toll fear makes a player not motivated to leave the link, which in turn means having little control over those players using toll regulations.
@@ -926,30 +926,36 @@ Intuitively, it describes the fact that having almost no toll fear makes a playe
 \chapter{Equilibria in Pricing Games}
 \label{chapter:pricing_equilibria}
 
-In this section we introduce the pricing game to our model and examine how different distribution functions $\alpha$ can affect the profit maximisation game between the toll owners, specifically when $\alpha$ is fixed, step or continuous.
+In this section we introduce the pricing competition game to our model and examine how different distribution functions $\alpha$ can affect the profit maximisation game between the toll owners, specifically when $\alpha$ is fixed or step.
 We begin, though, with some necessary restrictions.
 
 \section{Problems with $0$ money sensitivity}
 
 In general having players with $\alpha(p) = 0$, i.e. players completely indifferent to tolls, creates issues.
 Even Cole et al. \cite{10.1145/780542.780618} assume $\alpha(p) > 0$ when $p > 0$ for their model to support optimal tolls.
-In fact, this restriction proves necessary for our pricing game as well, since its absence allows distribution functions with arbitrarily small flow all at $0$, which in turn, as we'll see in the following Lemma, breaks the pricing game, too.
+In fact, this restriction proves necessary for our pricing game as well, since its absence allows distribution functions with arbitrarily small flow all at $0$, which in turn, as we'll see in the following Lemma, break the pricing game, too.
 
 \begin{lemma}
 	\label{lemma:a_0_0}
-	Let $([2], \ell, \alpha)$ a pricing game for which it holds that $\exists \epsilon > 0: \alpha(p) = 0 \; \forall p < \epsilon$.
-	Then the best response functions $B_i(t_{-i})$ are unbounded.
+	Let $(N, \ell, \alpha)$ a heterogeneous pricing game for which it holds that $\exists \epsilon > 0: \alpha(p) = 0 \; \forall p < \epsilon$.
+	Let $i \in N$ be a link for which $\ell_i(0) = \min_{j \in N} \ell_i(0)$.
+	Then $B_i(t_{-i})$ is unbounded for all $t_{-i} \in \R_+^{|N| - 1}$.
 \end{lemma}
 
 \begin{proof}
-	All players $p$ with $\alpha(p) = 0$ will completely neglect the toll values and play the congestion game only considering the flow latencies, thus always selecting the fastest link, regardless of the toll prices.
-
-	We have from assumption that $x_i(0) > 0$.
-	Consider $x_i^\prime = \min\{x_i(0), \epsilon\} > 0$.
-	Obviously $\alpha(p) = 0 \; \forall p < x_i^\prime$.
-	Then we can see that for all $t_i > t_{-i}$ where link $i$ has the lower latency link, all those players will be on that link and will remain so regardless of how high is the value of $t_i$.
-	For the respective profit that means $\Pi_i(t_i, t_{-i}) \ge x_i t_i \; \forall t_i > t_{-i}$.
-	Consequently, as $t_i \rightarrow +\infty$ then so does $x_i t_i$ and $\Pi_i(t_i, t_{-i})$, making in turn $B_i(t_{-i}) \rightarrow +\infty$.
+	All players $p$ with $\alpha(p) = 0$ will completely neglect the toll values and play the congestion game only considering the link latencies, thus always selecting the fastest link regardless of the toll prices.
+	The condition of $\ell_i(0) = \min_{j \in N} \ell_i(0)$, then, ensures that link $i$ will always have flow, i.e. $x_i(t) > 0, \forall t \in \R_+^{|N|}$, since if $x_i(t) = 0$ for some set of tolls $t$, then $i$ becomes a lowest-latency link meaning that at least some of the players with $\alpha(p) = 0$ view this as the lowest cost, a contradiction.
+ 
+	Link operator $i$ can therefore select a $t_i > \max t_{-i}$ which will make link $i$ the lowest-latency link and be populated exclusively by players with $\alpha(p) = 0$.
+	Indeed, consider $x_i^\prime(t) = \min\{x_i(t), \epsilon\} > 0$; obviously $\alpha(p) = 0 \; \forall p < x_i^\prime(t)$.
+	Consequently, $t_i$ can be increased arbitrarily with no link user ever leaving the link, resulting to a fixed flow and pure profit for link operator $i$.
+	More formally, for any $t_i^\prime > \max t_{-i}$ and any $t_i > t_i^\prime$ we have $x_i^\prime(t_i, t_{-i}) = x_i^\prime(t_i^\prime, t_{-i})$ and therefore $\Pi_i(t_i, t_{-i}) = x_i(t_i, t_{-i}) t_i \ge x_i^\prime(t_i, t_{-i}) t_i = x_i^\prime(t_i^\prime, t_{-i})t_i$.
+	We fix $t_i^\prime$ and we see that
+	\[
+		\lim_{t_i \rightarrow +\infty} \Pi_i(t_i, t_{-i}) \ge \lim_{t_i \rightarrow +\infty} x_i^\prime(t_i^\prime, t_{-i})t_i = +\infty
+	\]
+	%Consequently, as $t_i \rightarrow +\infty$ then so does $x_i t_i$ and $\Pi_i(t_i, t_{-i})$,
+	making in turn $B_i(t_{-i}) = +\infty$.
 \end{proof}
 We therefore need the restriction of $\alpha(p) > 0$ when $p > 0$ in order for our pricing game to have an equilibrium.
 
@@ -961,58 +967,70 @@ We start with formalising our base.
 
 \begin{lemma}
 	\label{lemma:a_fixed_homogeneous}
-	Let $\Gm_1 = ([2], \ell^{(1)}, c)$ a heterogeneous pricing game with distribution function $\alpha(p) = c$ for some $c > 0$ and $\Gm_2 = ([2], \frac{\ell^{(1)}}{c}, 1)$ a homogeneous pricing game with latencies $\ell^{(2)} = \frac{\ell^{(1)}}{c}$ for the same $c$.
+	Let $\Gm_1 = (N, \ell^{(1)}, c)$ a heterogeneous pricing game with distribution function $\alpha(p) = c$ for some $c > 0$ and $\Gm_2 = (N, \frac{\ell^{(1)}}{c}, 1)$ a homogeneous pricing game with latencies $\ell^{(2)} = \frac{\ell^{(1)}}{c}$ for the same $c$.
 	Then the two games are equivalent.
 \end{lemma}
 
 \begin{proof}
-	It suffices to show that $x^{(1)}(t) = x^{(2)}(t), \; \forall t \in \R_+^2 \cup \{0\}$, where $x^{(1)}(t), x^{(2)}(t)$ the respective Nash Equilibrium for $t$ for $\Gm_1, \Gm_2$.
-	Begin by noticing that while $\Gm_1$ is heterogeneous, all its players have the same money sensitivity, and thus at an equilibrium they will all see the two links as the same.
-	Therefore for all $t \in \R_+ \cup \{0\}$, $x^{(1)}(t)$ is the unique solution of the equation
+	It suffices to show that $x^{(1)}(t) = x^{(2)}(t), \; \forall t \in \R_+^{|N|}$, where $x^{(1)}(t), x^{(2)}(t)$ the respective Nash Equilibrium for $t$ in $\Gm_1, \Gm_2$.
+	Since $\Gm_2$ is homogeneous, we can use Lemma \ref{lemma:wardrop_equilibrium} to get that for any other flow $x^{(2)}$ it holds that
 	\[
-		\ell_1^{(1)}(x_1^{(1)}(t)) + ct_1 = \ell_2^{(1)}(x_2^{(1)}(t)) + ct_2
+		\sum_{i \in N} \left(\tfrac1c \cdot \ell_i^{(1)}(x_i^{(2)}(t)) + t_i\right) \cdot \left(x_i^{(2)}(t) - x_i^{(2)}\right) \leq 0
 	\]
-	It is easy to check now that $x^{(2)}(t)$ is also a solution to the above equation, since in $\Gm_2$ it is the equivalent unique solution for
+	which is equivalent to
 	\[
-		\frac{\ell_1^{(1)}(x_1^{(2)}(t))}{c} + t_1 = \frac{\ell_2^{(1)}(x_2^{(2)}(t))}{c} + t_2 \Leftrightarrow \ell_1^{(2)}(x_1^{(2)}(t)) + t_1 = \ell_2^{(2)}(x_2^{(2)}(t)) + t_2
+		\sum_{i \in N} \left(\ell_i^{(1)}(x_i^{(2)}(t)) + c t_i\right) \cdot \left(x_i^{(2)}(t) - x_i^{(2)}\right) \leq 0
 	\]
-	Therefore $x^{(1)}(t) = x^{(2)}(t), \; \forall t \in \R_+^2 \cup \{0\}$, making $\Gm_1, \Gm_2$ equivalent.
+	Notice that $\ell_i^{(1)}(x_i) + c t_i$ is the link cost of link $i$ for players in $\Gm_1$, given flow $x_i$ and toll $t_i$.
+	Regardless of the heterogeneity of our users, since the above inequality holds, then for flow $x^{(2)}(t)$ in $\Gm_1$ it will also hold for any other flow $x_i^{(1)} = x^{(2)}$.
+	It follows that any flow movement from $x^{(2)}(t)$ will again put players in links with larger link costs, making $x^{(2)}(t)$ a Nash Equilibrium for $t$ in $\Gm_1$ as well.
+	Uniqueness of the equilibrium with regards to costs finally gives us $x^{(1)}(t) = x^{(2)}(t)$.
+	Since the above hold for all $t \in \R_+^{|N|}$, we conclude from Definition \ref{definition:game_equivalence} that $\Gm_1, \Gm_2$ are equivalent.
 \end{proof}
-Intuitively, the above means that increasing the money sensitivity of the players in equivalent to analogously decreasing the traffic that flows create on all links.
-Unfortunately this correspondence  disappears for non-fixed distribution functions, since, as we saw in Chapter 2, we loose the $1-1$ relation between the latency functions and the distribution function due to heterogeneity.
+Intuitively, the above means that increasing the money sensitivity of the players in a game is equivalent to proportionally decreasing the traffic that flows create on all links.
+Unfortunately this correspondence  disappears for non-fixed distribution functions, since, in the general setting, a flow might consist of players with different money-sensitivity values depending on the tolls, thus loosing the $1-1$ relation between the latency function values and the distribution function ones.
+We discuss more about the relation between time and money sensitivity in Chapter \ref{chapter:future_work}.
 
-Still, looking now at the relation between fixed distribution functions, Lemma \ref{lemma:a_fixed_homogeneous} gives us the following corollary.
+Looking now at the relation between different fixed distribution functions, Lemma \ref{lemma:a_fixed_homogeneous} gives us the following corollary.
 \begin{corollary}
 	\label{corollary:a_fixed_c_relation}
 	Let $\Gm_1 = (N, \ell, c_1)$ and $\Gm_2 = (N, \ell, c_2)$ two heterogeneous pricing games with common latency functions $\ell$ and distribution functions $\alpha(p) = c_1 > 0$ and $c_2 > 0$ respectively.
 	Then the following are true
 	\begin{enumerate}[$(i)$]
 		%\item $x^{(1)}(0) = x^{(2)}(0)$
-		\item $x^{(1)}(t) = x^{(2)}\left(\frac{c_1}{c_2} \cdot t\right)$
-		\item $\frac{c_1}{c_2} \cdot \Pi_i^{(1)}(t_i, t_{-i}) = \Pi_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_i, \frac{c_1}{c_2} \cdot t_{-i}\right)$
-		\item $\frac{c_1}{c_2} \cdot B_i^{(1)}(t_{-i}) = B_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_{-i}\right)$
+		\item $x^{(1)}(c_2 t) = x^{(2)}(c_1 t)$
+		\item $\frac{\Pi_i^{(1)}(c_2 t)}{\Pi_i^{(2)}(c_1 t)} = \frac{c_2}{c_1}$
+		\item $\frac{B_i^{(1)}(c_2t_{-i})}{B_i^{(2)}(c_1 t_{-i})} = \frac{c_2}{c_1}$
 	\end{enumerate}
 \end{corollary}
 
 \begin{proof}
-	$ $
 	\begin{enumerate}[$(i)$]
 		%\item Obvious since for $t = 0$ the flow in both $\Gm_1, \Gm_2$ play a homogeneous game with common latencies $\ell$, which makes the two games identical and therefore $x^{(1)}(0) = x^{(2)}(0)$.
-		\item With the same rational as in Lemma \ref{lemma:a_fixed_homogeneous}, looking at the respective cost equalities for the two games we see that starting from $\Gm_2$ for tolls $(c_1 / c_2)t$ we get
-		\begin{flalign*}
-			\ell_1&\left(x_1^{(2)}\left(\frac{c_1}{c_2} \cdot t\right)\right) + c_2 \cdot \left(\frac{c_1}{c_2} \cdot t_1\right) = \ell_2\left(x_2^{(2)}\left(\frac{c_1}{c_2} \cdot t\right)\right) + c_2 \cdot \left(\frac{c_1}{c_2} \cdot t_2\right) & \\
-			&\Rightarrow \ell_1\left(x_1^{(2)}\left(\frac{c_1}{c_2} \cdot t\right)\right) + c_1 t_1 = \ell_2\left(x_2^{(2)}\left(\frac{c_1}{c_2} \cdot t\right)\right) + c_1 t_2 &
-		\end{flalign*}
-		with the last equation being the one for link equality in $\Gm_1$ with a unique solution at $x^{(1)}(t)$, leading us to $x^{(1)}(t) = x^{(2)}\left(\frac{c_1}{c_2} \cdot t\right)$
+		\item Consider the homogeneous games $\Gm_3 = (N, \frac{\ell}{c_1}, 1)$ and $\Gm_4 = (N, \frac{\ell}{c_2}, 1)$, for which it follows from Lemma \ref{lemma:a_fixed_homogeneous} that they are equivalent to $\Gm_1, \Gm_2$ respectively, meaning that for all $t \in \R_+^{|N|}$ we have $x^{(1)}(t) = x^{(3)}(t)$ and $x^{(2)}(t) = x^{(4)}(t)$.
+		If we now assign tolls $c_2 t$ to $\Gm_3$, then from Lemma \ref{lemma:wardrop_equilibrium} we get that for any other flow $x^{(3)}$ it holds that
+		\[
+			\sum_{i \in N} \left(\tfrac{1}{c_1} \cdot \ell_i(x_i^{(3)}(c_2 t)) + c_2 t_i\right) \cdot \left(x_i^{(3)}(c_2 t) - x_i^{(3)}\right) \leq 0
+		\]
+		which is equivalent to
+		\[
+			\sum_{i \in N} \left(\tfrac{1}{c_2} \cdot \ell_i(x_i^{(3)}(c_2 t)) + c_1 t_i\right) \cdot \left(x_i^{(3)}(c_2 t) - x_i^{(3)}\right) \leq 0
+		\]
+		which again, since $x^{(3)}$ is an arbitrary flow, from Lemma \ref{lemma:wardrop_equilibrium} it follows that $x^{(3)}(c_2 t)$ is a Nash Equilibrium for $c_1 t$ in $\Gm_4$, i.e. $x^{(3)}(c_2 t) = x^{(4)}(c_1 t)$.
+		Gathering all the above, we have
+		\[x^{(1)}(c_2 t) = x^{(3)}(c_2 t) = x^{(4)}(c_1 t) = x^{(2)}(c_1 t)\]
 		\item From $(i)$ and the definition of $\Pi_i$ we get
 		\begin{flalign*}
-			\frac{c_1}{c_2} \cdot \Pi_i^{(1)}(t_i, t_{-i}) &= \frac{c_1}{c_2} \cdot x_i^{(1)}(t) \cdot t_i \stackrel{(i)}{=} x_i^{(2)}\left(\frac{c_1}{c_2} \cdot t\right) \cdot \left(\frac{c_1}{c_2} \cdot t_i\right) & \\
-			&= \Pi_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_i, \frac{c_1}{c_2} \cdot t_{-i}\right) &
+			c_1 \cdot \Pi_i^{(1)}(c_2 t_i, c_2 t_{-i}) &= c_1 \cdot x_i^{(1)}(c_2 t) \cdot c_2 t_i & \\
+			&\stackrel{(i)}{=} c_1 \cdot x_i^{(2)}(c_1 t) \cdot c_2 t_i & \\
+			&= c_2 \cdot x_i^{(2)}(c_1 t) \cdot c_1 t_i & \\
+			&= c_2 \cdot \Pi_i^{(2)}(c_1 t_i, c_1 t_{-i}) &
 		\end{flalign*}
 		\item From $(ii)$ and the definition of $B_i$ we get
 		\begin{flalign*}
-			\frac{c_1}{c_2} \cdot B_i^{(1)}(t_{-i}) &= \frac{c_1}{c_2} \cdot \argmax_{t_i > 0}\Pi_i^{(1)}(t_i, t_{-i}) \stackrel{(ii)}{=} \argmax_{t_i > 0}\Pi_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_i, \frac{c_1}{c_2} \cdot t_{-i}\right) & \\
-			&= B_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_{-i}\right) &
+			c_1 \cdot B_i^{(1)}(c_2 t_{-i}) &= c_1 \cdot \argmax_{t_i > 0}\Pi_i^{(1)}(c_2 t_i, c_2 t_{-i}) & \\
+			&\stackrel{(ii)}{=} c_2 \cdot \argmax_{t_i > 0}\Pi_i^{(2)}(c_1 t_i, c_1 t_{-i}) & \\
+			&= c_2 \cdot B_i^{(2)}(c_1 t_{-i}) &
 		\end{flalign*}
 	\end{enumerate}
 \end{proof}
@@ -1352,6 +1370,7 @@ Unfortunately the results do not scale for $n$-link parallel networks.
 
 
 \chapter{Future work}
+\label{chapter:future_work}
 
 A natural extension of the above would be to examine them for $[N]$ parallel graphs.
 Some of the properties naturally extend but for others more care is required.
@@ -1360,6 +1379,15 @@ On a first thought, it seems trivial to also order the links on an equilibrium b
 Still, more investigation is needed to uncover the relation between those values, and its consequences to the flow's or the pricing game's behaviours.
 
 Putting the pricing games aside, it would also be interesting to expand the split function for series-parallel graphs.
+
+\section*{Time-money sensitivity relation}
+
+The standard technique to capture heterogeneity in the users of a network has been to apply a weight $\alpha$ to the toll cost viewed be each user, making their total cost $\ell(x) + \alpha t$.
+This approach is equivalent to applying the inverse weight to the latency, i.e. make the cost $\tfrac1\alpha \ell(x) + t$.
+Though less intuitive we already saw an application of this idea in Lemma \ref{lemma:heterogenous_flow_equiv_fixed} where we showed that a fixed distribution function is equivalent to restricting the latency functions inversely proportionally, however the idea could potentially be extended outside of fixed values.
+This would of course does not guarantee that the latency functions will remain affine, or even polynomial.
+One could attempt and investigate distribution functions that are inverse polynomials, making the respective latencies remain polynomial.
+In any case we believe that a future work on the relation of the time-sensitivity with money-sensitivity approaches, could uncover further insights in the behavior of heterogeneity.
 
 \cleardoublepage
 
