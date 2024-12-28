@@ -71,6 +71,7 @@
 \newcommand{\NE}{\mathrm{N.E.}}
 \newcommand{\as}{\mathrm{\alpha_s}}
 \newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
 \newcommand{\Gm}{\mathcal{G}}
 \DeclareMathOperator*{\argmax}{arg\,max}
 % \newcommand{\Exp}{\mathrm{Exp}}
@@ -378,8 +379,8 @@ We conclude this section by providing an example to solidify all the above.
 		% Left Column: Network Graph
 		\begin{tikzpicture}[scale=1.4, every node/.style={font=\small}]
 			% Nodes
-			\node[circle, draw, fill=blue!20, minimum size=1cm] (s) at (0,0) {$s$};
-			\node[circle, draw, fill=blue!20, minimum size=1cm] (t) at (4,0) {$t$};
+			\node[circle, draw, fill=blue!20, minimum size=0.8cm] (s) at (0,0) {$s$};
+			\node[circle, draw, fill=blue!20, minimum size=0.8cm] (t) at (4,0) {$t$};
 
 			% Links
 			\draw[->, thick] (s) to[bend left=35] node[midway, above] {$2x$} (t);
@@ -535,6 +536,7 @@ We can now formally define $\as$ and prove some of its properties.
 	Let $(N, \ell, \alpha)$ a heterogeneous parallel game, tolls $t$ where $t_i \ne t_j$ for links $i, j \in N$ and $x(t)$ the Nash equilibrium for $t$.
 	We define the \textit{money sensitivity split function} $\as^{(i, j)}: \{t \in \R_+^{|N|}|t_i \ne t_j\} \rightarrow (0, +\infty)$ as
 	\[\as^{(i, j)}(t) = \frac{\ell_j(x_j(t)) - \ell_i(x_i(t))}{t_i - t_j}\]
+	In the case of $N = [2]$ where there exists only one link pair, we will simply write $\as(t)$.
 \end{definition}
 We can easily see that if any flow user $p$ has $\alpha(p) = \as^{(i, j)}(t)$ then $c_i(p) = c_j(p)$.
 The fact that the function is not well-defined for $t_i = t_j$ matches with the notion we're trying to capture, as in that case we get $c_i(p) = c_j(p)$ for all flow users of the network, regardless of their money-sensitivity value.
@@ -733,17 +735,17 @@ The next lemma sums up the above discussion and gives us some insight about the 
 		Denote by $P_i(t)$ the set of all players in link $i$ in the Nash Equlibrium for $t$, i.e. $P_i(t) = \{p \in [0, 1] | f(p) = i\}$.
 		$P_i(t)$ is non-empty since $x_i(t) > 0$.
 
-		Let $(t_{i_m})_{m \in \mathbb{N}}$ a decreasing sequence of tolls in link $i$, such that $t_{i_m} \rightarrow t_i$.
-		We know that as a toll decreases, the link can only gain flow, which in turn makes $(x_i(t_{i_m}, t_{-i}))_{m \in \mathbb{N}}$ non-decreasing with $x_i(t_{i_m}, t_{-i}) \rightarrow x_i(t)$.
-		Therefore we can define from each $t_{i_m}$ an edge player $(p_m)_{m \in \mathbb{N}}$ such that $p_m = \sup P_i(t_{i_m}, t_{-i})$, thus making the non-decreasing sequence $(p_m)_{m \in \mathbb{N}}$ with $p_m \rightarrow \sup P_i(t)$.
+		Let $(t_{i_m})_{m \in \N}$ a decreasing sequence of tolls in link $i$, such that $t_{i_m} \rightarrow t_i$.
+		We know that as a toll decreases, the link can only gain flow, which in turn makes $(x_i(t_{i_m}, t_{-i}))_{m \in \N}$ non-decreasing with $x_i(t_{i_m}, t_{-i}) \rightarrow x_i(t)$.
+		Therefore we can define from each $t_{i_m}$ an edge player $(p_m)_{m \in \N}$ such that $p_m = \sup P_i(t_{i_m}, t_{-i})$, thus making the non-decreasing sequence $(p_m)_{m \in \N}$ with $p_m \rightarrow \sup P_i(t)$.
 
-		Corollary \ref{corollary:split_to_alpha} gives us $\alpha(p_m) \le \as^{(i, j)}(t_{i_m}, t_{-i})$ for all $m \in \mathbb{N}$.
+		Corollary \ref{corollary:split_to_alpha} gives us $\alpha(p_m) \le \as^{(i, j)}(t_{i_m}, t_{-i})$ for all $m \in \N$.
 		If the inequality holds as equality (in which case $c_i(p_m) = c_j(p_m)$), we take $t_{i_m}^\prime = t_{i_m}$.
 		Otherwise, it holds for all players in link $i$ that $c_i(p) < c_j(p)$, which means there is room to increase $t_{i_m}$ with no link users leaving the link (also no player from other links will enter a more expensive one), making the total flow remain the same.
 		Since we're interested in $t_i$ values very close to $t_j$, we can safely assume that $i, j$ are consequent links in the toll ordering on links defined by $t$, and since $t_{i_m} \rightarrow t_i$ we can also assume that no $t_{i_m}$ element breaks that ordering.
 		We can therefore see from Lemma \ref{lemma:split_monotonicity} that if we take $t_{i_m}^\prime > t_{i_m}$ then $\as^{(i, j)}(t_{i_m}^\prime, t_{-i}) \le \as^{(i, j)}(t_{i_m}, t_{-i})$, so we do so until we again reach the point where the most sensitive player of the link will view the $i, j$ link costs equally, i.e. $\alpha(p_m) = \as^{(i, j)}(t_{i_m}^\prime, t_{-i})$.
 		That increase doesn't break the monotonicity of the sequence, since the increase will happen at most until the value of the previous sequence element is reached, for which we've already checked that the inequality from Corollary \ref{corollary:split_to_alpha} is tight.
-		Therefore, the updated toll sequence $(t_{i_m}^\prime)_{m \in \mathbb{N}}$ becomes non-decreasing with $t_{i_m}^\prime \rightarrow t_i^\prime$ and it holds for all elements that
+		Therefore, the updated toll sequence $(t_{i_m}^\prime)_{m \in \N}$ becomes non-decreasing with $t_{i_m}^\prime \rightarrow t_i^\prime$ and it holds for all elements that
 		\[\alpha(p_m) = \as^{(i, j)}(t_{i_m}^\prime, t_{-i})\]
 
 		Finally we need to notice that from Lemma \ref{lemma:latencies_tolls} we have $t_i = t_j$ if and only if $\ell_i(x_i(t)) = \ell_j(x_j(t))$, so as $t_i - t_j$ approaches $0$, $\ell_i(x_i(t)) - \ell_j(x_j(t))$ also asymptotically approaches $0$.
@@ -751,8 +753,8 @@ The next lemma sums up the above discussion and gives us some insight about the 
 
 		%and the fact that $x(t)$ is continuous (TODO: ref?)
 		%\footnote{Harkes et al. \cite[Lemma 3.1]{Harks_2019} prove a more general property where also $x_j(t_i^\prime, t_{-i}) \le x_j(t)$ for all $j \ne i$. Though it seems that also holds for heterogeneous users, since we don't need the latter property and proving it seems tricky, we omit it from this study.}
-		%Let $(p_n)_{n \in \mathbb{N}}$ be an increasing sequence of players from $P_i(t)$, which , such that $p_n \rightarrow \sup P_i(t)$.
-		%Therefore we can find a decreasing sequence of $(t_{i_n})_{i_n \in \mathbb{N}}$ with $t_{i_n} \rightarrow t_i$, such that $\max P_i(t_{i_n}, t_{-i}) = p_n$.
+		%Let $(p_n)_{n \in \N}$ be an increasing sequence of players from $P_i(t)$, which , such that $p_n \rightarrow \sup P_i(t)$.
+		%Therefore we can find a decreasing sequence of $(t_{i_n})_{i_n \in \N}$ with $t_{i_n} \rightarrow t_i$, such that $\max P_i(t_{i_n}, t_{-i}) = p_n$.
 		%Such a $t_n$ might not be unique, though since $t_n > t_i > t_j$, link $i$ always remains the lower split.
 		%If $t_n$ is unique, then from the monotonicity of $\as$ (Lemma \ref{lemma:split_monotonicity}) we get $\as^{(i, j)}(t_n, t_{-i}) = \alpha(p_n)$. 
 		%Otherwise, it means there is a range of $t_n$ such that $\as^{(i, j)}(t_n, t_{-i}) \ge \alpha(p_n)$, so we select the highest one for which we get equality.
@@ -806,35 +808,33 @@ We apply this on Example \ref{example:simple_alpha} to solidify this.
 Since $\alpha$ is continuous we get from Corollary \ref{corollary:split_asymptotic_continuous} that
 \[\lim_{t_1 - t_2 \rightarrow 0^-} \as(t) = \alpha(x_2(0)) = 4/3, \lim_{t_1 - t_2 \rightarrow 0^+} \as(t) = \alpha(x_1(0)) = 5/3\]
 
-All the above give us the graph for $\as$ in Figure \ref{figure:apha_simple:split_example}.
-\begin{center}
-\begin{tikzpicture}[x=5cm, y=2cm, every node/.style={font=\small}]
-	\label{figure:apha_simple:split_example}
+All the above give us the graph for $\as$ in Figure \ref{figure:alpha_simple:split_example}.
+\begin{figure}
+	\centering
+	\begin{tikzpicture}[x=5cm, y=2cm, every node/.style={font=\small}]
+		% Axes
+		\draw[->] (0,0) -- (1.2,0) node[right] {$t_1$};
+		\draw[->] (0,0) -- (0,2.2) node[above] {$\as(t)$};
 
-	% Axes
-	\draw[->] (0,0) -- (1.2,0) node[right] {$t_1$};
-	\draw[->] (0,0) -- (0,2.2) node[above] {$\as(t)$};
+		% Tick marks
+		\draw (0,0) -- (0,-0.05) node[below] {$0$};
+		\draw (0.5,0) -- (0.5,-0.05) node[below] {$t_2$};
+		\draw (0,4/3) -- (-0.05,4/3) node[left] {$4/3$};
+		\draw (0,5/3) -- (-0.05,5/3) node[left] {$5/3$};
 
-	% Tick marks
-	\draw (0,0) -- (0,-0.05) node[below] {$0$};
-	\draw (0.5,0) -- (0.5,-0.05) node[below] {$t_2$};
-	\draw (0,4/3) -- (-0.05,4/3) node[left] {$4/3$};
-	\draw (0,5/3) -- (-0.05,5/3) node[left] {$5/3$};
+		% Function graph
+		\draw[thick] (0,0.1) -- (0.5,4/3);
+		\draw[thick] (0.5,5/3) -- (1,0.1);
 
-	% Function graph
-	\draw[thick] (0,0.1) -- (0.5,4/3);
-	\draw[thick] (0.5,5/3) -- (1,0.1);
-
-	% Dots
-	\fill[white] (0.5,4/3) ellipse (0.02 and 0.04);
-	\draw[black] (0.5,4/3) ellipse (0.02 and 0.04);
-	\fill[white] (0.5,5/3) ellipse (0.02 and 0.04);
-	\draw[black] (0.5,5/3) ellipse (0.02 and 0.04);
-
-	% Description
-	\node[align=center] at (0.7, -0.7) {\textbf{Figure \ref*{figure:apha_simple:split_example}:} Split function of Example \ref{example:simple_alpha}};
-\end{tikzpicture}
-\end{center}
+		% Dots
+		\fill[white] (0.5,4/3) ellipse (0.02 and 0.05);
+		\draw[black] (0.5,4/3) ellipse (0.02 and 0.05);
+		\fill[white] (0.5,5/3) ellipse (0.02 and 0.05);
+		\draw[black] (0.5,5/3) ellipse (0.02 and 0.05);
+	\end{tikzpicture}
+	\caption{Split function of Example \ref{example:simple_alpha}}
+	\label{figure:alpha_simple:split_example}
+\end{figure}
 
 \section{Upper bound}
 
@@ -987,13 +987,15 @@ We start with formalising our base.
 	Uniqueness of the equilibrium with regards to costs finally gives us $x^{(1)}(t) = x^{(2)}(t)$.
 	Since the above hold for all $t \in \R_+^{|N|}$, we conclude from Definition \ref{definition:game_equivalence} that $\Gm_1, \Gm_2$ are equivalent.
 \end{proof}
-Intuitively, the above means that increasing the money sensitivity of the players in a game is equivalent to proportionally decreasing the traffic that flows create on all links.
+Since a heterogeneous game with a fixed distribution function is, in practice, homogeneous with regard to the flow behaviour, we will also use, when relevant, the term \textit{pseudo-heterogeneous game} to describe such flows more easily.
+
+Intuitively, the above means that increasing the money sensitivity of all players in a game is equivalent to proportionally decreasing the traffic that flows create on all links.
 Unfortunately this correspondence  disappears for non-fixed distribution functions, since, in the general setting, a flow might consist of players with different money-sensitivity values depending on the tolls, thus loosing the $1-1$ relation between the latency function values and the distribution function ones.
 We discuss more about the relation between time and money sensitivity in Chapter \ref{chapter:future_work}.
 
-Looking now at the relation between different fixed distribution functions, Lemma \ref{lemma:a_fixed_homogeneous} gives us the following corollary.
-\begin{corollary}
-	\label{corollary:a_fixed_c_relation}
+Looking now at the relation between different fixed distribution functions, Lemma \ref{lemma:a_fixed_homogeneous} leads us to the following one.
+\begin{lemma}
+	\label{lemma:a_fixed_c_relation}
 	Let $\Gm_1 = (N, \ell, c_1)$ and $\Gm_2 = (N, \ell, c_2)$ two heterogeneous pricing games with common latency functions $\ell$ and distribution functions $\alpha(p) = c_1 > 0$ and $c_2 > 0$ respectively.
 	Then the following are true
 	\begin{enumerate}[$(i)$]
@@ -1002,7 +1004,7 @@ Looking now at the relation between different fixed distribution functions, Lemm
 		\item $\frac{\Pi_i^{(1)}(c_2 t)}{\Pi_i^{(2)}(c_1 t)} = \frac{c_2}{c_1}$
 		\item $\frac{B_i^{(1)}(c_2t_{-i})}{B_i^{(2)}(c_1 t_{-i})} = \frac{c_2}{c_1}$
 	\end{enumerate}
-\end{corollary}
+\end{lemma}
 
 \begin{proof}
 	\begin{enumerate}[$(i)$]
@@ -1209,58 +1211,257 @@ Finally, we can again calculate $t_{-i_0}$ using the closed formulas provided by
 \end{proof}
 We have now gathered all necessary tools to start investigating step distribution functions.
 
-\section{Step distribution function}
+\section{Step distribution function for $2$-link networks}
 
-Moving now to actual heterogeneous games, we will examine how the pricing game behaves when the distribution function is a step function, i.e. it takes finitely many values.
-There will be a strong connection with the fixed distribution function games we studied earlier, and that connection extends beyond the step function, which is why we will prove it here for any distribution function.
+Moving now to other (actual) heterogeneous games, we will once again restrict our model to networks with $2$ links in order to simplify our analysis.
+Even with this restriction, however, we will still uncover some vulnerabilities in reaching a Nash Equilibrium in the pricing competition game between the link operators.
+
+If the flow's distribution function is a step function, i.e. it takes finitely many values, then the flow sensitivity is fixed in finite intervals.
+This creates a strong connection with the pseudo-homogeneous games we studied earlier, and that connection is the main focus of this section.
+The following lemma holds for any distribution function, so we prove them as such, and by discussing afterwards their implications for step functions we'll move to our main result.
 
 \begin{lemma}
 	\label{lemma:heterogenous_flow_equiv_fixed}
 	Let $\Gm_1 = ([2], \ell, \alpha^{(1)})$ a heterogeneous game, $t \ne 0$ a given set of tolls and $x^{(1)}(t)$ the Nash equilibrium for $t$.
-	Now let $\Gm_2 = ([2], \ell, \as^{(1)}(t))$ a heterogeneous game with latency functions the same as $\Gm_1$ and fixed distribution function $\alpha^{(2)}(p) = \as^{(1)}(t)$.
-	Then $x^{(1)}(t) = x^{(2)}(t)$.
+	Now let $\Gm_2 = ([2], \ell, \as^{(1)}(t))$ a pseudo-heterogeneous game with latency functions the same as $\Gm_1$ and fixed distribution function $\alpha^{(2)}(p) = \as^{(1)}(t)$.
+	Then the following hold
+	\begin{enumerate}[$(i)$]
+		\item $x^{(1)}(t) = x^{(2)}(t)$
+		\item $\Pi_i^{(1)}(t) = \Pi_i^{(2)}(t)$ for each respective link operator $i$
+	\end{enumerate}
 \end{lemma}
 
 \begin{proof}
-	From definition, $\as^{(1)}(t)$ is the value for which any player that has such $\alpha^{(1)}$ value will view the two link costs as equal.
-	Then, since the latency functions are the same between $\Gm_1, \Gm_2$, we get $x^{(1)}(t) = x^{(2)}(t)$, and since all players have money sensitivity $\as^{(1)}(t)$, they will all view the two links equally with no one wishing to change.
-	We conclude that $x^{(1)}(t)$ is a Nash equilibrium for $t$ in $\Gm_2$ as well.
+	\begin{enumerate}[$(i)$]
+		\item From Definition \ref{definition:split_function} we have that $\as^{(1)}(t)$ is the value for which any player that has such $\alpha^{(1)}$ value will view the two link costs equally.
+		So if we assume flow $x^{(1)}(t)$ in $\Gm_2$, where all players have money-sensitivity $\as^{(1)}(t)$, then all players will view the two link costs equally (latency functions and tolls are the same), which in turn means that everyone is happy with their choice.
+		We conclude that $x^{(1)}(t)$ is a Nash Equilibrium for $t$ in $\Gm_2$ as well, and from the uniqueness of the equilibrium with regard to costs, we finally get $x^{(1)}(t) = x^{(2)}(t)$.
+		\item Natural conclusion from $(i)$ and the definition of $\Pi_i$.
+	\end{enumerate}
 \end{proof}
 
-\begin{corollary}
-	\label{corollary:heterogenous_profit_equiv_fixed}
-	Let $\Gm_1 = ([2], \ell, \alpha^{(1)})$ a heterogeneous game, $t \ne 0$ a given set of tolls, $\Gm_2 = ([2], \ell, \as^{(1)}(t))$ a heterogeneous game with latency functions the same as $\Gm_1$ and fixed distribution function $\alpha^{(2)}(p) = \as^{(1)}(t)$.
-	Then for each link operator $i$ it holds that $\Pi_i^{(1)}(t) = \Pi_i^{(2)}(t)$.
-\end{corollary}
-
-\begin{proof}
-	Natural conclusion from Lemma \ref{lemma:heterogenous_flow_equiv_fixed} and the definition of $\Pi_i$.
-\end{proof}
-
-For a game with step distribution function in particular, the above mean that we can "slice" its flow and respective profit depending on the money sensitivity of each flow section, and apply the properties we investigated earlier on fixed distribution function games.
-Combining it with the discussion around the values of $\as$ for different tolls, especially Theorem \ref{theorem:alpha_upper_irrelevant}, we can see that the game is played among a subset of $\alpha$ values, mirrored around the lower and upper splits.
-We visualise this idea in the following example.
+We return our focus to step distribution functions, which we define as a function $\alpha$ which takes on a finite number of values $\alpha_1 < \alpha_2 < \dots < \alpha_m, \; m \in \N$.
+From Lemma \ref{lemma:split_basic}$(ii)$ we have $\as \in [\alpha_1, \alpha_m]$ and from the overall analysis of $\as$ in Chapter \ref{chapter:split} we get that $\as$ will move continuously among a subset of $(\alpha_k)_{k \in [m]}$, mirrored around the lower splits on each link.
+Lemma \ref{lemma:heterogenous_flow_equiv_fixed} shows us that in each case the game is corresponding to a pseudo-heterogeneous one with $\alpha(p) = \as(t)$, marking a clear connection with those games where $\alpha(p) \in (\alpha_k)_{k \in [m]}$.
+Intuitively, it seems to make sense to "slice" the flow into intervals in which we have equivalency with one of those games.
+We visualise this intuition in the following example.
 
 \begin{example}
 	\label{example:a_step_simple}
-	Let $([2], \ell, \alpha)$ be a heterogeneous pricing game where
+	Let $([2], \ell, \alpha)$ a heterogeneous pricing game with latency functions $\ell_1(x) = 2x, \ell_2(x) = x + 1$ and distribution function $\alpha$ such that
 	\begin{align*}
-		\begin{aligned}
-			\ell_1 &= x + 1 \\
-			\ell_2 &= 2x
-		\end{aligned}
-		\qquad
 		\alpha(p) =
 		\begin{cases}
-			1 & p \le 1 / 5 \\
-			3 & p > 0
+			1 & p \le \tfrac15 \\
+			3 & p \in \left(\tfrac15, \tfrac12\right) \\
+			4 & p \ge \tfrac12
 		\end{cases}&
 	\end{align*}
-	TODO: Add flow and profit plots for a fixed $t_{-i}$.
-	In each case include all flow/profit for the game with $\alpha(p) = 1, 3$ and make bold the sub-intervals that are relevant.
 \end{example}
 
-In order to be able to describe the different profits on the different intervals of the step function, we introduce a definition of profit for a link operator within a flow section.
+\begin{center}
+	\begin{multicols}{2}
+		% Left Column: Network Graph
+		\begin{tikzpicture}[scale=1.4, every node/.style={font=\small}]
+			% Nodes
+			\node[circle, draw, fill=blue!20, minimum size=0.8cm] (s) at (0,0) {$s$};
+			\node[circle, draw, fill=blue!20, minimum size=0.8cm] (t) at (4,0) {$t$};
+
+			% Links
+			\draw[->, thick] (s) to[bend left=35] node[midway, above] {$2x$} (t);
+			\draw[->, thick] (s) to[bend right=35] node[midway, below] {$x + 1$} (t);
+
+			% Description
+			\node[align=center] at (2, -2) {Network of Example \ref{example:a_step_simple}};
+		\end{tikzpicture}
+
+		% Right Column: Distribution function Graph
+		\begin{tikzpicture}[x=3cm, y=0.7cm, every node/.style={font=\small}]
+			% Axes
+			\draw[->] (0,0) -- (1.2,0) node[right] {$p$};
+			\draw[->] (0,0) -- (0,4.2) node[above] {$\as(p)$};
+
+			% Tick marks
+			\draw (0,0) -- (0,-0.05) node[below] {$0$};
+			\draw (0.2,0) -- (0.2,-0.05) node[below] {$\frac15$};
+			\draw (0.5,0) -- (0.5,-0.05) node[below] {$\frac12$};
+			\draw (1,0) -- (1,-0.05) node[below] {$1$};
+			\draw (0,1) -- (-0.05,1) node[left] {$1$};
+			\draw (0,3) -- (-0.05,3) node[left] {$3$};
+			\draw (0,4) -- (-0.05,4) node[left] {$4$};
+
+			% Function graph
+			\draw[thick] (0,1) -- (0.2,1);
+			\draw[thick] (0.2,3) -- (0.5,3);
+			\draw[thick] (0.5,4) -- (1,4);
+
+			% Closed / Open dots
+			\fill[white] (0.2,1) ellipse (0.014 and 0.06);
+			\draw[black] (0.2,1) ellipse (0.014 and 0.06);
+			\fill[black] (0.2,3) ellipse (0.014 and 0.06);
+			\draw[black] (0.2,3) ellipse (0.014 and 0.06);
+			\fill[black] (0.5,3) ellipse (0.014 and 0.06);
+			\draw[black] (0.5,3) ellipse (0.014 and 0.06);
+			\fill[white] (0.5,4) ellipse (0.014 and 0.06);
+			\draw[black] (0.5,4) ellipse (0.014 and 0.06);
+			
+			% Description
+			\node[align=center] at (0.7, -1.7) {Distribution function of\\Example \ref{example:a_step_simple}};
+		\end{tikzpicture}
+	\end{multicols}
+\end{center}
+We can easily find that $x(0) = (2/3, 1/3)$, so from Corollary \ref{corollary:split_asymptotic_continuous} we get that the edge values of $\as$ are $\alpha(x_1(0)) = \alpha(2/3) = 4$ and $\alpha(x_2(0)) = \alpha(1/3) = 3$.
+Focusing on link $1$, we fix an arbitrarily large $t_2$ and examine $t_1 - t_2$ for different values of $t_1$.
+With a reasoning similar to that of Example \ref{example:simple_alpha} (since again $\alpha(0) = 1$) we get that the toll difference bounds are $t_1 - t_2 \le 2$ and $t_2 - t_1 \le 1$, which means that we can restrict our focus to $t_1 - t_2 \in [-1, 2]$.
+We also know at which flows the behaviour of the network will change, which are exactly the flows where each all player of each sensitivity type are using a single link, i.e. the flows $(4/5, 1/5), (1/2, 1/2), (1/5, 4/5)$, e.g. flow $(4/5, 1/5)$ has all players with $\alpha(p) = 1$ in link $2$ and all $\alpha(p) = 3, 4$ players in link $1$, which in turn means that such a flow can only have $\as$ value between $1$ and $3$.
+
+We focus on the edge cases.
+For each flow and each relevant $\alpha$ value we can calculate the toll difference that will cause it, e.g. if we want to find the toll difference for which we get flow $x(t) = (4/5, 1/5)$ with $\as(t) = 3$, then we solve $\ell_1(4/5) + 3t_1 = \ell_2(1/5) + 3t_2 \Rightarrow t_2 - t_1 = 2/15$.
+After calculating all cases we arrive at Figures \ref{figure:alpha_step:split} and \ref{figure:alpha_step:flow} which visualise respectively $\as(t)$ and $x_1(t)$ for all possible values of $t_1$.
+
+\begin{figure}
+	\centering
+	\begin{tikzpicture}[x=3.4cm, y=1cm, every node/.style={font=\small}]
+		% Axes
+		\draw[->] (0,0) -- (-1.1,0);
+		\draw[->] (0,0) -- (2.1,0) node[right] {$t_1 - t_2$};
+		\draw[->] (0,0) -- (0,4.4) node[above] {$\as(t)$};
+
+		% Tick marks
+		\draw (-1,0) -- (-1,-0.05) node[below] {$-1$};
+		\draw (-2/5,0) -- (-2/5,-0.05) node[below] {$-\frac25$};
+		\draw (-2/15,0) -- (-2/15,-0.05) node[below] {$-\frac{2}{15}$};
+		\draw (0,0) -- (0,-0.05) node[below] {$t_2$};
+		\draw (1/8,0) -- (1/8,-0.05) node[below] {$\frac18$};
+		\draw (1/6,0) -- (1/6,-0.05) node[below] {$\frac16$};
+		\draw (7/15,0) -- (7/15,-0.05) node[below] {$\frac{7}{15}$};
+		\draw (7/5,0) -- (7/5,-0.05) node[below] {$\frac75$};
+		\draw (2,0) -- (2,-0.05) node[below] {$2$};
+		\draw (0,1) -- (-0.05,1) node[left] {$1$};
+		\draw (0,3) -- (0.05,3) node[right] {$3$};
+		\draw (0,4) -- (-0.05,4) node[left] {$4$};
+
+		% Function graph
+		% Left side
+		\draw[thick] (-1,1) -- (-2/5,1);
+		\draw[thick] (-2/5,1) -- (-2/15,3);
+		\draw[thick] (-2/15,3) -- (0,3);
+		% Right side
+		\draw[thick] (0,4) -- (1/8,4);
+		\draw[thick] (1/8,4) -- (1/6,3);
+		\draw[thick] (1/6,3) -- (7/15,3);
+		\draw[thick] (7/15,3) -- (7/5,1);
+		\draw[thick] (7/5,1) -- (2,1);
+
+		% Dots
+		\fill[white] (0,3) ellipse (0.02 and 0.066);
+		\draw[black] (0,3) ellipse (0.02 and 0.066);
+		\fill[white] (0,4) ellipse (0.02 and 0.066);
+		\draw[black] (0,4) ellipse (0.02 and 0.066);
+	\end{tikzpicture}
+	\caption{Split function of Example \ref{example:a_step_simple}}
+	\label{figure:alpha_step:split}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\begin{tikzpicture}[x=3.4cm, y=3.4cm, every node/.style={font=\small}]
+		% Axes
+		\draw[->] (0,0) -- (-1.1,0);
+		\draw[->] (0,0) -- (2.1,0) node[right] {$t_1 - t_2$};
+		\draw[->] (0,0) -- (0,1.1) node[above] {$x_1(t)$};
+
+		% Tick marks
+		\draw (-1,0) -- (-1,-0.05) node[below] {$-1$};
+		\draw (-2/5,0) -- (-2/5,-0.05) node[below] {$-\frac25$};
+		\draw (-2/15,0) -- (-2/15,-0.05) node[below] {$-\frac{2}{15}$};
+		\draw (0,0) -- (0,-0.05) node[below] {$t_2$};
+		\draw (1/8,0) -- (1/8,-0.05) node[below] {$\frac18$};
+		\draw (1/6,0) -- (1/6,-0.05) node[below] {$\frac16$};
+		\draw (7/15,0) -- (7/15,-0.05) node[below] {$\frac{7}{15}$};
+		\draw (7/5,0) -- (7/5,-0.05) node[below] {$\frac75$};
+		\draw (2,0) -- (2,-0.05) node[below] {$2$};
+		\draw (0,1) -- (-0.05,1) node[left] {$1$};
+		\draw (0,4/5) -- (0.05,4/5) node[right] {$\frac45$};
+		\draw (0,2/3) -- (-0.05,2/3) node[left] {$\frac23$};
+		\draw (0,1/2) -- (-0.05,1/2) node[left] {$\frac12$};
+		\draw (0,1/5) -- (-0.05,1/5) node[left] {$\frac15$};
+
+		% Function graph
+		% Left side
+		\draw[thick] (-1,1) -- (-2/5,4/5);
+		\draw[thick] (-2/5,4/5) -- (-2/15,4/5);
+		\draw[thick] (-2/15,4/5) -- (0,2/3);
+		% Right side
+		\draw[thick] (0,2/3) -- (1/8,1/2);
+		\draw[thick] (1/8,1/2) -- (1/6,1/2);
+		\draw[thick] (1/6,1/2) -- (7/15,1/5);
+		\draw[thick] (7/15,1/5) -- (7/5,1/5);
+		\draw[thick] (7/5,1/5) -- (2,0);
+	\end{tikzpicture}
+	\caption{Flow function for link $1$ of Example \ref{example:a_step_simple}}
+	\label{figure:alpha_step:flow}
+\end{figure}
+
+What one may first notice from those figures, is that when $x_1$ is fixed then $\as$ isn't and vice-versa.
+This happens due to the fact that we have a step distribution function, therefore if the flow is moving, then it does so among players with the same sensitivity type, which is one of the finitely many values $\alpha$ can take.
+Inversely, if all players of each sensitivity type are using a single link, then $\as$ can take any value between the lowest and highest $\alpha$ value in the upper and lower split respectively.
+
+Considering now the pricing competition game and looking at the profit function $\Pi_1(t)$, we can already notice from Figure \ref{figure:alpha_step:flow} that in the toll difference intervals where the flow remains the same, $\Pi_1(t)$ will be strictly increasing as $t_1$ also does.
+In extension, in terms of profit maximisation, it follows that max profit will never be within those intervals.
+We capture this idea in the following lemma.
+
+\begin{lemma}
+	\label{lemma:alpha_step_gaps}
+	Let $\Gm_1 = ([2], \ell, \alpha)$ a heterogeneous pricing game where $\alpha$ is a step function with values $(\alpha_k)_{k \in [m]}, \; m \in N$.
+	Also let $t \ne 0$ a set of tolls for which it holds for all $k \in [m]$ that all players $p$ with $\alpha(p) = \alpha_k$ are using the same link.
+	Then $t$ is not a Nash equilibrium for the pricing game.
+\end{lemma}
+
+\begin{proof}
+	It suffices to show that there exists a link operator $i$ for which it holds that $B_i(t_{-i}) \ne t_i$.
+	From the condition about $t$ we get that there exists some $\alpha_k, \alpha_{k + 1}, \; k \in [m - 1]$ where $\alpha_k$ is the highest $\alpha$ value in the lower split and $\alpha_{k + 1}$ the lowest $\alpha$ value in the upper split.
+	It obviously follows that $\alpha_k \le \as(t) \le \alpha_{k + 1}$, but since also $\alpha_k \ne \alpha_{k + 1}$, we see that the inequalities cannot hold with equality both at the same time.
+	
+	If $\as(t) > \alpha_k$, then let $i$ be the link operator of the link with the higher toll, i.e. the link with the lower split.
+	From Lemma \ref{lemma:split_asymptotic} we see that for any $t_i^\prime > t_i$, which increases the toll difference $t_i - t_{-i}$, may decrease $\as(t)$.
+	Still, if link operator $i$ increases their toll $t_i^\prime > t_i$ by an arbitrarily small amount, they can ensure that $\as(t) \ge \as(t_i^\prime, t_{-i}) > \alpha_k$ and not break the property of $\alpha_k < \as(t_i^\prime, t_{-i}) \le \alpha_{k + 1}$, thus achieving no flow movement between $t_i$ and $t_i^\prime$.
+	This gives us $x(t) = x(t_i^\prime, t_{-i})$, from which it is easy to show that $\Pi_i(t) < \Pi_i(t_i^\prime, t_{-i})$ and in turn $B_i(t_{-i}) \ne t_i$.
+	
+	If $\as(t) < \alpha_{k + 1}$, then a symmetrical argument can be made by selecting as $i$ the link operator of the link with the higher toll.
+	Note that an increase in $t_i$ now causes the toll difference $t_{-i} - t_i$ to decrease which may increase $\as(t)$, so we again need to consider that the $t_i^\prime$ increase is arbitrarily small to ensure $\as(t_i^\prime, t_{-i}) < \alpha_{k + 1}$.
+	The rest of the argument continues as before.
+\end{proof}
+
+The above lemma shows us that the Nash Equilibrium for the pricing game (if existent at all) does not reside in tolls for which $\as$ is in-between the values of $\alpha$.
+We complement this idea with the following Theorem, one of the main results of this chapter, where we will show that if that Nash Equilibrium exists, then it has to happen for some specific flow.
+
+\begin{theorem}
+	\label{theorem:a_step_ne_equiv_fixed}
+	Let $\Gm_1 = ([2], \ell, \alpha)$ a heterogeneous pricing game where $\alpha$ is a step function with values $(\alpha_k)_{k \in [m]}$.
+	If $\Gm_1$ has a Nash equilibrium for the pricing game at toll $t^*$, let $\Gm_2 = ([2], \ell, \as(t^*))$ a pseudo-heterogeneous game with latency functions the same as the ones in $\Gm_1$ and fixed distribution function $\alpha^{(2)}(p) = \as(t^*)$.
+	Then $t^*$ is a Nash equilibrium for the pricing game in $\Gm_2$.
+\end{theorem}
+
+\begin{proof}
+	First observe that from Lemma \ref{lemma:alpha_step_gaps} we get that $t^*$ cannot have all players of each sensitivity type using a single link, otherwise it wouldn't be a Nash equilibrium for the pricing game.
+	Therefore $\as(t^*) = \alpha_k$ for some $k \in [m]$ and there exists a non-zero flow of players with money-sensitivity $\alpha_k$ in both links.
+	That means that we can find arbitrarily small toll variations which will move some, but not all, of those players, thus keeping $\as$ at $\alpha_k$.
+	In other words, for an arbitrary link $i$, $\exists \epsilon > 0$ such that if $|t_i - t_i^*| < \epsilon$ then $\as(t_i, t_{-i}^*) = \alpha_k$.
+	Let $T_\epsilon$ denote the set of those $t_i$.
+	
+	Notice that $\Gm_2$, from the way we defined it, has $\alpha^{(2)}(p) = \alpha_k$.
+	We can therefore apply Lemma \ref{lemma:heterogenous_flow_equiv_fixed}$(ii)$ on the elements of $T_\epsilon$ and get $\Pi_i^{(1)}(t_i, t_{-i}^*) = \Pi_i^{(2)}(t_i, t_{-i}^*)$ for all $t_i \in T_\epsilon$.
+	Since $t^*$ is a Nash equilibrium for the pricing game in $\Gm_1$, it holds that $\Pi_i^{(1)}(t^*) \ge \Pi_i^{(1)}(t_i, t_{-i}^*)$ for all $t_i > 0$, so if we restrict our domain to $T_\epsilon$ we get $\Pi_i^{(2)}(t^*) \ge \Pi_i^{(2)}(t_i, t_{-i}^*)$ for all $t_i \in T_\epsilon$.
+	That makes $\Pi_i^{(2)}(t^*)$ a local maximum in $\Gm_2$.
+	From the analysis in Harks et al. \cite{Harks_2019} we know that for homogeneous games the profit functions $\Pi_i$ are concave, making their values take a unique global maximum.
+	It follows that $\Pi_i^{(2)}(t^*)$ is the global maximum profit against $t_{-i}^*$ in $\Gm_2$, thus arriving at $B_i^{(2)}(t_{-i}^*) = t_i^*$.
+	
+	The link selection was arbitrary, making $B_i^{(2)}(t_{-i}^*) = t_i^*$ hold for all links $i \in [2]$, finally concluding that $t^*$ is a Nash equilibrium for the pricing game in $\Gm_2$.
+\end{proof}
+
+It therefore seems to make sense to discuss profit only within those intervals where the flow changes, or equivalently view profit with regard to flow intervals, since we ignore instances where the flow remains the same and thus there exists a $1-1$ relation between profit and flow.
+We now introduce the notion of profit within a flow interval.
 
 \begin{definition}
 	\label{definition:profit_interval}
@@ -1292,43 +1493,6 @@ We will therefore use the money sensitivity split function to refer to the respe
 When it comes to maximising profit for the pricing games, those values included in all $\Pi_{i, k}$ are all we need, because if $\as(t)$ takes any other in-between value, then we are on an instance where no player views the two link costs as equal, with players viewing a purely smaller cost in either link.
 For the link operators, this means there at least one who can increase their toll and still keep the flow the same, achieving pure profit.
 This can also happen in link cases of $\as(t) = \alpha_k$, so we move our full description of this behavior in the following lemma.
-
-\begin{lemma}
-	\label{lemma:a_step_gaps}
-	Let $\Gm_1 = ([2], \ell, \alpha)$ a heterogeneous game where $\alpha$ is a step function with values $(\alpha_k)_{k \in [m]}$.
-	If $t^\prime$ a set of tolls in the closure of $T_{-\alpha} = \{t | \as(t) \ne \alpha_k \; \forall k \in [m]\}$, then $t^\prime$ is not a Nash equilibrium for the pricing game.
-\end{lemma}
-
-\begin{proof}
-	It suffices to show that there exists link operator $i$ such that $B_i(t_{-i}^\prime) \ne t_i$.
-	First, notice that from \ref{lemma:split_basic} and \ref{theorem:alpha_upper_irrelevant} we get $\alpha_1 \le \as(t) \le \alpha_k$ for all $t$, and therefore $\as$ is always in-between some $\alpha_k, \alpha_{k+1}$.
-	Even if $\as(t) \ \alpha_k$ for some $k$, belonging in the closed border of $T_{-\alpha}$, it will be either the lowest or highest toll difference possible, ensuring there is always a link where no players are viewing the two links equally.
-
-	Let $i$ be that link which we also assume is the lower split of the flow equilibrium, i.e. $t_i^\prime > t_{-i}^\prime$, and let $k \in [m - 1]$ such that $\alpha_k < \as(t^\prime) < \alpha_{k+1}$.
-	Then link operator $i$ can increase their toll to a $t_i^{\prime\prime} > t_i^\prime$, thus decreasing the value of $\as$, up to the point where $\alpha(t^{\prime\prime}, t_{-i}^\prime) = \alpha_k$.
-	Players in link $i$ will now view their link as of either lower or equal cost value as the other, while the players in the other link will view theirs as of purely lower cost, making none wishing to change.
-	We therefore get that $x_i(t_i^{\prime\prime}, t_i^\prime) = x_i(t^\prime)$ making in turn $\Pi_i(t_i^{\prime\prime}, t_i^\prime) > \Pi_i(t^\prime)$ and finally $B_i(t_{-i}^\prime) \ne t_i$.
-
-	Similarly we can show that $B_{-i}(t_i^\prime) \ne t_{-i}$ if $i$ is the upper split of the flow equilibrium, decisively making $t^\prime$ a set of tolls where there never is a Nash equilibrium for the pricing game.
-\end{proof}
-
-We complete the picture now with correlation result for the Nash equilibrium of the pricing game.
-
-\begin{theorem}
-	\label{theorem:a_step_ne_equiv_fixed}
-	Let $\Gm_1 = ([2], \ell, \alpha)$ a heterogeneous game where $\alpha$ is a step function with values $(\alpha_k)_{k \in [m]}$.
-	If $\Gm_1$ has a Nash equilibrium for the pricing game at toll $t^*$, then the game $\Gm_2 = ([2], \ell, \as(t^*))$, with latency functions the same as $\Gm_1$ and fixed distribution function $\alpha(p) = \as(t^*)$, also has its unique Nash equilibrium for the pricing game at $t^*$.
-\end{theorem}
-
-\begin{proof}
-	First observe that from Lemma \ref{lemma:a_step_gaps} we get $t^*$ is not in the closure of $T_{-\alpha}$, otherwise it couldn't be a Nash equilibrium, therefore $\as(t^*) = \alpha_k$ for some $k \in [m]$.
-	Then, again due to $t^*$ being a Nash equilibrium, it holds that $\Pi_i(t^*) \ge \Pi_i(t_i, t_{-i}^*)$ for all $t_i > 0$.
-
-	Now it is important to note that from the analysis in Harks et al. \cite{Harks_2019} we know that for homogeneous games the profit functions $\Pi_i$ are concave, making them have unique maximum.
-	Therefore when restricting the domain to an interval, either that same maximum is within that interval or a lower maximum of the interval is achieved at its corners.
-	The restriction of $t^*$ not belonging in the closure of $T_{-\alpha}$ also forbids the latter case, making $\Pi_i(t^*)$ also the global maximum for $\Gm_2$.
-	That condition holds for all link operators $i \in [2]$, therefore $t^*$ is a Nash equilibrium for the pricing game in $\Gm_2$.
-\end{proof}
 
 The most important corollary from that lemma comes from the fact that, as stated in \ref{lemma:a_fixed_ne}, for any $c > 0$ the flow for which the Nash Equilibrium emerges is always the same.
 Consequently for any step function assigned to a pricing game with fixed latency functions, if a Nash Equilibrium exists then it needs to be on the same flow as the one emerging in the respective homogeneous pricing game.
@@ -1388,6 +1552,16 @@ Though less intuitive we already saw an application of this idea in Lemma \ref{l
 This would of course does not guarantee that the latency functions will remain affine, or even polynomial.
 One could attempt and investigate distribution functions that are inverse polynomials, making the respective latencies remain polynomial.
 In any case we believe that a future work on the relation of the time-sensitivity with money-sensitivity approaches, could uncover further insights in the behavior of heterogeneity.
+
+\section*{Pseudo-heterogeneous games}
+
+In Chapter \ref{chapter:pricing_equilibria} we investigated the class of heterogeneous games with a fixed distribution function, which maintains its homogeneous behaviour and presents interesting properties when comparing different fixed sensitivities.
+Since these games have a clear connection to heterogeneous games with step functions, it shows special interest to study the relation of flow and profit with regard to the same $t$, as this approach can then lead to a characterisation of those in step functions.
+
+\subsection*{Profit maximisation}
+
+During the investigation of this study, there has been some minor results in the relation of flow and profit between two similar pseudo-heterogeneous games.
+We present a list of conjectures that we believe are true.
 
 \cleardoublepage
 
