@@ -174,9 +174,9 @@ In our case we will additionally assume that the flow users behave in a heteroge
 The structure of this thesis is as such.
 We finish this chapter by briefly presenting previous work in this field, all while examining some of the different models and properties that have been researched in the literature so far.
 This will also serve as a bridge to Chapter \ref{chapter:preliminaries} were we will set our basis for the rest of the study.
-This includes formal definitions of the models and properties we introduced from previous work, as well as some additional -but still basic- properties of the models, with heavy focus on the user's time-money trade-off, captured by a money-sensitivity distribution function $\alpha$.
+This includes formal definitions of the models and properties we introduced from previous work, as well as some additional -but still basic- properties of the models, with heavy focus on the user's time-money trade-off, captured by a money sensitivity distribution function $\alpha$.
 
-Entering the main body of our work, in Chapter \ref{chapter:split} we introduce a new term regarding any two links of the network, called \textit{money-sensitivity split}, which captures the notion of a (potentially non-existent) player whose money-sensitivity makes them view the two links as equal.
+Entering the main body of our work, in Chapter \ref{chapter:split} we introduce a new term regarding any two links of the network, called \textit{money sensitivity split}, which captures the notion of a (potentially non-existent) player whose money sensitivity makes them view the two links as equal.
 We will then analyse that notion and provide properties and bounds for its values.
 Finally, in the chapter's main result, we prove a general property of heterogeneous network games as, due to the previously found bounds, there might be a portion of users whose sensitivity value can be arbitrarily large without affecting the game.
 
@@ -192,7 +192,9 @@ We conclude this thesis with a short discussion around the main outtakes of this
 \section{Related Work}
 \label{section:related_work}
 
-Selfish routing has a vast history of literature as it's been proven useful in solving a variety of real-world problems in economics \cite{pigou1920economics}, transportation \cite{beckmann1956studies} and more (see \cite{roughgarden2002sr} and \cite{roughgarden2005slpoa} for more references).
+Selfish routing is the study of trafficked networks where selfish users seek to optimise their own traffic cost.
+The main interest is on instances where all users are content with the traffic they experience and no one wishes to change their strategy, a notion known as a Nash Equilibrium, or equivalently from the work of Wardrop \cite{wardrop_theoretical_1952}, a Wardrop Equilibrium.
+Models from this field have been proven extremely useful in solving a variety of real-world problems in economics \cite{pigou1920economics}, transportation \cite{beckmann1956studies}, \cite{wardrop_theoretical_1952} and more, resulting in a vast history in the literature (see \cite{roughgarden2002sr} and \cite{roughgarden2005slpoa} for more references).
 It has been well-established, at least as early as 1920 from the work of Pigou \cite{pigou1920economics}, that selfish behavior in congested networks can create (arbitrary) inefficiencies with regard to the total latency experienced by all users.
 A long-standing practice to solve these inefficiencies has been to regulate the network by adding tolls to the links, thus altering the cost of the link usage.
 A classical result on this is the use of marginal tolls (Beckman et al. \cite{beckmann1956studies}), where each link user is charged a toll corresponding to their externality, i.e. the added congestion effect caused by their participation in the network.
@@ -201,7 +203,7 @@ Marginal cost pricing has been investigated in networks with heterogeneous users
 
 Congestion games were formally introduced by Rosenthal \cite{Rosenthal1973ACO} who also proved that in those games a pure Nash Equilibrium always exists.
 Later, Monterer-Shapely \cite{MONDERER1996124} defined the class of potential games (games where the incentive for all players to change their strategy can be expressed with a global function) and proved that congestion games are equivalent to exact potential games (potential games where a change in strategy from any player alter the potential function the exact way it alters the player's cost).
-One of the major contributions in this field has been the introduction of the Wardrop equilibrium \cite{wardrop_theoretical_1952}, a notion of Nash equilibrium for potential games, where the Wardrop principles provide a framework to describe and analyse those equilibria.
+%One of the major contributions in this field has been the introduction of the Wardrop equilibrium \cite{wardrop_theoretical_1952}, a notion of Nash equilibrium for potential games, where the Wardrop principles provide a framework to describe and analyse those equilibria.
 Milchtaich \cite{MILCHTAICH1996111} then investigated different pay-off functions for congestion games, where he showed that even though some best-reply strategies may end up in a cyclic path, there is always a path that leads to Nash equilibrium with pure strategies.
 
 Given the above, with the existence of a Nash equilibrium always existing, later research focused on investigating the quality of an equilibrium by using the notion of \textit{Price of Anarchy}, introduced by Koutsoupias-Papadimitriou \cite{KOUTSOUPIAS200965}.
@@ -301,9 +303,9 @@ By also using the fact that $\sum_{j \in N(t)} x_i = 1$ we solve the equations w
 \subsection*{Heterogeneous players}
 
 In the heterogeneous case, each player $p$ reacts differently to tolls, presumably due to different time-money trade-off values.
-We describe this by adding a money-sensitivity weight $\alpha(p)$ on the toll costs experienced by a player, making them see the cost of a link with flow $x_i$ and toll $t_i$ as $c_i(p) = \ell_i(x_i) + \alpha(p) \cdot t_i$.
+We describe this by adding a money sensitivity weight $\alpha(p)$ on the toll costs experienced by a player, making them see the cost of a link with flow $x_i$ and toll $t_i$ as $c_i(p) = \ell_i(x_i) + \alpha(p) \cdot t_i$.
 For a flow $x$ and tolls $t$, each player considers their costs experienced across all links and then selects to use the one (or one of potentially many) with the lowest cost. 
-By also assuming that the players are sorted by money-sensitivity, we can describe their heterogeneity by defining a non-decreasing function $\alpha: [0, 1] \rightarrow [0, +\infty]$.
+By also assuming that the players are sorted by money sensitivity, we can describe their heterogeneity by defining a non-decreasing function $\alpha: [0, 1] \rightarrow [0, +\infty]$.
 We call $\alpha$ a \textit{distribution function}.
 Even though the definition does allow functions that are not upper bounded with $\alpha(1) = +\infty$, we will always assume that $\alpha$ is finite on $[0, 1)$.
 %Finally, we will assume that $\alpha(0) > 0$, since, as we'll see in more detail in Lemma \ref{lemma:a_0_0}, allowing many players close to $0$ breaks the pricing game.
@@ -479,16 +481,26 @@ It trivially follows from this definition that the two pricing competition games
 \chapter{Money sensitivity split}
 \label{chapter:split}
 
+\section*{Summary}
+
+In this chapter we will formalise and investigate the behaviour of the way a heterogeneous flow splits among the network links.
+In order to tackle the variance in money sensitivity among the flow users, we will focus on two (arbitrary) links and seek a money sensitivity value for which, for a given set of tolls, the two link costs are equal.
+After some discussion around the intuition of this idea, we will formally define a \textit{money sensitivity split} function (\ref{definition:split_function}) to capture this notion, as well as describe its essential idea of splitting the sensitivity values of the link's users to lower and higher values (Corollary \ref{corollary:split_to_alpha}).
+A discussion will then be necessary about the set of sensitivity values in the flow users of a link which will lead us to defining them in \ref{definition:alpha_flow_sets}.
+We then proceed with Lemmas to describe the split function's bounds (\ref{lemma:split_basic}), monotonicity (\ref{lemma:split_monotonicity}) and asymptotic behavior (\ref{lemma:split_asymptotic}), with which we'll arrive at the function's characterisation, cementing it visually for Example \ref{example:simple_alpha} in Figure \ref{figure:alpha_simple:split_example}.
+Finally, some observations about the split function's global upper bounds (Lemma \ref{lemma:split_upper_bound}) will have as logical consequence this chapter's main result, Theorem \ref{theorem:alpha_upper_irrelevant}, which states that there may exist a portion of players whose sensitivity value can be arbitrarily high without affecting the network game.
+
+
 \section{Introduction}
 
-One of the main difficulties with heterogeneity is that, for a given set of tolls, flow users with different money-sensitivity values, view toll values also differently, and therefore, in practice, play different games.
+One of the main difficulties with heterogeneity is that, for a given set of tolls, flow users with different money sensitivity values, view toll values also differently, and therefore, in practice, play different games.
 In the analysis of Example \ref{example:simple_alpha} we can find a first glimpse on how to tackle this issue, as we can see that the flow users on each link are organised around the player that views the two link costs as equal.
 This notion will be the center of this chapter, and using it we will try and describe some properties about all users.
 
 We start with a simple example in a network with $2$ links.
 Consider $([2], \ell, \alpha)$, a heterogeneous parallel game with two links $[2] = \{1, 2\}$ such that $x_1(0), x_2(0) > 0$, tolls $t = (t_1, t_2)$ assigned to them and  $x(t) = (x_1(t), x_2(t))$ the Nash equilibrium for $t$.
 Without loss of generality we assume $t_1 > t_2$ which from Lemma \ref{lemma:latencies_tolls} leads to $\ell_1(x_1(t)) < \ell_2(x_2(t))$.
-For the $2$ links of the game we introduce the term money sensitivity split $\as(t)$ as the value of $\alpha$ for which if any player $p$ has $\alpha(p)=\as(t)$ then that player views the $2$ links' total costs as equal.
+For the $2$ links of the game we introduce the term \textit{money sensitivity split} $\as(t)$ as the value of $\alpha$ for which if any player $p$ has $\alpha(p)=\as(t)$ then that player views the $2$ links' total costs as equal.
 More specifically, $\as(t)$ is the value of the distribution function $\alpha$ for which it holds
 \[\ell_1(x_1(t)) + \as(t) \cdot t_1 = \ell_2(x_2(t)) + \as(t) \cdot t_2\]
 from which, after solving for $\as(t)$, we get
@@ -497,9 +509,9 @@ from which, after solving for $\as(t)$, we get
 Before we get into a more formal definition and description of $\as$, it'd help to first discuss the nature of the split that $\as$ captures.
 Regardless of whether there exists a player $p$ such that $\alpha(p) = \as(t)$, it still holds that
 \begin{itemize}
-	\item if $\alpha(p) < \as(t)$ then $\ell_1(x_1(t)) + \alpha(p) \cdot t_1 < \ell_2(x_2(t)) + \alpha(p \cdot) t_2$, thus $p$ is on link $1$
-	\item if $\alpha(p) > \as(t)$ then $\ell_1(x_1(t)) + \alpha(p) \cdot t_1 > \ell_2(x_2(t)) + \alpha(p) \cdot t_2$, thus $p$ is on link $2$
-	\item if $\alpha(p) = \as(t)$ then $\ell_1(x_1(t)) + \alpha(p) \cdot t_1 = \ell_2(x_2(t)) + \alpha(p) \cdot t_2$, thus $p$ is either on link $1$ or $2$
+	\item if $\alpha(p) < \as(t)$ then $\ell_1(x_1(t)) + \alpha(p) t_1 < \ell_2(x_2(t)) + \alpha(p) t_2$, so $p$ is on link $1$
+	\item if $\alpha(p) > \as(t)$ then $\ell_1(x_1(t)) + \alpha(p) t_1 > \ell_2(x_2(t)) + \alpha(p) t_2$, so $p$ is on link $2$
+	\item if $\alpha(p) = \as(t)$ then $\ell_1(x_1(t)) + \alpha(p) t_1 = \ell_2(x_2(t)) + \alpha(p) t_2$, so $p$ is either on link $1$ or $2$
 \end{itemize}
 Remember that we have assumed that $t_1 > t_2 \stackrel{\ref{lemma:latencies_tolls}}{\Leftrightarrow} \ell_1(x_1(t)) < \ell_2(x_2(t))$.
 Therefore the flow in the lower-latency link $1$ has players with $\alpha(p) \le \as(t)$, while the flow in the higher-latency link $2$ has players with $\alpha(p) \ge \as(t)$.
@@ -539,7 +551,7 @@ We can now formally define $\as$ and prove some of its properties.
 	In the case of $N = [2]$ where there exists only one link pair, we will simply write $\as(t)$.
 \end{definition}
 We can easily see that if any flow user $p$ has $\alpha(p) = \as^{(i, j)}(t)$ then $c_i(p) = c_j(p)$.
-The fact that the function is not well-defined for $t_i = t_j$ matches with the notion we're trying to capture, as in that case we get $c_i(p) = c_j(p)$ for all flow users of the network, regardless of their money-sensitivity value.
+The fact that the function is not well-defined for $t_i = t_j$ matches with the notion we're trying to capture, as in that case we get $c_i(p) = c_j(p)$ for all flow users of the network, regardless of their money sensitivity value.
 We will also give a more formal definition to the lower-upper split intuition we described above.
 \begin{definition}
 	\label{definition:split_lower_upper}
@@ -633,19 +645,9 @@ We continue with describing some basic properties around the values of $\as$.
 	\end{enumerate}
 \end{proof}
 
-At this point we should notice that $\as$, similarly to $x$, depends only on the toll differences and on the toll ordering of the links.
-In order to emphasise on this, let's restrict ourselves to $2$ links and point out that we could alternatively have defined both $x$ and $\as$ as single variable functions with a domain of values $t_d = t_1 - t_2 \in \R$ and function values as such
-\[
-	x(t_d) =
-	\begin{cases*}
-		x(t_d, 0) & $t_d \ge 0$ \\
-		x(0, -t_d) & $t_d < 0$ \\
-	\end{cases*}
-\]
-We will not utilise this definition as is in this work as it gets more complex for games with $n$ links, however displaying it helps with the intuition that the flow, and consequently $\as$, actually changes as the toll differences do in $\R^{|N| - 1}$.
-
-With that in mind, we will investigate the monotonicity of $\as$ in relation to toll differences (and in extension to latency differences) and only when the ordering does not change.
-For this we will need to compare different tolls that create lower-upper splits in the same links, or in other words for tolls $t, t^\prime$ to hold that if $t_i > t_j$ then also $t_i^\prime > t_j^\prime$ and vice-versa.
+At this point we should notice that $\as$, similarly to $x$, depends only on the toll differences and on the toll ordering on links.
+With that in mind, we will investigate the monotonicity of $\as$ in relation to those toll differences (and in extension to latency differences) and only when the link ordering does not change.
+For the latter condition to be true, we will need to compare different tolls that create lower-upper splits in the same links, or, in other words, for tolls $t, t^\prime$ to hold that if $t_i > t_j$ then also $t_i^\prime > t_j^\prime$.
 We will capture this with the following condition
 \begin{equation}
 	\label{eq:split_property_cond_tolls_0}
@@ -804,33 +806,52 @@ Eventually, Lemma \ref{lemma:split_asymptotic}$(ii)$ gives us that $\lim_{t_d \r
 Proceeding to cases where $t_d > 0$, we symmetrically get $\lim_{t_d \rightarrow 0^+} \as(t) = \limsup_{t_d \rightarrow 0^+} A_1(t)$, $\as$ non-increasing as $t_d$ increases and $\lim_{t_d \rightarrow +\infty} = 0$.
 
 The above show that $\as(t)$ is continuous for all $t \ne 0$, approaches $0$ at large toll differences and increases as that difference approaches $0$, thus making the side limits around $0$ have different values (apart from the very specific case where $x_1(0) = x_2(0)$).
+At this point we should also mention that at the toll difference bounds we discussed in Chapter \ref{chapter:preliminaries}, $\as$ takes the value of the least sensitive player, i.e. $\alpha(0)$.
+
 We apply this on Example \ref{example:simple_alpha} to solidify this.
 Since $\alpha$ is continuous we get from Corollary \ref{corollary:split_asymptotic_continuous} that
 \[\lim_{t_1 - t_2 \rightarrow 0^-} \as(t) = \alpha(x_2(0)) = 4/3, \lim_{t_1 - t_2 \rightarrow 0^+} \as(t) = \alpha(x_1(0)) = 5/3\]
+Toll difference bounds are $t_1 - t_2 \le 2$ and $t_2 - t_1 \le 1$.
+The distribution function for this example is simple enough for us to also calculate a closed type for $\as(t)$ (included analytically in the \hyperref[chapter:appendix]{Appendix}), from which calculations we get
+\[
+	\as(t) =
+	\begin{cases}
+		\frac{1}{t_2 - t_1} & t_1 - t_2 \le -1 \\
+		\frac{4}{3 + (t_2 - t_1)} & t_1 - t_2 \in (-1, 0) \\
+		\frac{5}{3 + (t_1 - t_2)} & t_1 - t_2 \in (0, 2) \\
+		\frac{2}{t_2 - t_1} & t_1 - t_2 \ge 2
+	\end{cases}
+\]
+whose plot is in Figure \ref{figure:alpha_simple:split_example} and which confirms the analysis we did above.
 
-All the above give us the graph for $\as$ in Figure \ref{figure:alpha_simple:split_example}.
 \begin{figure}
 	\centering
-	\begin{tikzpicture}[x=5cm, y=2cm, every node/.style={font=\small}]
+	\begin{tikzpicture}[x=2cm, y=2cm, every node/.style={font=\small}]
 		% Axes
-		\draw[->] (0,0) -- (1.2,0) node[right] {$t_1$};
+		\draw[->] (0,0) -- (-1.1,0);
+		\draw[->] (0,0) -- (2.1,0) node[right] {$t_1 - t_2$};
 		\draw[->] (0,0) -- (0,2.2) node[above] {$\as(t)$};
 
 		% Tick marks
-		\draw (0,0) -- (0,-0.05) node[below] {$0$};
-		\draw (0.5,0) -- (0.5,-0.05) node[below] {$t_2$};
-		\draw (0,4/3) -- (-0.05,4/3) node[left] {$4/3$};
+		\draw (-1,0) -- (-1,-0.05) node[below] {$-1$};
+		\draw (0,0) -- (0,-0.05) node[below] {$t_2$};
+		\draw (2,0) -- (2,-0.05) node[below] {$2$};
+		\draw (0,2) -- (-0.05, 2) node[left] {$2$};
+		\draw (0,4/3) -- (0.05,4/3) node[right] {$4/3$};
 		\draw (0,5/3) -- (-0.05,5/3) node[left] {$5/3$};
+		\draw (0,1) -- (-0.05,1) node[left] {$1$};
 
 		% Function graph
-		\draw[thick] (0,0.1) -- (0.5,4/3);
-		\draw[thick] (0.5,5/3) -- (1,0.1);
+		%\draw[thick] (-1,1) -- (0,4/3);
+		%\draw[thick] (0,5/3) -- (2,1);
+		\draw[thick,samples at={-1,0}] plot (\x,{4/(3 - \x)});
+		\draw[thick,samples at={0,2}] plot (\x,{5/(3 + \x)});
 
 		% Dots
-		\fill[white] (0.5,4/3) ellipse (0.02 and 0.05);
-		\draw[black] (0.5,4/3) ellipse (0.02 and 0.05);
-		\fill[white] (0.5,5/3) ellipse (0.02 and 0.05);
-		\draw[black] (0.5,5/3) ellipse (0.02 and 0.05);
+		\fill[white] (0,4/3) ellipse (0.03 and 0.03);
+		\draw[black] (0,4/3) ellipse (0.03 and 0.03);
+		\fill[white] (0,5/3) ellipse (0.03 and 0.03);
+		\draw[black] (0,5/3) ellipse (0.03 and 0.03);
 	\end{tikzpicture}
 	\caption{Split function of Example \ref{example:simple_alpha}}
 	\label{figure:alpha_simple:split_example}
@@ -839,11 +860,11 @@ All the above give us the graph for $\as$ in Figure \ref{figure:alpha_simple:spl
 \section{Upper bound}
 
 Having now a good overview of the overall values of $\as$, we notice that there exist values of $\alpha$ that will never be a value of $\as$.
-Do then those values actually affect our game in any way?
+Do those values actually affect our game in any way?
 We answer this in the theorem below, which is the main result of this chapter, preceded by a lemma to describe those missing values.
 
 \begin{lemma}
-	\label{lemma:as_upper_bound}
+	\label{lemma:split_upper_bound}
 	Let $(N, \ell, \alpha)$ a heterogeneous parallel game.
 	For all $i, j \in N, i \ne j$ it holds that
 	\[\as^{(i, j)}(t) \le \max\left\{\limsup_{t_i - t_j \rightarrow 0^+} A_i(t), \limsup_{t_j - t_i \rightarrow 0^+} A_j(t)\right\}\]
@@ -900,13 +921,25 @@ Theorem \ref{theorem:alpha_upper_irrelevant} states that even if we used a distr
 	\alpha(p) =
 	\begin{cases}
 		p + 1 & p \le 2/3 \\
-		p + 10 & p > 2/3
+		\mathrm{e}^p & p > 2/3
 	\end{cases}
 \]
 then $\as$ would still behave the same way as those $(2/3, 1]$ players will always be in the upper split regardless of their $\alpha$ value.
 
 This irrelevancy will become more apparent later when calculating best responses, as even in the pricing games those higher values are never used.
-We finish this section with a lemma about the behaviour of $\as$ when many players have money sensitivity close to 0.
+
+\cleardoublepage
+
+
+\chapter{Equilibria in Pricing Games}
+\label{chapter:pricing_equilibria}
+
+In this section we introduce the pricing competition game to our model and examine how different distribution functions $\alpha$ can affect the profit maximisation game between the toll owners, specifically when $\alpha$ is fixed or step.
+We begin, though, with some necessary restrictions.
+
+\section{Problems with $0$ money sensitivity}
+
+We start this section with a lemma about the behaviour of $\as$ when many players have money sensitivity close to 0.
 Note that since the behavior of a single player has no effect on the game, it doesn't suffice to assume $\alpha(0) = 0$ just for player $0$, so in order to capture the notion of having many players with $\alpha$ values close to $0$ we additionally assume that $0$ is an accumulation point in $\alpha$.
 \begin{lemma}
 	Let $(N, \ell, \alpha)$ a heterogeneous parallel game with distribution function $\alpha$ such that $\alpha(0) = 0$ and $0$ is an accumulation point.
@@ -919,17 +952,6 @@ Note that since the behavior of a single player has no effect on the game, it do
 \end{proof}
 The main interest in the above lemma is the fact that it affects the lowest-latency, and therefore highest-toll, link, meaning that regardless of how high the highest toll is, some players will always remain in that link.
 Intuitively, it describes the fact that having almost no toll fear makes a player not motivated to leave the link, which in turn means having little control over those players using toll regulations.
-
-\cleardoublepage
-
-
-\chapter{Equilibria in Pricing Games}
-\label{chapter:pricing_equilibria}
-
-In this section we introduce the pricing competition game to our model and examine how different distribution functions $\alpha$ can affect the profit maximisation game between the toll owners, specifically when $\alpha$ is fixed or step.
-We begin, though, with some necessary restrictions.
-
-\section{Problems with $0$ money sensitivity}
 
 In general having players with $\alpha(p) = 0$, i.e. players completely indifferent to tolls, creates issues.
 Even Cole et al. \cite{10.1145/780542.780618} assume $\alpha(p) > 0$ when $p > 0$ for their model to support optimal tolls.
@@ -990,10 +1012,10 @@ We start with formalising our base.
 Since a heterogeneous game with a fixed distribution function is, in practice, homogeneous with regard to the flow behaviour, we will also use, when relevant, the term \textit{pseudo-heterogeneous game} to describe such flows more easily.
 
 Intuitively, the above means that increasing the money sensitivity of all players in a game is equivalent to proportionally decreasing the traffic that flows create on all links.
-Unfortunately this correspondence  disappears for non-fixed distribution functions, since, in the general setting, a flow might consist of players with different money-sensitivity values depending on the tolls, thus loosing the $1-1$ relation between the latency function values and the distribution function ones.
+Unfortunately this correspondence  disappears for non-fixed distribution functions, since, in the general setting, a flow might consist of players with different money sensitivity values depending on the tolls, thus loosing the $1-1$ relation between the latency function values and the distribution function ones.
 We discuss more about the relation between time and money sensitivity in Chapter \ref{chapter:future_work}.
 
-Looking now at the relation between different fixed distribution functions, Lemma \ref{lemma:a_fixed_homogeneous} leads us to the following one.
+Looking now at the relation between different fixed distribution functions, Lemma \ref{lemma:a_fixed_homogeneous} leads us to the following proposition.
 \begin{lemma}
 	\label{lemma:a_fixed_c_relation}
 	Let $\Gm_1 = (N, \ell, c_1)$ and $\Gm_2 = (N, \ell, c_2)$ two heterogeneous pricing games with common latency functions $\ell$ and distribution functions $\alpha(p) = c_1 > 0$ and $c_2 > 0$ respectively.
@@ -1036,6 +1058,36 @@ Looking now at the relation between different fixed distribution functions, Lemm
 		\end{flalign*}
 	\end{enumerate}
 \end{proof}
+
+%Intuitively, the 
+
+\begin{figure}
+	\centering
+	\begin{tikzpicture}[x=3.4cm, y=3.4cm, every node/.style={font=\small}]
+		% Axes
+		\draw[->] (0,0) -- (-1.1,0);
+		\draw[->] (0,0) -- (2.1,0) node[right] {$t_1 - t_2$};
+		\draw[->] (0,0) -- (0,1.1) node[above] {$x_1(t)$};
+		
+		% Tick marks
+		\draw (-1,0) -- (-1,-0.05) node[below] {$-1$};
+		\draw (-1/3,0) -- (-1/3,-0.05) node[below] {$-\frac13$};
+		\draw (-1/4,0) -- (-1/4,-0.05) node[below] {$-\frac14$};
+		\draw (0,0) -- (0,-0.05) node[below] {$t_2$};
+		\draw (2/4,0) -- (2/4,-0.05) node[below] {$\frac12$};
+		\draw (2/3,0) -- (2/3,-0.05) node[below] {$\frac23$};
+		\draw (2,0) -- (2,-0.05) node[below] {$2$};
+		\draw (0,1) -- (0.05,1) node[right] {$1$};
+		\draw (0,2/3) -- (-0.05,2/3) node[left] {$\frac23$};
+		
+		% Flow function graphs
+		\draw[thick, blue!33] (-1,1) -- (2,0) node[above, black] {$\alpha = 1$};
+		\draw[thick, blue!66] (-1/3,1) -- (2/3,0) node[above right, black] {$\alpha = 3$};
+		\draw[thick, blue!100] (-1/4,1) -- (2/4,0) node[black] at (0.2,0.17) {$\alpha = 4$};
+	\end{tikzpicture}
+	\caption{Flow function for link $1$ of Example \ref{example:simple_alpha} for $\alpha(p) = 1, 3, 4$.}
+	\label{figure:alpha_fixed:flow}
+\end{figure}
 
 What we need to examine  next is how those two games react differently for an link $i$ given a fixed $t_{-i}$.
 For this it is important to focus again on the fact that the flow is exclusively dependent on the toll difference.
@@ -1234,7 +1286,7 @@ The following lemma holds for any distribution function, so we prove them as suc
 \begin{proof}
 	\begin{enumerate}[$(i)$]
 		\item From Definition \ref{definition:split_function} we have that $\as^{(1)}(t)$ is the value for which any player that has such $\alpha^{(1)}$ value will view the two link costs equally.
-		So if we assume flow $x^{(1)}(t)$ in $\Gm_2$, where all players have money-sensitivity $\as^{(1)}(t)$, then all players will view the two link costs equally (latency functions and tolls are the same), which in turn means that everyone is happy with their choice.
+		So if we assume flow $x^{(1)}(t)$ in $\Gm_2$, where all players have money sensitivity $\as^{(1)}(t)$, then all players will view the two link costs equally (latency functions and tolls are the same), which in turn means that everyone is happy with their choice.
 		We conclude that $x^{(1)}(t)$ is a Nash Equilibrium for $t$ in $\Gm_2$ as well, and from the uniqueness of the equilibrium with regard to costs, we finally get $x^{(1)}(t) = x^{(2)}(t)$.
 		\item Natural conclusion from $(i)$ and the definition of $\Pi_i$.
 	\end{enumerate}
@@ -1388,6 +1440,11 @@ After calculating all cases we arrive at Figures \ref{figure:alpha_step:split} a
 		\draw (0,1/5) -- (-0.05,1/5) node[left] {$\frac15$};
 
 		% Function graph
+		% Base flow functions
+		\draw[gray,dashed, very thin] (-1,1) -- (2,0);
+		\draw[gray,dashed, very thin] (-1/3,1) -- (2/3,0);
+		\draw[gray,dashed, very thin] (-1/4,1) -- (2/4,0);
+		
 		% Left side
 		\draw[thick] (-1,1) -- (-2/5,4/5);
 		\draw[thick] (-2/5,4/5) -- (-2/15,4/5);
@@ -1445,7 +1502,7 @@ We complement this idea with the following Theorem, one of the main results of t
 
 \begin{proof}
 	First observe that from Lemma \ref{lemma:alpha_step_gaps} we get that $t^*$ cannot have all players of each sensitivity type using a single link, otherwise it wouldn't be a Nash equilibrium for the pricing game.
-	Therefore $\as(t^*) = \alpha_k$ for some $k \in [m]$ and there exists a non-zero flow of players with money-sensitivity $\alpha_k$ in both links.
+	Therefore $\as(t^*) = \alpha_k$ for some $k \in [m]$ and there exists a non-zero flow of players with money sensitivity $\alpha_k$ in both links.
 	That means that we can find arbitrarily small toll variations which will move some, but not all, of those players, thus keeping $\as$ at $\alpha_k$.
 	In other words, for an arbitrary link $i$, $\exists \epsilon > 0$ such that if $|t_i - t_i^*| < \epsilon$ then $\as(t_i, t_{-i}^*) = \alpha_k$.
 	Let $T_\epsilon$ denote the set of those $t_i$.
@@ -1551,7 +1608,7 @@ This approach is equivalent to applying the inverse weight to the latency, i.e. 
 Though less intuitive we already saw an application of this idea in Lemma \ref{lemma:heterogenous_flow_equiv_fixed} where we showed that a fixed distribution function is equivalent to restricting the latency functions inversely proportionally, however the idea could potentially be extended outside of fixed values.
 This would of course does not guarantee that the latency functions will remain affine, or even polynomial.
 One could attempt and investigate distribution functions that are inverse polynomials, making the respective latencies remain polynomial.
-In any case we believe that a future work on the relation of the time-sensitivity with money-sensitivity approaches, could uncover further insights in the behavior of heterogeneity.
+In any case we believe that a future work on the relation of the time-sensitivity with money sensitivity approaches, could uncover further insights in the behavior of heterogeneity.
 
 \section*{Pseudo-heterogeneous games}
 
@@ -1574,6 +1631,45 @@ We present a list of conjectures that we believe are true.
 \phantomsection
 \addcontentsline{toc}{chapter}{Appendix}
 \chapter*{Appendix}
+\label{chapter:appendix}
+
+\section*{Example calculations}
+
+\subsection*{Example \ref{example:simple_alpha}}
+
+We calculate the flow $x$ by focusing on $x_1$ and solving
+\[
+	\ell_1(x_1) + \alpha(p)t_1 = \ell_2(1 - x_1) + \alpha(p) t_2 \Rightarrow 3 x_1 - 2 = \alpha(p) (t_2 - t_1)
+\]
+
+\paragraph{If $t_1 > t_2$} then $p = x_1$ so $\alpha(p) = x_1 + 1$.
+We replace and calculate
+\[
+	3 x_1 - 2 = (x_1 + 1) (t_2 - t_1) \Rightarrow x_1 (3 - (t_2 - t_1)) = 2 + (t_2 - t_1) \Rightarrow x_1 = \frac{2 - (t_1 - t_2)}{3 + (t_1 - t_2)}
+\]
+Now for $\as(t)$ we focus again on $x_1$ and get
+\[
+	\as(t) = \frac{\ell_2(1 - x_1) - \ell_1(x_1)}{t_1 - t_2} = \frac{2 - 3 x_1}{t_1 - t_2}
+\]
+and by replacing $x_1$ with the type from before we get
+\[
+	\as(t) = \frac{1}{t_1 - t_2} \left[2 - 3 \cdot \frac{2 - (t_1 - t_2)}{3 + (t_1 - t_2)}\right] = \frac{1}{t_1 - t_2} \cdot \frac{5(t_1 - t_2)}{3 + (t_1 - t_2)} = \frac{5}{3 + (t_1 - t_2)}
+\]
+
+\paragraph{If $t_1 < t_2$} then $p = x_2 = 1 - x_1$ so $\alpha(p) = 2 - x_1$.
+Similarly as before we get
+\[
+	x_1 = \frac{2 + 2(t_2 - t_1)}{3 + (t_2 - t_1)} \qquad \as(t) = \frac{4}{3 + (t_2 - t_1)}
+\]
+Finally we check for the toll difference bounds.
+For $t_1 - t_2 \ge 2$, the latency difference is fixed at $\ell_2(1) - \ell_1(0) = 2$, while for $t_2 - t_1 \ge 1$ it's fixed at $\ell_1(1) - \ell_2(0) = 1$.
+So as $|t_1 - t_2| \rightarrow 0$ in each case $\as$ becomes respectively
+\[
+	\as(t) = \frac{2}{t_1 - t_2} \qquad \as(t) = \frac{1}{t_2 - t_1}
+\]
+
+
+\section*{Additional examples}
 
 [TODO: add framework for examining games]
 
@@ -1670,7 +1766,7 @@ with profits $\Pi_1(t) = {2 t_2}/3, t_2 + 4 - 2 \sqrt{t_2 + 3}$ and $\Pi_2(t) = 
 Both toll owners have one thing in common, above a specific threshold $(t_2 > 3, t_1 > 2 \sqrt{2})$ they always play either the same or a lower toll than the other toll owner.
 Below that threshold, which will eventually occur from any starting point, they both get divergent best responses and thus a $\NE$ cannot be defined.
 
-\paragraph{The bad behaviors} are obviously having divergent or undefined best response functions, which we claim occur only when we allow $0$ to be an accumulation point in $\alpha$, since this allows players with arbitrarily low money-sensitivity to always stay on the expensive link.
+\paragraph{The bad behaviors} are obviously having divergent or undefined best response functions, which we claim occur only when we allow $0$ to be an accumulation point in $\alpha$, since this allows players with arbitrarily low money sensitivity to always stay on the expensive link.
 Assume that in Example $\ref{example:ap_p}$ we use $\alpha(p) = p + 1$ as a distribution function.
 Then we get the following best response functions
 \begin{align*}
