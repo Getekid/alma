@@ -21,6 +21,8 @@
 \usepackage{tikz}
 \usepackage{multicol}
 \usepackage{natbib}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 
 \renewcommand{\maketitle}{
 	\begin{titlepage}
@@ -459,7 +461,7 @@ From the same work we also get that if the full Wardrop support assumption holds
 %We will thus assume for all further instances that the full Wardrop support assumption is true.
 Finally, again from Harkes et al. \cite[Lemma 3.3]{Harks_2019} we can also get a formula for the Nash Equilibrium of the pricing game for affine latencies $\ell_i(x) = a_i x + b_i$.
 \begin{equation}
-	\label{eq:homogeneous_ne_br_i}
+	\label{eq:homogeneous_pricing_ne_i}
 	t_i^* = \left(a_i + \frac{1}{\sum_{j \ne i} \frac{1}{a_j}}\right) \cdot x_i(t^*)
 \end{equation}
 
@@ -934,28 +936,22 @@ This irrelevancy will become more apparent later when calculating best responses
 \chapter{Equilibria in Pricing Games}
 \label{chapter:pricing_equilibria}
 
-In this section we introduce the pricing competition game to our model and examine how different distribution functions $\alpha$ can affect the profit maximisation game between the toll owners, specifically when $\alpha$ is fixed or step.
-We begin, though, with some necessary restrictions.
+\section*{Summary}
+
+In this chapter we will introduce the pricing competition game to our model and examine how different distribution functions can affect the profit maximisation game between the toll operators.
+We will begin by noticing that players with no toll fear, i.e. $\alpha(p)$ close to $0$, can be exploited by some link operators who then get unbounded profits (Lemma \ref{lemma:a_0_0}).
+This obviously breaks the pricing competition game and, in turn, leads us to include the restriction of $\alpha(p) > 0$ when $p > 0$.
+We will then proceed to analyse games with fixed distribution functions, where in Lemma \ref{lemma:a_fixed_homogeneous} we will show that such games are, as intuition suggests, equivalent to homogeneous games.
+Special interest will then be on comparing such games, specifically those with the same setup but different fixed $\alpha$ functions, as Lemma \ref{lemma:a_fixed_c_relation} will reveal that uniformly varying the player sensitivity maps the toll values around the same flow.
+The tools and notions built above will prove extremely useful when we next analyse games with step distribution functions, where we'll restrict our analysis to instances with $2$ links to simplify our work.
+For those we will show an equivalence with a homogeneous game for a given toll \ref{lemma:heterogenous_flow_equiv_fixed} and combining it with Lemma \ref{lemma:alpha_step_gaps} where we'll show that a Nash Equilibrium cannot exist with all players of each sensitivity type using a single link, we get this chapter's main result, Theorem \ref{theorem:a_step_ne_equiv_fixed}, which states that if a Nash Equilibrium exists in a heterogeneous game with a step distribution function, then the respective homogeneous also has an equilibrium for the same set of tolls.
+Using this notion, we will describe an algorithm (\ref{definition:algorithm:ne_pricing}) which can decide existence and return the Nash Equilibrium for the pricing competition game in a heterogeneous $2$-link network.
 
 \section{Problems with $0$ money sensitivity}
 
-We start this section with a lemma about the behaviour of $\as$ when many players have money sensitivity close to 0.
-Note that since the behavior of a single player has no effect on the game, it doesn't suffice to assume $\alpha(0) = 0$ just for player $0$, so in order to capture the notion of having many players with $\alpha$ values close to $0$ we additionally assume that $0$ is an accumulation point in $\alpha$.
-\begin{lemma}
-	Let $(N, \ell, \alpha)$ a heterogeneous parallel game with distribution function $\alpha$ such that $\alpha(0) = 0$ and $0$ is an accumulation point.
-	Then $x_1(t) > 0, \forall t \in \R_+^{|N|}$
-\end{lemma}
-
-\begin{proof}
-	By the definition of an accumulation point, we get for $0$ in $\alpha$ that $\forall \delta > 0 \; \exists \epsilon > 0: p < \epsilon \Rightarrow \alpha(p) < \delta$.
-	Therefore $\forall t \in \R_+^{|N|}$ if $\delta = \min_{j \in N \setminus \{i\}}\as^{(i, j)}(t)$ then $\exists \epsilon > 0: p < \epsilon \Rightarrow \alpha(p) < \as^{(i, j)}(t)$ for all $j \in N \setminus \{i\}$, which means that the lower-latency link will always have flow some $\epsilon > 0$, and therefore $x_1(t) > 0$.
-\end{proof}
-The main interest in the above lemma is the fact that it affects the lowest-latency, and therefore highest-toll, link, meaning that regardless of how high the highest toll is, some players will always remain in that link.
-Intuitively, it describes the fact that having almost no toll fear makes a player not motivated to leave the link, which in turn means having little control over those players using toll regulations.
-
-In general having players with $\alpha(p) = 0$, i.e. players completely indifferent to tolls, creates issues.
+It is well known in the literature that having players with $\alpha(p) = 0$, i.e. players completely indifferent to tolls, creates issues.
 Even Cole et al. \cite{10.1145/780542.780618} assume $\alpha(p) > 0$ when $p > 0$ for their model to support optimal tolls.
-In fact, this restriction proves necessary for our pricing game as well, since its absence allows distribution functions with arbitrarily small flow all at $0$, which in turn, as we'll see in the following Lemma, break the pricing game, too.
+In fact, this restriction proves necessary for our pricing game as well, since its absence allows distribution functions with arbitrarily small flow all at $0$, which, as we'll see in the following Lemma, breaks the pricing game.
 
 \begin{lemma}
 	\label{lemma:a_0_0}
@@ -968,7 +964,7 @@ In fact, this restriction proves necessary for our pricing game as well, since i
 	All players $p$ with $\alpha(p) = 0$ will completely neglect the toll values and play the congestion game only considering the link latencies, thus always selecting the fastest link regardless of the toll prices.
 	The condition of $\ell_i(0) = \min_{j \in N} \ell_i(0)$, then, ensures that link $i$ will always have flow, i.e. $x_i(t) > 0, \forall t \in \R_+^{|N|}$, since if $x_i(t) = 0$ for some set of tolls $t$, then $i$ becomes a lowest-latency link meaning that at least some of the players with $\alpha(p) = 0$ view this as the lowest cost, a contradiction.
  
-	Link operator $i$ can therefore select a $t_i > \max t_{-i}$ which will make link $i$ the lowest-latency link and be populated exclusively by players with $\alpha(p) = 0$.
+	Link operator $i$ can therefore select a $t_i > \max t_{-i}$ which will make link $i$ the lowest-latency link, populated exclusively by players with $\alpha(p) = 0$.
 	Indeed, consider $x_i^\prime(t) = \min\{x_i(t), \epsilon\} > 0$; obviously $\alpha(p) = 0 \; \forall p < x_i^\prime(t)$.
 	Consequently, $t_i$ can be increased arbitrarily with no link user ever leaving the link, resulting to a fixed flow and pure profit for link operator $i$.
 	More formally, for any $t_i^\prime > \max t_{-i}$ and any $t_i > t_i^\prime$ we have $x_i^\prime(t_i, t_{-i}) = x_i^\prime(t_i^\prime, t_{-i})$ and therefore $\Pi_i(t_i, t_{-i}) = x_i(t_i, t_{-i}) t_i \ge x_i^\prime(t_i, t_{-i}) t_i = x_i^\prime(t_i^\prime, t_{-i})t_i$.
@@ -976,10 +972,15 @@ In fact, this restriction proves necessary for our pricing game as well, since i
 	\[
 		\lim_{t_i \rightarrow +\infty} \Pi_i(t_i, t_{-i}) \ge \lim_{t_i \rightarrow +\infty} x_i^\prime(t_i^\prime, t_{-i})t_i = +\infty
 	\]
-	%Consequently, as $t_i \rightarrow +\infty$ then so does $x_i t_i$ and $\Pi_i(t_i, t_{-i})$,
 	making in turn $B_i(t_{-i}) = +\infty$.
 \end{proof}
 We therefore need the restriction of $\alpha(p) > 0$ when $p > 0$ in order for our pricing game to have an equilibrium.
+The main interest in the above lemma is the fact that it affects the lowest-latency, and therefore highest-toll, link, meaning that regardless of how high the highest toll is, some players will always remain in that link.
+Intuitively, it describes the fact that having no toll fear makes a player not motivated to leave the link, which in turn means having little control over those players using toll regulations.
+
+In our current study of fixed and step distribution functions, this restriction will suffice.
+In general, however, similar issues can also arise when many players have $\alpha(p)$ close to $0$ (almost no toll fear), something that our restriction allows.
+We include Lemma \ref{lemma:a_0_accumulation_point} and Example \ref{example:ap_p} in the Appendix to showcase some properties of a setup where $0$ is an accumulation point in $\alpha$, but without going into any further analysis.
 
 \section{Fixed distribution function}
 
@@ -1059,7 +1060,8 @@ Looking now at the relation between different fixed distribution functions, Lemm
 	\end{enumerate}
 \end{proof}
 
-%Intuitively, the 
+We consider Example \ref{example:simple_alpha} with fixed distribution functions $\alpha(p) = 1, 3$ and $4$ and visualise the flow function of link $1$ for each of those cases in Figure \ref{figure:alpha_fixed:flow}.
+The graph confirms what Lemma \ref{lemma:a_fixed_c_relation}$(i)$ suggests, that varying the fixed value in the distribution function basically "maps" the toll differences to a compressed or expanded range, with the respective flow for those corresponding toll differences remaining the same.
 
 \begin{figure}
 	\centering
@@ -1518,21 +1520,7 @@ We complement this idea with the following Theorem, one of the main results of t
 \end{proof}
 
 It therefore seems to make sense to discuss profit only within those intervals where the flow changes, or equivalently view profit with regard to flow intervals, since we ignore instances where the flow remains the same and thus there exists a $1-1$ relation between profit and flow.
-We now introduce the notion of profit within a flow interval.
-
-\begin{definition}
-	\label{definition:profit_interval}
-	Let $([2], \ell, \alpha)$ be a heterogeneous pricing game.
-	For a flow interval $[a, b] \subset [0, 1]$ and a link operator $i$, we define the \textit{profit in $[a, b]$} $\Pi_{i, [a, b]}$ as the toll that maximises the link operator's profit against the opposing toll $t_{-i}$, with the flow $x_i(t)$ being within $[a, b]$.
-	More formally
-	\[
-		\Pi_{i, [a, b]}(t_{-i}) = \max_{\stackrel{t_i > 0}{x_i(t_i, t_{-i}) \in [a, b]}}\Pi_i(t_i, t_{-i})
-	\]
-	%from which we also get
-	%\[B_i(t_{-i}) = \argmax_{t_i > 0} \cup_{\forall [a, b] \subset [0, 1]}\Pi_{i, [a, b]}(t_{-i})\]
-\end{definition}
-
-From this definition it naturally follows that the best response of a link operator $i$ given $t_{-i}$ depends on the max profit value over any set of intervals that completely cover $[0, 1]$.
+It naturally follows that the best response of a link operator $i$ given $t_{-i}$ depends on the max profit value over any set of intervals that completely cover $[0, 1]$.
 For step distribution functions, this set can be the domains of each of its finitely different values $\alpha_1 < \ldots < \alpha_m$.
 As such $\forall k \in [m]$ we denote as $A_k$ the closed set of all players $p$ in $[0, 1]$ for whom $\alpha(p) = \alpha_k$.
 Obviously $\cup_{k=1}^m A_k = [0, 1]$ and from the assumption that $\alpha$ is non-decreasing we also get $A_k$ convex $\forall k \in [m]$.
@@ -1558,21 +1546,73 @@ With such a strong notion of the pricing Nash equilibrium, we can now see a pote
 We present it here.
 
 \begin{definition}[Algorithm]
-	Let $\Gm = ([2], \ell, \alpha)$ a heterogeneous game where $\alpha$ is a step function with values $(\alpha_k)_{k \in [m]}$.
-	Then we define the following algorithm that takes as input a game's parameters and returns the Nash Equilibrium of the pricing game, if any.
+	\label{definition:algorithm:ne_pricing}
+	Let $\Gm = ([2], \ell, \alpha)$ a heterogeneous game with latency functions $\ell = (\ell_1(x), \ell_2(x))_{i \in [2]} = (a_ix + b_i)_{i \in [2]}$ and $\alpha$ a step distribution function with values $(\alpha_k)_{k \in [m]}$.
+	Then we define the following algorithm that takes a heterogeneous game's parameters as input and decides the existence of a Nash Equilibrium of the pricing game or not.
+
+	\begin{algorithm}
+		\caption{Decide and return the pricing Nash Equilibrium for a heterogeneous network with step distribution function}
+		\label{algorithm:ne_pricing}
+		\begin{algorithmic}[1]
+			%\Return $t^*$ the Nash Equilibrium for the pricing game, $0$ if not existent
+			\State $t_1 \gets \frac13 \cdot (2 a_2 + b_2 + a_1 - b_1)$; $t_2 \gets \frac13 \cdot (2 a_1 + b_1 + a_2 - b_2)$
+			\State $x_1 \gets t_1 / (a_1 + a_2)$; $x_2 \gets t_2 / (a_1 + a_2)$
+			\State $\as \gets \frac{\ell_2(x_2) - \ell_1(x_1)}{t_1 - t_2}$
+			\If{$\as \notin (\alpha_k)_{k \in [m]}$}
+				\State \Return $0$
+			\EndIf
+			\State $z \gets$ index of $\as$ in $(\alpha_k)_{k \in [m]}$
+			\State $t_1 \gets \alpha_z t_1$; $t_2 \gets \alpha_z t_2$
+			\State $\Pi_1 = x_1 t_1$; $\Pi_2 = x_2 t_2$
+			\ForAll{$k \in [m]$}
+				\State $t_{1, k} = B_{i, k}(t_2)$
+				\State $p_1, p_2 \gets$ the border players for which $\alpha(p) = \alpha_k$
+				\For{$p_1, p_2$}
+					\State $t_{1, k^-} = \frac{3p_1 - 2}{\alpha_k}$
+					\State $t_{1, k^+} = \frac{3p_2 - 2}{\alpha_k}$
+					\If{$t_{1, k} \in [t_{1, k^-}, t_{1, k^+}]$}
+						\State $\Pi_{1, k} \gets t_{1, k}$
+						\State $\Pi_{2, k} \gets t_{2, k}$
+					\Else
+						\State $\Pi_{1, k} \gets \max\{t_{1, k^-}, t_{1, k^+}\}$
+						\State $\Pi_{2, k} \gets \max\{t_{2, k^-}, t_{2, k^+}\}$
+					\EndIf
+				\EndFor
+				\If{$\Pi_{1, k} > \Pi_1$ \textbf{or} $\Pi_{2, k} > \Pi_2$}
+					\State \Return $0$
+				\EndIf
+				\If{($\Pi_{1, k} = \Pi_1$ \textbf{or} $\Pi_{2, k} = \Pi_2$) \textbf{and} $k \ne z$}
+					\State \Return $0$
+				\EndIf
+			\EndFor
+			\State \Return $(t_1, t_2)$
+		\end{algorithmic}
+	\end{algorithm}
+\end{definition}
+
+\begin{theorem}
+	Algorithm \ref{algorithm:ne_pricing} is correct.
+\end{theorem}
+
+\begin{proof}
+	Consider $\Gm^\prime = ([2], \ell, 1)$ the homogeneous pricing game with latency functions same as in $\Gm$.
+	We can use formulas \ref{eq:homogeneous_x_i} and \ref{eq:homogeneous_pricing_ne_i} for $2$ links to calculate the respective formulas for $t^*$ and $x(t^*)$ in $\Gm^\prime$.
+	Indeed, for $i, j$ our two links, we can find
+	\[
+		t_i^* = \frac{2 a_j + b_j + a_i - b_i}{3} \qquad x_i(t^*) = \frac{2 a_j + b_j + a_i - b_i}{3(a_j + a_i)} = \frac{t_i^*}{a_j + a_i}
+	\]
+	which leads our calculations in lines $1-5$.
+	After calculating $\as(t^*)$ from Definition \ref{definition:split_function}, we check whether that value is one of $(\alpha_k)_{k \in [m]}$, and if not, Lemma \ref{lemma:alpha_step_gaps} ensures that a Nash equilibrium for the pricing game does not exist.
+	Otherwise we denote as $z \in [m]$ the index for which $\as(t^*) = \alpha_z$.
+	From Corollary ?? we know that if a Nash Equilibrium exists, then it will be at $t^{*\prime} = \alpha_z \cdot t^*$.
 	\begin{enumerate}
-		\item Consider $\Gm^\prime = ([2], \ell, 1)$ the homogeneous pricing game with latency functions same as in $\Gm$, and calculate its Nash equilibrium $t^*$.
-		\item Calculate $\as(t^*)$.
+		\item Calculate $\Pi_{i, k}$ for all link operators $i$ and $\alpha_k$ values.
 		\begin{enumerate}
-			\item[2.1] If $t^*$ in the closure of $T_{-a}$, then there is no Nash equilibrium for the pricing game in $\Gm$.
-			\item[2.2] Otherwise, calculate $\Pi_{i, k}$ for all link operators $i$ and $\alpha_k$ values.
-			\begin{enumerate}
-				\item[2.2.1] If $\Pi_i(t^*) \ge \Pi_{i, k}$ for all $k \in [m]$ and for all $i \in [2]$ then $t^*$ is a Nash equilibrium in $\Gm$.
-				\item[2.2.2] Otherwise, there is no Nash equilibrium in $\Gm$.
-			\end{enumerate}
+			\item[2.2.1] If $\Pi_i(t^*) \ge \Pi_{i, k}$ for all $k \in [m]$ and for all $i \in [2]$ then $t^*$ is a Nash equilibrium in $\Gm$.
+			\item[2.2.2] Otherwise, there is no Nash equilibrium in $\Gm$.
 		\end{enumerate}
 	\end{enumerate}
-\end{definition}
+\end{proof}
 
 Given the restrictions of the possible positions for Nash equilibrium tolls, it would be tempting to try and calculate exact conditions for it.
 Those conditions would depend on latencies and the distance of the step function's $k$ values.
@@ -1630,8 +1670,21 @@ We present a list of conjectures that we believe are true.
 
 \phantomsection
 \addcontentsline{toc}{chapter}{Appendix}
-\chapter*{Appendix}
+\chapter{Appendix}
 \label{chapter:appendix}
+
+\section*{Propositions}
+
+\begin{lemma}
+	\label{lemma:a_0_accumulation_point}
+	Let $(N, \ell, \alpha)$ a heterogeneous parallel game with distribution function $\alpha$ such that $\alpha(0) = 0$ and $0$ is an accumulation point.
+	For all $t \in \R_+^{|N|}$, if $x_1(t)$ the lowest-latency link in the link ordering of $t$, then $x_1(t) > 0$.
+\end{lemma}
+
+\begin{proof}
+	By the definition of an accumulation point, we get for $0$ in $\alpha$ that $\forall \delta > 0 \; \exists \epsilon > 0: p < \epsilon \Rightarrow \alpha(p) < \delta$.
+	Therefore $\forall t \in \R_+^{|N|}$ if $\delta = \min_{i \in N \setminus \{1\}}\as^{(1, i)}(t)$ then $\exists \epsilon > 0: p < \epsilon \Rightarrow \alpha(p) < \as^{(1, i)}(t)$ for all $i \in N \setminus \{1\}$, which means that the lowest-latency link will always have flow some $\epsilon > 0$, and therefore $x_1(t) > 0$.
+\end{proof}
 
 \section*{Example calculations}
 
@@ -1671,15 +1724,13 @@ So as $|t_1 - t_2| \rightarrow 0$ in each case $\as$ becomes respectively
 
 \section*{Additional examples}
 
-[TODO: add framework for examining games]
-
 \begin{example}
 	\label{example:ap_p}
-	Consider a $2$-link parallel network pricing game with $l_1(x) = x, l_2(x) = 2x$ and distribution function $\alpha(p) = p$.
+	Consider a $2$-link parallel network pricing game with $\ell_1(x) = x, \ell_2(x) = 2x$ and distribution function $\alpha(p) = p$.
 \end{example}
 
 Notice that the condition $\alpha(p) > 0$ when $p > 0$ holds for this example.
-However in this case $0$ is an accumulation point, and by Lemma $\ref{lemma:split_bounds}(ii)$ it follows $x_1(t), x_2(t) > 0, \forall t \in \R_+^2$.
+However in this case $0$ is an accumulation point, and by Lemma $\ref{lemma:a_0_accumulation_point}$ it follows $x_1(t), x_2(t) > 0, \forall t \in \R_+^2$.
 Then Lemma $\ref{lemma:split_basic}$ entails that, assuming $t_1 > t_2$, $\alpha(x_1(t)) \le \as(t) \le \alpha(x_1(t) + \epsilon), \forall \epsilon > 0$ arbitrarily small, and since in this example $\alpha$ is onto, then $\as(t) = \alpha(x_1(t))$.
 
 We will calculate $B_i(t_{-i})$ by calculating $x_i(t)$ and then finding $\argmax \Pi_i(t)$.
