@@ -945,7 +945,7 @@ We will then proceed to analyse games with fixed distribution functions, where i
 Special interest will then be on comparing such games, specifically those with the same setup but different fixed $\alpha$ functions, as Lemma \ref{lemma:a_fixed_c_relation} will reveal that uniformly varying the player sensitivity maps the toll values around the same flow.
 The tools and notions built above will prove extremely useful when we next analyse games with step distribution functions, where we'll restrict our analysis to instances with $2$ links to simplify our work.
 For those we will show an equivalence with a homogeneous game for a given toll \ref{lemma:heterogenous_flow_equiv_fixed} and combining it with Lemma \ref{lemma:alpha_step_gaps} where we'll show that a Nash Equilibrium cannot exist with all players of each sensitivity type using a single link, we get this chapter's main result, Theorem \ref{theorem:a_step_ne_equiv_fixed}, which states that if a Nash Equilibrium exists in a heterogeneous game with a step distribution function, then the respective homogeneous also has an equilibrium for the same set of tolls.
-Using this notion, we will describe an algorithm (\ref{definition:algorithm:ne_pricing}) which can decide existence and return the Nash Equilibrium for the pricing competition game in a heterogeneous $2$-link network.
+Using this notion, we will describe an algorithm (\ref{algorithm:ne_pricing}) which can decide existence and return the Nash Equilibrium for the pricing competition game in a heterogeneous $2$-link network.
 
 \section{Problems with $0$ money sensitivity}
 
@@ -1019,7 +1019,7 @@ We discuss more about the relation between time and money sensitivity in Chapter
 Looking now at the relation between different fixed distribution functions, Lemma \ref{lemma:a_fixed_homogeneous} leads us to the following proposition.
 \begin{lemma}
 	\label{lemma:a_fixed_c_relation}
-	Let $\Gm_1 = (N, \ell, c_1)$ and $\Gm_2 = (N, \ell, c_2)$ two heterogeneous pricing games with common latency functions $\ell$ and distribution functions $\alpha(p) = c_1 > 0$ and $c_2 > 0$ respectively.
+	Let $\Gm_1 = (N, \ell, c_1)$ and $\Gm_2 = (N, \ell, c_2)$ two heterogeneous pricing games with common latency functions $\ell$ and distribution functions $\alpha^{(1)}(p) = c_1 > 0$ and $\alpha^{(2)}(p) = c_2 > 0$ respectively.
 	Then the following are true
 	\begin{enumerate}[$(i)$]
 		%\item $x^{(1)}(0) = x^{(2)}(0)$
@@ -1090,6 +1090,42 @@ The graph confirms what Lemma \ref{lemma:a_fixed_c_relation}$(i)$ suggests, that
 	\caption{Flow function for link $1$ of Example \ref{example:simple_alpha} for $\alpha(p) = 1, 3, 4$.}
 	\label{figure:alpha_fixed:flow}
 \end{figure}
+
+We proceed with a consequence of the above behaviour for the Nash Equilibrium for the pricing game.
+
+\begin{lemma}
+	\label{lemma:a_fixed_pricing_ne_relation}
+	Let $\Gm_1 = (N, \ell, c_1)$ and $\Gm_2 = (N, \ell, c_2)$ two heterogeneous pricing games with common latency functions $\ell$ and distribution functions $\alpha^{(1)}(p) = c_1 > 0$ and $\alpha^{(2)}(p) = c_2 > 0$ respectively.
+	Also let $t^{*(1)}$ and $t^{*(2)}$ be the Nash Equilibria for the pricing games in $\Gm_1$ and $\Gm_2$ respectively.
+	Then the following are true
+	\begin{enumerate}[$(i)$]
+		\item $\frac{t^{*(1)}}{t^{*(2)}} = \frac{c_2}{c_1}$
+		\item $x^{(1)}(t^{*(1)}) = x^{(2)}(t^{*(2)})$
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+	\begin{enumerate}[$(i)$]
+		\item From the definition of a Nash Equilibrium for the pricing game, we have for all $i \in N$ in $\Gm_1$ that
+		\[
+			t_i^{*(1)} = B_i^{(1)}(t_{-i}^{*(1)})
+		\]
+		where we observe from Lemma \ref{lemma:a_fixed_c_relation} that
+		\[
+			B_i^{(1)}(t_{-i}^{*(1)}) = \frac{c_1}{c_1} \cdot B_i^{(1)}\left(\frac{c_2}{c_2} t_{-i}^{*(1)}\right) \stackrel{\ref{lemma:a_fixed_c_relation}}{=} \frac{c_2}{c_1} \cdot B_i^{(2)}\left(\frac{c_1}{c_2}t_{-i}^{*(1)}\right)
+		\]
+		From those two equations we eventually get
+		\[
+			\frac{c_1}{c_2} t_i^{*(1)} = B_i^{(2)}\left(\frac{c_1}{c_2} t_{-i}^{*(1)}\right)
+		\]
+		for all $i \in N$, which means that $\tfrac{c_1}{c_2} t_i^{*(1)}$ is a Nash Equilibrium for the pricing game in $\Gm_2$.
+		From the uniqueness of the equilibrium, we arrive at $\tfrac{c_1}{c_2} t^{*(1)} = t^{*(2)}$.
+		\item From $(i)$ and Lemma \ref{lemma:a_fixed_c_relation}$(i)$  we get
+		\[
+			x^{(1)}(t^{*(1)}) \stackrel{(i)}{=} x^{(1)}\left(\tfrac{c_2}{c_1}t^{*(2)}\right) \stackrel{\ref{lemma:a_fixed_c_relation}}{=} x^{(2)}(t^{*(2)})
+		\]
+	\end{enumerate}
+\end{proof}
 
 What we need to examine  next is how those two games react differently for an link $i$ given a fixed $t_{-i}$.
 For this it is important to focus again on the fact that the flow is exclusively dependent on the toll difference.
@@ -1545,87 +1581,148 @@ Consequently for any step function assigned to a pricing game with fixed latency
 With such a strong notion of the pricing Nash equilibrium, we can now see a potential algorithm that can be used to query its existence or not as well as calculate it.
 We present it here.
 
-\begin{definition}[Algorithm]
-	\label{definition:algorithm:ne_pricing}
-	Let $\Gm = ([2], \ell, \alpha)$ a heterogeneous game with latency functions $\ell = (\ell_1(x), \ell_2(x))_{i \in [2]} = (a_ix + b_i)_{i \in [2]}$ and $\alpha$ a step distribution function with values $(\alpha_k)_{k \in [m]}$.
-	Then we define the following algorithm that takes a heterogeneous game's parameters as input and decides the existence of a Nash Equilibrium of the pricing game or not.
+\begin{algorithm}
+	\caption{Helper functions for Algorithm \ref{algorithm:step_ne_pricing}}
+	\label{algorithm:step_helper_functions}
+	\begin{algorithmic}[1]
+		\Function{\texttt{TollDiff}}{$\alpha_k, x_1$} \label{function:toll_diff}
+		\State \Return $\frac{1}{\alpha_k}[(a_1 + a_2) x_1 - a_2 + b_1 - b_2]$
+		\EndFunction
 
-	\begin{algorithm}
-		\caption{Decide and return the pricing Nash Equilibrium for a heterogeneous network with step distribution function}
-		\label{algorithm:ne_pricing}
-		\begin{algorithmic}[1]
-			%\Return $t^*$ the Nash Equilibrium for the pricing game, $0$ if not existent
-			\State $t_1 \gets \frac13 \cdot (2 a_2 + b_2 + a_1 - b_1)$; $t_2 \gets \frac13 \cdot (2 a_1 + b_1 + a_2 - b_2)$
-			\State $x_1 \gets t_1 / (a_1 + a_2)$; $x_2 \gets t_2 / (a_1 + a_2)$
-			\State $\as \gets \frac{\ell_2(x_2) - \ell_1(x_1)}{t_1 - t_2}$
-			\If{$\as \notin (\alpha_k)_{k \in [m]}$}
-				\State \Return $0$
-			\EndIf
-			\State $z \gets$ index of $\as$ in $(\alpha_k)_{k \in [m]}$
-			\State $t_1 \gets \alpha_z t_1$; $t_2 \gets \alpha_z t_2$
-			\State $\Pi_1 = x_1 t_1$; $\Pi_2 = x_2 t_2$
-			\ForAll{$k \in [m]$}
-				\State $t_{1, k} = B_{i, k}(t_2)$
-				\State $p_1, p_2 \gets$ the border players for which $\alpha(p) = \alpha_k$
-				\For{$p_1, p_2$}
-					\State $t_{1, k^-} = \frac{3p_1 - 2}{\alpha_k}$
-					\State $t_{1, k^+} = \frac{3p_2 - 2}{\alpha_k}$
-					\If{$t_{1, k} \in [t_{1, k^-}, t_{1, k^+}]$}
-						\State $\Pi_{1, k} \gets t_{1, k}$
-						\State $\Pi_{2, k} \gets t_{2, k}$
-					\Else
-						\State $\Pi_{1, k} \gets \max\{t_{1, k^-}, t_{1, k^+}\}$
-						\State $\Pi_{2, k} \gets \max\{t_{2, k^-}, t_{2, k^+}\}$
-					\EndIf
-				\EndFor
-				\If{$\Pi_{1, k} > \Pi_1$ \textbf{or} $\Pi_{2, k} > \Pi_2$}
-					\State \Return $0$
-				\EndIf
-				\If{($\Pi_{1, k} = \Pi_1$ \textbf{or} $\Pi_{2, k} = \Pi_2$) \textbf{and} $k \ne z$}
-					\State \Return $0$
-				\EndIf
-			\EndFor
-			\State \Return $(t_1, t_2)$
-		\end{algorithmic}
-	\end{algorithm}
-\end{definition}
+		\Statex
+		\Function{\texttt{Profit1}}{$\alpha_k, t_1, t_2$} \label{function:profit_1}
+		\State \Return $\frac{t_1}{a_1 + a_2} [a_2 + b_2 - b_1 + \alpha_k (t_2 - t_1)]$
+		\EndFunction
+
+		\Statex
+		\Function{\texttt{Profit2}}{$\alpha_k, t_1, t_2$} \label{function:profit_2}
+		\State \Return $\frac{t_2}{a_1 + a_2} [a_1 + b_1 - b_2 + \alpha_k (t_1 - t_2)]$
+		\EndFunction
+
+		\Statex
+		\Function{\texttt{BestResponse1}}{$\alpha_k, t_2$} \label{function:best_response_1}
+		\If{$t_2 \le \frac{1}{\alpha_k}(2 a_1 + a_2 + b_1 - b_2)$}
+		\State \Return $\frac{t_2}{2} + \frac{1}{2 \alpha_k}(a_2 + b_2 - b_1)$
+		\Else
+		\State \Return $t_2 - \frac{1}{\alpha_k}(a_1 + b_1 - b_2)$
+		\EndIf
+		\EndFunction
+
+		\Statex
+		\Function{\texttt{BestResponse2}}{$\alpha_k, t_1$} \label{function:best_response_2}
+		\If{$t_1 \le \frac{1}{\alpha_k}(2 a_2 + a_1 + b_2 - b_1)$}
+		\State \Return $\frac{t_1}{2} + \frac{1}{2 \alpha_k}(a_1 + b_1 - b_2)$
+		\Else
+		\State \Return $t_1 - \frac{1}{\alpha_k}(a_2 + b_2 - b_1)$
+		\EndIf
+		\EndFunction
+	\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+	\caption{Decide existence and return the Nash Equilibrium for the pricing game of a heterogeneous network with $2$ links and step distribution function}
+	\label{algorithm:step_ne_pricing}
+	\begin{algorithmic}[1]
+		\Require $(a_i, b_i)_{i \in N}$, step function $\alpha$
+		\Ensure $(t_1, t_2)$
+		\State $t_1 \gets \frac13 \cdot (2 a_2 + b_2 + a_1 - b_1)$;\; $t_2 \gets \frac13 \cdot (2 a_1 + b_1 + a_2 - b_2)$
+		\State $x_1 \gets t_1 / (a_1 + a_2)$;\; $x_2 \gets t_2 / (a_1 + a_2)$
+		\If{$t_1 > t_2$}
+		\State $\as \gets \alpha(x_1)$
+		\Else
+		\State $\as \gets \alpha(x_2)$
+		\EndIf
+		\State $t_1 \gets \frac{t_1}{\alpha_s}$;\; $t_2 \gets \frac{t_2}{\alpha_s}$
+		\State $\Pi_1 = x_1 t_1$;\; $\Pi_2 = x_2 t_2$
+		\For{$k$ \textbf{in} $[1, 2, \dots, m]$}
+		\If{$\alpha_k = \as$}
+		\State \texttt{continue}
+		\EndIf
+		\State $t_{1, k} \gets \Call{\texttt{BestResponse1}}{\alpha_k, t_2}$;\; $t_{2, k} \gets \Call{\texttt{BestResponse2}}{\alpha_k, t_1}$
+		\State $p_k^-, p_k^+ \gets$ border players where $\alpha(p) = \alpha_k$
+		\State $t_{d^-}^- \gets \Call{\texttt{TollDiff}}{\alpha_k, p_k^-};\qquad t_{d^-}^+ \gets \Call{\texttt{TollDiff}}{\alpha_k, p_k^+}$
+		\State $t_{d^+}^- \gets \Call{\texttt{TollDiff}}{\alpha_k, 1 - p_k^+};\; t_{d^+}^+ \gets \Call{\texttt{TollDiff}}{\alpha_k, 1 - p_k^-}$
+		\State $t_{1, k^-}^- \gets t_2 - t_{d^-}^-$;\; $t_{1, k^-}^+ \gets t_2 - t_{d^-}^+$;\; $t_{1, k^+}^- \gets t_2 - t_{d^+}^-$;\; $t_{1, k^+}^+ \gets t_2 - t_{d^+}^+$
+		\State $t_{2, k^-}^- \gets t_1 + t_{d^-}^-$;\; $t_{2, k^-}^+ \gets t_1 + t_{d^-}^+$;\; $t_{2, k^+}^- \gets t_1 + t_{d^+}^-$;\; $t_{2, k^+}^+ \gets t_1 + t_{d^+}^+$
+		\If{$t_{1, k^-}^- \le t_{1, k} \le t_{1, k^-}^+$ \textbf{or} $t_{1, k^+}^- \le t_{1, k} \le t_{1, k^+}^+$}
+		\State $\Pi_{1, k} \gets \Call{\texttt{Profit1}}{\alpha_k, t_{1, k}, t_2}$
+		\Else
+		%\For{$(i, j)$ \textbf{in} $[(1, 2), (2, 1)]$}
+		\State $\Pi_{1, k} \gets \max\{\Call{\texttt{Profit1}}{\alpha_k, t_{1, k^-}^-, t_2},$ $\Call{\texttt{Profit1}}{\alpha_k, t_{1, k^-}^+, t_2},$
+		\Statex \hspace{8.5em} $\Call{\texttt{Profit1}}{\alpha_k, t_{1, k^+}^-, t_2},$ $\Call{\texttt{Profit1}}{\alpha_k, t_{1, k_+}^+, t_2}\}$
+		\EndIf
+		\If{$t_{2, k^-}^- \le t_{2, k} \le t_{2, k^-}^+$ \textbf{or} $t_{2, k^+}^- \le t_{2, k} \le t_{2, k^+}^+$}
+		\State $\Pi_{2, k} \gets \Call{\texttt{Profit2}}{\alpha_k, t_1, t_{2, k}}$
+		\Else
+		\State $\Pi_{2, k} \gets \max\{\Call{\texttt{Profit2}}{\alpha_k, t_1, t_{2, k^-}^-},$  $\Call{\texttt{Profit2}}{\alpha_k, t_1, t_{2, k^-}^+},$
+		\Statex \hspace{8.5em} $\Call{\texttt{Profit2}}{\alpha_k, t_1, t_{2, k^+}^-},$ $\Call{\texttt{Profit2}}{\alpha_k, t_1, t_{2, k_+}^+}\}$
+		\EndIf
+		\If{$\Pi_{1, k} > \Pi_1$ \textbf{or} $\Pi_{2, k} > \Pi_2$}
+		\State \Return $0$
+		\EndIf
+		\EndFor
+		\State \Return $(t_1, t_2)$
+	\end{algorithmic}
+\end{algorithm}
 
 \begin{theorem}
-	Algorithm \ref{algorithm:ne_pricing} is correct.
+	Let $\Gm = ([2], \ell, \alpha)$ a heterogeneous game with latency functions $\ell = (\ell_1(x), \ell_2(x))_{i \in [2]} = (a_ix + b_i)_{i \in [2]}$ and $\alpha$ a step distribution function with values $(\alpha_k)_{k \in [m]}$.
+	Then Algorithm \ref{algorithm:step_ne_pricing} with input $(\ell, \alpha)$ calculates the Nash Equilibrium for the pricing game in $\Gm$ in $\mathcal{O}(m)$ time.
 \end{theorem}
 
 \begin{proof}
-	Consider $\Gm^\prime = ([2], \ell, 1)$ the homogeneous pricing game with latency functions same as in $\Gm$.
-	We can use formulas \ref{eq:homogeneous_x_i} and \ref{eq:homogeneous_pricing_ne_i} for $2$ links to calculate the respective formulas for $t^*$ and $x(t^*)$ in $\Gm^\prime$.
-	Indeed, for $i, j$ our two links, we can find
+	Consider $\Gm^\prime = ([2], \ell, 1)$ the homogeneous pricing game with latency functions same as in $\Gm$ and let $t^*, t^{\prime*}$ the Nash Equilibria for the pricing games in $\Gm, \Gm^\prime$ respectively.
+	By using formulas \ref{eq:homogeneous_x_i} and \ref{eq:homogeneous_pricing_ne_i}, adjusted for $2$ links, we can solve for $t^{*}$ and get, for $i, j$ an arbitrary ordering of our two links, that
 	\[
 		t_i^* = \frac{2 a_j + b_j + a_i - b_i}{3} \qquad x_i(t^*) = \frac{2 a_j + b_j + a_i - b_i}{3(a_j + a_i)} = \frac{t_i^*}{a_j + a_i}
 	\]
-	which leads our calculations in lines $1-5$.
-	After calculating $\as(t^*)$ from Definition \ref{definition:split_function}, we check whether that value is one of $(\alpha_k)_{k \in [m]}$, and if not, Lemma \ref{lemma:alpha_step_gaps} ensures that a Nash equilibrium for the pricing game does not exist.
-	Otherwise we denote as $z \in [m]$ the index for which $\as(t^*) = \alpha_z$.
-	From Corollary ?? we know that if a Nash Equilibrium exists, then it will be at $t^{*\prime} = \alpha_z \cdot t^*$.
-	\begin{enumerate}
-		\item Calculate $\Pi_{i, k}$ for all link operators $i$ and $\alpha_k$ values.
-		\begin{enumerate}
-			\item[2.2.1] If $\Pi_i(t^*) \ge \Pi_{i, k}$ for all $k \in [m]$ and for all $i \in [2]$ then $t^*$ is a Nash equilibrium in $\Gm$.
-			\item[2.2.2] Otherwise, there is no Nash equilibrium in $\Gm$.
-		\end{enumerate}
-	\end{enumerate}
+	These formulas hold for homogeneous games, so we use them to calculate $t^{\prime*}$ and $x^\prime(t^{\prime*})$ in $\Gm^\prime$.
+	If we assume that $t^*$ exists, then Theorem \ref{theorem:a_step_ne_equiv_fixed} tells us that $t^*$ is also the Nash Equilibrium for the pseudo-heterogeneous pricing game $\Gm^{\prime\prime} = ([2], \ell, \as(t^*))$, while Lemma \ref{lemma:alpha_step_gaps} gives us that $\as(t^*)$ needs to take some value in $(\alpha_k)_{k \in [m]}$, with flow users for which $\alpha(p) = \as(t^*)$ assigned in both links.
+	Finally, by applying Lemma \ref{lemma:a_fixed_pricing_ne_relation}$(ii)$ in $\Gm^\prime$ and $\Gm^{\prime\prime}$, we can see that, regardless of the value of $\as(t^*)$, it always holds that $x(t^*) = x^\prime(t^{*\prime})$.
+	We can therefore check whether $t_1^{*\prime} > t_2^{*\prime}$ or $t_1^{*\prime} < t_2^{*\prime}$ and take $x_1$ or $x_2$ to be the lower split in each case (which will remain so in $\Gm$ for any sensitivity $\alpha_k > 0$), giving us $\as(t^*) = \alpha(x_1^\prime(t^{*\prime}))$ or $\alpha(x_2^\prime(t^{*\prime}))$ respectively.
+	Having calculated $\as(t^*)$, we now get from Lemma \ref{lemma:a_fixed_pricing_ne_relation}$(i)$ for $\Gm^\prime$ and $\Gm^{\prime\prime}$ that $t^* = \tfrac{t^{*\prime}}{\as(t^*)}$, the calculation of which gives us our candidate Nash Equilibrium $t^*$.
+
+	We're only left with ensuring that $t^*$ is indeed a Nash Equilibrium for the pricing game in $\Gm$, i.e. for both link operators $i \in [2]$ to hold $\Pi_i(t_i^*, t_{-i}^*) \ge \Pi_i(t_i, t_{-i}^*)$ for all $t_i \in \R_+$.
+	Since $t^*$ is the equilibrium in $\Gm^{\prime\prime}$, we know that $t_i^*$ is the max profit toll response against $t_{-i}^*$ compared to $t_i$ where $\as(t_i, t_{-i}^*) = \as(t^*)$, and since $\as(t^*)$ takes a value $\alpha_z$ for some $z \in [m]$, we only need to check for splits in the remaining $(\alpha_k)_{k \in [m] \setminus \{z\}}$ values.
+	Therefore, for all $k \in [m] \setminus \{z\}$, we need to search for max profit within tolls $t_k$ such that $\as(t_k) = \alpha_k$ .
+	As showcased in Example \ref{example:a_step_simple}, we can find those toll difference ranges by solving the cost equality equation $\ell_1(x_1) + \alpha_k t_1 = \ell_2(x_2) + \alpha_k t_2$ for a target $\alpha_k$ value and flow such that all players with $\alpha(p) = \alpha_k$ are using a single link.
+	Indeed, if we consider from the definition of $\alpha$ the border players $p_k^-, p_k^+$ for which $\alpha(p) = \alpha_k$ when $p_k^- < p < p_k^+$, then the possible link splits are those where $x_1$ (arbitrarily chosen) has flow such that $x_1 = p_k^-, p_k^+, 1 - p_k^+, 1 - p_k^-$.
+	Solving the cost equality equation for $t_2 - t_1$ (and by substituting $x_2$ for $1 - x_1$) we get the formula of \texttt{TollDiff} function in \algref{algorithm:step_helper_functions}{function:toll_diff}, and by then using it in the above four cases for $x_1$, we get from each of the two pairs a min and a max toll difference, each belonging to a different split, for which a set of tolls $t$ is in that range if and only if $\as(t) = \alpha_k$.
+
+	Before we continue, we need to discuss the profit and best response functions.
+	By again solving the cost equality equation for $x_i$ we get
+	\[
+		x_i(t) = \frac{a_{-i} + b_{-i} - b_i + \alpha_k (t_{-i} - t_i)}{a_1 + a_2}
+	\]
+	so by using that and taking $\Pi_{i, k}(t) = x_i(t) t_i$ we get the \texttt{Profit1} (\algref{algorithm:step_helper_functions}{function:profit_1}) and \texttt{Profit2} (\algref{algorithm:step_helper_functions}{function:profit_2}) functions.
+	Finally, by taking first order conditions on them with regard to $t_i$, we also get the respective \texttt{BestResponse1} (\algref{algorithm:step_helper_functions}{function:best_response_1}) and \texttt{BestResponse2} (\algref{algorithm:step_helper_functions}{function:best_response_2}) functions.
+	For the latter, we need put extra care to handle large $t_{-i}$, as the current formulas can return $t_i$ such that $x_i(t_i, t_{-i}) > 1$.
+	We therefore need to take into account the toll difference bounds discussed in Chapter \ref{chapter:preliminaries}, i.e. solve for $t_{-i}$ the equation
+	\[
+		t_{-i} - \Call{\texttt{BestResponseI}}{t_{-i}} = \frac{\ell_i(1) - \ell_{-i}(0)}{\alpha_k} = \frac{a_i + b_i - b_{-i}}{\alpha_k}
+	\]
+	thus finding opposing toll $t_{-i} = \frac{2 a_i + a_{-i} + b_i - b_{-i}}{\alpha_k}$ for which the best response is to take the entire flow.
+	Any higher $t_{-i}$ will therefore also have as best response to take the entire flow, leading to a best response toll of $t_i = t_{-i} - \frac{a_i + b_i - b_{-i}}{\alpha_k}$.
+	The last condition and formula completes the \texttt{BestResponse1} (\algref{algorithm:step_helper_functions}{function:best_response_1}) and \texttt{BestResponse2} (\algref{algorithm:step_helper_functions}{function:best_response_2}) function definitions.
+
+	So for all $k \in [m] \setminus \{z\}$ and all link operators $i \in [2]$, we assume a pseudo-heterogeneous game $\Gm_k = ([2], \ell, \alpha_k)$ and calculate the best response toll $t_{i, k}$ against $t_{-i}^*$ using the respective \texttt{BestResponse1} or \texttt{BestResponse2} function.
+	Also, we solve $t_2 - t_1 = \texttt{TollDiff}$ for the respective $t_i$ against $t_{-i}^*$ and calculate the two $t_i$ ranges for which $\as(t_i, t_{-i}^*) = \alpha_k$.
+	If $t_{i, k}$ is within any of the two ranges, then max profit is obviously achieved at $t_{i, k}$, which is the $\max_{t_i} \Pi_i(t_i, t_{-i}^*)$ in $\Gm_k$.
+	Otherwise, since $\Pi_i(t)$ is concave from the analysis of Harkes et al. \cite{Harks_2019}, not taking a max value at a range follows that profit is either non-decreasing or non-increasing in that range, resulting in its local maximum achieved at one of its edge values.
+	So, in that case, we calculate all edge profit values from the two ranges and keep the overall max value.
+
+	Having now calculated the max profit among all tolls for which $\as(t) = \alpha_k$, we check whether that value is higher that the profit from the candidate toll, and if so, then $t^*$ is not a Nash Equilibrium for the pricing game in $\Gm$.
+	If the last condition fails for all $k \in [m] \setminus \{z\}$, then $t^*$ is a Nash Equilibrium for the pricing game in $\Gm$, so we return it.
+
+	We should also mention that we've on purpose ignored invalid toll difference cases.
+	Theorem \ref{theorem:alpha_upper_irrelevant} shows us there might be sensitivity values that are irrelevant to the game.
+	The algorithm will ignore those cases, however, as the \texttt{TollDiff} function will return $t_i < 0$, resulting in $\Pi_i < 0$, which will be skipped when looking for max profit values.
+
+	Finally, regarding the complexity of Algorithm \ref{algorithm:step_ne_pricing}, we can easily see that it mostly consists of base operations with a \texttt{for} loop taking at most $m - 1$ iterations, resulting in a time complexity of $\mathcal{O}(m)$.
 \end{proof}
 
-Given the restrictions of the possible positions for Nash equilibrium tolls, it would be tempting to try and calculate exact conditions for it.
-Those conditions would depend on latencies and the distance of the step function's $k$ values.
-
-Unfortunately the results do not scale for $n$-link parallel networks.
-
-%Specifically the case of $\alpha(p) = cp$, for some $c > 0$, shows some interesting behavior, as it creates instances where $\Pi_i$ becomes either unbounded or fixed; in the first case then $B_i$ becomes unbounded, while in the second it becomes an an infinite set.
-%This is showcased analytically in Example \ref{example:ap_p} in the Appendix, where for $\alpha(p) = p$ we see that the resulting best responses can indeed be undefined or unbounded.
-%When does this happen?
-%Is the problem $0$ being an accumulation point?
-%\begin{lemma}[Conjecture]
-%	If a distribution function has $\alpha(p) \le p \; \forall p$, then $\Pi_i$ becomes either unbounded or fixed.
-%\end{lemma}
+Concluding our analysis for step distribution functions in $2$-link networks, one note we'd like to take from this chapter is the clear issues that gaps in the money-sensitivity values create in the Nash Equilibrium for the pricing game, making their removal (by e.g. assuming continuous functions) lead to better properties for the pricing game.
+We will continue the discussion on further extensions of this work in the next chapter.
 
 \cleardoublepage
 
@@ -1659,6 +1756,23 @@ Since these games have a clear connection to heterogeneous games with step funct
 
 During the investigation of this study, there has been some minor results in the relation of flow and profit between two similar pseudo-heterogeneous games.
 We present a list of conjectures that we believe are true.
+
+\section*{Continuous functions}
+
+%Specifically the case of $\alpha(p) = cp$, for some $c > 0$, shows some interesting behavior, as it creates instances where $\Pi_i$ becomes either unbounded or fixed; in the first case then $B_i$ becomes unbounded, while in the second it becomes an an infinite set.
+%This is showcased analytically in Example \ref{example:ap_p} in the Appendix, where for $\alpha(p) = p$ we see that the resulting best responses can indeed be undefined or unbounded.
+%When does this happen?
+%Is the problem $0$ being an accumulation point?
+%\begin{lemma}[Conjecture]
+%	If a distribution function has $\alpha(p) \le p \; \forall p$, then $\Pi_i$ becomes either unbounded or fixed.
+%\end{lemma}
+
+\section*{Other}
+
+Given the restrictions of the possible positions for Nash equilibrium tolls, it would be tempting to try and calculate exact conditions for it.
+Those conditions would depend on latencies and the distance of the step function's $k$ values.
+
+Unfortunately the results do not scale for $n$-link parallel networks.
 
 \cleardoublepage
 
