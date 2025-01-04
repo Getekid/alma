@@ -131,6 +131,7 @@ We present and analyse an algorithm to calculate that equilibrium, if it exists,
 
 \thispagestyle{empty}
 \pagenumbering{gobble}
+
 \chapter*{Συνοψη}
 Σε αυτή τη διπλωματική μεταπτυχιακού μελετάμε ένα παίγνιο $2$ επιπέδων όπου, σε ένα δίκτυο με $n$ ακμές από μια πηγή $s$ σε ένα στόχο $t$, μια μονάδα ροής θέλει να μετακινηθεί από το $s$ στο $t$ χρησιμοποιώντας την ακμή με το χαμηλότερο κόστος, ενώ οι διαχειριστές των ακμών ανταγωνίζονται για κέρδος βάζοντας δίοδια στις ακμές και δημιουργώντας έτσι ένα παίγνιο συμφόρησης με διόδια.
 Εξετάζουμε μόνο αφινικές καθυστερήσεις για τις ακμές.
@@ -228,7 +229,7 @@ Marginal cost prices can be computed using convex programming \cite{beckmann1956
 
 Acemoglu and Ozdaglar were the first to introduce pricing competition between link operators to the above model \cite{10.1287/moor.1060.0231}.
 They showed that increasing the competition among operators from a monopoly to an oligopoly may reduce the efficiency of the network, achieving tight bounds on the Price of Anarchy.
-In a follow-up work \cite{10.1109/JSAC.2007.070812}, they generalised the above by assuming more general topologies where links can also be linked serially (series-parallel networks).
+In a follow-up work \cite{10.1109/JSAC.2007.070812}, they generalised the above by assuming more general topologies where links can also be linked serially (serial-parallel networks).
 Correa et al. \cite{correa2018pricing} showed pricing games may not exist, may not be unique and can be arbitrarily inefficient, but regulating the network with toll caps can solve all three issues.
 Harkes et al. \cite{Harks_2019} then showed that the same is true for uniform toll caps, which is stronger in practice as toll discrimination is often not allowed.
 The latter two papers have also been main pillars of the current work.
@@ -942,10 +943,10 @@ In this chapter we will introduce the pricing competition game to our model and 
 We will begin by noticing that players with no toll fear, i.e. $\alpha(p)$ close to $0$, can be exploited by some link operators who then get unbounded profits (Lemma \ref{lemma:a_0_0}).
 This obviously breaks the pricing competition game and, in turn, leads us to include the restriction of $\alpha(p) > 0$ when $p > 0$.
 We will then proceed to analyse games with fixed distribution functions, where in Lemma \ref{lemma:a_fixed_homogeneous} we will show that such games are, as intuition suggests, equivalent to homogeneous games.
-Special interest will then be on comparing such games, specifically those with the same setup but different fixed $\alpha$ functions, as Lemma \ref{lemma:a_fixed_c_relation} will reveal that uniformly varying the player sensitivity maps the toll values around the same flow.
+Special interest will then be on comparing such games, specifically those with the same setup but different fixed $\alpha$ functions, as Lemma \ref{lemma:a_fixed_c_relation} will reveal that, uniformly varying the player sensitivity, maps the toll values around the same flow.
 The tools and notions built above will prove extremely useful when we next analyse games with step distribution functions, where we'll restrict our analysis to instances with $2$ links to simplify our work.
 For those we will show an equivalence with a homogeneous game for a given toll \ref{lemma:heterogenous_flow_equiv_fixed} and combining it with Lemma \ref{lemma:alpha_step_gaps} where we'll show that a Nash Equilibrium cannot exist with all players of each sensitivity type using a single link, we get this chapter's main result, Theorem \ref{theorem:a_step_ne_equiv_fixed}, which states that if a Nash Equilibrium exists in a heterogeneous game with a step distribution function, then the respective homogeneous also has an equilibrium for the same set of tolls.
-Using this notion, we will describe an algorithm (\ref{algorithm:ne_pricing}) which can decide existence and return the Nash Equilibrium for the pricing competition game in a heterogeneous $2$-link network.
+Using this notion, we will describe an algorithm (\ref{algorithm:step_ne_pricing}) which can decide existence and return the Nash Equilibrium for the pricing competition game in a heterogeneous $2$-link network.
 
 \section{Problems with $0$ money sensitivity}
 
@@ -1127,178 +1128,8 @@ We proceed with a consequence of the above behaviour for the Nash Equilibrium fo
 	\end{enumerate}
 \end{proof}
 
-What we need to examine  next is how those two games react differently for an link $i$ given a fixed $t_{-i}$.
-For this it is important to focus again on the fact that the flow is exclusively dependent on the toll difference.
-
-TODO: Fix the next Lemma.
-For affine latencies, we can calculate the best response functions $B_i(t_{-i})$.
-For each link operator $i$, by solving first order conditions on $\Pi_i(t_i, t_{-i})$ for $t_i$ we get
-\begin{equation}
-	\label{eq:homogeneous_br_i}
-	B_i(t_{-i}) = \frac{1 + \sum_{j \ne i}\frac{b_j + t_j - b_i}{a_j}}{\sum_{j \ne i}\frac{2}{a_j}}
-\end{equation}
-
-%In the extreme cases where the toll differences are arbitrarily large, the best response of some players will be to lower their toll and take all available flow.
-
-To describe more properties of homogeneous pricing games we will need the following crucial Lemma.
-\begin{lemma}
-	\label{lemma:tolls_diff}
-	Let $(N, \ell, 1)$ be a homogeneous pricing game, and let $D_i$ a function for each link $i$ where $D_i(t_{-i}) = B_i(t_{-i}) - t_{-i}$, a vector of $t_i - t_j$ values for all $t_j \in t_{-i}$.
-	Then $D_i$ is decreasing with regard to any $t_j \in t_{-i}$.
-\end{lemma}
-
-\begin{proof}
-	For any link $i$ and any $t_j \in t_{-i}$ consider the respective element of $D_i$, which is $B_i(t_{-i}) - t_j$.
-	From formula \ref{eq:homogeneous_br_i} after some calculations we get
-	\[
-	B_i(t_{-i}) - t_j = \left(\frac{1}{\sum_{k \ne i} \frac{2a_j}{a_k}} - 1\right)t_j + \frac{1 + \frac{b_j - b_i}{a_j} + \sum_{k \ne i, j}\frac{b_k + t_k - b_i}{a_k}}{\sum_{k \ne i} \frac{2}{a_k}}
-	\]
-	which is decreasing with regards to $t_j$ if and only if its coefficient is negative.
-	Indeed, since $a_i > 0$ for all $i$, we get
-	\[
-	\frac{1}{\sum_{k \ne i} \frac{2a_j}{a_k}} - 1 = \frac{1}{2 \left(1 + \sum_{k \ne i, j} \frac{a_j}{a_k}\right)} - 1 \leq \frac{1}{2} - 1 < 0
-	\]
-\end{proof}
-
- which is in turn non-increasing with regards to $t_{-i}$ (\ref{lemma:tolls_diff}).
-Therefore, as $t_{-i}$ increases, the best response gets decreasing difference with $t_{-i}$, thus taking more flow in $x_i$.
-Eventually there will be a smallest possible $t_{-i}$ where the best response is to take all flow, and henceforth any larger $t_{-i}$ will also result in a best response with the same toll difference and flow.
-We will use this property to describe the flow relation between the two games in the following lemma.
-
-\begin{lemma}
-	\label{lemma:a_fixed_t_iM_fixed}
-	Let $\Gm_1 = ([2], \ell, c_1)$ and $\Gm_2 = ([2], \ell, c_1)$ two heterogeneous pricing games with common latency functions $\ell$ and distribution functions $\alpha(p) = c_1$ and $c_2 > c_1 > 0$ respectively.
-	Also let $t_{-i_M}^{(1)}, t_{-i_M}^{(2)}$ the smallest possible $t_{-i}$ where $x_i(B_i(t_{-i}), t_{-i}) = 1$, respectively for each game.
-	Then the following hold.
-	\begin{enumerate}[$(i)$]
-		\item $t_{-i_M}^{(2)} < t_{-i_M}^{(1)}$
-		\item $x_i^{(1)}(B_i^{(1)}(0), 0) = x_i^{(2)}(B_i^{(2)}(0), 0)$
-		\item $x_i^{(1)}(B_i^{(1)}(t_{-i}), t_{-i}) = x_i^{(2)}(B_i^{(2)}(t_{-i}), t_{-i}) = 1$ for all $t_{-i} \ge t_{-i_M}^{(1)}$
-		\item $x_i^{(1)}(B_i^{(1)}(t_{-i}), t_{-i}) < x_i^{(2)}(B_i^{(2)}(t_{-i}), t_{-i})$, for all $t_{-i} \in (0, t_{-i_M}^{(1)})$
-		\item $x_i^{(1)}(B_i^{(1)}(t_{-i}), t_{-i}), x_i^{(2)}(B_i^{(2)}(t_{-i}), t_{-i})$ get max distance at $t_{-i_M}^{(2)}$ \\
-		\textit{(conjecture)}
-	\end{enumerate}
-\end{lemma}
-
-\begin{proof}
-	$ $
-	\begin{enumerate}[$(i)$]
-		\item Assume $t_{-i_M}^{(2)} \ge t_{-i_M}^{(1)}$.
-		Then from Corollary \ref{corollary:a_fixed_c_relation} we get
-		\begin{flalign*}
-			1 = &x_i^{(1)}(B_i^{(1)}(t_{-i_M}^{(1)}), t_{-i_M}^{(1)}) = x_i^{(2)}\left( \frac{c_1}{c_2} \cdot B_i^{(1)}(t_{-i_M}^{(1)}), \frac{c_1}{c_2} \cdot t_{-i_M}^{(1)}\right) & \\
-			&= x_i^{(2)}\left(B_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_{-i_M}^{(1)}\right), \frac{c_1}{c_2} \cdot t_{-i_M}^{(1)}\right) &
-		\end{flalign*}
-		which is a contradiction since $\frac{c_1}{c_2} t_{-i_M}^{(1)} < t_{-i_M}^{(1)} \le t_{-i_M}^{(2)}$ and $t_{-i_M}^{(2)}$ is the smallest value with that property.
-		Therefore the initial assumption is wrong and we get $t_{-i_M}^{(2)} < t_{-i_M}^{(1)}$.
-		\item With application of Corollary \ref{corollary:a_fixed_c_relation} we have
-		\[
-			x_i^{(1)}(B_i^{(1)}(0), 0) = x_i^{(2)}\left(\frac{c_1}{c_2} \cdot B_i^{(1)}(0), 0\right) = x_i^{(2)}(B_i^{(2)}(0), 0)
-		\]
-		\item Since from $(i)$ we have $t_{-i_M}^{(1)} = \max\{t_{-i_M}^{(1)}, t_{-i_M}^{(2)}\}$ then the property follows from the definitions of $t_{-i_M}^{(1)}, t_{-i_M}^{(2)}$.
-		\item For $t_{-i} \in (t_{-i_M}^{(2)}, t_{-i_M}^{(1)})$ obviously
-		\[
-			x_i^{(1)}(B_i^{(1)}(t_{-i}), t_{-i}) < 1 = x_i^{(2)}(B_i^{(2)}(t_{-i}), t_{-i})
-		\]
-		Then for $t_{-i} \in (0, t_{-i_M}^{(2)})$ with the same way we used Corollary \ref{corollary:a_fixed_c_relation} as in $(i)$ we see that
-		\[
-			x_i^{(1)}(B_i^{(1)}(t_{-i}), t_{-i}) = x_i^{(2)}\left(B_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_{-i}\right), \frac{c_1}{c_2} \cdot t_{-i}\right)
-		\]
-		where the second part is the flow in $\Gm_2$ at the best response of link operator $i$ against $\frac{c_1}{c_2} t_{-i}$.
-		Therefore their best response against $t_{-i} > \frac{c_1}{c_2} t_{-i}$ will have a lower toll difference to $t_{-i}$ (\ref{lemma:tolls_diff}) and thus more flow, arriving at
-		\[
-			x_i^{(2)}\left(B_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_{-i}\right), \frac{c_1}{c_2} \cdot t_{-i}\right) < x_i^{(2)}(B_i^{(2)}(t_{-i}), t_{-i})
-		\]
-	\end{enumerate}
-\end{proof}
-
-%\begin{lemma}
-%	\label{lemma:a_fixed_x12}
-%	Let $\Gm_1 = ([2], \ell, c_1)$ and $\Gm_2 = ([2], \ell, c_1)$ two heterogeneous pricing games with common latency functions $\ell$ and distribution functions $\alpha(p) = c_1$ and $c_2 > c_1 > 0$ respectively.
-%	Then the following hold.
-%	\begin{enumerate}[$(i)$]
-%		\item $x^{(1)}(0) = x^{(2)}(0)$
-%		\item $x_i^{(1)}(t) - x_i^{(2)}(t)$ is non-decreasing in relation to $t_i - t_{-i}$
-%	\end{enumerate}
-%\end{lemma}
-%Notice that the above Lemma also provides us with $x_i^{(1)}(t) < x_i^{(2)}(t)$ iff $t_i < t_{-i}$ and vice versa, as well as that this difference is expanded as $t_i - t_{-i}$ does.
-%We avoided using the affinity of the latency functions on purpose to get a more general notion between the two games.
-%Using latency functions now, we can get a calculated version of the above.
-%\begin{corollary}
-%	\label{lemma:a_fixed_x12_calc}
-%	Let $\Gm_1 = ([2], \ell, c_1)$ and $\Gm_2 = ([2], \ell, c_1)$ two heterogeneous pricing games with the same affine latency functions $\ell$ and distribution functions $\alpha(p) = c_1$ and $c_2 > c_1 > 0$ respectively.
-%	Then for some fixed number $K_i > 0$ it holds that
-%	\[x_i^{(1)}(t) - x_i^{(2)}(t) = K_i \cdot (t_i - t_{-i})\]
-%\end{corollary}
-%
-%\begin{proof}
-%	From equation \ref{eq:homogeneous_x_i} for $2$ links and under universal sensitivity $c_1, c_2$ respectively we get
-%	\begin{align*}
-%		x_i^{(1)}(t) - x_i^{(2)}(t) &= \frac{a_{-i} + b_{-i} + c_1t_{-i} - b_i - c_1t_i}{a_i} - \frac{a_{-i} + b_{-i} + c_2t_{-i} - b_i - c_2t_i}{a_i} \\
-%		&= \frac{(c_2 - c_1)(t_i - t_{-i})}{a_i}
-%	\end{align*}
-%	So the property holds for $K_i = \frac{c_2 - c_1}{a_i} > 0$.
-%\end{proof}
-
-We finally arrive at the main theorem of this section, which describes similar properties for the relative behaviour of the profit functions between the two games.
-Fist, let's remind ourselves that from Lemma \ref{lemma:tolls_diff} for each game $B_i(t_{-i}) - t_{-i}$ is decreasing as well as continuous.
-Therefore, given that best responses range from above and below $t_{-i}$ values, there exists some $t_{-i_0}$ for which $B_i(t_{-i_0}) = t_{-i_0}$.
-We state now our theorem.
-
-\begin{theorem}
-	\label{theorem:a_fixed_t_i0}
-	Let $\Gm_1 = ([2], \ell, c_1)$ and $\Gm_2 = ([2], \ell, c_1)$ two heterogeneous pricing games with the same latency functions $\ell$ and distribution functions $\alpha(p) = c_1$ and $c_2 > c_1 > 0$ respectively.
-	Also let $t_{-i_0}^{(1)}, t_{-i_0}^{(2)}$ the respective tolls for which $B_i^{(1)}(t_{-i_0}^{(1)}) = t_{-i_0}^{(1)}$ and $B_i^{(1)}(t_{-i_0}^{(2)}) = t_{-i_0}^{(2)}$.
-	Then for all links $i$ it holds that
-	\begin{enumerate}[$(i)$]
-		\item $t_{-i_0}^{(1)} > t_{-i_0}^{(2)}$
-		\item There exists $t_{-i_0} \in \left(t_{-i_0}^{(2)}, t_{-i_0}^{(1)}\right)$ such that
-		\[\max_{t_i > 0}\Pi_i^{(1)}(t_i, t_{-i_0}) = \max_{t_i > 0}\Pi_i^{(2)}(t_i, t_{-i_0})\]
-		\item $\max_{t_i > 0}\Pi_i^{(1)}(t_i, t_{-i}) - \max_{t_i > 0}\Pi_i^{(2)}(t_i, t_{-i})$ is non-increasing in relation to $t_{-i}$.
-		\item $t_{-i_0}$ is the geometric mean of $t_{-i_0}^{(1)}, t_{-i_0}^{(2)}$
-	\end{enumerate}
-\end{theorem}
-
-\begin{proof}
-	$ $
-	\begin{enumerate}[$(i)$]
-		\item From Corollary \ref{corollary:a_fixed_c_relation}$(iii)$ we get
-		\[
-			B_i^{(1)}(t_{-i_0}^{(1)}) = t_{-i_0}^{(1)} \Rightarrow B_i^{(2)}\left(\frac{c_1}{c_2} \cdot t_{-i_0}^{(1)}\right) = \frac{c_1}{c_2} \cdot t_{-i_0}^{(1)}
-		\]
-		and from the fact that $t_{-i_0}^{(1)}, t_{-i_0}^{(2)}$ are the unique solutions of their respective equations we get $t_{-i_0}^{(2)} = \frac{c_1}{c_2} \cdot t_{-i_0}^{(1)} < t_{-i_0}^{(1)}$.
-		\item Consider the function $\Pi_i(t_{-i}) = \max_{t_i > 0}\Pi_i^{(1)}(t_i, t_{-i}) - \max_{t_i > 0}\Pi_i^{(2)}(t_i, t_{-i})$.
-		Then for $t_{-i} = t_{-i_0}^{(2)}$ we see that in $\Gm_2$ the best response for link operator $i$ is to play the same toll as in the other link, therefore they get max profit at $x_i^{(2)}(0) \cdot t_{-i_0}^{(2)}$.
-		In $\Gm_1$ now, since $t_{-i_0}^{(2)} < t_{-i_0}^{(1)}$ then the best response for link operator $i$ is for some $t_i > t_{-i_0}^{(2)}$, and since from \ref{corollary:a_fixed_c_relation}$(i)$ the profit $x_i^{(1)}(0) = x_i^{(2)}(0) \cdot t_{-i_0}^{(2)}$ is also one of their options, it means that the profit at $t_i$ is greater, i.e.
-		\[
-			\max_{t_i > 0}\Pi_i^{(1)}(t_i, t_{-i_0}^{(2)}) > \max_{t_i > 0}\Pi_i^{(2)}(t_i, t_{-i_0}^{(2)}) \Rightarrow \Pi_i(t_{-i_0}^{(2)}) > 0
-		\]
-		Similarly we can show that $\Pi_i(t_{-i_0}^{(1)}) < 0$.
-		With all the above and given that we know from the analysis in Harkes et al. \cite{Harks_2019} that best response functions are continuous, from the Bolzano theorem (TODO: Is this the right theorem? Reference?) we get that there exists $t_{-i_0} \in \left(t_{-i_0}^{(2)}, t_{-i_0}^{(1)}\right)$ such that $\Pi_i(t_{-i_0}) = 0$, which gives us the desired proposition.
-		\item We will use the same $\Pi_i$ function as in $(ii)$, so we instead need to show that $\Pi_i(t_{-i})$ is non-decreasing in relation to $t_{-i}$.
-		For all $t_{-i} \ge t_{-i_M}^{(1)}$ from Lemma \ref{lemma:a_fixed_t_iM_fixed} we get $\Pi_i(t_{-i}) = 1 \cdot B_i^{(1)}(t_{-i}) - 1 \cdot B_i^{(2)}(t_{-i})$, where the best responses have fixed differences to $t_{-i}$ (and therefore to each other as well), making $\Pi_i(t_{-i})$ in turn fixed for all $t_{-i} \ge t_{-i_M}^{(1)}$.
-		TODO: Pending.
-		\item By using the $B_i(t_{-i})$ formula to find $t_{-i_0}^{(1)}, t_{-i_0}^{(2)}$ and then solve $\max_{t_i > 0}\Pi_i^{(1)}(t_i, t_{-i_0}) = \max_{t_i > 0}\Pi_i^{(2)}(t_i, t_{-i_0})$.
-		TODO: Either replace with a theoretical proof or write the calculations.
-	\end{enumerate}
-\end{proof}
-
-Finally, we can again calculate $t_{-i_0}$ using the closed formulas provided by the affine assumption.
-
-\begin{corollary}
-	\label{corollary:a_fixed_ti0_calc}
-	Let $\Gm_1 = ([2], \ell, c_1)$ and $\Gm_2 = ([2], \ell, c_1)$ two heterogeneous pricing games with the same latency functions $\ell$ and distribution functions $\alpha(p) = c_1$ and $c_2 > c_1 > 0$ respectively.
-	Then for $t_{-i_0}$ defined in Theorem \ref{theorem:a_fixed_t_i0} for the two games it holds that
-	\[t_{-i_0} = \frac{a_{-i} + b_{-i} - b_i}{\sqrt{c_1 c_2}}\]
-\end{corollary}
-
-\begin{proof}
-	We can easily calculate $t_{-i_0}^{(1)}$ and $t_{-i_0}^{(2)}$.
-	For $\Gm_1$ we have
-	\[B_i^{(1)}(t_{-i_0}^{(1)}) = t_{-i_0}^{(1)} \Rightarrow \frac{a_{-i} + b_{-i} - b_i + c_1 t_{-i_0}^{(1)}}{2 c_1} = t_{-i_0}^{(1)} \Rightarrow t_{-i_0}^{(1)} = \frac{a_{-i} + b_{-i} - b_i}{c_1}\]
-	Similarly for $\Gm_2$ we have $t_{-i_0}^{(2)} = \frac{a_{-i} + b_{-i} - b_i}{c_2}$, so finally from Theorem \ref{theorem:a_fixed_t_i0}$(iv)$ we get
-	\[t_{-i_0} = \sqrt{t_{-i_0}^{(1)} \cdot t_{-i_0}^{(2)}} = \frac{a_{-i} + b_{-i} - b_i}{\sqrt{c_1 c_2}}\]
-\end{proof}
+%What we need to examine  next is how those two games react differently for an link $i$ given a fixed $t_{-i}$.
+%For this it is important to focus again on the fact that the flow is exclusively dependent on the toll difference.
 We have now gathered all necessary tools to start investigating step distribution functions.
 
 \section{Step distribution function for $2$-link networks}
@@ -1555,31 +1386,8 @@ We complement this idea with the following Theorem, one of the main results of t
 	The link selection was arbitrary, making $B_i^{(2)}(t_{-i}^*) = t_i^*$ hold for all links $i \in [2]$, finally concluding that $t^*$ is a Nash equilibrium for the pricing game in $\Gm_2$.
 \end{proof}
 
-It therefore seems to make sense to discuss profit only within those intervals where the flow changes, or equivalently view profit with regard to flow intervals, since we ignore instances where the flow remains the same and thus there exists a $1-1$ relation between profit and flow.
-It naturally follows that the best response of a link operator $i$ given $t_{-i}$ depends on the max profit value over any set of intervals that completely cover $[0, 1]$.
-For step distribution functions, this set can be the domains of each of its finitely different values $\alpha_1 < \ldots < \alpha_m$.
-As such $\forall k \in [m]$ we denote as $A_k$ the closed set of all players $p$ in $[0, 1]$ for whom $\alpha(p) = \alpha_k$.
-Obviously $\cup_{k=1}^m A_k = [0, 1]$ and from the assumption that $\alpha$ is non-decreasing we also get $A_k$ convex $\forall k \in [m]$.
-When looking at the flow (and consequently profit) of a specific link $i$, however, the split behaviour of the distribution function makes it possible for different flows having the same money sensitivity split.
-We will therefore use the money sensitivity split function to refer to the respective flows that follow it, and formalise the profit and respective best response of link operator $i$ in the following definition.
-
-\begin{definition}
-	Let $\Gm_1 = ([2], \ell, \alpha)$ a heterogeneous game where $\alpha$ is a step function and $(A_k)_{k \in [m]}$ the partition of $[0, 1]$ that is defined by the domain of $\alpha$.
-	Then for link operator $i$ the definition of $\Pi_i$ is extended for an interval $A_k$ as
-	\[
-		\Pi_{i, k}(t_{-i}) = \max_{\stackrel{t_i > 0}{\as(t_i, t_{-i}) = \alpha_k}}\Pi_i(t_i, t_{-i})
-	\]
-\end{definition}
-
-When it comes to maximising profit for the pricing games, those values included in all $\Pi_{i, k}$ are all we need, because if $\as(t)$ takes any other in-between value, then we are on an instance where no player views the two link costs as equal, with players viewing a purely smaller cost in either link.
-For the link operators, this means there at least one who can increase their toll and still keep the flow the same, achieving pure profit.
-This can also happen in link cases of $\as(t) = \alpha_k$, so we move our full description of this behavior in the following lemma.
-
-The most important corollary from that lemma comes from the fact that, as stated in \ref{lemma:a_fixed_ne}, for any $c > 0$ the flow for which the Nash Equilibrium emerges is always the same.
-Consequently for any step function assigned to a pricing game with fixed latency functions, if a Nash Equilibrium exists then it needs to be on the same flow as the one emerging in the respective homogeneous pricing game.
-
 With such a strong notion of the pricing Nash equilibrium, we can now see a potential algorithm that can be used to query its existence or not as well as calculate it.
-We present it here.
+We present it in Algorithm \ref{algorithm:step_ne_pricing}.
 
 \begin{algorithm}
 	\caption{Helper functions for Algorithm \ref{algorithm:step_ne_pricing}}
@@ -1730,49 +1538,60 @@ We will continue the discussion on further extensions of this work in the next c
 \chapter{Future work}
 \label{chapter:future_work}
 
-A natural extension of the above would be to examine them for $[N]$ parallel graphs.
-Some of the properties naturally extend but for others more care is required.
-Special notice and expansion is certainly necessary for the split function, as it is only defined for two links.
-On a first thought, it seems trivial to also order the links on an equilibrium by latency and then define the split function on each consecutive pair, therefore also having an ordered set of split function values.
-Still, more investigation is needed to uncover the relation between those values, and its consequences to the flow's or the pricing game's behaviours.
-
-Putting the pricing games aside, it would also be interesting to expand the split function for series-parallel graphs.
+In this chapter we will close on some of the discussions from previous chapters by exploring potential extensions of them that could be studied in future projects.
 
 \section*{Time-money sensitivity relation}
 
-The standard technique to capture heterogeneity in the users of a network has been to apply a weight $\alpha$ to the toll cost viewed be each user, making their total cost $\ell(x) + \alpha t$.
-This approach is equivalent to applying the inverse weight to the latency, i.e. make the cost $\tfrac1\alpha \ell(x) + t$.
-Though less intuitive we already saw an application of this idea in Lemma \ref{lemma:heterogenous_flow_equiv_fixed} where we showed that a fixed distribution function is equivalent to restricting the latency functions inversely proportionally, however the idea could potentially be extended outside of fixed values.
-This would of course does not guarantee that the latency functions will remain affine, or even polynomial.
-One could attempt and investigate distribution functions that are inverse polynomials, making the respective latencies remain polynomial.
-In any case we believe that a future work on the relation of the time-sensitivity with money sensitivity approaches, could uncover further insights in the behavior of heterogeneity.
+For general heterogeneous models, the standard technique to capture the heterogeneity of the users in a network (at least in the accounted work) has been to apply a weight $\alpha$ to the toll cost viewed by each user, thus making their total cost $\ell(x) + \alpha t$.
+This approach is equivalent to applying the inverse weight to the latency cost, i.e. make the cost $\tfrac1\alpha \ell(x) + t$.
+We already saw an application of this idea in Lemma \ref{lemma:heterogenous_flow_equiv_fixed}, where we showed that a heterogeneous game with a fixed distribution function is equivalent to a homogeneous game with latency functions restricted inversely proportionally.
+Unfortunately, as mentioned before, this correspondence is lost when considering non-fixed distribution functions, as then different tolls can create similar flows used by players with different sensitivity values, thus loosing the $1-1$ relation between latency and $\alpha$ values.
+
+Still, we believe that studying games with time sensitivity costs instead of money sensitivity ones, i.e. heterogeneous games with user cost $\tfrac1\alpha \ell(x) + t$, has the potential to reveal more insights about the game's mechanics and heterogeneous behaviour, which can then be mapped back to game models with the standard user cost of $\ell(x) + \alpha t$.
 
 \section*{Pseudo-heterogeneous games}
 
-In Chapter \ref{chapter:pricing_equilibria} we investigated the class of heterogeneous games with a fixed distribution function, which maintains its homogeneous behaviour and presents interesting properties when comparing different fixed sensitivities.
-Since these games have a clear connection to heterogeneous games with step functions, it shows special interest to study the relation of flow and profit with regard to the same $t$, as this approach can then lead to a characterisation of those in step functions.
+In Chapter \ref{chapter:pricing_equilibria} we investigated the class of heterogeneous games with a fixed distribution function, called in this work \textit{pseudo-heterogeneous games}, as we discovered that they still maintain a homogeneous behaviour, with tolls scaled inverse proportionally to their fixed sensitivity value (Figure \ref{figure:alpha_fixed:flow}).
+Continuing on the study of similar games with different fixed distribution functions, we believe there is special interest in doing so with regard to the same opposing toll $t_{-i}$.
+Such an analysis can shed more light into the relations between flow, tolls, profit etc. among similar games where the fixed sensitivity value varies, which, apart from its clear connection to games with step distribution functions (Lemma \ref{lemma:heterogenous_flow_equiv_fixed}), it could also potentially lead to a more complete characterisation of the heterogeneity's effect on the game overall.
 
-\subsection*{Profit maximisation}
+Having conducted this analysis partially, we include in the Appendix the (incomplete) propositions \ref{lemma:a_fixed_t_iM}, \ref{lemma:a_fixed_x12}, \ref{corollary:a_fixed_x12_calc} and \ref{lemma:a_fixed_t_i0}, which try to describe that relation between flow and profit, among similar games with varying fixed sensitivity, for the same opposing $t_{-i}$.
+We hope this work can be used as a basis for any further investigation on the property relations between similar pseudo-heterogeneous games.
 
-During the investigation of this study, there has been some minor results in the relation of flow and profit between two similar pseudo-heterogeneous games.
-We present a list of conjectures that we believe are true.
+\section*{Step distribution functions}
 
-\section*{Continuous functions}
+\subsection*{$2$-link networks}
 
-%Specifically the case of $\alpha(p) = cp$, for some $c > 0$, shows some interesting behavior, as it creates instances where $\Pi_i$ becomes either unbounded or fixed; in the first case then $B_i$ becomes unbounded, while in the second it becomes an an infinite set.
-%This is showcased analytically in Example \ref{example:ap_p} in the Appendix, where for $\alpha(p) = p$ we see that the resulting best responses can indeed be undefined or unbounded.
-%When does this happen?
-%Is the problem $0$ being an accumulation point?
-%\begin{lemma}[Conjecture]
-%	If a distribution function has $\alpha(p) \le p \; \forall p$, then $\Pi_i$ becomes either unbounded or fixed.
-%\end{lemma}
+Algorithm \ref{algorithm:step_ne_pricing} calculates tolls which are a candidate Nash Equilibrium for the pricing game and then checks for all step function values that no profit earned in a different sensitivity split is higher than that.
+Given those restrictions, it seems very possible to calculate exact conditions for a candidate set of tolls to be a Nash Equilibrium.
+Those conditions would heavily depend on the definition of $\alpha$, making the player splits as well as the distance of the step function's $\alpha_k$ values appear to be the defining factors.
+Therefore another possible extension of this work would be to compute and study these exact conditions.
 
-\section*{Other}
+\subsection*{$n$-link networks}
 
-Given the restrictions of the possible positions for Nash equilibrium tolls, it would be tempting to try and calculate exact conditions for it.
-Those conditions would depend on latencies and the distance of the step function's $k$ values.
+A natural question pending from Chapter \ref{chapter:pricing_equilibria} is whether any of the properties described for step distribution functions for $2$-link networks can be extended for $n$-link parallel ones.
+The main issue with that potential extension is that, even for $3$-link parallel networks, the notion of a single user viewing all link costs equally is lost, as different sensitivity splits between any two pairs of links will make is so that no sensitivity value can view them all equal.
 
-Unfortunately the results do not scale for $n$-link parallel networks.
+A different approach is therefore required to study step distribution functions for $n$-link parallel heterogeneous networks, with possible directions being investigating the different sensitivity splits among the links, running simulations, or even focusing on the algorithmic aspect of the game, where complexity results regarding the calculation or simply decision of a Nash Equilibrium can also give us further insights into the game's properties.
+Finally, another (maybe odd) way to characterise the pricing game for some $n$-link networks, would be proving it never exists for $n \ge 3$ under some conditions, a possibility which the authors have suspected.
+The main motivation for such a suspicion, is that even for $n = 3$, with the condition of having different sensitivity splits between the two consecutive pairs of links (with regard to a toll ordering on links), the respective sub-games of those pairs will likely display a behaviour similar to $2$-link networks, thus each converging to their own toll equilibrium and never reaching one overall.
+
+It is clear that studying any of the above directions would require much additional analysis around heterogeneous pricing games, so we hope that the tools and notions developed in this thesis can be used as base in any such potential future work.
+
+\section*{Continuous distribution functions}
+
+Another possible continuation of this work would be to investigate Nash Equilibria in heterogeneous pricing games for which heterogeneity is described by continuous distribution functions.
+Though other function types can also be of interest, as we mentioned in our analysis of step distribution functions in Chapter \ref{chapter:pricing_equilibria}, gaps in the player sensitivity values may break a potential Nash Equilibrium for the pricing game, a case completely eradicated by assuming continuity.
+
+For such functions, however, our former restriction of $\alpha(p) > 0$ when $p > 0$ does not suffice, as similar issues can arise when considering many players with almost no toll-fear.
+In Lemma \ref{lemma:a_0_accumulation_point} we attempt to show that when $0$ is an accumulation point in $\alpha$, then the lowest latency toll will always have flow, conditions similar to those of Lemma \ref{lemma:a_0_0}, suggesting the possible emergence of a similar behaviour.
+Example \ref{example:ap_p} in the Appendix analyses a game with distribution function $\alpha(p) = p$, and showcases that the resulting best responses can indeed be undefined or unbounded, marking this function (or similar ones, e.g.  $\alpha(p) = cp$, for some $c > 0$) to be of interest for further study.
+
+\section*{Split function for series-parallel links}
+
+Finally, in Chapter \ref{chapter:split}, we put the pricing games aside and introduced the concept of a money sensitivity split, which can help us describe how the user sensitivity is divided among the different links.
+While this notion works well for parallel networks, it could potentially also work on series-parallel ones, networks allowing for more general graph configurations.
+While in such complex networks the link sequence can vary greatly (potentially mixing different sensitivity split values in merging links), we believe there is great interest as well as value in examining how those split values behave as a heterogeneous flow moves through different link configurations, making any future research around this topic prone to acquiring further insights regarding heterogeneous games overall.
 
 \cleardoublepage
 
@@ -1789,6 +1608,9 @@ Unfortunately the results do not scale for $n$-link parallel networks.
 
 \section*{Propositions}
 
+The following prepositions are not vetted and the author does not claim that any of the statements are concretely true.
+They are included here, however, first to present some parallel results that were produced during the development of this research, and then to provide additional info in some of the discussions throughout.
+
 \begin{lemma}
 	\label{lemma:a_0_accumulation_point}
 	Let $(N, \ell, \alpha)$ a heterogeneous parallel game with distribution function $\alpha$ such that $\alpha(0) = 0$ and $0$ is an accumulation point.
@@ -1800,7 +1622,190 @@ Unfortunately the results do not scale for $n$-link parallel networks.
 	Therefore $\forall t \in \R_+^{|N|}$ if $\delta = \min_{i \in N \setminus \{1\}}\as^{(1, i)}(t)$ then $\exists \epsilon > 0: p < \epsilon \Rightarrow \alpha(p) < \as^{(1, i)}(t)$ for all $i \in N \setminus \{1\}$, which means that the lowest-latency link will always have flow some $\epsilon > 0$, and therefore $x_1(t) > 0$.
 \end{proof}
 
-\section*{Example calculations}
+%To describe more properties of homogeneous pricing games we will need the following crucial Lemma.
+\begin{lemma}
+	\label{lemma:tolls_diff}
+	Let $(N, \ell, 1)$ be a homogeneous pricing game, and let $D_i$ a function for each link $i$ where $D_i(t_{-i}) = B_i(t_{-i}) - t_{-i}$, a vector of $t_i - t_j$ values for all $t_j \in t_{-i}$.
+	Then $D_i$ is decreasing with regard to any $t_j \in t_{-i}$.
+\end{lemma}
+
+\begin{proof}
+	For any link $i$ and any $t_j \in t_{-i}$ consider the respective element of $D_i$, which is $B_i(t_{-i}) - t_j$.
+	For affine latency functions, we can calculate the best response functions $B_i(t_{-i})$ for each link operator $i$, by solving first order conditions on $\Pi_i(t_i, t_{-i})$ for $t_i$ we get
+	\begin{equation}
+		\label{eq:homogeneous_br_i}
+		B_i(t_{-i}) = \frac{1 + \sum_{j \ne i}\frac{b_j + t_j - b_i}{a_j}}{\sum_{j \ne i}\frac{2}{a_j}}
+	\end{equation}
+	From formula \ref{eq:homogeneous_br_i} after some calculations we get
+	\[
+		B_i(t_{-i}) - t_j = \left(\frac{1}{\sum_{k \ne i} \frac{2a_j}{a_k}} - 1\right)t_j + \frac{1 + \frac{b_j - b_i}{a_j} + \sum_{k \ne i, j}\frac{b_k + t_k - b_i}{a_k}}{\sum_{k \ne i} \frac{2}{a_k}}
+	\]
+	which is decreasing with regards to $t_j$ if and only if its coefficient is negative.
+	Indeed, since $a_i > 0$ for all $i$, we get
+	\[
+		\frac{1}{\sum_{k \ne i} \frac{2a_j}{a_k}} - 1 = \frac{1}{2 \left(1 + \sum_{k \ne i, j} \frac{a_j}{a_k}\right)} - 1 \leq \frac{1}{2} - 1 < 0
+	\]
+\end{proof}
+
+which is in turn non-increasing with regards to $t_{-i}$ (\ref{lemma:tolls_diff}).
+Therefore, as $t_{-i}$ increases, the best response gets decreasing difference with $t_{-i}$, thus taking more flow in $x_i$.
+Eventually there will be a smallest possible $t_{-i}$ where the best response is to take all flow, and henceforth any larger $t_{-i}$ will also result in a best response with the same toll difference and flow.
+We will use this property to describe the flow relation between the two games in the following lemma.
+
+\subsection*{Pseudo-heterogeneous games}
+
+\begin{lemma}
+	\label{lemma:a_fixed_t_iM}
+	Let $\Gm_1 = ([2], \ell, c_1)$ and $\Gm_2 = ([2], \ell, c_2)$ two pseudo-heterogeneous pricing games with common latency functions $\ell$ and distribution functions $\alpha^{(1)}(p) = c_1$ and $\alpha^{(2)}(p) = c_2 > c_1 > 0$ respectively.
+	Also let $t_{-i_M}^{(1)}, t_{-i_M}^{(2)}$ the smallest possible $t_{-i}$ where $x_i(B_i(t_{-i}), t_{-i}) = 1$, respectively for each game.
+	Then the following hold.
+	\begin{enumerate}[$(i)$]
+		\item $t_{-i_M}^{(2)} < t_{-i_M}^{(1)}$
+		\item $x_i^{(1)}(B_i^{(1)}(0), 0) = x_i^{(2)}(B_i^{(2)}(0), 0)$
+		\item $x_i^{(1)}(B_i^{(1)}(t_{-i}), t_{-i}) = x_i^{(2)}(B_i^{(2)}(t_{-i}), t_{-i}) = 1$ for all $t_{-i} \ge t_{-i_M}^{(1)}$
+		\item $x_i^{(1)}(B_i^{(1)}(t_{-i}), t_{-i}) < x_i^{(2)}(B_i^{(2)}(t_{-i}), t_{-i})$, for all $t_{-i} \in (0, t_{-i_M}^{(1)})$
+		\item $x_i^{(1)}(B_i^{(1)}(t_{-i}), t_{-i}), x_i^{(2)}(B_i^{(2)}(t_{-i}), t_{-i})$ get max distance at $t_{-i_M}^{(2)}$ \\
+		\textit{(conjecture)}
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+	$ $
+	\begin{enumerate}[$(i)$]
+		\item Assume $t_{-i_M}^{(2)} \ge t_{-i_M}^{(1)}$.
+		Then from Lemma \ref{lemma:a_fixed_c_relation} we get
+		\begin{flalign*}
+			1 = &x_i^{(1)}(B_i^{(1)}(t_{-i_M}^{(1)}), t_{-i_M}^{(1)}) = x_i^{(2)}\left( \frac{c_1}{c_2} B_i^{(1)}(t_{-i_M}^{(1)}), \frac{c_1}{c_2} t_{-i_M}^{(1)}\right) & \\
+			&= x_i^{(2)}\left(B_i^{(2)}\left(\frac{c_1}{c_2} t_{-i_M}^{(1)}\right), \frac{c_1}{c_2} t_{-i_M}^{(1)}\right) &
+		\end{flalign*}
+		which is a contradiction since $\frac{c_1}{c_2} t_{-i_M}^{(1)} < t_{-i_M}^{(1)} \le t_{-i_M}^{(2)}$ and $t_{-i_M}^{(2)}$ is the smallest value with that property.
+		Therefore the initial assumption is wrong and we get $t_{-i_M}^{(2)} < t_{-i_M}^{(1)}$.
+		\item With the application of Lemma \ref{lemma:a_fixed_c_relation} we have
+		\[
+			x_i^{(1)}(B_i^{(1)}(0), 0) = x_i^{(2)}\left(\frac{c_1}{c_2} B_i^{(1)}(0), 0\right) = x_i^{(2)}(B_i^{(2)}(0), 0)
+		\]
+		\item Since from $(i)$ we have $t_{-i_M}^{(1)} = \max\{t_{-i_M}^{(1)}, t_{-i_M}^{(2)}\}$ then the property follows from the definitions of $t_{-i_M}^{(1)}, t_{-i_M}^{(2)}$.
+		\item For $t_{-i} \in (t_{-i_M}^{(2)}, t_{-i_M}^{(1)})$ obviously
+		\[
+			x_i^{(1)}(B_i^{(1)}(t_{-i}), t_{-i}) < 1 = x_i^{(2)}(B_i^{(2)}(t_{-i}), t_{-i})
+		\]
+		Then for $t_{-i} \in (0, t_{-i_M}^{(2)})$, using Lemma \ref{lemma:a_fixed_c_relation} the same way as in $(i)$, we see that
+		\[
+		x_i^{(1)}(B_i^{(1)}(t_{-i}), t_{-i}) = x_i^{(2)}\left(B_i^{(2)}\left(\frac{c_1}{c_2} t_{-i}\right), \frac{c_1}{c_2} t_{-i}\right)
+		\]
+		where the second part is the flow in $\Gm_2$ at the best response of link operator $i$ against $\frac{c_1}{c_2} t_{-i}$.
+		Lemma \ref{lemma:tolls_diff}, then, tells us that their best response against $t_{-i} > \frac{c_1}{c_2} t_{-i}$ will have a lower toll difference to $t_{-i}$, and thus more flow, arriving at
+		\[
+			x_i^{(2)}\left(B_i^{(2)}\left(\frac{c_1}{c_2} t_{-i}\right), \frac{c_1}{c_2} t_{-i}\right) < x_i^{(2)}(B_i^{(2)}(t_{-i}), t_{-i})
+		\]
+	\end{enumerate}
+\end{proof}
+
+\begin{lemma}[Conjecture]
+	\label{lemma:a_fixed_x12}
+	Let $\Gm_1 = ([2], \ell, c_1)$ and $\Gm_2 = ([2], \ell, c_2)$ two pseudo-heterogeneous pricing games with common latency functions $\ell$ and distribution functions $\alpha^{(1)}(p) = c_1$ and $\alpha^{(2)}(p) = c_2 > c_1 > 0$ respectively.
+	Then $x_i^{(1)}(t) - x_i^{(2)}(t)$ is non-decreasing in relation to $t_i - t_{-i}$.
+\end{lemma}
+Notice that the above Lemma also provides us with $x_i^{(1)}(t) < x_i^{(2)}(t)$ iff $t_i < t_{-i}$ and vice versa, as well as that this difference is expanded as $t_i - t_{-i}$ does.
+We avoided using the affinity of the latency functions on purpose to get a more general notion between the two games.
+Using latency functions now, we can get a calculated version of the above.
+\begin{corollary}
+	\label{corollary:a_fixed_x12_calc}
+	Let $\Gm_1 = ([2], \ell, c_1)$ and $\Gm_2 = ([2], \ell, c_2)$ two pseudo-heterogeneous pricing games with common latency functions $\ell$ and distribution functions $\alpha^{(1)}(p) = c_1$ and $\alpha^{(2)}(p) = c_2 > c_1 > 0$ respectively.
+	Then for some fixed number $K_i > 0$ it holds that
+	\[x_i^{(1)}(t) - x_i^{(2)}(t) = K_i (t_i - t_{-i})\]
+\end{corollary}
+
+\begin{proof}
+	Using formula \ref{eq:homogeneous_x_i} for $2$ links we get $x_i(t)$ for a homogeneous game.
+	Lemma \ref{lemma:a_fixed_c_relation}$(i)$ gives us $x_i(c_2 t) = x^{(1)}(t)$ and $x_i(c_2 t) = x^{(2)}(t)$, resulting in
+	\begin{align*}
+		x_i^{(1)}(t) - x_i^{(2)}(t) &= \frac{a_{-i} + b_{-i} + c_1t_{-i} - b_i - c_1t_i}{a_i} - \frac{a_{-i} + b_{-i} + c_2t_{-i} - b_i - c_2t_i}{a_i} \\
+		&= \frac{(c_2 - c_1)(t_i - t_{-i})}{a_i}
+	\end{align*}
+	So the property holds for $K_i = \frac{c_2 - c_1}{a_i} > 0$.
+\end{proof}
+
+We finally arrive at the main proposition of this section, which describes similar properties for the relative behaviour of the profit functions between the two games.
+First, let's remind ourselves that, from Lemma \ref{lemma:tolls_diff}, each $B_i(t_{-i}) - t_{-i}$ is decreasing as well as continuous with regard to $t_{-i}$.
+Therefore, given that best responses range from above and below $t_{-i}$ values, there exists some $t_{-i_0}$ for which $B_i(t_{-i_0}) = t_{-i_0}$.
+We state now our lemma.
+
+\begin{lemma}
+	\label{lemma:a_fixed_t_i0}
+	Let $\Gm_1 = ([2], \ell, c_1)$ and $\Gm_2 = ([2], \ell, c_2)$ two pseudo-heterogeneous pricing games with same latency functions $\ell$ and distribution functions $\alpha(p) = c_1$ and $\alpha^{(2)}(p) = c_2 > c_1 > 0$ respectively.
+	Also let $t_{-i_0}^{(1)}, t_{-i_0}^{(2)}$ the respective tolls for which $B_i^{(1)}(t_{-i_0}^{(1)}) = t_{-i_0}^{(1)}$ and $B_i^{(1)}(t_{-i_0}^{(2)}) = t_{-i_0}^{(2)}$.
+	Then for all links $i$ it holds that
+	\begin{enumerate}[$(i)$]
+		\item $t_{-i_0}^{(1)} > t_{-i_0}^{(2)}$
+		\item There exists $t_{-i_0} \in \left(t_{-i_0}^{(2)}, t_{-i_0}^{(1)}\right)$ such that
+		\[\max_{t_i > 0}\Pi_i^{(1)}(t_i, t_{-i_0}) = \max_{t_i > 0}\Pi_i^{(2)}(t_i, t_{-i_0})\]
+		\item $\max_{t_i > 0}\Pi_i^{(1)}(t_i, t_{-i}) - \max_{t_i > 0}\Pi_i^{(2)}(t_i, t_{-i})$ is non-increasing in relation to $t_{-i}$.
+		\item $t_{-i_0}$ is the geometric mean of $t_{-i_0}^{(1)}, t_{-i_0}^{(2)}$
+	\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+	$ $
+	\begin{enumerate}[$(i)$]
+		\item From Lemma \ref{lemma:a_fixed_c_relation}$(iii)$ we get
+		\[
+			B_i^{(1)}(t_{-i_0}^{(1)}) = t_{-i_0}^{(1)} \Rightarrow B_i^{(2)}\left(\frac{c_1}{c_2} t_{-i_0}^{(1)}\right) = \frac{c_1}{c_2} t_{-i_0}^{(1)}
+		\]
+		and from the fact that $t_{-i_0}^{(1)}, t_{-i_0}^{(2)}$ are the unique solutions of their respective definition equations, we get $t_{-i_0}^{(2)} = \frac{c_1}{c_2} t_{-i_0}^{(1)} < t_{-i_0}^{(1)}$.
+		\item Consider the function $\Pi_i(t_{-i}) = \max_{t_i > 0}\Pi_i^{(1)}(t_i, t_{-i}) - \max_{t_i > 0}\Pi_i^{(2)}(t_i, t_{-i})$.
+		Then for $t_{-i} = t_{-i_0}^{(2)}$, in $\Gm_2$ by definition, the best response for link operator $i$ is to play the same toll as in the other link, therefore they get max profit at $x_i^{(2)}(0) t_{-i_0}^{(2)}$.
+		In $\Gm_1$ now, since $t_{-i_0}^{(2)} < t_{-i_0}^{(1)}$, Lemma \ref{lemma:tolls_diff} gives us
+		\[
+			B_i^{(1)}(t_{-i_0}^{(2)}) - t_{-i_0}^{(2)} \ge B_i^{(1)}(t_{-i_0}^{(1)}) - t_{-i_0}^{(1)} \Rightarrow B_i^{(1)}(t_{-i_0}^{(2)}) > t_{-i_0}^{(2)}
+		\]
+		and since $\Pi_i(t_{-i_0}^{(2)}, t_{-i_0}^{(2)}) = x_i^{(1)}(0) t_{-i_0}^{(2)} \indeq{\textrm{\ref{lemma:a_fixed_c_relation}}(i)} x_i^{(2)}(0) t_{-i_0}^{(2)}$ is also one of their options, it means that the profit at $t_i$ is greater, i.e.
+		\[
+			\max_{t_i > 0}\Pi_i^{(1)}(t_i, t_{-i_0}^{(2)}) > \max_{t_i > 0}\Pi_i^{(2)}(t_i, t_{-i_0}^{(2)}) \Rightarrow \Pi_i(t_{-i_0}^{(2)}) > 0
+		\]
+		Similarly we can show that $\Pi_i(t_{-i_0}^{(1)}) < 0$.
+		With those two inequalities and given that we know from the analysis in Harkes et al. \cite{Harks_2019} that best response functions are continuous, we get (from ??) that there exists $t_{-i_0} \in \left(t_{-i_0}^{(2)}, t_{-i_0}^{(1)}\right)$ such that $\Pi_i(t_{-i_0}) = 0$, which gives us the desired proposition.
+		\item We will use the same $\Pi_i$ function as in $(ii)$ and show that $\Pi_i(t_{-i})$ is non-decreasing in relation to $t_{-i}$.
+		For all $t_{-i} \ge t_{-i_M}^{(1)}$, from Lemma \ref{lemma:a_fixed_t_iM}, we get $\Pi_i(t_{-i}) = 1 \cdot B_i^{(1)}(t_{-i}) - 1 \cdot B_i^{(2)}(t_{-i})$, where the best responses have fixed differences to $t_{-i}$ (and therefore to each other as well), making $\Pi_i(t_{-i})$ in turn fixed for all $t_{-i} \ge t_{-i_M}^{(1)}$.
+		We now follow the same reasoning as in $(ii)$.
+		%TODO: Pending.
+		\item We first use the $B_i(t_{-i})$ formula to find $t_{-i_0}^{(1)}$ and $t_{-i_0}^{(2)}$.
+		For $\Gm_1$ we have from the definition of $t_{-i_0}^{(1)}$ that
+		\[
+			B_i^{(1)}(t_{-i_0}^{(1)}) = t_{-i_0}^{(1)} \Rightarrow \frac{a_{-i} + b_{-i} - b_i + c_1 t_{-i_0}^{(1)}}{2 c_1} = t_{-i_0}^{(1)} \Rightarrow t_{-i_0}^{(1)} = \frac{a_{-i} + b_{-i} - b_i}{c_1}
+		\]
+		and similarly for $\Gm_2$ we have $t_{-i_0}^{(2)} = \frac{a_{-i} + b_{-i} - b_i}{c_2}$.
+		Then, solving for $t_{-i_0}$ in
+		\[\max_{t_i > 0}\Pi_i^{(1)}(t_i, t_{-i_0}) = \max_{t_i > 0}\Pi_i^{(2)}(t_i, t_{-i_0})\]
+		we get
+		\begin{flalign*}
+			&\Pi_i^{(1)}(B_i^{(1)}(t_{-i_0}), t_{-i_0}) = \Pi_i^{(2)}(B_i^{(2)}(t_{-i_0}), t_{-i_0}) \\
+			\Rightarrow &\cdots \\
+			\Rightarrow &t_{-i_0} = \frac{a_{-i} + b_{-i} - b_i}{\sqrt{c_1 c_2}}
+		\end{flalign*}
+		which is obviously the geometric mean of $t_{-i_0}^{(1)}$ and $t_{-i_0}^{(2)}$.
+	\end{enumerate}
+\end{proof}
+
+\subsection*{Step distribution function}
+
+Extending on the discussion about viewing profit only within toll intervals where the flow will change for arbitrary toll variance, we can equivalently view profit with regard to flow intervals, since we ignore instances where the flow remains the same and thus there exists a $1-1$ relation between profit and flow.
+It naturally follows that the best response of a link operator $i$ given $t_{-i}$ depends on the max profit value over any set of intervals that completely cover $[0, 1]$.
+For step distribution functions, this set can be the domains of each of its finitely different values $\alpha_1 < \ldots < \alpha_m$.
+As such, $\forall k \in [m]$ we denote as $A_k$ the closed set of all players $p$ in $[0, 1]$ for whom $\alpha(p) = \alpha_k$.
+Obviously $\cup_{k=1}^m A_k = [0, 1]$ and from the assumption that $\alpha$ is non-decreasing we also get $A_k$ convex $\forall k \in [m]$.
+When looking at the flow (and consequently profit) of a specific link $i$, however, the split behaviour of the distribution function makes it possible for different flows having the same money sensitivity split.
+We will therefore use the money sensitivity split function to refer to the respective flows that follow it, and formalise the profit and respective best response of link operator $i$ in the following definition.
+
+\begin{definition}
+	Let $\Gm_1 = ([2], \ell, \alpha)$ a heterogeneous game where $\alpha$ is a step function and $(A_k)_{k \in [m]}$ the partition of $[0, 1]$ that is defined by the domain of $\alpha$.
+	Then for link operator $i$ the definition of $\Pi_i$ is extended for an interval $A_k$ as
+	\[
+	\Pi_{i, k}(t_{-i}) = \max_{\stackrel{t_i > 0}{\as(t_i, t_{-i}) = \alpha_k}}\Pi_i(t_i, t_{-i})
+	\]
+\end{definition}
+
+\section*{Examples}
 
 \subsection*{Example \ref{example:simple_alpha}}
 
@@ -1836,43 +1841,44 @@ So as $|t_1 - t_2| \rightarrow 0$ in each case $\as$ becomes respectively
 \]
 
 
-\section*{Additional examples}
+\subsection*{Additional examples}
 
 \begin{example}
 	\label{example:ap_p}
-	Consider a $2$-link parallel network pricing game with $\ell_1(x) = x, \ell_2(x) = 2x$ and distribution function $\alpha(p) = p$.
+	Consider a $2$-link heterogeneous pricing game with latency functions $\ell_1(x) = x, \ell_2(x) = 2x$ and distribution function $\alpha(p) = p$.
 \end{example}
 
-Notice that the condition $\alpha(p) > 0$ when $p > 0$ holds for this example.
-However in this case $0$ is an accumulation point, and by Lemma $\ref{lemma:a_0_accumulation_point}$ it follows $x_1(t), x_2(t) > 0, \forall t \in \R_+^2$.
-Then Lemma $\ref{lemma:split_basic}$ entails that, assuming $t_1 > t_2$, $\alpha(x_1(t)) \le \as(t) \le \alpha(x_1(t) + \epsilon), \forall \epsilon > 0$ arbitrarily small, and since in this example $\alpha$ is onto, then $\as(t) = \alpha(x_1(t))$.
+Notice that the condition $\alpha(p) > 0$ when $p > 0$ holds for this example, however in this case $0$ is an accumulation point for $\alpha$.
+Lemma \ref{lemma:split_basic}$(iii)$, combined with the fact that $\alpha$ is continuous, gives us that $\as(t) = \alpha(x_i(t))$ for $x_i$ is the lower split flow.
 
-We will calculate $B_i(t_{-i})$ by calculating $x_i(t)$ and then finding $\argmax \Pi_i(t)$.
-Note that since we always have $x_1(t), x_2(t) > 0$ we don't need to take cases where the flow is on one link.
-For tolls $t = (t_1, t_2)$ and respective optimal flow $x = (x_1(t), x_2(t))$ we take the following cases.
+We will thus calculate $B_i(t_{-i})$ by first calculating $x_i(t)$ and then use $\Pi_i(t) = x_i(t) t_i$ to search for $\argmax_{t_2 < t_1} \Pi_i(t)$.
+%Note that since we always have $x_1(t), x_2(t) > 0$ we don't need to take cases where the flow is on one link.
+For tolls $t = (t_1, t_2)$ and respective optimal flow $x(t) = (x_1(t), x_2(t))$ we take the following cases.
 
 \paragraph{If $t_1 > t_2$}
 then $x_1$ is the low-latency flow and thus $\as(t) = \alpha(x_1(t)) = x_1(t)$.
 We therefore get
 \begin{align}
-	l_1(x_1(t)) + \as(t) t_1 &= l_2(x_2(t)) + \as(t) t_2 &\Rightarrow \notag \\
-	x_1(t) + x_1(t) t_1 &= 2 (1 - x_1(t)) + x_1(t) t_2 &\Rightarrow \notag \\
-	x_1(t) &= \frac{2}{3 + t_1 - t_2} \label{eq:ex2_x1_1}
+	\ell_1(x_1(t)) + \as(t) t_1 &= \ell_2(x_2(t)) + \as(t) t_2 &\Rightarrow & \notag \\
+	x_1(t) + x_1(t) t_1 &= 2 (1 - x_1(t)) + x_1(t) t_2 &\Rightarrow & \notag \\
+	x_1(t) &= \frac{2}{3 + t_1 - t_2} \label{eq:ex2_x1_1} &
 \end{align}
-\[
-	B_1^>(t_2) = \argmax_{t_2 < t_1} x_1(t) t_1 \indeq{(\ref{eq:ex2_x1_1})} \argmax_{t_2 < t_1} \frac{2 t_1}{3 + t_1 - t_2} = \argmax_{t_2 < t_1} \frac{2}{1 + \frac{3 - t_2}{t_1}} =
+which means for the best response function when $t_1 > t_2$, denoted by $B_i^>(t_2)$, that
+\begin{flalign*}
+	B_1^>(t_2) &= \argmax_{t_2 < t_1} x_1(t) t_1 \indeq{(\ref{eq:ex2_x1_1})} \argmax_{t_2 < t_1} \frac{2 t_1}{3 + t_1 - t_2} & \\
+	&= \argmax_{t_2 < t_1} \frac{2}{1 + \frac{3 - t_2}{t_1}} =
 		\begin{cases}
 			+\infty, & t_2 < 3 \\
 			\textrm{undefined}, & t_2 = 3 \\
 			t_2, & t_2 > 3 \\
-		\end{cases}
-\]
+		\end{cases} &
+\end{flalign*}
 We can already see some of the problems that appear.
 If $t_2 = 3$ then $x_1(t_1, 3) = 2/t_1$ and thus $\Pi_1(t_1, 3) = 2 \; \forall t_1 > 3$ resulting in $B_1^>(3)$ being undefinable.
 Then for $t_2 < 3$ if we set $c = 3 - t_2 > 0$ we have $\Pi_1(t) = \frac{2}{1 + c/t_1}$ so as $t_1 \rightarrow +\infty$ we get that $\Pi_1(t)$ is increasing and $\Pi_1(t) \rightarrow 2$, making no $t_1 > t_2$ a best candidate.
 Finally, if $t_2 > 3$ then $\Pi_1(t) = \frac{2}{1 - c/t_1}$ making $\Pi_1$ decrease as $t_1$ increases, and in turn making $t_2$ the best response with profit $\Pi_1(t) = {2 t_2}/3$.
 
-Continuing for $B_2^>(t_1)$ where $x_2(t) = 1 - x_1(t) = \frac{1 + t_1 - t_2}{3 + t_1 - t_2}$, we calculate $\argmax_{t_2 < t_1} \Pi_2(t)$ by taking first order conditions and we get
+Continuing for $B_2^>(t_1)$ where $x_2(t) = 1 - x_1(t) = \frac{1 + t_1 - t_2}{3 + t_1 - t_2}$, we now calculate $\argmax_{t_2 < t_1} \Pi_2(t)$ by taking first order conditions on $\Pi_2(t)$ (with regard to $t_2$), from which we get
 \[\argmax_{t_2 < t_1} \Pi_2(t) = t_1 + 3 - \sqrt{2 t_1 + 6}\]
 This value is within bounds when $t_1 + 3 - \sqrt{2 t_1 + 6} < t_1 \Rightarrow t_1 > 3/2$.
 For $t_1 \le 3/2$ we have $\Pi_2(t)$ non-decreasing in $[0, t_1]$ achieving maximum at $t_2 = t_1$.
@@ -1908,31 +1914,27 @@ we follow a similar analysis and find the following
 \end{equation*}
 with profits $\Pi_1(t) = {2 t_2}/3, t_2 + 4 - 2 \sqrt{t_2 + 3}$ and $\Pi_2(t) = 1 - \epsilon, 1, t_1/3$.
 
-\paragraph{Combining} $B_1^>(t_2), B_1^<(t_2)$ and $B_2^>(t_1), B_2^<(t_1)$ by comparing at each interval the profits between the strategies $t_1 > t_2$ and $t_1 < t_2$ (i.e. comparing profits when playing a toll either higher or lower from the other toll owner), we get the final best response functions
-\begin{equation*}
-	\begin{aligned}
-		B_1(t_2) =
-			\begin{cases}
-				+\infty, & t_2 < 3 \\
-				\textrm{undefined}, & t_2 = 3 \\
-				t_2, & 3 < t_2 < 6 \\
-				t_2 + 3 - \sqrt{t_2 + 3} & t_2 \ge 6
-			\end{cases}
-	\end{aligned}
-	\qquad
-	\begin{aligned}
-		B_2(t_1) =
-			\begin{cases}
-				+\infty, & t_1 < 2 \sqrt{2} \\
-				t_1 + 3 - \sqrt{2 t_1 + 6}, & t_1 \ge 2 \sqrt{2}
-			\end{cases}
-	\end{aligned}
-\end{equation*}
-Both toll owners have one thing in common, above a specific threshold $(t_2 > 3, t_1 > 2 \sqrt{2})$ they always play either the same or a lower toll than the other toll owner.
-Below that threshold, which will eventually occur from any starting point, they both get divergent best responses and thus a $\NE$ cannot be defined.
+\paragraph{Combine} now $B_1^>(t_2), B_1^<(t_2)$ and $B_2^>(t_1), B_2^<(t_1)$ by comparing at each interval the profits between the strategies $t_1 > t_2$ and $t_1 < t_2$ (i.e. comparing profits for a link operator when their best response toll value is either higher or lower from the opposing one).
+By doing so we get the final best response functions
+\begin{align*}
+	B_1(t_2) &=
+	\begin{cases}
+		+\infty, & t_2 < 3 \\
+		\textrm{undefined}, & t_2 = 3 \\
+		t_2, & 3 < t_2 < 6 \\
+		t_2 + 3 - \sqrt{t_2 + 3} & t_2 \ge 6
+	\end{cases} \\[10pt]
+	B_2(t_1) &=
+	\begin{cases}
+		+\infty, & t_1 < 2 \sqrt{2} \\
+		t_1 + 3 - \sqrt{2 t_1 + 6}, & t_1 \ge 2 \sqrt{2}
+	\end{cases}
+\end{align*}
+Both link operators have one thing in common, which is the fact that, above a specific threshold of the opposing toll ($t_2 > 3, t_1 > 2 \sqrt{2}$), they always play either the same or a lower toll than the other link operator.
+Below that threshold, which will eventually occur from any starting point, they both get divergent best responses and thus a Nash Equilibrium cannot exist.
 
-\paragraph{The bad behaviors} are obviously having divergent or undefined best response functions, which we claim occur only when we allow $0$ to be an accumulation point in $\alpha$, since this allows players with arbitrarily low money sensitivity to always stay on the expensive link.
-Assume that in Example $\ref{example:ap_p}$ we use $\alpha(p) = p + 1$ as a distribution function.
+\paragraph{The bad behaviors} of having divergent or undefined best response functions, we claim only occur when we allow $0$ to be an accumulation point in $\alpha$, as in those cases some players with arbitrarily low money sensitivity value will always stay on the expensive link.
+Assume that in Example \ref{example:ap_p} we instead use $\alpha(p) = p + 1$ as a distribution function.
 Then we get the following best response functions
 \begin{align*}
 	B_1(t_2) &=
@@ -1941,7 +1943,7 @@ Then we get the following best response functions
 		t_2, & 6/5 \le t_2 \le 3/2 \\
 		t_2 + 3 - \sqrt{2 t_2 + 6}, & 3/2 < t_2 < 5 \\
 		t_2 - 1 & t_2 \ge 5
-	\end{cases}\\
+	\end{cases} \\[10pt]
 	B_2(t_1) &=
 	\begin{cases}
 		2 \sqrt{3 - t_1} - (3 - t_1), & t_1 \le \frac29 \sqrt{22 - 4 \sqrt{10}} \\
@@ -1949,11 +1951,12 @@ Then we get the following best response functions
 		t_1 - 2, & t_1 \ge 7
 	\end{cases}
 \end{align*}
-which can be shown [TODO: currently done experimentally in python] that has a $\NE$ at $t \approx (1.1464, 0.9268)$.
-
+which can be shown that have a Nash Equilibrium at
+\[t = \left(\frac{\sqrt{205} - 4}{9}, \frac{\sqrt{205} + 23}{9} - \frac{\sqrt{10}}{6} \sqrt{\sqrt{205} + 23}\right) \approx (1.1464, 0.9268)\]
+This result has been verified to hold in simulations of best response sequences in Python.
 
 \begin{example}
-	Consider a $2$-link parallel network pricing game with $l_1(x) = x, l_2(x) = 2x$ and distribution function
+	Let $\Gm = ([2], \ell, \alpha)$ a $2$-link heterogeneous pricing game with latency functions $\ell_1(x) = x, \ell_2(x) = 2x$ and distribution function
 	\[
 		\alpha(p) =
 		\begin{cases}
@@ -1963,14 +1966,14 @@ which can be shown [TODO: currently done experimentally in python] that has a $\
 	\]
 \end{example}
 
-First we calculate the edge cases [TODO: add relevant section in preliminaries].
-If all flow is in link $1$ then $t_2 - t_1 = \alpha(0) l_1(1) = 1$, while if all flow is in link $2$ then $t_1 - t_2 = \alpha(0) l_2(1) = 2$ therefore
+First we calculate the toll difference bounds we discussed in Chapter \ref{chapter:preliminaries}.
+If all flow is in link $1$ then $t_2 - t_1 = \frac{\ell_1(1) - \ell_2(0)}{\alpha(0)} = 1$, while if all flow is in link $2$ then $t_1 - t_2 = \frac{\ell_2(1) - \ell_1(0)}{\alpha(0)} = 2$ therefore
 \[t_2 - t_1 \le 1 \qquad t_1 - t_2 \le 2\]
 
 \paragraph{If $t_1 < t_2$} then $x_2(t)$ is the low-latency flow with $x_2(t) < 1/3$ as without tolls we have Wardrop equilibrium at $x = (2/3, 1/3)$.
 As such we get $\as(t) = 1$ and therefore
 \[
-	l_1(x_1(t)) + \as(t) t_1 = l_2(x_2(t)) + \as(t) t_2 \Rightarrow	x_1(t) + t_1 = 2 (1 - x_1(t)) + t_2 \Rightarrow
+	\ell_1(x_1(t)) + \as(t) t_1 = \ell_2(x_2(t)) + \as(t) t_2 \Rightarrow	x_1(t) + t_1 = 2 (1 - x_1(t)) + t_2 \Rightarrow
 \]
 \begin{equation*}
 	\begin{aligned}
@@ -1991,7 +1994,7 @@ Using first order conditions we find
 		\argmax_{t_1 < t_2}\Pi_2(t_1) = \frac{t_1 + 1}2
 	\end{aligned}
 \end{equation*}
-and by also applying the edge case restrictions we get
+and by also applying the toll difference bound restrictions we get
 \begin{equation*}
 	\begin{aligned}
 		B_1^<(t_2) =
@@ -2010,7 +2013,7 @@ and by also applying the edge case restrictions we get
 		\end{cases}
 	\end{aligned}
 \end{equation*}
-with profits
+with respective profits
 \begin{equation*}
 	\begin{aligned}
 		\Pi_1^<(t_2) =
@@ -2030,19 +2033,19 @@ with profits
 	\end{aligned}
 \end{equation*}
 
-\paragraph{If $t_1 > t_2$} then $x_1(t)$ is the low-latency flow so we need to take cases depending on its value.
-We will show analytically the process for toll owner $1$.
+\paragraph{If $t_1 > t_2$} then $x_1(t)$ is the low-latency flow, so we need to take cases depending on its value.
+We will show analytically the process for link operator $1$ and then directly present the results for link operator $2$, as the steps are similar.
 
 \subparagraph{If $x_1 < 1/2$} then $\as(t) = 1$ so we get $x_1(t), x_2(t)$ and best responses as before.
 Also
 \[x_1(t) < \frac12 \Rightarrow \frac{2 - (t_1 - t_2)}{3} < \frac12 \Rightarrow t_1 - t_2 > \frac12\]
-so for toll owner $1$ with $B_1^>(t_2) = \frac{t_2 + 2}2$ we have
+so for link operator $1$ with $B_1^>(t_2) = \frac{t_2 + 2}2$ we have
 \[t_1 - t_2 > \frac12 \Rightarrow \frac{t_2 + 2}2 - t_2 > \frac12 \Rightarrow t_2 < 1\]
 \[t_1 > t_2 \Rightarrow \frac{t_2 + 2}2 > t_2 \Rightarrow t_2 < 2\]
 
 \subparagraph{If $x_1 > 1/2$} then $\as(t) = 5$ so we calculate $x_1(t)$ and its $\argmax$ using first order conditions.
 \[
-	l_1(x_1(t)) + \as(t) t_1 = l_2(x_2(t)) + \as(t) t_2 \Rightarrow	x_1(t) + 5 t_1 = 2 (1 - x_1(t)) + 5 t_2 \Rightarrow
+	\ell_1(x_1(t)) + \as(t) t_1 = \ell_2(x_2(t)) + \as(t) t_2 \Rightarrow	x_1(t) + 5 t_1 = 2 (1 - x_1(t)) + 5 t_2 \Rightarrow
 \]
 \begin{equation*}
 	\begin{aligned}
@@ -2055,18 +2058,18 @@ so for toll owner $1$ with $B_1^>(t_2) = \frac{t_2 + 2}2$ we have
 \end{equation*}
 Also
 \[x_1(t) > \frac12 \Rightarrow \frac{2 - 5 (t_1 - t_2)}{3} > \frac12 \Rightarrow t_1 - t_2 < \frac1{10}\]
-so for toll owner $1$ we have
+so for link operator $1$ we have
 \[t_1 - t_2 < \frac1{10} \Rightarrow \frac{5 t_2 + 2}{10} - t_2 < \frac1{10} \Rightarrow t_2 > \frac15\]
 \[t_1 > t_2 \Rightarrow \frac{5 t_2 + 2}{10} > t_2 \Rightarrow t_2 < \frac25\]
 
 \subparagraph{If $x_1 = 1/2$} then $\as(t) \in [1, 5]$ and using the definition we get
-\[\as(t) = \frac{l_2(1/2) - l_1(1/2)}{t_1 - t_2} = \frac1{2 (t_1 - t_2)}\]
+\[\as(t) = \frac{\ell_2(1/2) - \ell_1(1/2)}{t_1 - t_2} = \frac1{2 (t_1 - t_2)}\]
 and in order to get the range of $t_1 - t_2$ where this applies we check
 \[1 \le \as(t) \le 5 \Rightarrow 1 \le \frac1{2 (t_1 - t_2)} \le 5 \Rightarrow \frac12 \ge t_1 - t_2 \ge \frac1{10}\]
 
-The flow is always the same so the best response for toll owner $1$ is to maximize $t_1 - t_2$ so we get $t_1 - t_2 = 1/2 \Rightarrow t_1 = t_2 + 1/2$.
+The flow is always the same, so the best response for link operator $1$ is to maximize $t_1 - t_2$, so we get $t_1 - t_2 = 1/2 \Rightarrow t_1 = t_2 + 1/2$.
 
-\subparagraph{Gathering all the above} we see that the player has the option to play $t_1$ with the case that provides the maximum profit, so we calculate them.
+\subparagraph{Gathering all the above} we see that link operator $1$, when searching for the best response toll, will compare all profits that tolls in each case provide, so we calculate them.
 \[
 	\Pi_1^>(t_2) =
 	\begin{cases}
@@ -2094,34 +2097,29 @@ and by solving the inequalities (in each respective bound) we finally get
 	\end{aligned}
 \end{equation*}
 
-In a similar way we calculate $B_2^>(t_1)$ and $\Pi_2^>(t_1)$, with only some extra care on the bounds as since $t_2 < t_1$ then not all options are always available (e.g. if $t_1 < 1/10$ then only $t_1 - t_2 < 1/10$ can be picked).
+In a similar way we calculate $B_2^>(t_1)$ and $\Pi_2^>(t_1)$, with only some extra care on the bounds, as for $t_2 < t_1$ not all options are always available (e.g. if $t_1 < 1/10$ then only $t_2$ such that $t_1 - t_2 < 1/10$ can be picked).
 Finally we get
 
-\begin{equation*}
-	\begin{aligned}
-		B_2^>(t_1) =
-		\begin{cases}
-			t_1, & t_1 < \frac15 \\
-			\frac{5 t_1 + 1}{10}, & \frac15 \le t_1 \le \frac25 \\
-			t_1 - \frac1{10}, & \frac25 < t_1 < \frac{10 + 2 \sqrt{15}}5 \\
-			\frac{t_1 + 1}2, & \frac{10 + 2 \sqrt{15}}5 \le t_1 \le 5 \\
-			t_1 - 2, & t_2 > 5
-		\end{cases}
-	\end{aligned}
-	\qquad
-	\begin{aligned}
-		\Pi_2^>(t_1) =
-		\begin{cases}
-			\frac13 t_1, & t_1 < \frac15 \\
-			\frac{(5 t_1 + 1)^2}{12}, & \frac15 \le t_1 \le \frac25 \\
-			\frac{10 t_1 - 1}{20}, & \frac25 < t_1 < \frac{10 + 2 \sqrt{15}}5 \\
-			\frac{(t_1 + 1)^2}{12}, & \frac{10 + 2 \sqrt{15}}5 \le t_1 \le 5 \\
-			t_1 - 2, & t_2 > 5
-		\end{cases}
-	\end{aligned}
-\end{equation*}
+\begin{align*}
+	B_2^>(t_1) &=
+	\begin{cases}
+		t_1, & t_1 < \frac15 \\
+		\frac{5 t_1 + 1}{10}, & \frac15 \le t_1 \le \frac25 \\
+		t_1 - \frac1{10}, & \frac25 < t_1 < \frac{10 + 2 \sqrt{15}}5 \\
+		\frac{t_1 + 1}2, & \frac{10 + 2 \sqrt{15}}5 \le t_1 \le 5 \\
+		t_1 - 2, & t_2 > 5
+	\end{cases} \\[10pt]
+	\Pi_2^>(t_1) &=
+	\begin{cases}
+		\frac13 t_1, & t_1 < \frac15 \\
+		\frac{(5 t_1 + 1)^2}{12}, & \frac15 \le t_1 \le \frac25 \\
+		\frac{10 t_1 - 1}{20}, & \frac25 < t_1 < \frac{10 + 2 \sqrt{15}}5 \\
+		\frac{(t_1 + 1)^2}{12}, & \frac{10 + 2 \sqrt{15}}5 \le t_1 \le 5 \\
+		t_1 - 2, & t_2 > 5
+	\end{cases}
+\end{align*}
 
-\subparagraph{Combining} $B_1^>(t_2), B_1^<(t_2)$ and $B_2^>(t_1), B_2^<(t_1)$ the same way as in Example $\ref{example:ap_p}$ we get the final best response functions.
+\subparagraph{Combining} $B_1^>(t_2), B_1^<(t_2)$ and $B_2^>(t_1), B_2^<(t_1)$ the same way as in Example \ref{example:ap_p}, we get the final best response functions.
 \begin{equation*}
 	\begin{aligned}
 		B_1(t_2) =
@@ -2146,6 +2144,6 @@ Finally we get
 	\end{aligned}
 \end{equation*}
 
-For the above functions we can show [TODO: currently done experimentally in python] that there is NO $\NE$ for the pricing game.
+With the above functions, we can show by simulating best response sequences in Python, that there is no Nash Equilibrium for the pricing game in $\Gm$.
 
 \end{document}
