@@ -448,9 +448,9 @@ Arriving at the main model that will be used in this thesis, we keep the above N
 For each link operator $i$, their profit $\Pi_i$ is defined as $\Pi_i = x_i \cdot t_i$, and since we have defined $x(t)$ we can extend $\Pi_i$ to $\Pi_i(t) = x_i(t) \cdot t_i$, which describes the profit of link operator $i$ at the Nash equilibrium for a given toll $t$.
 The link operators compete with each other for profit, each selfishly selecting the toll $t_i$ that will maximise their profit, given fixed remaining tolls $t_{-i}$.
 We describe this best response as $B_i(t_{-i}) = \argmax_{t_i \geq 0} \Pi_i(t_i, t_{-i})$.
-Consequently, a toll vector $t$ is a \textit{Nash Equilibrium} for the pricing game, if $\forall i \in N$ and $\forall t_i^\prime \in \R$ it holds that
+Consequently, a toll vector $t$ is a \textit{Nash Equilibrium} for the pricing game, if $\forall i \in N$ and $\forall t_i^\prime \in \R_+$ it holds that
 \[\Pi_i(t_i, t_{-i}) \geq \Pi_i(t_i^\prime, t_{-i})\]
-or, equivalently, if for all $i \in N$ we have $|B_i(t_{-i})| = 1$ and
+or, equivalently, if
 \[t = (B_i(t_{-i}))_{i \in N}\]
 We will denote this toll equilibrium as $t^*$ when relevant.
 
@@ -847,8 +847,8 @@ whose plot is in Figure \ref{figure:alpha_simple:split_example} and which confir
 		% Function graph
 		%\draw[thick] (-1,1) -- (0,4/3);
 		%\draw[thick] (0,5/3) -- (2,1);
-		\draw[thick,samples at={-1,0}] plot (\x,{4/(3 - \x)});
-		\draw[thick,samples at={0,2}] plot (\x,{5/(3 + \x)});
+		\draw[thick,domain=-1:0] plot (\x,{4/(3-\x)});
+		\draw[thick,domain=0:2] plot (\x,{5/(3+\x)});
 
 		% Dots
 		\fill[white] (0,4/3) ellipse (0.03 and 0.03);
@@ -1074,8 +1074,8 @@ The graph confirms what Lemma \ref{lemma:a_fixed_c_relation}$(i)$ suggests, that
 		
 		% Tick marks
 		\draw (-1,0) -- (-1,-0.05) node[below] {$-1$};
-		\draw (-1/3,0) -- (-1/3,-0.05) node[below] {$-\frac13$};
-		\draw (-1/4,0) -- (-1/4,-0.05) node[below] {$-\frac14$};
+		\draw (-1/3,0) -- (-1/3,-0.05) node[left=9,below] {$-\frac13$};
+		\draw (-1/4,0) -- (-1/4,-0.05) node[right=3,below] {$-\frac14$};
 		\draw (0,0) -- (0,-0.05) node[below] {$t_2$};
 		\draw (2/4,0) -- (2/4,-0.05) node[below] {$\frac12$};
 		\draw (2/3,0) -- (2/3,-0.05) node[below] {$\frac23$};
@@ -1386,8 +1386,280 @@ We complement this idea with the following Theorem, one of the main results of t
 	The link selection was arbitrary, making $B_i^{(2)}(t_{-i}^*) = t_i^*$ hold for all links $i \in [2]$, finally concluding that $t^*$ is a Nash equilibrium for the pricing game in $\Gm_2$.
 \end{proof}
 
-With such a strong notion of the pricing Nash equilibrium, we can now see a potential algorithm that can be used to query its existence or not as well as calculate it.
-We present it in Algorithm \ref{algorithm:step_ne_pricing}.
+The above provides a strong notion for the pricing Nash equilibrium, as it directly connects it to an equivalent one from a pseudo-heterogeneous game, leaving only the existence condition unexamined.
+From definition, a set of tolls $t^*$ is a pricing Nash equilibrium if and only if $\forall i \in N$ and $\forall t_i^\prime \in \R_+$ it holds that
+\[\Pi_i(t_i, t_{-i}) \geq \Pi_i(t_i^\prime, t_{-i})\]
+leading us to focus on profit for different sensitivity splits.
+Unsurprisingly, there is a heavy dependence on the definition of the distribution function, which we illustrate in the following examples.
+
+\begin{example}
+	\label{example:a_step_profit_ne}
+	Let $\Gm = ([2], \ell, \alpha)$ a heterogeneous pricing game with latency functions $\ell_1(x) = 2x, \ell_2(x) = x + 1$ and distribution function $\alpha$ such that
+	\begin{align*}
+		\alpha(p) =
+		\begin{cases}
+			3 & p \le \tfrac14 \\
+			4 & p > \tfrac14
+		\end{cases}&
+	\end{align*}
+	Then $\Gm$ has a Nash Equilibrium for the pricing game at $t^* = \left(\tfrac{5}{12}, \tfrac{4}{12}\right)$.
+\end{example}
+
+\begin{proof}
+	First we verify that $t^* = \left(\tfrac59, \tfrac49\right)$ is indeed a valid candidate pricing Nash equilibrium.
+	Theorem \ref{theorem:a_step_ne_equiv_fixed} requires $t^*$ to also be a Nash Equilibrium at the pricing game of $\Gm^c = ([2], \ell, c)$, a pseudo-heterogeneous game where $c = 2$ or $3$.
+	Since Lemma \ref{lemma:a_fixed_pricing_ne_relation} suggests that the flow at that equilibrium will be the same regardless of the value of $c$, we calculate the one from the homogeneous game $G^{\prime} = ([2], \ell, 1)$.
+	We can calculate the latter equilibrium $t^{*\prime}$ by solving the system of equations with \ref{eq:homogeneous_x_i} and \ref{eq:homogeneous_pricing_ne_i}, from which we get $t^{*\prime} = \left(\tfrac53, \tfrac43\right)$ with $x^\prime(t^{*\prime}) = \left(\tfrac59, \tfrac49\right)$.
+	Such a flow split puts the flow of link $1$ in the upper split and link $2$ in the lower split, making $\as(t^*) = \alpha(x_1(t^{*\prime})) = \alpha(5/9) = 4$.
+	Lemma \ref{lemma:a_fixed_pricing_ne_relation} then gives us
+	\[
+		t^* = \frac13 t^{*\prime} = \left(\frac{5}{12}, \frac{4}{12}\right) \qquad x(t^*) = x^\prime(t^{*\prime}) = \left(\frac59, \frac49\right)
+	\]
+	We're only left to check whether $t^*$ satisfies the definition of a Nash Equilibrium, i.e. whether each link operator has a max profit toll in response to the opposing one.
+	We will therefore need to calculate the profit functions for each link, for which, thanks to \ref{lemma:heterogenous_flow_equiv_fixed}$(ii)$, we can use the respective pseudo-heterogeneous profit functions for each $c = 2, 3$.
+	We can then take the profit definition, formula \ref{eq:homogeneous_x_i} for $2$ links as well as Lemma \ref{lemma:a_fixed_c_relation}$(ii)$ and get for $\Gm^c$
+	\[
+		\Pi_1^c(t_1, t_2^*) = t_1 \cdot \frac{2 + c (4/3 - t_1)}{3}
+		\qquad
+		\Pi_2^c(t_1^*, t_2) = t_2 \cdot \frac{1 + c (5/3 - t_2)}{3}
+	\]
+	Next, we need to calculate the toll difference intervals for which $\as(t) = 2, 3$.
+	Similarly to Example \ref{example:a_step_simple}, for each link operator we fix the opposing toll $t_{-i}^*$ and consider all flow cases where all players of each sensitivity type are using a single link, i.e. $x = \left(\tfrac14, \tfrac34\right)$ and $\left(\tfrac34, \tfrac14\right)$, for all possible $\alpha$ values, i.e. $2$ and $3$.
+	We ignore the cases $x = (1, 0), (0, 1)$ as they minimise profit for both link operators.
+	For toll differences where $\as(t) = c$, then profit is equal to $\Pi_i^c(t)$ (Lemma \ref{lemma:heterogenous_flow_equiv_fixed}).
+	Otherwise, the flow remains static, making $x_i t_i$ a strictly increasing linear function with regards to $t_i$.
+	
+	We visualise the results of our analysis in Figure \ref{figure:alpha_step:profit_ne}, where we can see that $B_i(t_{-i}^*) = t_i^*$ for both link operators, making $t^* = \left(\tfrac{5}{12}, \tfrac{4}{12}\right)$ a Nash Equilibrium for the pricing game in $\Gm$.
+\end{proof}
+
+\begin{figure}
+	\centering
+	\begin{tikzpicture}[x=10cm, y=17cm, every node/.style={font=\small}]
+		% Axes
+		\draw[->] (0,0) -- (-0.4,0);
+		\draw[->] (0,0) -- (0.7,0) node[right] {$t_1 - t_2$};
+		\draw[->] (0,0) -- (0,0.3) node[above] {$\Pi_1(t)$};
+
+		% Tick marks
+		\draw (-1/3,0) -- (-1/3,-0.01) node[below] {$-\frac13$};
+		\draw (-1/4,0) -- (-1/4,-0.01) node[below] {$-\frac14$};
+		\draw (-1/12,0) -- (-1/12,-0.01) node[left=9,below] {$-\frac{1}{12}$};
+		\draw (-1/16,0) -- (-1/16,-0.01) node[right=2,below] {$-\frac{1}{16}$};
+		\draw (0,0) -- (0,-0.01) node[below] {$0$} node[below=15] {$t_2^* = \frac{4}{12}$};
+		\draw (1/12,0) -- (1/12,-0.01) node[below] {$\frac{1}{12}$};
+		\draw (5/16,0) -- (5/16,-0.01) node[below] {$\frac{5}{16}$};
+		\draw (5/12,0) -- (5/12,-0.01) node[below] {$\frac{5}{12}$};
+		\draw (2/4,0) -- (2/4,-0.01) node[below] {$\frac24$};
+		\draw (2/3,0) -- (2/3,-0.01) node[below] {$\frac23$};
+		%\draw (0,2/9) -- (-0.02,2/9) node[left] {$\frac29$};
+		%\draw (0,1/12) -- (0.01,1/12) node[right] {$\frac{1}{12}$};
+
+		% Pseudo-heterogeneous profits
+		\draw[gray,dashed,very thin,domain=-1/3:2/3] plot (\x,{((2-3*\x)/3)*(1/3+\x)}) node[above=20,right=-5,black] {$c = 3$};
+		\draw[gray,dashed,very thin,domain=-1/4:2/4] plot (\x,{((2-4*\x)/3)*(1/3+\x)}) node[above=15,right,black] {$c = 4$};
+
+		% Profit function
+		\draw[thick,domain=-1/3:-1/12] plot (\x,{((2-3*\x)/3)*(4/12+\x)});
+		\draw[thick] (-1/12,3/16) -- (-1/16, 39/192);
+		\fill[black] (-1/12,3/16) ellipse (0.0051 and 0.003) node[below right] {$\frac{3}{16}$};
+		\fill[black] (-1/16,39/192) ellipse (0.0051 and 0.003) node[above left] {$\frac{39}{192}$};
+		\draw[thick,domain=-1/16:5/16] plot (\x,{((2-4*\x)/3)*(4/12+\x)});
+		\draw[thick] (5/16,31/192) -- (5/12,3/16);
+		\fill[black] (5/16,31/192) ellipse (0.0051 and 0.003) node[below left] {$\frac{31}{192}$};
+		\fill[black] (5/12,3/16) ellipse (0.0051 and 0.003) node[above right] {$\frac{3}{16}$};
+		\draw[thick,domain=5/12:2/3] plot (\x,{((2-3*\x)/3)*(4/12+\x)});
+
+		% Max point
+		\fill[red] (1/12, 25/108) ellipse (0.0068 and 0.004) node[below,black] {$\frac{25}{108}$};
+	\end{tikzpicture}
+	\begin{tikzpicture}[x=10cm, y=20cm, every node/.style={font=\small}]
+		% Axes
+		\draw[->] (0,0) -- (-0.55,0);
+		\draw[->] (0,0) -- (0.4,0) node[right] {$t_2 - t_1$};
+		\draw[->] (0,0) -- (0,0.2) node[above] {$\Pi_2(t)$};
+
+		% Tick marks
+		%\draw (-2/3,0) -- (-2/3,-0.01) node[below] {$-\frac23$};
+		\draw (-2/4,0) -- (-2/4,-0.01) node[below] {$-\frac24$};
+		\draw (-5/12,0) -- (-5/12,-0.01) node[below] {$-\frac{5}{12}$};
+		\draw (-5/16,0) -- (-5/16,-0.01) node[below] {$-\frac{5}{16}$};
+		\draw (-1/12,0) -- (-1/12,-0.01) node[below] {$-\frac{1}{12}$};
+		\draw (0,0) -- (0,-0.01) node[below] {$0$} node[below=15] {$t_1^* = \frac{5}{12}$};
+		\draw (1/16,0) -- (1/16,-0.01) node[left=3,below] {$\frac{1}{16}$};
+		\draw (1/12,0) -- (1/12,-0.01) node[right=3,below] {$\frac{1}{12}$};
+		\draw (1/4,0) -- (1/4,-0.01) node[below] {$\frac14$};
+		\draw (1/3,0) -- (1/3,-0.01) node[below] {$\frac13$};
+		%\draw (0,5/36) -- (-0.02,5/36) node[below=7,left] {$\frac{5}{36}$};
+
+		% Pseudo-heterogeneous profits
+		\draw[gray,dashed,very thin,domain=-5/12:1/3] plot (\x,{((1-3*\x)/3)*(5/12+\x)}) node[above=20,right=-5,black] {$c = 3$};
+		\draw[gray,dashed,very thin,domain=-5/12:1/4] plot (\x,{((1-4*\x)/3)*(5/12+\x)}) node[above=15,left=17,black] {$c = 4$};
+
+		% Profit function
+		\draw[thick] (-5/12,0) -- (-5/16,5/64);
+		\fill[black] (-5/12,0) ellipse (0.005 and 0.0025) node[above left] {$0$};
+		\fill[black] (-5/16,5/64) ellipse (0.005 and 0.0025) node[above left] {$\frac{5}{64}$};
+		\draw[thick,domain=-5/16:1/16] plot (\x,{((1-4*\x)/3)*(5/12+\x)});
+		\draw[thick] (1/16,23/192) -- (1/12,1/8);
+		\fill[black] (1/16,23/192) ellipse (0.005 and 0.0025) node[below left] {$\frac{23}{192}$};
+		\fill[black] (1/12,1/8) ellipse (0.005 and 0.0025) node[above right] {$\frac18$};
+		\draw[thick,domain=1/12:1/3] plot (\x,{((1-3*\x)/3)*(5/12+\x)});
+
+		% Max point
+		\fill[red] (-1/12, 4/27) ellipse (0.008 and 0.004) node[above,black] {$\frac{4}{27}$};
+	\end{tikzpicture}
+	\caption{Profit functions for link operators $1$ and $2$ of Example \ref{example:a_step_profit_ne}.\\Max profit for both at $t^* = \left(\tfrac{5}{12}, \tfrac{4}{12}\right)$.}
+	\label{figure:alpha_step:profit_ne}
+\end{figure}
+
+\begin{example}
+	\label{example:a_step_profit_no_ne}
+	Let $\Gm = ([2], \ell, \alpha)$ a heterogeneous pricing game with latency functions $\ell_1(x) = 2x, \ell_2(x) = x + 1$ and distribution function $\alpha$ such that
+	\begin{align*}
+		\alpha(p) =
+		\begin{cases}
+			2 & p \le \tfrac14 \\
+			4 & p > \tfrac14
+		\end{cases}&
+	\end{align*}
+	Then $\Gm$ has no Nash Equilibrium for the pricing game.
+\end{example}
+
+\begin{proof}
+	Similarly to Example \ref{example:a_step_profit_ne}, we have from Theorem \ref{theorem:a_step_ne_equiv_fixed} that $t^* = \left(\tfrac{5}{12}, \tfrac{4}{12}\right)$ is the only candidate pricing Nash Equilibrium.
+	We calculate again the profit functions giving us Figure \ref{figure:alpha_step:profit_no_ne}, where we can see that
+	\[
+		B_1\left(\frac{4}{12}\right) = \frac58 \ne \frac{5}{12} \qquad B_2\left(\frac{5}{12}\right) = \frac{4}{12}
+	\]
+	Since $t^*$ is the only possible candidate (Theorem \ref{theorem:a_step_ne_equiv_fixed}), then $\Gm$ has no Nash equilibrium for its pricing game.
+\end{proof}
+
+\begin{figure}
+	\centering
+	\begin{tikzpicture}[x=6cm, y=17cm, every node/.style={font=\small}]
+		% Axes
+		\draw[->] (0,0) -- (-0.4,0);
+		\draw[->] (0,0) -- (1.1,0) node[right] {$t_1 - t_2$};
+		\draw[->] (0,0) -- (0,0.3) node[above] {$\Pi_1(t)$};
+
+		% Tick marks
+		\draw (-1/3,0) -- (-1/3,-0.01) node[below] {$-\frac13$};
+		\draw (-1/4,0) -- (-1/4,-0.01) node[below] {$-\frac14$};
+		\draw (-1/8,0) -- (-1/8,-0.01) node[left=5,below] {$-\frac18$};
+		\draw (-1/16,0) -- (-1/16,-0.01) node[below] {$-\frac{1}{16}$};
+		\draw (0,0) -- (0,-0.01) node[below] {$0$} node[below=15] {$t_2^* = \frac{4}{12}$};
+		\draw (1/12,0) -- (1/12,-0.01) node[below] {$\frac{1}{12}$};
+		\draw (5/16,0) -- (5/16,-0.01) node[below] {$\frac{5}{16}$};
+		\draw (2/4,0) -- (2/4,-0.01) node[below] {$\frac24$};
+		\draw (5/8,0) -- (5/8,-0.01) node[below] {$\frac58$};
+		\draw (1,0) -- (1,-0.01) node[below] {$1$};
+		%\draw (0,2/9) -- (-0.02,2/9) node[left] {$\frac29$};
+		%\draw (0,1/12) -- (0.01,1/12) node[right] {$\frac{1}{12}$};
+
+		% Pseudo-heterogeneous profits
+		\draw[gray,dashed,very thin,domain=-1/3:2/2] plot (\x,{((2-2*\x)/3)*(1/3+\x)}) node[above=20,right=-5,black] {$c = 2$};
+		\draw[gray,dashed,very thin,domain=-1/4:2/4] plot (\x,{((2-4*\x)/3)*(1/3+\x)}) node[above=15,right,black] {$c = 4$};
+
+		% Profit function
+		\draw[thick,domain=-1/3:-1/8] plot (\x,{((2-2*\x)/3)*(4/12+\x)});
+		\draw[thick] (-1/8, 5/32) -- (-1/16, 39/192);
+		\fill[black] (-1/8, 5/32) ellipse (0.0085 and 0.003) node[below right] {$\frac{5}{32}$};
+		\fill[black] (-1/16,39/192) ellipse (0.0085 and 0.003) node[above left] {$\frac{39}{192}$};
+		\draw[thick,domain=-1/16:5/16] plot (\x,{((2-4*\x)/3)*(4/12+\x)});
+		\draw[thick] (5/16,31/192) -- (5/8,23/96);
+		\fill[black] (5/16,31/192) ellipse (0.0085 and 0.003) node[below left] {$\frac{31}{192}$};
+		\fill[black] (5/8,23/96) ellipse (0.0085 and 0.003) node[above right] {$\frac{23}{96}$};
+		\draw[thick,domain=5/8:1] plot (\x,{((2-2*\x)/3)*(4/12+\x)});
+
+		% Max point
+		\fill[red] (1/12, 25/108) ellipse (0.0085 and 0.003) node[below,black] {$\frac{25}{108}$};
+	\end{tikzpicture}
+	\begin{tikzpicture}[x=10cm, y=20cm, every node/.style={font=\small}]
+		% Axes
+		\draw[->] (0,0) -- (-0.55,0);
+		\draw[->] (0,0) -- (0.6,0) node[right] {$t_2 - t_1$};
+		\draw[->] (0,0) -- (0,0.2) node[above] {$\Pi_2(t)$};
+
+		% Tick marks
+		%\draw (-2/3,0) -- (-2/3,-0.01) node[below] {$-\frac23$};
+		\draw (-2/4,0) -- (-2/4,-0.01) node[below] {$-\frac24$};
+		\draw (-5/12,0) -- (-5/12,-0.01) node[below] {$-\frac{5}{12}$};
+		\draw (-5/16,0) -- (-5/16,-0.01) node[below] {$-\frac{5}{16}$};
+		\draw (-1/12,0) -- (-1/12,-0.01) node[below] {$-\frac{1}{12}$};
+		\draw (0,0) -- (0,-0.01) node[below] {$0$} node[below=15] {$t_1^* = \frac{5}{12}$};
+		\draw (1/16,0) -- (1/16,-0.01) node[left=3,below] {$\frac{1}{16}$};
+		\draw (1/12,0) -- (1/12,-0.01) node[right=3,below] {$\frac{1}{12}$};
+		\draw (1/4,0) -- (1/4,-0.01) node[below] {$\frac14$};
+		\draw (1/3,0) -- (1/3,-0.01) node[below] {$\frac13$};
+		%\draw (0,5/36) -- (-0.02,5/36) node[below=7,left] {$\frac{5}{36}$};
+
+		% Pseudo-heterogeneous profits
+		\draw[gray,dashed,very thin,domain=-5/12:1/2] plot (\x,{((1-2*\x)/3)*(5/12+\x)}) node[above=20,right=-5,black] {$c = 2$};
+		\draw[gray,dashed,very thin,domain=-5/12:1/4] plot (\x,{((1-4*\x)/3)*(5/12+\x)}) node[above=15,left=17,black] {$c = 4$};
+
+		% Profit function
+		\draw[thick] (-5/12,0) -- (-5/16,5/64);
+		\fill[black] (-5/16,5/64) ellipse (0.005 and 0.0025) node[above left] {$\frac{5}{64}$};
+		\draw[thick,domain=-5/16:1/16] plot (\x,{((1-4*\x)/3)*(5/12+\x)});
+		\draw[thick] (1/16,23/192) -- (1/8,13/96);
+		\fill[black] (1/16,23/192) ellipse (0.005 and 0.0025) node[below left] {$\frac{23}{192}$};
+		\fill[black] (1/8,13/96) ellipse (0.005 and 0.0025) node[above right] {$\frac{13}{96}$};
+		\draw[thick,domain=1/8:1/2] plot (\x,{((1-2*\x)/3)*(5/12+\x)});
+
+		% Max point
+		\fill[red] (-1/12, 4/27) ellipse (0.008 and 0.004) node[above,black] {$\frac{4}{27}$};
+	\end{tikzpicture}
+	\caption{Profit functions for link operators $1$ and $2$ of Example \ref{example:a_step_profit_no_ne}.}
+	\label{figure:alpha_step:profit_no_ne}
+\end{figure}
+
+It seems apparent, from the previous two examples, that the success of a candidate pricing Nash equilibrium to extend for a step function is heavily dependent on the function's definition, i.e. the sensitivity values as well as the amount of flow corresponding to them.
+It would be tempting, at this point, to try and calculate exact conditions for the existence of such a Nash Equilibrium, given arbitrary game parameters.
+For example, assume the pricing game in Example \ref{example:a_step_profit_ne} has the distribution function
+\[
+	\alpha(p) =
+	\begin{cases}
+		c & p \le p_0 \\
+		4 & p > p_0
+	\end{cases}
+\]
+for $c < 4$ and $p_0 < 5/9$, with the last condition ensuring the sensitivity split for the equilibrium remains at $\as(t^*) = 4$.
+Looking at Example \ref{example:a_step_profit_no_ne}, we can see that for $c = 2$ the Nash Equilibrium breaks due to link operator $1$ getting higher profit at flow $p_0$.
+We can therefore assume that, for their equilibrium profit $\Pi_1(t^*) = \tfrac{25}{108}$ to remain maximum, it needs to be greater than the profit at flow $p_0$ for sensitivity $c$.
+We can then calculate $t_1$ such that $x(t_1, t_2^*) = p_0$, by solving the cost equality for $x = (p_0, 1 - p_0)$ and sensitivity $c$, and eventually get that link operator $1$ will not diverge from the equilibrium if
+\[
+	\frac{25}{108} \ge \frac{-3p_0^2 + p_0 (2 + c/3)}{c}
+\]
+Such a constrain can definitely provide insights into the numerical restrains between $c$ and $p_0$, however, as it also requires additional conditions to ensure the equilibrium won't still break due to higher profit at a different point, it suggests that a further analysis requires a more careful approach.
+As, admittedly based on our own capacity, will not proceed with such an analysis.
+We can still observe the following
+\begin{itemize}
+	\item larger differences in $\alpha_k$ values are more likely to break a pricing Nash Equilibrium
+	\item larger flow intervals around $\as(t^*)$ are more likely to have a pricing Nash Equilibrium (the game becomes more homogeneous)
+\end{itemize}
+
+Focusing now on the algorithmic aspect of existence, we see that things are much simpler.
+Looking at the profits of each pseudo-heterogeneous game overall, a sub-interval will either be monotonous or contain the global maximum, therefore the interval maximum will either be the profit on one of its edges or on the global best response in the pseudo-heterogeneous game.
+Using that property, along with everything from above, we can define now an algorithm that can be used to query the existence or not of a pricing Nash Equilibrium, as well as calculate it if so.
+We start with a short summary of the algorithm below, followed by a theorem to prove its validity.
+
+\paragraph{Summary of Algorithm \ref{algorithm:step_ne_pricing}}
+For a given heterogeneous pricing game $\Gm = ([2], \ell, \alpha)$
+\begin{enumerate}
+	\item Consider $\Gm^\prime = ([2], \ell, 1)$ and calculate its pricing Nash equilibrium $t^{*\prime}$ and respective flow $x^\prime(t^{*\prime})$.
+	\item Calculate $\as(t^*)$ as the $\alpha$ value of the lower split flow in $x^\prime(t^{*\prime})$ (valid since $x(t^*) = x^\prime(t^{*\prime})$ from Theorem \ref{theorem:a_step_ne_equiv_fixed}, Lemma \ref{lemma:a_fixed_pricing_ne_relation})
+	\item Calculate candidate pricing Nash Equilibrium at $t^* = \tfrac{t^{*\prime}}{\as(t^*)}$ and respective profits $\Pi_1(t^*), \Pi_2(t^*)$.
+	\item For each $\alpha_k$, value of $\alpha$ different than $\as(t^*)$ and for each link operator $i \in [2]$
+	\begin{enumerate}[$4.1$]
+		\item Consider $\Gm_k = ([2], \ell, \alpha_k)$ and calculate $B_{i, k}(t_{-i})$ as well as the tolls $t_{i, k}$ for which $\as(t_i, t_{-i}^*) = \alpha_k$, resulting in two toll ranges for $t_i$.
+		\begin{enumerate}[$4.1.1$]
+			\item If $B_{i, k}(t_{-i})$ is within the above ranges, then $\Pi_{i, k} = \Pi_i(B_{i, k}(t_{-i}), t_{-i})$.
+			\item Otherwise, $\Pi_{i, k}$ is the max of the profits for tolls in the edges of the above ranges.
+		\end{enumerate}
+		\item If $\Pi_i < \Pi_{i, k}$, then $\Gm$ has no pricing Nash Equilibrium.
+	\end{enumerate}
+	\item If none of the above checks fail, return $t^*$ as the Nash Equilibrium for the pricing game in $\Gm$.
+\end{enumerate}
 
 \begin{algorithm}
 	\caption{Helper functions for Algorithm \ref{algorithm:step_ne_pricing}}
@@ -1475,7 +1747,7 @@ We present it in Algorithm \ref{algorithm:step_ne_pricing}.
 
 \begin{theorem}
 	Let $\Gm = ([2], \ell, \alpha)$ a heterogeneous game with latency functions $\ell = (\ell_1(x), \ell_2(x))_{i \in [2]} = (a_ix + b_i)_{i \in [2]}$ and $\alpha$ a step distribution function with values $(\alpha_k)_{k \in [m]}$.
-	Then Algorithm \ref{algorithm:step_ne_pricing} with input $(\ell, \alpha)$ calculates the Nash Equilibrium for the pricing game in $\Gm$ in $\mathcal{O}(m)$ time.
+	Then Algorithm \ref{algorithm:step_ne_pricing} with input $(\ell, \alpha)$ decides existence and calculates the Nash Equilibrium for the pricing game in $\Gm$ in $\mathcal{O}(m)$ time.
 \end{theorem}
 
 \begin{proof}
