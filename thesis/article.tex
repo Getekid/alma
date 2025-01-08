@@ -119,10 +119,10 @@ We first present some definitions and properties of pricing homogeneous games, h
 We introduce a new term, the sensitivity split function $\as(t)$, defined for any $2$ links of the network as the time-money sensitivity value for which, given a set of tolls $t$, the link costs are equal.
 With the help of $\as$ we describe some properties around the selfish behaviour of heterogeneous users for different tolls, as well as prove the existence of bounds for the sensitivity values that are relevant to the game.
 Then, arriving at the main body of this study, we investigate the existence of a Nash Equilibrium in the profit game between the link operators for different cases of heterogeneous users.
-We show there is no Nash Equilibrium when there are many users with $0$ sensitivity, i.e. players not affected by tolls, so we further assume $\alpha(p) > 0$.
-We then investigate cases of fixed distribution functions, which, even though create homogeneous behaviour for the users (making them pseudo-heterogeneous games), help us describe how flow, tolls and equilibria behave as that fixed value changes.
-Using all the above, we study step distribution functions, where by limiting our scope to $2$ links, we present strict conditions necessary for the existence or not of a Nash Equilibrium in the profit game between the link operators.
-We present and analyse an algorithm to calculate that equilibrium, if it exists, and finish with some discussion about potential future work.
+We show there is no Nash Equilibrium when there are many users with $0$ sensitivity, i.e. players not affected by tolls, forcing us to assume onward $\alpha(p) > 0$.
+We then investigate cases of fixed distribution functions, which create homogeneous behaviours for the users (making them pseudo-heterogeneous games), through which we then describe how flow, tolls and equilibria behave as that fixed value changes.
+Using all the above, we study step distribution functions, where, by limiting our scope to $2$ links, we prove a strong requirement for the value of a potential Nash Equilibrium in the profit game between the link operators, connecting it to the equilibrium of an equivalent pseudo-heterogeneous game.
+We finally present and analyse an algorithm that calculates that equilibrium, if it exists, in time linear with regard to the step function's cardinality, and we finish with some discussion about potential future work.
 \clearpage
 
 \thispagestyle{empty}
@@ -137,13 +137,13 @@ We present and analyse an algorithm to calculate that equilibrium, if it exists,
 Εξετάζουμε μόνο αφινικές καθυστερήσεις για τις ακμές.
 Επιπλέον, ο κάθε χρήστης δικτύου αντιδρά στα διόδια με ετερογενή τρόπο, δηλ. ο κάθε παίκτης $p$ στη ροή του δικτύου έχει διαφορετική τιμή ευαισθησίας χρόνου-χρήματος, η οποία περιγράφεται από μια συνάρτηση κατανομής $\alpha(p)$.
 Πρώτα παρουσιάζουμε κάποιους βασικούς ορισμούς και ιδιότητες των ομογενών παιγνίων κέρδους, κυρίως βασισμένα σε προηγούμενες δουλειές, και με αυτά ως βάση, τα επεκτείνουμε για να περιγράψουμε παίγνια κέρδους με ετερογενείς χρήστες.
-Εισαγάγουμε έναν νέο όρο, τη συνάρτηση διαχωρισμού ευαισθησίας $\as(t)$, ορισμένη για οποιεσδήποτε $2$ ακμές του δικτύου ως η τιμή ευαισθησίας χρόνου-χρήματος για την οποία, δωσμένων σετ διοδίων $t$, τα κόστη των $2$ ακμών είναι ίσα.
+Εισαγά-γουμε έναν νέο όρο, τη συνάρτηση διαχωρισμού ευαισθησίας $\as(t)$, ορισμένη για ο-ποιεσδήποτε $2$ ακμές του δικτύου ως η τιμή ευαισθησίας χρόνου-χρήματος για την οποία, δωσμένων σετ διοδίων $t$, τα κόστη των $2$ ακμών είναι ίσα.
 Με τη βοήθεια της $\as$ θα περιγράψουμε μερικές ιδιότητες γύρω από την εγωιστική συμπεριφορά των ετερογενών χρηστών για διαφορετικά διόδια, καθώς και θα αποδείξουμε την ύπαρξη άνω φράγματος για τις τιμές ευαισθησίας που αφορούν το παίγνιο.
-Στη συνέχεια, φτάνοντας στο κύριο σώμα αυτής της έρευνας, εξετάζουμε την ύπαρξη ισορροπίας Nash στο παίγνιο κέρδους μεταξύ των διαχειριστών των ακμών για διαφορετικές περιπτώσεις ετερογενών χρηστών.
-Δείχνουμε ότι δεν υπάρχει ισορροπία Nash όταν υπάρχουν πολλοί χρήστες με $0$ ευαισθησία, δηλ. παίκτες που δεν επηρρεάζονται από τα διόδια, οπότε στο εξής υποθέτουμε ότι $\alpha(p) > 0$.
-Κατόπιν εξετάζουμε περιπτώσεις όπου η συνάρτηση κατανομής είναι σταθερή, η οποίες, αν και δημιουργούν ομογενή συμπεριφορά στους χρήστες (κάνοντάς τα ψευδο-ετερογενή παίγνια), μας βοηθάνε να περιγράψουμε πώς συμπεριφέρονται η ροή, τα διόδια και τα σημεία ισορροπίας όταν αυτή η σταθερή τιμή μεταβάλλεται.
-Χρησιμοποιώντας όλα τα παραπάνω, μελετάμε βηματικές συναρτήσεις κατανομής, όπου περιορίζοντας το μοντέλο μας σε στιγμιότυπα $2$ ακμών, παρουσιάζουμε αυστηρές συνθήκες αναγκαίες για την ύπαρξη ή μη σημείου ισορροπίας Nash στο παίγνιο κέρδους μεταξύ των διαχειριστών των ακμών.
-Παρουσιάζουμε και αναλύουμε έναν αλγόριθμο για τον υπολογισμό του σημείου ισορροπίας, αν υπάρχει, και κλείνουμε με μια συζήτηση για πιθανή μελοντική δουλειά.
+Στη συνέχεια, φτάνοντας στο κύριο σώμα αυτής της έρευνας, εξετάζουμε την ύπαρξη ισορροπίας Nash στο παίγνιο κέρδους μεταξύ των διαχειριστών των ακμών για διαφορετικές περι-πτώσεις ετερογενών χρηστών.
+Δείχνουμε ότι δεν υπάρχει ισορροπία Nash όταν υπάρχουν πολλοί χρήστες με $0$ ευαισθησία, δηλ. παίκτες που δεν επηρρεάζονται από τα διόδια, το οποίο μας αναγκάζει στο εξής να υποθέσουμε ότι $\alpha(p) > 0$.
+Κατόπιν, εξετάζουμε περιπτώσεις όπου η συνάρτηση κατανομής είναι σταθερή, η οποίες δημιουργούν ομογενή συμπεριφορά στους χρήστες (κάνοντάς τα ψευδο-ετερογενή παίγνια), μέσω των οποίων μετά θα περιγράψουμε πώς συμπεριφέρονται η ροή, τα διόδια και τα σημεία ισορροπίας όταν αυτή η σταθερή τιμή μεταβάλλεται.
+Χρησιμοποιώντας όλα τα παραπάνω, μελετάμε βηματικές συναρτήσεις κατανομής, όπου, περιορίζοντας το μοντέλο μας σε στιγμιότυπα $2$ ακμών, αποδεικνύουμε μια αυστηρή συνθήκη για την τιμή ενός πιθανού σημείου ισορροπίας Nash στο παίγνιο κέρδους μεταξύ των διαχειριστών των ακμών, συνδέοντάς το με το σημείο ισορροπίας σε ένα ισοδύναμο ψευδο-ετερογενή παίγνιο.
+Εντέλει, παρουσιάζουμε και αναλύουμε έναν αλγόριθμο για τον υπολογισμό αυτού του σημείου ισορροπίας, αν υπάρχει, σε χρόνο γραμμικό σε σχέση με τον πληθάριθμο της βηματικής συνάρτησης, και κλείνουμε με μια συζήτηση για πιθανές μελλοντικές εργασίες.
 
 \clearpage
 
@@ -172,14 +172,14 @@ On the basis there is a network with 2 nodes $(s, t)$ and $n$ links, each link d
 On the lower level, a flow $[0, 1]$ wants to move from $s$ to $t$ using one of the $n$ links and experience minimum latency (traffic).
 On the upper level, each link is managed by a different operator who can assign a toll to their link and gain profit proportional to that toll and the flow that ends up using the link.
 The tolls impose an additional cost to the flow players, affecting the lower level game, and the link operators compete with each other to maximise their profit.
-In our case we will additionally assume that the flow users behave in a heterogeneous way when it comes to tolls, meaning that each player has a different time-money trade-off and thus see the link costs differently.
+In our case, we will additionally assume that the flow users behave in a heterogeneous way when it comes to tolls, meaning that each player has a different time-money trade-off and thus see the link costs differently.
 
 The structure of this thesis is as such.
 We finish this chapter by briefly presenting previous work in this field, all while examining some of the different models and properties that have been researched in the literature so far.
 This will also serve as a bridge to Chapter \ref{chapter:preliminaries} were we will set our basis for the rest of the study.
 This includes formal definitions of the models and properties we introduced from previous work, as well as some additional -but still basic- properties of the models, with heavy focus on the user's time-money trade-off, captured by a money sensitivity distribution function $\alpha$.
 
-Entering the main body of our work, in Chapter \ref{chapter:split} we introduce a new term regarding any two links of the network, called \textit{money sensitivity split}, which captures the notion of a (potentially non-existent) player whose money sensitivity makes them view the two links as equal.
+Entering the main body of our work, in Chapter \ref{chapter:split} we introduce a new term regarding any two links of the network, called \textit{money sensitivity split}, which captures the notion of a (potentially non-existent) player whose money sensitivity makes them view the two link costs as equal.
 We will then analyse that notion and provide properties and bounds for its values.
 Finally, in the chapter's main result, we prove a general property of heterogeneous network games as, due to the previously found bounds, there might be a portion of users whose sensitivity value can be arbitrarily large without affecting the game.
 
@@ -187,9 +187,10 @@ Having arrived at our main results in this work, in Chapter \ref{chapter:pricing
 We begin by examining a class of games where the distribution function is fixed across all users, which, as we'll formally describe, makes the game \textit{pseudo-heterogeneous}.
 Particular interest in the above class is the relation between games with identical setup but with different fixed distribution functions.
 We describe and prove some properties for them, and using those we then tackle step distribution functions (where the user sensitivity can take values out of a finite set).
-At this point we restrict our model to instances with $2$ links, and provide strict restrictions for equilibrium existence for the pricing competition game.
+At this point we restrict our model to instances with $2$ links, and prove a strong condition about the value of a potential Nash Equilibrium for the pricing game, connecting it to the respective equilibrium of an equivalent pseudo-heterogeneous game.
+We will discuss with examples the consequences of such a condition, and finally, we will present, analyse and prove the validity of an algorithm which can decide on the existence as well as calculate a Nash Equilibrium for the pricing game in $\mathcal{O}(m)$ time (with $m$ being the size of the step distribution function's finite set of values).
 
-We conclude this thesis with a short discussion around the main outtakes of this study, while also presenting potential directions for future work.
+We conclude this thesis with a short discussion around potential directions for future work.
 
 
 \section{Related Work}
@@ -592,7 +593,7 @@ If in Example \ref{example:simple_alpha} we consider a different distribution fu
 We will cover both cases of open and closed intervals by using border bounds on the set of all $\alpha$ values of a link's flow.
 
 One other difficulty we need to consider are cases where $t_i = t_j$ for some links $i, j \in N$.
-Remember that $x(t)$ is only uniquely defined with regards to costs, which in extension makes players in such links with equal cost (viewed as such by all players of the game) able to be put arbitrarily in any of the two, regardless of their $\alpha$ value.
+Remember that $x(t)$ is only uniquely defined with regard to costs, which in extension makes players in such links with equal cost (viewed as such by all players of the game) able to be put arbitrarily in any of the two, regardless of their $\alpha$ value.
 Even if we attempted to assume a link assignment ordered by $\alpha$, the link order also matters, as the (equal latency) links might have different flow volume, resulting in different $\alpha$ values in the flow that uses each.
 We tackle this by assuming that our sets contain all possible $\alpha$ values of any player that might use that link.
 We therefore ignore the information about the actual flow splits among those links and keep only the ones among links with different toll values (and in consequence different latencies, Lemma \ref{lemma:latencies_tolls}).
@@ -775,7 +776,7 @@ The next lemma sums up the above discussion and gives us some insight about the 
 	\end{enumerate}
 \end{proof}
 
-All the above lemmas can now help us describe the behaviour of $\as$ for different tolls, and more specifically how it behaves with regards to $t_i$ for a fixed $t_{-i}$.
+All the above lemmas can now help us describe the behaviour of $\as$ for different tolls, and more specifically how it behaves with regard to $t_i$ for a fixed $t_{-i}$.
 The main challenge in this analysis is that a changing $t_i$ can affect the sensitivity split of multiple link pairs, while even the link ordering is not always fixed, as we can put link $i$ at any place by selecting an appropriate $t_i$.
 In order to help with the intuition, we will simplify our final analysis to $2$-link networks, where we essentially have two possible toll orderings, thus giving us a simplified look on what happens when that ordering changes.
 Note that the concepts presented here are still valid for $n$-link networks, if we simply focus on consecutive links.
@@ -939,14 +940,14 @@ This irrelevancy will become more apparent later when calculating best responses
 
 \section*{Summary}
 
-In this chapter we will introduce the pricing competition game to our model and examine how different distribution functions can affect the profit maximisation game between the toll operators.
+In this chapter we will introduce the pricing competition game to our model and examine how different distribution functions can affect the profit maximisation game between the link operators.
 We will begin by noticing that players with no toll fear, i.e. $\alpha(p)$ close to $0$, can be exploited by some link operators who then get unbounded profits (Lemma \ref{lemma:a_0_0}).
 This obviously breaks the pricing competition game and, in turn, leads us to include the restriction of $\alpha(p) > 0$ when $p > 0$.
 We will then proceed to analyse games with fixed distribution functions, where in Lemma \ref{lemma:a_fixed_homogeneous} we will show that such games are, as intuition suggests, equivalent to homogeneous games.
 Special interest will then be on comparing such games, specifically those with the same setup but different fixed $\alpha$ functions, as Lemma \ref{lemma:a_fixed_c_relation} will reveal that, uniformly varying the player sensitivity, maps the toll values around the same flow.
 The tools and notions built above will prove extremely useful when we next analyse games with step distribution functions, where we'll restrict our analysis to instances with $2$ links to simplify our work.
-For those we will show an equivalence with a homogeneous game for a given toll \ref{lemma:heterogenous_flow_equiv_fixed} and combining it with Lemma \ref{lemma:alpha_step_gaps} where we'll show that a Nash Equilibrium cannot exist with all players of each sensitivity type using a single link, we get this chapter's main result, Theorem \ref{theorem:a_step_ne_equiv_fixed}, which states that if a Nash Equilibrium exists in a heterogeneous game with a step distribution function, then the respective homogeneous also has an equilibrium for the same set of tolls.
-Using this notion, we will describe an algorithm (\ref{algorithm:step_ne_pricing}) which can decide existence and return the Nash Equilibrium for the pricing competition game in a heterogeneous $2$-link network.
+We will show that $2$-link games, for a fixed set of tolls, are equivalent to a specific pseudo-heterogeneous game  (Lemma \ref{lemma:heterogenous_flow_equiv_fixed}) and combining this property with Lemma \ref{lemma:alpha_step_gaps}, where we'll show that a Nash Equilibrium cannot exist with all players of each sensitivity type using a single link, we get this chapter's main result, Theorem \ref{theorem:a_step_ne_equiv_fixed}, which states that if a Nash Equilibrium exists in a heterogeneous game with a step distribution function, then a respective pseudo-heterogeneous game also has an equilibrium for the same set of tolls.
+Using this notion, we will describe an algorithm (\ref{algorithm:step_ne_pricing}) which can decide existence and return the Nash Equilibrium for a $2$-link pricing competition game in $\mathcal{O}(m)$ time.
 
 \section{Problems with $0$ money sensitivity}
 
@@ -1008,7 +1009,7 @@ We start with formalising our base.
 	Notice that $\ell_i^{(1)}(x_i) + c t_i$ is the link cost of link $i$ for players in $\Gm_1$, given flow $x_i$ and toll $t_i$.
 	Regardless of the heterogeneity of our users, since the above inequality holds, then for flow $x^{(2)}(t)$ in $\Gm_1$ it will also hold for any other flow $x_i^{(1)} = x^{(2)}$.
 	It follows that any flow movement from $x^{(2)}(t)$ will again put players in links with larger link costs, making $x^{(2)}(t)$ a Nash Equilibrium for $t$ in $\Gm_1$ as well.
-	Uniqueness of the equilibrium with regards to costs finally gives us $x^{(1)}(t) = x^{(2)}(t)$.
+	Uniqueness of the equilibrium with regard to costs finally gives us $x^{(1)}(t) = x^{(2)}(t)$.
 	Since the above hold for all $t \in \R_+^{|N|}$, we conclude from Definition \ref{definition:game_equivalence} that $\Gm_1, \Gm_2$ are equivalent.
 \end{proof}
 Since a heterogeneous game with a fixed distribution function is, in practice, homogeneous with regard to the flow behaviour, we will also use, when relevant, the term \textit{pseudo-heterogeneous game} to describe such flows more easily.
@@ -1406,35 +1407,35 @@ Unsurprisingly, there is a heavy dependence on the definition of the distributio
 \end{example}
 
 \begin{proof}
-	First we verify that $t^* = \left(\tfrac59, \tfrac49\right)$ is indeed a valid candidate pricing Nash equilibrium.
-	Theorem \ref{theorem:a_step_ne_equiv_fixed} requires $t^*$ to also be a Nash Equilibrium at the pricing game of $\Gm^c = ([2], \ell, c)$, a pseudo-heterogeneous game where $c = 2$ or $3$.
+	First we verify that $t^* = \left(\tfrac{5}{12}, \tfrac{4}{12}\right)$ is indeed a valid candidate pricing Nash equilibrium.
+	Theorem \ref{theorem:a_step_ne_equiv_fixed} requires $t^*$ to also be a Nash Equilibrium at the pricing game of $\Gm_c = ([2], \ell, c)$, a pseudo-heterogeneous game where $c = 2$ or $3$.
 	Since Lemma \ref{lemma:a_fixed_pricing_ne_relation} suggests that the flow at that equilibrium will be the same regardless of the value of $c$, we calculate the one from the homogeneous game $G^{\prime} = ([2], \ell, 1)$.
 	We can calculate the latter equilibrium $t^{*\prime}$ by solving the system of equations with \ref{eq:homogeneous_x_i} and \ref{eq:homogeneous_pricing_ne_i}, from which we get $t^{*\prime} = \left(\tfrac53, \tfrac43\right)$ with $x^\prime(t^{*\prime}) = \left(\tfrac59, \tfrac49\right)$.
-	Such a flow split puts the flow of link $1$ in the upper split and link $2$ in the lower split, making $\as(t^*) = \alpha(x_1(t^{*\prime})) = \alpha(5/9) = 4$.
+	Such a flow split puts the flow of link $1$ in the lower split and link $2$ in the upper split, making $\as(t^*) = \alpha(x_1(t^{*\prime})) = \alpha(5/9) = 4$.
 	Lemma \ref{lemma:a_fixed_pricing_ne_relation} then gives us
 	\[
 		t^* = \frac13 t^{*\prime} = \left(\frac{5}{12}, \frac{4}{12}\right) \qquad x(t^*) = x^\prime(t^{*\prime}) = \left(\frac59, \frac49\right)
 	\]
 	We're only left to check whether $t^*$ satisfies the definition of a Nash Equilibrium, i.e. whether each link operator has a max profit toll in response to the opposing one.
 	We will therefore need to calculate the profit functions for each link, for which, thanks to \ref{lemma:heterogenous_flow_equiv_fixed}$(ii)$, we can use the respective pseudo-heterogeneous profit functions for each $c = 2, 3$.
-	We can then take the profit definition, formula \ref{eq:homogeneous_x_i} for $2$ links as well as Lemma \ref{lemma:a_fixed_c_relation}$(ii)$ and get for $\Gm^c$
+	We can then take the profit definition, formula \ref{eq:homogeneous_x_i} for $2$ links as well as Lemma \ref{lemma:a_fixed_c_relation}$(ii)$ and get for $\Gm_c$
 	\[
-		\Pi_1^c(t_1, t_2^*) = t_1 \cdot \frac{2 + c (4/3 - t_1)}{3}
+		\Pi_{1, c}(t_1, t_2^*) = t_1 \cdot \frac{2 + c (4/3 - t_1)}{3}
 		\qquad
-		\Pi_2^c(t_1^*, t_2) = t_2 \cdot \frac{1 + c (5/3 - t_2)}{3}
+		\Pi_{2, c}(t_1^*, t_2) = t_2 \cdot \frac{1 + c (5/3 - t_2)}{3}
 	\]
 	Next, we need to calculate the toll difference intervals for which $\as(t) = 2, 3$.
 	Similarly to Example \ref{example:a_step_simple}, for each link operator we fix the opposing toll $t_{-i}^*$ and consider all flow cases where all players of each sensitivity type are using a single link, i.e. $x = \left(\tfrac14, \tfrac34\right)$ and $\left(\tfrac34, \tfrac14\right)$, for all possible $\alpha$ values, i.e. $2$ and $3$.
 	We ignore the cases $x = (1, 0), (0, 1)$ as they minimise profit for both link operators.
-	For toll differences where $\as(t) = c$, then profit is equal to $\Pi_i^c(t)$ (Lemma \ref{lemma:heterogenous_flow_equiv_fixed}).
-	Otherwise, the flow remains static, making $x_i t_i$ a strictly increasing linear function with regards to $t_i$.
+	For toll differences where $\as(t) = c$, profit is equal to $\Pi_{i, c}(t)$ (Lemma \ref{lemma:heterogenous_flow_equiv_fixed}).
+	Otherwise, the flow remains static, making $x_i t_i$ a linear function with regard to $t_i$, with slope $x_i > 0$.
 	
 	We visualise the results of our analysis in Figure \ref{figure:alpha_step:profit_ne}, where we can see that $B_i(t_{-i}^*) = t_i^*$ for both link operators, making $t^* = \left(\tfrac{5}{12}, \tfrac{4}{12}\right)$ a Nash Equilibrium for the pricing game in $\Gm$.
 \end{proof}
 
 \begin{figure}
 	\centering
-	\begin{tikzpicture}[x=10cm, y=17cm, every node/.style={font=\small}]
+	\begin{tikzpicture}[x=8cm, y=10cm, every node/.style={font=\small}]
 		% Axes
 		\draw[->] (0,0) -- (-0.4,0);
 		\draw[->] (0,0) -- (0.7,0) node[right] {$t_1 - t_2$};
@@ -1445,7 +1446,7 @@ Unsurprisingly, there is a heavy dependence on the definition of the distributio
 		\draw (-1/4,0) -- (-1/4,-0.01) node[below] {$-\frac14$};
 		\draw (-1/12,0) -- (-1/12,-0.01) node[left=9,below] {$-\frac{1}{12}$};
 		\draw (-1/16,0) -- (-1/16,-0.01) node[right=2,below] {$-\frac{1}{16}$};
-		\draw (0,0) -- (0,-0.01) node[below] {$0$} node[below=15] {$t_2^* = \frac{4}{12}$};
+		\draw (0,0) -- (0,-0.01) node[below] {$0$} node[below=20] {$t_2^* = \frac{4}{12}$};
 		\draw (1/12,0) -- (1/12,-0.01) node[below] {$\frac{1}{12}$};
 		\draw (5/16,0) -- (5/16,-0.01) node[below] {$\frac{5}{16}$};
 		\draw (5/12,0) -- (5/12,-0.01) node[below] {$\frac{5}{12}$};
@@ -1455,24 +1456,25 @@ Unsurprisingly, there is a heavy dependence on the definition of the distributio
 		%\draw (0,1/12) -- (0.01,1/12) node[right] {$\frac{1}{12}$};
 
 		% Pseudo-heterogeneous profits
-		\draw[gray,dashed,very thin,domain=-1/3:2/3] plot (\x,{((2-3*\x)/3)*(1/3+\x)}) node[above=20,right=-5,black] {$c = 3$};
-		\draw[gray,dashed,very thin,domain=-1/4:2/4] plot (\x,{((2-4*\x)/3)*(1/3+\x)}) node[above=15,right,black] {$c = 4$};
+		\draw[gray,dashed,thick,domain=-1/3:2/3] plot (\x,{((2-3*\x)/3)*(1/3+\x)}) node[above=17,right=-7,black] {$c = 3$};
+		\draw[gray,dashed,thick,domain=-1/4:2/4] plot (\x,{((2-4*\x)/3)*(1/3+\x)}) node[above=10,right=-3,black] {$c = 4$};
 
 		% Profit function
 		\draw[thick,domain=-1/3:-1/12] plot (\x,{((2-3*\x)/3)*(4/12+\x)});
 		\draw[thick] (-1/12,3/16) -- (-1/16, 39/192);
-		\fill[black] (-1/12,3/16) ellipse (0.0051 and 0.003) node[below right] {$\frac{3}{16}$};
-		\fill[black] (-1/16,39/192) ellipse (0.0051 and 0.003) node[above left] {$\frac{39}{192}$};
+		\fill[black] (-1/12,3/16) ellipse (0.00625 and 0.005) node[below right] {$\frac{3}{16}$};
+		\fill[black] (-1/16,39/192) ellipse (0.00625 and 0.005) node[above left] {$\frac{39}{192}$};
 		\draw[thick,domain=-1/16:5/16] plot (\x,{((2-4*\x)/3)*(4/12+\x)});
 		\draw[thick] (5/16,31/192) -- (5/12,3/16);
-		\fill[black] (5/16,31/192) ellipse (0.0051 and 0.003) node[below left] {$\frac{31}{192}$};
-		\fill[black] (5/12,3/16) ellipse (0.0051 and 0.003) node[above right] {$\frac{3}{16}$};
+		\fill[black] (5/16,31/192) ellipse (0.00625 and 0.005) node[below left] {$\frac{31}{192}$};
+		\fill[black] (5/12,3/16) ellipse (0.00625 and 0.005) node[above right] {$\frac{3}{16}$};
 		\draw[thick,domain=5/12:2/3] plot (\x,{((2-3*\x)/3)*(4/12+\x)});
 
 		% Max point
-		\fill[red] (1/12, 25/108) ellipse (0.0068 and 0.004) node[below,black] {$\frac{25}{108}$};
+		\fill[red] (1/12, 25/108) ellipse (0.00625 and 0.005) node[below,black] {$\frac{25}{108}$};
 	\end{tikzpicture}
-	\begin{tikzpicture}[x=10cm, y=20cm, every node/.style={font=\small}]
+	\\[15pt]
+	\begin{tikzpicture}[x=10cm, y=15cm, every node/.style={font=\small}]
 		% Axes
 		\draw[->] (0,0) -- (-0.55,0);
 		\draw[->] (0,0) -- (0.4,0) node[right] {$t_2 - t_1$};
@@ -1484,7 +1486,7 @@ Unsurprisingly, there is a heavy dependence on the definition of the distributio
 		\draw (-5/12,0) -- (-5/12,-0.01) node[below] {$-\frac{5}{12}$};
 		\draw (-5/16,0) -- (-5/16,-0.01) node[below] {$-\frac{5}{16}$};
 		\draw (-1/12,0) -- (-1/12,-0.01) node[below] {$-\frac{1}{12}$};
-		\draw (0,0) -- (0,-0.01) node[below] {$0$} node[below=15] {$t_1^* = \frac{5}{12}$};
+		\draw (0,0) -- (0,-0.01) node[below] {$0$} node[below=20] {$t_1^* = \frac{5}{12}$};
 		\draw (1/16,0) -- (1/16,-0.01) node[left=3,below] {$\frac{1}{16}$};
 		\draw (1/12,0) -- (1/12,-0.01) node[right=3,below] {$\frac{1}{12}$};
 		\draw (1/4,0) -- (1/4,-0.01) node[below] {$\frac14$};
@@ -1492,23 +1494,23 @@ Unsurprisingly, there is a heavy dependence on the definition of the distributio
 		%\draw (0,5/36) -- (-0.02,5/36) node[below=7,left] {$\frac{5}{36}$};
 
 		% Pseudo-heterogeneous profits
-		\draw[gray,dashed,very thin,domain=-5/12:1/3] plot (\x,{((1-3*\x)/3)*(5/12+\x)}) node[above=20,right=-5,black] {$c = 3$};
-		\draw[gray,dashed,very thin,domain=-5/12:1/4] plot (\x,{((1-4*\x)/3)*(5/12+\x)}) node[above=15,left=17,black] {$c = 4$};
+		\draw[gray,dashed,thick,domain=-5/12:1/3] plot (\x,{((1-3*\x)/3)*(5/12+\x)}) node[above=15,right=-7,black] {$c = 3$};
+		\draw[gray,dashed,thick,domain=-5/12:1/4] plot (\x,{((1-4*\x)/3)*(5/12+\x)}) node[above=15,left=17,black] {$c = 4$};
 
 		% Profit function
 		\draw[thick] (-5/12,0) -- (-5/16,5/64);
-		\fill[black] (-5/12,0) ellipse (0.005 and 0.0025) node[above left] {$0$};
-		\fill[black] (-5/16,5/64) ellipse (0.005 and 0.0025) node[above left] {$\frac{5}{64}$};
+		\fill[black] (-5/12,0) ellipse (0.0045 and 0.003) node[above left] {$0$};
+		\fill[black] (-5/16,5/64) ellipse (0.0045 and 0.003) node[above left] {$\frac{5}{64}$};
 		\draw[thick,domain=-5/16:1/16] plot (\x,{((1-4*\x)/3)*(5/12+\x)});
 		\draw[thick] (1/16,23/192) -- (1/12,1/8);
-		\fill[black] (1/16,23/192) ellipse (0.005 and 0.0025) node[below left] {$\frac{23}{192}$};
-		\fill[black] (1/12,1/8) ellipse (0.005 and 0.0025) node[above right] {$\frac18$};
+		\fill[black] (1/16,23/192) ellipse (0.0045 and 0.003) node[below left] {$\frac{23}{192}$};
+		\fill[black] (1/12,1/8) ellipse (0.0045 and 0.003) node[above right] {$\frac18$};
 		\draw[thick,domain=1/12:1/3] plot (\x,{((1-3*\x)/3)*(5/12+\x)});
 
 		% Max point
-		\fill[red] (-1/12, 4/27) ellipse (0.008 and 0.004) node[above,black] {$\frac{4}{27}$};
+		\fill[red] (-1/12, 4/27) ellipse (0.0045 and 0.003) node[above,black] {$\frac{4}{27}$};
 	\end{tikzpicture}
-	\caption{Profit functions for link operators $1$ and $2$ of Example \ref{example:a_step_profit_ne}.\\Max profit for both at $t^* = \left(\tfrac{5}{12}, \tfrac{4}{12}\right)$.}
+	\caption{Profit functions for link operators $1$ and $2$ of Example \ref{example:a_step_profit_ne} when opposed against the candidate Nash Equilibrium $t^* = \left(\tfrac{5}{12}, \tfrac{4}{12}\right)$. Red dot indicates the max profit at $t^*$. Black dots indicate tolls when relevant intervals start or end for the respective pseudo-heterogeneous profits (dashed lines) they correspond.}
 	\label{figure:alpha_step:profit_ne}
 \end{figure}
 
@@ -1527,16 +1529,17 @@ Unsurprisingly, there is a heavy dependence on the definition of the distributio
 
 \begin{proof}
 	Similarly to Example \ref{example:a_step_profit_ne}, we have from Theorem \ref{theorem:a_step_ne_equiv_fixed} that $t^* = \left(\tfrac{5}{12}, \tfrac{4}{12}\right)$ is the only candidate pricing Nash Equilibrium.
-	We calculate again the profit functions giving us Figure \ref{figure:alpha_step:profit_no_ne}, where we can see that
+	We calculate again the profit functions, which we present in Figure \ref{figure:alpha_step:profit_no_ne}, and where we can see that
 	\[
 		B_1\left(\frac{4}{12}\right) = \frac58 \ne \frac{5}{12} \qquad B_2\left(\frac{5}{12}\right) = \frac{4}{12}
 	\]
-	Since $t^*$ is the only possible candidate (Theorem \ref{theorem:a_step_ne_equiv_fixed}), then $\Gm$ has no Nash equilibrium for its pricing game.
+	which makes $t^*$ ineligible for an equilibrium.
+	Since $t^*$ is the only possible candidate (Theorem \ref{theorem:a_step_ne_equiv_fixed}), it follows that $\Gm$ has no Nash equilibrium for its pricing game.
 \end{proof}
 
 \begin{figure}
 	\centering
-	\begin{tikzpicture}[x=6cm, y=17cm, every node/.style={font=\small}]
+	\begin{tikzpicture}[x=6cm, y=10cm, every node/.style={font=\small}]
 		% Axes
 		\draw[->] (0,0) -- (-0.4,0);
 		\draw[->] (0,0) -- (1.1,0) node[right] {$t_1 - t_2$};
@@ -1547,7 +1550,7 @@ Unsurprisingly, there is a heavy dependence on the definition of the distributio
 		\draw (-1/4,0) -- (-1/4,-0.01) node[below] {$-\frac14$};
 		\draw (-1/8,0) -- (-1/8,-0.01) node[left=5,below] {$-\frac18$};
 		\draw (-1/16,0) -- (-1/16,-0.01) node[below] {$-\frac{1}{16}$};
-		\draw (0,0) -- (0,-0.01) node[below] {$0$} node[below=15] {$t_2^* = \frac{4}{12}$};
+		\draw (0,0) -- (0,-0.01) node[below] {$0$} node[below=20] {$t_2^* = \frac{4}{12}$};
 		\draw (1/12,0) -- (1/12,-0.01) node[below] {$\frac{1}{12}$};
 		\draw (5/16,0) -- (5/16,-0.01) node[below] {$\frac{5}{16}$};
 		\draw (2/4,0) -- (2/4,-0.01) node[below] {$\frac24$};
@@ -1557,24 +1560,25 @@ Unsurprisingly, there is a heavy dependence on the definition of the distributio
 		%\draw (0,1/12) -- (0.01,1/12) node[right] {$\frac{1}{12}$};
 
 		% Pseudo-heterogeneous profits
-		\draw[gray,dashed,very thin,domain=-1/3:2/2] plot (\x,{((2-2*\x)/3)*(1/3+\x)}) node[above=20,right=-5,black] {$c = 2$};
-		\draw[gray,dashed,very thin,domain=-1/4:2/4] plot (\x,{((2-4*\x)/3)*(1/3+\x)}) node[above=15,right,black] {$c = 4$};
+		\draw[gray,dashed,thick,domain=-1/3:2/2] plot (\x,{((2-2*\x)/3)*(1/3+\x)}) node[above=20,right=-5,black] {$c = 2$};
+		\draw[gray,dashed,thick,domain=-1/4:2/4] plot (\x,{((2-4*\x)/3)*(1/3+\x)}) node[above=15,right,black] {$c = 4$};
 
 		% Profit function
 		\draw[thick,domain=-1/3:-1/8] plot (\x,{((2-2*\x)/3)*(4/12+\x)});
 		\draw[thick] (-1/8, 5/32) -- (-1/16, 39/192);
-		\fill[black] (-1/8, 5/32) ellipse (0.0085 and 0.003) node[below right] {$\frac{5}{32}$};
-		\fill[black] (-1/16,39/192) ellipse (0.0085 and 0.003) node[above left] {$\frac{39}{192}$};
+		\fill[black] (-1/8, 5/32) ellipse (0.008333 and 0.005) node[below right] {$\frac{5}{32}$};
+		\fill[black] (-1/16,39/192) ellipse (0.008333 and 0.005) node[above left] {$\frac{39}{192}$};
 		\draw[thick,domain=-1/16:5/16] plot (\x,{((2-4*\x)/3)*(4/12+\x)});
 		\draw[thick] (5/16,31/192) -- (5/8,23/96);
-		\fill[black] (5/16,31/192) ellipse (0.0085 and 0.003) node[below left] {$\frac{31}{192}$};
-		\fill[black] (5/8,23/96) ellipse (0.0085 and 0.003) node[above right] {$\frac{23}{96}$};
+		\fill[black] (5/16,31/192) ellipse (0.008333 and 0.005) node[below left] {$\frac{31}{192}$};
+		\fill[black] (5/8,23/96) ellipse (0.008333 and 0.005) node[above right] {$\frac{23}{96}$};
 		\draw[thick,domain=5/8:1] plot (\x,{((2-2*\x)/3)*(4/12+\x)});
 
 		% Max point
-		\fill[red] (1/12, 25/108) ellipse (0.0085 and 0.003) node[below,black] {$\frac{25}{108}$};
+		\fill[red] (1/12, 25/108) ellipse (0.008333 and 0.005) node[below,black] {$\frac{25}{108}$};
 	\end{tikzpicture}
-	\begin{tikzpicture}[x=10cm, y=20cm, every node/.style={font=\small}]
+	\\[15pt]
+	\begin{tikzpicture}[x=8cm, y=15cm, every node/.style={font=\small}]
 		% Axes
 		\draw[->] (0,0) -- (-0.55,0);
 		\draw[->] (0,0) -- (0.6,0) node[right] {$t_2 - t_1$};
@@ -1586,7 +1590,7 @@ Unsurprisingly, there is a heavy dependence on the definition of the distributio
 		\draw (-5/12,0) -- (-5/12,-0.01) node[below] {$-\frac{5}{12}$};
 		\draw (-5/16,0) -- (-5/16,-0.01) node[below] {$-\frac{5}{16}$};
 		\draw (-1/12,0) -- (-1/12,-0.01) node[below] {$-\frac{1}{12}$};
-		\draw (0,0) -- (0,-0.01) node[below] {$0$} node[below=15] {$t_1^* = \frac{5}{12}$};
+		\draw (0,0) -- (0,-0.01) node[below] {$0$} node[below=20] {$t_1^* = \frac{5}{12}$};
 		\draw (1/16,0) -- (1/16,-0.01) node[left=3,below] {$\frac{1}{16}$};
 		\draw (1/12,0) -- (1/12,-0.01) node[right=3,below] {$\frac{1}{12}$};
 		\draw (1/4,0) -- (1/4,-0.01) node[below] {$\frac14$};
@@ -1594,28 +1598,28 @@ Unsurprisingly, there is a heavy dependence on the definition of the distributio
 		%\draw (0,5/36) -- (-0.02,5/36) node[below=7,left] {$\frac{5}{36}$};
 
 		% Pseudo-heterogeneous profits
-		\draw[gray,dashed,very thin,domain=-5/12:1/2] plot (\x,{((1-2*\x)/3)*(5/12+\x)}) node[above=20,right=-5,black] {$c = 2$};
-		\draw[gray,dashed,very thin,domain=-5/12:1/4] plot (\x,{((1-4*\x)/3)*(5/12+\x)}) node[above=15,left=17,black] {$c = 4$};
+		\draw[gray,dashed,thick,domain=-5/12:1/2] plot (\x,{((1-2*\x)/3)*(5/12+\x)}) node[above=20,right=-5,black] {$c = 2$};
+		\draw[gray,dashed,thick,domain=-5/12:1/4] plot (\x,{((1-4*\x)/3)*(5/12+\x)}) node[above=15,right,black] {$c = 4$};
 
 		% Profit function
 		\draw[thick] (-5/12,0) -- (-5/16,5/64);
 		\fill[black] (-5/16,5/64) ellipse (0.005 and 0.0025) node[above left] {$\frac{5}{64}$};
 		\draw[thick,domain=-5/16:1/16] plot (\x,{((1-4*\x)/3)*(5/12+\x)});
 		\draw[thick] (1/16,23/192) -- (1/8,13/96);
-		\fill[black] (1/16,23/192) ellipse (0.005 and 0.0025) node[below left] {$\frac{23}{192}$};
+		\fill[black] (1/16,23/192) ellipse (0.005 and 0.0025) node[left=6,below] {$\frac{23}{192}$};
 		\fill[black] (1/8,13/96) ellipse (0.005 and 0.0025) node[above right] {$\frac{13}{96}$};
 		\draw[thick,domain=1/8:1/2] plot (\x,{((1-2*\x)/3)*(5/12+\x)});
 
 		% Max point
 		\fill[red] (-1/12, 4/27) ellipse (0.008 and 0.004) node[above,black] {$\frac{4}{27}$};
 	\end{tikzpicture}
-	\caption{Profit functions for link operators $1$ and $2$ of Example \ref{example:a_step_profit_no_ne}.}
+	\caption{Profit functions for link operators $1$ and $2$ of Example \ref{example:a_step_profit_no_ne} when opposed against the candidate Nash Equilibrium $t^* = \left(\tfrac{5}{12}, \tfrac{4}{12}\right)$. Red dot indicates the max profit at $t^*$. Black dots indicate tolls when relevant intervals start or end for the respective pseudo-heterogeneous profits (dashed lines) they correspond.}
 	\label{figure:alpha_step:profit_no_ne}
 \end{figure}
 
-It seems apparent, from the previous two examples, that the success of a candidate pricing Nash equilibrium to extend for a step function is heavily dependent on the function's definition, i.e. the sensitivity values as well as the amount of flow corresponding to them.
-It would be tempting, at this point, to try and calculate exact conditions for the existence of such a Nash Equilibrium, given arbitrary game parameters.
-For example, assume the pricing game in Example \ref{example:a_step_profit_ne} has the distribution function
+It seems apparent, from the previous two examples, that the criteria, for a candidate pricing Nash equilibrium to maintain its maximality among tolls at different $\alpha_k$ values, are heavily dependent on the function's definition, i.e. the sensitivity values as well as the amount of flow corresponding to them.
+It would be tempting, at this point, to try and calculate exact conditions around the definition of $\alpha$ that would ensure existence of a Nash Equilibrium, given arbitrary game parameters.
+For example, assume we want to investigate Example \ref{example:a_step_profit_ne} by altering its distribution function to
 \[
 	\alpha(p) =
 	\begin{cases}
@@ -1623,19 +1627,21 @@ For example, assume the pricing game in Example \ref{example:a_step_profit_ne} h
 		4 & p > p_0
 	\end{cases}
 \]
-for $c < 4$ and $p_0 < 5/9$, with the last condition ensuring the sensitivity split for the equilibrium remains at $\as(t^*) = 4$.
+for $c < 4$ and $p_0 < 5/9$, with the last condition ensuring the sensitivity split for the pricing equilibrium remains at $\as(t^*) = 4$.
 Looking at Example \ref{example:a_step_profit_no_ne}, we can see that for $c = 2$ the Nash Equilibrium breaks due to link operator $1$ getting higher profit at flow $p_0$.
 We can therefore assume that, for their equilibrium profit $\Pi_1(t^*) = \tfrac{25}{108}$ to remain maximum, it needs to be greater than the profit at flow $p_0$ for sensitivity $c$.
-We can then calculate $t_1$ such that $x(t_1, t_2^*) = p_0$, by solving the cost equality for $x = (p_0, 1 - p_0)$ and sensitivity $c$, and eventually get that link operator $1$ will not diverge from the equilibrium if
+By calculating $t_1$ such that $x(t_1, t_2^*) = p_0$, we can eventually get that link operator $1$ will not diverge from the equilibrium if
 \[
 	\frac{25}{108} \ge \frac{-3p_0^2 + p_0 (2 + c/3)}{c}
 \]
-Such a constrain can definitely provide insights into the numerical restrains between $c$ and $p_0$, however, as it also requires additional conditions to ensure the equilibrium won't still break due to higher profit at a different point, it suggests that a further analysis requires a more careful approach.
-As, admittedly based on our own capacity, will not proceed with such an analysis.
-We can still observe the following
+Such a constrain can definitely e.g. provide insights into the numerical restrains between $c$ and $p_0$.
+In order to support the characterisation of the equilibrium existence, however, it requires to be considered alongside additional conditions to account for all other possibly higher profits (other sensitivity values, multiple global maximums, etc.).
+It therefore seems overall complex to tackle this task directly, and a smarter approach would be to first further develop our tools on pseudo-heterogeneous games, which is why we will leave such an analysis for future work.
+We discuss this again in Chapter \ref{chapter:future_work}.
+As a final note before leaving this topic, regarding the influence of the step distribution function on the equilibrium, we can still observe the following:
 \begin{itemize}
-	\item larger differences in $\alpha_k$ values are more likely to break a pricing Nash Equilibrium
-	\item larger flow intervals around $\as(t^*)$ are more likely to have a pricing Nash Equilibrium (the game becomes more homogeneous)
+	\item Larger differences between $\alpha_k$ values are more likely to result in no Nash Equilibrium for the pricing game.
+	\item Larger flow intervals around $\as(t^*)$ are more likely to result in having a Nash Equilibrium for the pricing game (the game becomes more homogeneous).
 \end{itemize}
 
 Focusing now on the algorithmic aspect of existence, we see that things are much simpler.
@@ -1648,17 +1654,18 @@ For a given heterogeneous pricing game $\Gm = ([2], \ell, \alpha)$
 \begin{enumerate}
 	\item Consider $\Gm^\prime = ([2], \ell, 1)$ and calculate its pricing Nash equilibrium $t^{*\prime}$ and respective flow $x^\prime(t^{*\prime})$.
 	\item Calculate $\as(t^*)$ as the $\alpha$ value of the lower split flow in $x^\prime(t^{*\prime})$ (valid since $x(t^*) = x^\prime(t^{*\prime})$ from Theorem \ref{theorem:a_step_ne_equiv_fixed}, Lemma \ref{lemma:a_fixed_pricing_ne_relation})
-	\item Calculate candidate pricing Nash Equilibrium at $t^* = \tfrac{t^{*\prime}}{\as(t^*)}$ and respective profits $\Pi_1(t^*), \Pi_2(t^*)$.
-	\item For each $\alpha_k$, value of $\alpha$ different than $\as(t^*)$ and for each link operator $i \in [2]$
+	\item Calculate the candidate pricing Nash Equilibrium $t^* = \tfrac{t^{*\prime}}{\as(t^*)}$ as well as the respective profits $\Pi_1(t^*), \Pi_2(t^*)$.
+	\item For each $\alpha_k$, value of $\alpha$ different than $\as(t^*)$, and for each link operator $i \in [2]$
 	\begin{enumerate}[$4.1$]
-		\item Consider $\Gm_k = ([2], \ell, \alpha_k)$ and calculate $B_{i, k}(t_{-i})$ as well as the tolls $t_{i, k}$ for which $\as(t_i, t_{-i}^*) = \alpha_k$, resulting in two toll ranges for $t_i$.
-		\begin{enumerate}[$4.1.1$]
-			\item If $B_{i, k}(t_{-i})$ is within the above ranges, then $\Pi_{i, k} = \Pi_i(B_{i, k}(t_{-i}), t_{-i})$.
-			\item Otherwise, $\Pi_{i, k}$ is the max of the profits for tolls in the edges of the above ranges.
+		\item Consider $\Gm_k = ([2], \ell, \alpha_k)$ and calculate $B_{i, k}(t_{-i}^*)$ as well as the tolls $t_{i, k}$ for which $\as(t_i, t_{-i}^*) = \alpha_k$, resulting in two toll ranges for $t_i$.
+		\item Search for $\Pi_{i, k}$, the max profit for $i$ within those $t_i$ ranges:
+		\begin{enumerate}[$4.2.1$]
+			\item If $B_{i, k}(t_{-i}^*)$ is within the $t_i$ ranges, then $\Pi_{i, k} = \Pi_i(B_{i, k}(t_{-i}^*), t_{-i}^*)$.
+			\item Otherwise, $\Pi_{i, k}$ is the highest profit value among the ($4$) tolls in the edges of the two $t_1$ ranges.
 		\end{enumerate}
 		\item If $\Pi_i < \Pi_{i, k}$, then $\Gm$ has no pricing Nash Equilibrium.
 	\end{enumerate}
-	\item If none of the above checks fail, return $t^*$ as the Nash Equilibrium for the pricing game in $\Gm$.
+	\item If all of the above checks fail, then $t^*$ is the Nash Equilibrium for the pricing game in $\Gm$, so return it.
 \end{enumerate}
 
 \begin{algorithm}
@@ -1834,10 +1841,10 @@ We hope this work can be used as a basis for any further investigation on the pr
 
 \subsection*{$2$-link networks}
 
-Algorithm \ref{algorithm:step_ne_pricing} calculates tolls which are a candidate Nash Equilibrium for the pricing game and then checks for all step function values that no profit earned in a different sensitivity split is higher than that.
-Given those restrictions, it seems very possible to calculate exact conditions for a candidate set of tolls to be a Nash Equilibrium.
-Those conditions would heavily depend on the definition of $\alpha$, making the player splits as well as the distance of the step function's $\alpha_k$ values appear to be the defining factors.
-Therefore another possible extension of this work would be to compute and study these exact conditions.
+In Chapter \ref{chapter:pricing_equilibria} we investigated the pricing Nash Equilibrium for step functions, and while Theorem \ref{theorem:a_step_ne_equiv_fixed} directly provides us with a candidate set of such tolls, the exact criteria deciding existence (mostly regarding the distribution function) can be elusive (see Examples \ref{example:a_step_profit_ne}, \ref{example:a_step_profit_no_ne} and the discussion thereafter).
+Even with the algorithmic approach being much simpler (shown in Algorithm \ref{algorithm:step_ne_pricing}), we believe there could still be value in investigating them.
+Apart from obviously discovering more patterns around maximising profit in arbitrary step functions, such criteria could also be utilised in order to identify classes of step distribution functions where existence is always (or never) ensured.
+Also note, that, as also mentioned in the relevant discussion in Chapter \ref{chapter:pricing_equilibria}, a potential progress in our understanding of pseudo-heterogeneous games can also support further analysis on the pricing Nash equilibrium criteria, and vice-versa.
 
 \subsection*{$n$-link networks}
 
@@ -1859,6 +1866,14 @@ For such functions, however, our former restriction of $\alpha(p) > 0$ when $p >
 In Lemma \ref{lemma:a_0_accumulation_point} we attempt to show that when $0$ is an accumulation point in $\alpha$, then the lowest latency toll will always have flow, conditions similar to those of Lemma \ref{lemma:a_0_0}, suggesting the possible emergence of a similar behaviour.
 Example \ref{example:ap_p} in the Appendix analyses a game with distribution function $\alpha(p) = p$, and showcases that the resulting best responses can indeed be undefined or unbounded, marking this function (or similar ones, e.g.  $\alpha(p) = cp$, for some $c > 0$) to be of interest for further study.
 
+\section*{Function series approximation}
+
+The study of step distribution functions in this work opens up the opportunity to approach arbitrary functions analytically.
+By approximating a distribution function as a series of step functions where $m \rightarrow +\infty$, one could find the tools developed above useful for their analysis.
+For example, Algorithm \ref{algorithm:step_ne_pricing} could potentially approximate an equilibrium (or prove non-existence) by using as base a step function close enough to the original one.
+This should be viewed with skepticism, however, since equilibria in step functions all enforce the same flow, something not true for generic distribution functions, while large variation in the step function's values will make the algorithm, running in $\mathcal{O}(m)$ time, arbitrarily inefficient.
+Still, for properties that are maintained when approaching a function through step approximations, we believe that the use of the intuitions and tools built here do have the potential to support their analysis.
+
 \section*{Split function for series-parallel links}
 
 Finally, in Chapter \ref{chapter:split}, we put the pricing games aside and introduced the concept of a money sensitivity split, which can help us describe how the user sensitivity is divided among the different links.
@@ -1873,8 +1888,6 @@ While in such complex networks the link sequence can vary greatly (potentially m
 \bibliography{ref.bib}
 \cleardoublepage
 
-\phantomsection
-\addcontentsline{toc}{chapter}{Appendix}
 \chapter{Appendix}
 \label{chapter:appendix}
 
@@ -1912,14 +1925,14 @@ They are included here, however, first to present some parallel results that wer
 	\[
 		B_i(t_{-i}) - t_j = \left(\frac{1}{\sum_{k \ne i} \frac{2a_j}{a_k}} - 1\right)t_j + \frac{1 + \frac{b_j - b_i}{a_j} + \sum_{k \ne i, j}\frac{b_k + t_k - b_i}{a_k}}{\sum_{k \ne i} \frac{2}{a_k}}
 	\]
-	which is decreasing with regards to $t_j$ if and only if its coefficient is negative.
+	which is decreasing with regard to $t_j$ if and only if its coefficient is negative.
 	Indeed, since $a_i > 0$ for all $i$, we get
 	\[
 		\frac{1}{\sum_{k \ne i} \frac{2a_j}{a_k}} - 1 = \frac{1}{2 \left(1 + \sum_{k \ne i, j} \frac{a_j}{a_k}\right)} - 1 \leq \frac{1}{2} - 1 < 0
 	\]
 \end{proof}
 
-which is in turn non-increasing with regards to $t_{-i}$ (\ref{lemma:tolls_diff}).
+which is in turn non-increasing with regard to $t_{-i}$ (\ref{lemma:tolls_diff}).
 Therefore, as $t_{-i}$ increases, the best response gets decreasing difference with $t_{-i}$, thus taking more flow in $x_i$.
 Eventually there will be a smallest possible $t_{-i}$ where the best response is to take all flow, and henceforth any larger $t_{-i}$ will also result in a best response with the same toll difference and flow.
 We will use this property to describe the flow relation between the two games in the following lemma.
