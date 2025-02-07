@@ -6,9 +6,10 @@
 
 \mode<presentation>
 {
-	\usetheme[progressbar=foot,numbering=fraction,background=light,block=fill]{metropolis}
+	\usetheme[subsectionpage=simple,progressbar=foot,numbering=fraction,background=light,block=fill]{metropolis}
 	\usecolortheme{default}
 	\usefonttheme{default}
+	\setbeamercolor{example text}{fg=mDarkTeal}
 	\setbeamertemplate{navigation symbols}{}
 	\setbeamertemplate{caption}[numbered]
 	\setbeamertemplate{frame footer}{Thomas Pappas | ALMA }
@@ -39,18 +40,19 @@
 			"ALGORITHMS, LOGIC AND DISCRETE MATHEMATICS"}
 	\end{columns}
 }
-\date{\today}
+%\date{\today}
+\date{February 10, 2025}
 
 \begin{document}
 \AtBeginSection[]{
-  \begin{frame}[noframenumbering,plain]
-	  \vfill
-	  \centering
-	  \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
-	    \usebeamerfont{title}\insertsectionhead\par
-	  \end{beamercolorbox}
-	  \vfill
-  \end{frame}
+	\begin{frame}[noframenumbering,plain]
+		\vfill
+		\centering
+		\begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+			\usebeamerfont{title}\insertsectionhead\par
+		\end{beamercolorbox}
+		\vfill
+	\end{frame}
 }
 
 
@@ -64,34 +66,48 @@
 \end{frame}
 
 
-\section{Introduction}
+\section{Brief History}
 
-\begin{frame}{History}
-	\begin{itemize}
-		\item Selfish routing \footcite{pigou1920economics}
-		\item Congestion games \footcite{Rosenthal1973ACO}
-		\item Wardrop equilibrium \footcite{wardrop_theoretical_1952}
-		\item Pricing competition \footcite{10.1287/moor.1060.0231}
-		\begin{itemize}
-			\item Homogeneous case with toll caps \footcite{Harks_2019}
-		\end{itemize}
-	\end{itemize}
+\begin{frame}{\insertsection}
+	Selfish routing can model and solve a variety of real-world problems in economics, transportation and more.
+	\\[20pt]
+	\begin{tikzpicture}[scale=0.9, every node/.style={font=\small,align=center}]
+		\draw (0,-0.15) node[below] {Pigou} -- (0,0.15) node[above] {$1920$};
+		\draw (0,0) -- (6,0);
+		\draw (6,-0.15) node[below] {Beckman\\et al.} -- (6,0.15) node[above] {$1956$};
+		\draw (6,0) -- (9,0);
+		\draw (9,-0.15) node[below] {Rosenthal} -- (9,0.15) node[above] {$1973$};
+		\draw (9,0) -- (10,0);
+
+		\draw (0,-2.65) node[below] {Cole\\et al.} -- (0,-2.35) node[above] {$2003$};
+		\draw (0,-2.5) -- (2,-2.5);
+		\draw (2,-2.65) node[below] {Acemoglu\\\& Ozdaglar} -- (2,-2.35) node[above] {$2007$};
+		\draw (2,-2.5) -- (7.5,-2.5);
+		\draw (7.5,-2.65) node[below] {Correa\\et al.} -- (7.5,-2.35) node[above] {$2018$};
+		\draw (7.5,-2.5) -- (9,-2.5);
+		\draw (9,-2.65) node[below] {Harks\\et al.} -- (9,-2.35) node[above] {$2019$};
+		\draw (9,-2.5) -- (10,-2.5);
+	\end{tikzpicture}
 \end{frame}
 
-\begin{frame}{Our model}
+\section{Preliminaries}
+
+\subsection{Our model}
+
+\begin{frame}{Preliminaries | Our model}
 	\begin{center}
 		Heterogeneous Non-atomic $n$-link Parallel Network\\
 		Toll Congestion Pricing Game
 	\end{center}
 \end{frame}
-\begin{frame}{Our model}
+\begin{frame}{Preliminaries | Our model}
 	\begin{center}
 		\textbf{Heterogeneous} Non-atomic $n$-link Parallel Network\\
 		Toll Congestion \textbf{Pricing} Game
 	\end{center}
 \end{frame}
 
-\begin{frame}{Our model}
+\begin{frame}{Preliminaries | Our model}
 	\;
 	\begin{block}{$2$-level game}
 		\begin{enumerate}
@@ -101,7 +117,7 @@
 	\end{block}
 \end{frame}
 
-\begin{frame}{Preliminaries}
+\begin{frame}{Preliminaries | Selfish routing (1\textsuperscript{st} level)}
 	\;
 	\begin{block}{Non-atomic $n$-link Parallel Network Game}
 		A \textbf{Parallel Network} is a directed graph $G = (\{s, t\}, N)$, where $N = \{1, \dots, n\}$ a set of $n$ parallel $s-t$ links.
@@ -130,7 +146,7 @@
 	\end{center}
 \end{frame}
 
-\begin{frame}{Preliminaries}
+\begin{frame}{Preliminaries | Selfish routing (1\textsuperscript{st} level)}
 	\;
 	\begin{block}{Non-atomic $n$-link Parallel Network Game}
 		Flow $f: [0, 1] \rightarrow N$ is a Lebesque measurable function assigning players to links.
@@ -157,10 +173,40 @@
 	\end{center}
 \end{frame}
 
-\begin{frame}{Homogeneous players}
-	Links can be tolled by assigning tolls $t \in \R_+^N$.
+\begin{frame}{Preliminaries | Selfish routing (1\textsuperscript{st} level) | Example}
+\begin{center}
+	\begin{tikzpicture}[scale=1.4, every node/.style={font=\small}]
+		% Nodes
+		\node[circle, draw, fill=blue!20, minimum size=0.8cm] (s) at (0,0) {$s$};
+		\node[circle, draw, fill=blue!20, minimum size=0.8cm] (t) at (4,0) {$t$};
 
-	Player $p$ experiences on link $i$ total cost $c_i(p) = \ell_i(x_i) + t_i$.
+		% Links
+		\draw[->, thick] (s) to[bend left=35] node[midway, above] {$2x$} (t);
+		\draw[->, thick] (s) to node[midway, above] {$x + 1$} (t);
+		\draw[->, thick] (s) to[bend right=35] node[midway, above] {$x + 2$} (t);
+	\end{tikzpicture}
+\end{center}
+Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency links.
+\end{frame}
+
+\begin{frame}{Preliminaries | Selfish routing (1\textsuperscript{st} level)}
+	Tolls $t \in \R_+^{|N|}$ can be assigned to links, affecting player cost.
+
+	In \textbf{homogeneous} networks, player $p$ on link $i$ experiences total cost $c_i(p) = \ell_i(x_i) + t_i$.
+
+	In \textbf{heterogeneous} networks, players value time-money differently, so we add a weight $\alpha$ to the toll (money) cost.
+
+	Player $p$ on link $i$ experiences total cost $c_i(p) = \ell_i(x_i) + \alpha(p) \cdot t_i$.
+	\begin{block}{Distribution function $\alpha: [0, 1] \rightarrow [0, +\infty]$}
+		\begin{itemize}
+			\item players are ordered w.r.t. sensitivity
+			\item $\alpha$ is non-decreasing
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\begin{frame}{Preliminaries | Selfish routing (1\textsuperscript{st} level)}
+	In homogeneous networks, all players view link costs the same.
 	\begin{definition}
 		For a given set of tolls $t$, a flow $x$ is a \textit{Wardrop equilibrium for $t$} if $\forall i, j \in N$ with $x_i > 0$ it holds that
 		\begin{equation*}
@@ -169,96 +215,125 @@
 	\end{definition}
 	Links with $x_i > 0$ have $\ell_i(x_i) + t_i = K$ for some $K > 0$.
 
-	Wardrop equilibrium always exits and is unique\footcite{??}, denote it by $x(t)$.
+	Equilibrium is indifferent to uniform variations of tolls ($t^\prime = t + c$).
 \end{frame}
 
-\begin{frame}{Homogeneous players}
-	\begin{lemma}[variational inequality\footcite{dafermos1973toll}]
+\begin{frame}{Preliminaries | Selfish routing (1\textsuperscript{st} level)}
+	\begin{lemma}[variational inequality\footcites{beckmann1956studies}{dafermos1973toll}]
 		A flow $x$ is a Wardrop equilibrium for $t$ if and only if for all feasible flows $x^\prime$,
 		\[\sum_{i \in N} (\ell_i(x_i) + t_i) \cdot (x_i - x_i^\prime) \leq 0\]
 	\end{lemma}
-	Equilibrium is indifferent to uniform variations of tolls ($t^\prime = t + c$) or (affine) latencies.
 \end{frame}
 
-\begin{frame}{Heterogeneous players}
-	Players value time-money differently, so add weight $\alpha$ to money.
-	\begin{block}{Distribution function $\alpha: [0, 1] \rightarrow [0, +\infty]$}
-		\begin{itemize}
-			\item players are ordered w.r.t. sensitivity
-			\item $\alpha$ is non-decreasing
-		\end{itemize}
-	\end{block}
-	Player $p$ experiences on link $i$ total cost $c_i(p) = \ell_i(x_i) + \alpha(p) \cdot t_i$.
+\begin{frame}{Preliminaries | Selfish routing (1\textsuperscript{st} level)}
 	\begin{definition}
-		For a given set of tolls $t$, a flow $x$ is a \textit{Nash equilibrium for $t$} if for all players $p \in [0, 1]$ and $\forall i \in N$ it holds that
+		For a given set of tolls $t$, a flow $x$ is a \textit{Nash equilibrium for $t$} if $\forall p \in [0, 1]$ and $\forall i \in N$ it holds that
 		\begin{equation*}
 			c_{f(p)}(p) \leq c_i(p)
 		\end{equation*}
 	\end{definition}
+	N.E. always exists and is unique w.r.t. costs for homogeneous\footcite{beckmann1956studies} and heterogeneous\footcites{1973JSP.....7..295S}{MILCHTAICH1996111} networks.
+	We denote it by $x(t)$.
 \end{frame}
 
-\begin{frame}{Heterogeneous players}
-	\begin{example}
-		Let $([2], \ell, \alpha)$ with $\ell_1(x) = 2x, \ell_2(x) = x + 1$ and $\alpha(p) = p + 1$.
-	\end{example}
-	\begin{center}
-		\begin{tikzpicture}[scale=1.4, every node/.style={font=\small}]
-			% Nodes
-			\node[circle, draw, fill=blue!20, minimum size=0.8cm] (s) at (0,0) {$s$};
-			\node[circle, draw, fill=blue!20, minimum size=0.8cm] (t) at (4,0) {$t$};
+\begin{frame}{Preliminaries | Selfish routing (1\textsuperscript{st} level) | Example}
+\begin{center}
+	\begin{tikzpicture}[scale=1.4, every node/.style={font=\small}]
+		% Nodes
+		\node[circle, draw, fill=blue!20, minimum size=0.8cm] (s) at (0,0) {$s$};
+		\node[circle, draw, fill=blue!20, minimum size=0.8cm] (t) at (4,0) {$t$};
 
-			% Links
-			\draw[->, thick] (s) to[bend left=35] node[midway, above] {$2x$} (t);
-			\draw[->, thick] (s) to[bend right=35] node[midway, below] {$x + 1$} (t);
-
-			% Description
-			%\node[align=center] at (2, -2) {Network of Example};
-		\end{tikzpicture}
-	\end{center}
-	$x(0) = \left(\frac23, \frac13\right), \; x(3, 2) = \left(\frac14, \frac34\right)$
+		% Links
+		\draw[->, thick] (s) to[bend left=35] node[midway, above] {$2x$} (t);
+		\draw[->, thick] (s) to node[midway, above] {$x + 1$} (t);
+		\draw[->, thick] (s) to[bend right=35] node[midway, above] {$x + 2$} (t);
+	\end{tikzpicture}
+\end{center}
+For homogeneous players and tolls $t = \left(4, 2, 1\right)$ we get
+\[x(t) = \left(0, \frac12, \frac12\right)\]
+since $\forall p \in [0, 1]$ it holds $c_2(p) = c_3(p) = 7/2$ and $c_1(p) = 4$.
 \end{frame}
 
-\begin{frame}{Heterogeneous players}
-	Nash equilibrium for $t$ always exists\footcite{1973JSP.....7..295S} and is unique\footcite{MILCHTAICH1996111}, again denote it by $x(t)$.
-\end{frame}
-
-\begin{frame}{Pricing competition (2\textsuperscript{nd} level)}
+\begin{frame}{Preliminaries | Pricing competition (2\textsuperscript{nd} level)}
 	Links are owned by agents who compete for profit.
 	\begin{block}{Profit}
-		For given set of tolls $t \in \R_+^N$, link operator $i$ gains profit
+		For given set of tolls $t \in \R_+^{|N|}$, link operator $i$ gains profit
 		\[\Pi_i(t) = x_i(t) \cdot t_i\]
 	\end{block}
-
 	\begin{block}{Best response}
 		For fixed tolls assignments from remaining link operators $t_{-i} = t \setminus \{t_i\}$, link operator $i$ will try and maximise their profit
 		\[B_i(t_{-i}) = \argmax_{t_i \ge 0} \Pi(t_i, t_{-i})\]
 	\end{block}
 \end{frame}
 
-\begin{frame}{Pricing competition (2\textsuperscript{nd} level)}
-	\begin{block}{Nash Equilibrium}
-		A given set of tolls $t$ is a \textit{Nash Equilibrium for the pricing game} if $\forall i \in N$ and $\forall t_i^\prime \in \R_+$
-		\[\Pi_i(t_i, t_{-i}) \geq \Pi_i(t_i^\prime, t_{-i})\]
+\begin{frame}{Preliminaries | Pricing competition (2\textsuperscript{nd} level)}
+	\begin{block}{Nash Equilibrium ($t^*$)}
+		A set of tolls $t^*$ is a \textit{Nash Equilibrium for the pricing game} if $\forall i \in N$ and $\forall t_i^\prime \in \R_+$
+		\[\Pi_i(t_i^*, t_{-i}^*) \geq \Pi_i(t_i^\prime, t_{-i}^*)\]
 	\end{block}
-	\begin{block}{Nash Equilibrium}
-		A given set of tolls $t$ is a \textit{Nash Equilibrium for the pricing game} if
-		$\forall i \in N$ we have $|B_i(t_{-i})| = 1$ and
-		\[t = (B_i(t_{-i}))_{i \in N}\]
+	\begin{block}{Nash Equilibrium ($t^*$)}
+		A set of tolls $t^*$ is a \textit{Nash Equilibrium for the pricing game} if
+		$\forall i \in N$ we have
+		\[t^* = (B_i(t_{-i}^*))_{i \in N}\]
 	\end{block}
 \end{frame}
 
-\begin{frame}{Game equivalence}
+\begin{frame}{Preliminaries | Our model}
+	We will describe a pricing game as the tuple $\Gm = (N, \ell, \alpha)$ where
+	\begin{itemize}
+		\item $N = \{1, 2, \cdots, n\}$ the links
+		\item $\ell = (\ell_i)_{i \in N}$ the latency functions
+		\item $\alpha$ the distribution function
+	\end{itemize}
+	A homogeneous game can be described as $(N, \ell, 1)$.
+\end{frame}
+
+\subsection{Game equivalence}
+
+\begin{frame}{Preliminaries | Game equivalence}
 	\begin{definition}[Game equivalence]
 		Let $\Gm_1, \Gm_2$ be two $n$-link Network Congestion Games.
-		$\Gm_1$ and $\Gm_2$ are called \textbf{equivalent} if and only if for all tolls $t \in \R_+$ it holds that $x^{(1)}(t) = x^{(2)}(t)$, with $x^{(1)}(t), x^{(2)}(t)$ being the Nash Equilibria for $t$ in $\Gm_1, \Gm_2$ respectively.
+		$\Gm_1$ and $\Gm_2$ are called \textbf{equivalent} if and only if for all tolls $t \in \R_+^{|N|}$ it holds that $x^{(1)}(t) = x^{(2)}(t)$, with $x^{(1)}(t), x^{(2)}(t)$ being the Nash Equilibria for $t$ in $\Gm_1, \Gm_2$ respectively.
 	\end{definition}
+	Equivalency means same tolls cause same flow.
+
 	The two pricing competition games played on two equivalent network congestion games are identical.
 \end{frame}
 
+\subsection{Homogeneous networks}
 
-\section{Heterogeneous players}
+\begin{frame}{Preliminaries | Homogeneous networks}
+	\begin{block}{Flow formula\footcite{Harks_2019}}
+		Define $N(t) = \{i \in N | x_i(t) > 0\}$.
+		For affine latency functions $\ell_i(x) = a_i x + b_i$, $a_i > 0, b_i \ge 0$ and by solving $\ell_i(x_i) + t_i = K$ with $\sum_{i \in N} x_i = 1$, calculate $K$ and get for all $i \in N$
+		\begin{equation*}
+			x_i(t) = \frac{1 + \sum_{j \in N(t)}\frac{b_j + t_j - b_i - t_i}{a_j}}{\sum_{j \in N(t)}\frac{a_i}{a_j}}
+		\end{equation*}
+	\end{block}
+\end{frame}
 
-\begin{frame}{Heterogeneous players}
+\begin{frame}{Preliminaries | Homogeneous networks}
+	\begin{block}{Full Wardrop support assumption}
+		$x_i(0) > 0$ for all $i \in N$
+	\end{block}
+	\begin{block}{Pricing N.E. properties\footcite{Harks_2019}}
+		$\Pi_i(t)$ is either linear or quadratic, therefore $|B_i(t_{-i})| = 1$.
+		If the \textit{full Wardrop support assumption} is satisfied then $t^*$ is unique, $x_i(t^*) > 0$ and $t_i^* > 0$ for all $i \in N$ and
+		\begin{equation*}
+			t_i^* = \left(a_i + \frac{1}{\sum_{j \ne i} \frac{1}{a_j}}\right) \cdot x_i(t^*)
+		\end{equation*}
+	\end{block}
+\end{frame}
+
+%\begin{frame}{Preliminaries | Homogeneous players | Example}
+%	\begin{example}
+%	\end{example}
+%	$x(0) = \left(\frac23, \frac13\right), \; x(3, 2) = \left(\frac14, \frac34\right)$
+%\end{frame}
+
+\subsection{Heterogeneous networks}
+
+\begin{frame}{Preliminaries | Heterogeneous players}
 	\begin{lemma}
 		For $\Gm = (N, \ell, \alpha)$ with tolls $t$ and flow $x(t)$ the Nash equilibrium for $t$, it holds for all $i, j \in N$ with $x_i(t), x_j(t) > 0$ that
 		\begin{enumerate}[(i)]
@@ -273,7 +348,7 @@
 	\end{proof}
 \end{frame}
 
-\begin{frame}{Heterogeneous players}
+\begin{frame}{Preliminaries | Heterogeneous players}
 	Latencies are viewed the same for all players.
 
 	Toll order is the same for all players.
@@ -287,13 +362,20 @@
 	Ordering is unique only when the toll (and therefore also latency) inequalities are strict.
 \end{frame}
 
+%\begin{frame}{Preliminaries | Heterogeneous players}
+%	\begin{example}
+%		Let $([2], \ell, \alpha)$ with $\ell_1(x) = 2x, \ell_2(x) = x + 1$ and $\alpha(p) = p + 1$.
+%	\end{example}
+%	$x(0) = \left(\frac23, \frac13\right), \; x(3, 2) = \left(\frac14, \frac34\right)$
+%\end{frame}
+
 
 \section{Sensitivity split}
 
 \begin{frame}{Sensitivity split}
 	In a heterogeneous game, in practice, each flow user plays a different game.
 
-	In example ?? the users are organised around the one for which $c_1(p) = c_2(p)$.
+	In example the users are organised around the one for which $c_1(p) = c_2(p)$.
 
 	We need the notion of the money-sensitivity value for which two link costs are equal.
 \end{frame}
@@ -329,19 +411,16 @@
 \begin{frame}{Sensitivity split}
 	\begin{definition}
 		\label{definition:alpha_flow_sets}
-		Let $(N, \ell, \alpha)$ a heterogeneous parallel game, tolls $t$ and $x(t)$ the Nash equilibrium for $t$.
-		We define as $A_i(t)$ the set of all possible $\alpha(p)$ values of players $p$ using link $i$ in the Nash equilibrium for $t$.
-		We define a set function $A_i: \R_+^{|N|} \rightarrow \mathcal{P}(\R_+)$, where $\mathcal{P}(\R_+)$ is the powerset of $\R_+$, such that
+		Let $(N, \ell, \alpha)$.
+		We define as $A_i(t), A_i: \R_+^n \rightarrow \mathcal{P}(\R_+)$ the set of all possible $\alpha(p)$ values of players $p$ using link $i$ in $x(t)$.
 		\[A_i(t) = \{\alpha(p) | f(p) = j \wedge t_j = t_i\}\]
 	\end{definition}
-
-	Notice that with this definition it follows that $A_i(0)$ is the entire domain of $\alpha$ for any $i \in N$.
 \end{frame}
 
 \begin{frame}{Sensitivity split}
 	\begin{lemma}
-		Let $(N, \ell, \alpha)$ a heterogeneous parallel game and tolls $t$ where $t_i \ne t_j$ and $x_i(t), x_j(t) > 0$ for some links $i, j \in N$.
-		Then the following hold:
+		Let $(N, \ell, \alpha)$ and tolls $t$ where $t_i \ne t_j$ and $x_i(t), x_j(t) > 0$ for some links $i, j \in N$.
+		Then:
 		\begin{enumerate}[(i)]
 			\item $\as^{(i, j)}(t) > 0$
 			\item $\as^{(i, j)}(t) \in [\alpha(0), \alpha(1)]$
@@ -389,28 +468,6 @@
 			\end{flalign*}
 		\end{enumerate}
 	\end{lemma}
-\end{frame}
-
-\begin{frame}{Sensitivity split | Limits}
-	\begin{proof}
-		$ $
-		\begin{enumerate}[(i)]
-			\item For $L = \max\{\ell_i(1) - \ell_j(0), \ell_j(1) - \ell_i(0)\}$ we find
-			\begin{flalign*}
-				\lim_{|t_i - t_j| \rightarrow +\infty}|\as^{(i, j)}(t)| &= \lim_{|t_i - t_j| \rightarrow +\infty}\frac{|\ell_i(x_i(t)) - \ell_j(x_j(t))|}{|t_i - t_j|}\\
-				&\le \lim_{|t_i - t_j| \rightarrow +\infty}\frac{L}{|t_i - t_j|} = 0
-			\end{flalign*}
-		\end{enumerate}
-	\end{proof}
-\end{frame}
-
-\begin{frame}{Sensitivity split | Limits}
-	\begin{proof}
-		$ $
-		\begin{enumerate}[(ii)]
-			\item ...
-		\end{enumerate}
-	\end{proof}
 \end{frame}
 
 \begin{frame}{Sensitivity split}
@@ -461,12 +518,6 @@
 \end{frame}
 
 \begin{frame}{Sensitivity split | Upper bound}
-	\begin{proof}
-		...
-	\end{proof}
-\end{frame}
-
-\begin{frame}{Sensitivity split | Upper bound}
 	For the Example we have
 	\[\max\{x_1(0), x_2(0)\} = \max\{2/3, 1/3\} = 2/3\]
 	so if we used a distribution function such as
@@ -483,45 +534,88 @@
 
 \section{Pseudo-heterogeneous Pricing Games}
 
-\begin{frame}{Heterogeneous Pricing Games}
-	Zero money sensitivity creates issues.
+\begin{frame}{Pseudo-heterogeneous Pricing Games}
+	Consider distribution functions $\alpha(p) = c$ for some $c > 0$.
+
+	Players again all view link costs the same.
+	\[c_i(p) = \ell_i(x_i) + c t_i\]
+	Behaviour should be homogeneous with tolls "mapped" to $t \rightarrow t/c$.
+
+	Also note that 
+	\[c_i(p) = c \left(\frac1c \ell_i(x_i) + t_i\right)\]
+	where $\frac1c \ell_i(x_i) = \frac{a_i}{c} x_i + \frac{b_i}{c}$ affine.
+\end{frame}
+
+\begin{frame}{Pseudo-heterogeneous Pricing Games}
 	\begin{lemma}
-		Let $(N, \ell, \alpha)$ where $\exists \epsilon > 0: \alpha(p) = 0 \; \forall p < \epsilon$.
-		Let $i \in N$ be a link for which $\ell_i(0) = \min_{j \in N} \ell_i(0)$.
-		Then $B_i(t_{-i})$ is unbounded for all $t_{-i} \in \R_+^{|N| - 1}$.
+		Let $\Gm_1 = (N, \ell^{(1)}, \alpha)$ where $\forall p \in [0, 1] \; \alpha(p) = c$ for some $c \in \R_+$ and $\Gm_2 = (N, \ell^{(2)}, 1)$ where $\ell^{(2)} = \frac{\ell^{(1)}}{c}$ for the same $c$.
+		Then the two games are equivalent.
 	\end{lemma}
 	\begin{proof}
-		$\ell_i(0) = \min_{j \in N} \ell_i(0)$, ensures link $i$ will always have flow
-
-		$i$ can select $t_i > \max t_{-i}$ to make link $i$ the lowest-latency link, populated exclusively by players with $\alpha(p) = 0$
-
-		We fix $t_i^\prime$ and we see that
+		For any $t \in \R_+^n$ and any flow $x_i$
 		\[
-			\lim_{t_i \rightarrow +\infty} \Pi_i(t_i, t_{-i}) \ge \lim_{t_i \rightarrow +\infty} x_i^\prime(t_i^\prime, t_{-i})t_i = +\infty
+			\sum_{i \in N} \left(\ell_i^{(1)}(x_i^{(2)}(t)) + c t_i\right) \left(x_i^{(2)}(t) - x_i\right) \leq 0
 		\]
-		making in turn $B_i(t_{-i}) = +\infty$.
+		$x^{(2)}(t)$ is the unique N.E. for $t$ in $\Gm_1$ so $x^{(1)}(t) = x^{(2)}(t)$.
+	\end{proof}
+	Costs are proportional.
+\end{frame}
+
+\begin{frame}{Pseudo-heterogeneous Pricing Games}
+	We will call such games \textit{pseudo-heterogeneous}.
+
+	Uniform increase in money-sensitivity is equivalent to uniform decrease in latencies (lost for general $\alpha$ functions).
+
+	\begin{lemma}
+		Let $\Gm_1 = \left(N, \frac{\ell}{c_1}, 1\right), \Gm_2 = \left(N, \frac{\ell}{c_2}, 1\right)$.
+		Then $x^{(1)}(c_2 t) = x^{(2)}(c_1 t)$.
+	\end{lemma}
+	\begin{proof}
+		\[
+			\begin{aligned}[t]
+				&\sum_{i \in N} \left(\frac{1}{c_1}\ell_i(x_i^{(1)}(c_2 t)) + c_2 t_i\right) \left(x_i^{(1)}(c_2 t) - x_i\right) \le 0\\
+				\Leftrightarrow &\sum_{i \in N} \left(\frac{1}{c_2}\ell_i(x_i^{(1)}(c_2 t)) + c_1 t_i\right) \left(x_i^{(1)}(c_2 t) - x_i\right) \le 0
+			\end{aligned}
+		\]
 	\end{proof}
 \end{frame}
 
 \begin{frame}{Pseudo-heterogeneous Pricing Games}
-	Consider cases where $\alpha(p) = c$ for some $c \in \R_+$.
-	\[
-		\sum_{i \in N} (\ell(x_i(t)) + c t_i) \cdot (x_i(t) - x_i) \leq 0
-	\]
+\begin{lemma}
+	Let $\Gm_1 = (N, \ell, c_1)$ and $\Gm_2 = (N, \ell, c_2)$, $c_1, c_2 > 0$.
+	Then
+	\begin{enumerate}[$(i)$]
+		\item $x^{(1)}(c_2 t) = x^{(2)}(c_1 t)$
+		\item $\frac{\Pi_i^{(1)}(c_2 t)}{\Pi_i^{(2)}(c_1 t)} = \frac{c_2}{c_1}$
+		\item $\frac{B_i^{(1)}(c_2t_{-i})}{B_i^{(2)}(c_1 t_{-i})} = \frac{c_2}{c_1}$
+	\end{enumerate}
+\end{lemma}
+\begin{proof}
+	\begin{enumerate}[$(i)$]
+		\item Consider $\Gm_3 = (N, \ell/c_1, 1), \Gm_4 = (N, \ell/c_2, 1)$.\\
+		Then $x^{(1)}(c_2 t) = x^{(3)}(c_2 t) = x^{(4)}(c_1 t) = x^{(2)}(c_1 t)$.
+		\item and $(iii)$ follow from definitions.
+		\vspace{-20pt}
+	\end{enumerate}
+\end{proof}
+\end{frame}
 
+\begin{frame}{Pseudo-heterogeneous Pricing Games}
 	\begin{lemma}
-		Let $\Gm_1 = (N, \ell^{(1)}, c)$ a heterogeneous pricing game with distribution function $\alpha(p) = c$ for some $c > 0$ and $\Gm_2 = (N, \ell^{(2)}, 1)$ a homogeneous pricing game with latencies $\ell^{(2)} = \frac{\ell^{(1)}}{c}$ for the same $c$.
-		Then the two games are equivalent.
+		Let $\Gm_1 = (N, \ell, c_1)$ and $\Gm_2 = (N, \ell, c_2)$, $c_1, c_2 > 0$.
+		Then
+		\begin{enumerate}[$(i)$]
+			\item $x^{(1)}(t) = x^{(2)}\left(\frac{c_1}{c_2} t\right)$
+			\item $\Pi_i^{(1)}(t) = \frac{c_2}{c_1} \Pi_i^{(2)}\left(\frac{c_1}{c_2} t\right)$
+			\item $B_i^{(1)}(t_{-i}) = \frac{c_2}{c_1} B_i^{(2)}\left(\frac{c_1}{c_2} t_{-i}\right)$
+		\end{enumerate}
 	\end{lemma}
-	We will call such games \textit{pseudo-heterogeneous}.
-
-	Latency-sensitivity relation is lost for general $\alpha$
 \end{frame}
 
 \begin{frame}{Pseudo-heterogeneous Pricing Games}
 	\begin{figure}
 		\centering
-		\begin{tikzpicture}[x=3.4cm, y=3.4cm, every node/.style={font=\small}]
+		\begin{tikzpicture}[x=3cm, y=3cm, every node/.style={font=\small}]
 			% Axes
 			\draw[->] (0,0) -- (-1.1,0);
 			\draw[->] (0,0) -- (2.1,0) node[right] {$t_1 - t_2$};
@@ -536,12 +630,23 @@
 			\draw (2/3,0) -- (2/3,-0.05) node[below] {$\frac23$};
 			\draw (2,0) -- (2,-0.05) node[below] {$2$};
 			\draw (0,1) -- (0.05,1) node[right] {$1$};
-			\draw (0,2/3) -- (-0.05,2/3) node[left] {$\frac23$};
+			\draw (0,2/3) -- (-0.05,2/3) node[below=4,left] {$\frac23$};
 
 			% Flow function graphs
-			\draw[thick, blue!33] (-1,1) -- (2,0) node[above, black] {$\alpha = 1$};
-			\draw[thick, blue!66] (-1/3,1) -- (2/3,0) node[above right, black] {$\alpha = 3$};
+			\draw[thick, blue!33] (-1,1) -- (2,0) node[above=20,left=5,black] {$\alpha = 1$};
+			\draw[thick, blue!66] (-1/3,1) -- (2/3,0) node[above right,black] {$\alpha = 3$};
 			\draw[thick, blue!100] (-1/4,1) -- (2/4,0) node[black] at (0.2,0.17) {$\alpha = 4$};
+
+			% Example graph in corner
+			\begin{scope}[shift={(1.5,1)},scale=0.2]
+				% Nodes
+				\node[circle, draw, fill=blue!20, minimum size=0.4cm] (s) at (0,0) {$s$};
+				\node[circle, draw, fill=blue!20, minimum size=0.4cm] (t) at (4,0) {$t$};
+
+				% Links
+				\draw[->, thick] (s) to[bend left=35] node[midway, above] {$2x$} (t);
+				\draw[->, thick] (s) to[bend right=35] node[midway, below] {$x + 1$} (t);
+			\end{scope}
 		\end{tikzpicture}
 		\caption{Flow function for link $1$ of Example for $\alpha(p) = 1, 3, 4$.}
 	\end{figure}
@@ -549,43 +654,55 @@
 
 \begin{frame}{Pseudo-heterogeneous Pricing Games}
 	\begin{lemma}
-		Let $\Gm_1 = (N, \ell, c_1)$ and $\Gm_2 = (N, \ell, c_2)$ two heterogeneous pricing games with $\alpha^{(1)}(p) = c_1 > 0$, $\alpha^{(2)}(p) = c_2 > 0$, then
-		\begin{enumerate}[$(i)$]
-			%\item $x^{(1)}(0) = x^{(2)}(0)$
-			\item $x^{(1)}(c_2 t) = x^{(2)}(c_1 t)$
-			\item $\frac{\Pi_i^{(1)}(c_2 t)}{\Pi_i^{(2)}(c_1 t)} = \frac{c_2}{c_1}$
-			\item $\frac{B_i^{(1)}(c_2t_{-i})}{B_i^{(2)}(c_1 t_{-i})} = \frac{c_2}{c_1}$
-		\end{enumerate}
-	\end{lemma}
-\end{frame}
-
-\begin{frame}{Pseudo-heterogeneous Pricing Games}
-	\begin{lemma}
-		Let $\Gm_1 = (N, \ell, c_1)$ and $\Gm_2 = (N, \ell, c_2)$ two heterogeneous pricing games with $\alpha^{(1)}(p) = c_1 > 0$, $\alpha^{(2)}(p) = c_2 > 0$.\\
-		Let $t^{*(1)}, t^{*(2)}$ the Nash Equilibria for the pricing games in $\Gm_1$ and $\Gm_2$.
+		Let $\Gm_1 = (N, \ell, c_1)$ and $\Gm_2 = (N, \ell, c_2)$, $c_1, c_2 > 0$.
 		Then
 		\begin{enumerate}[$(i)$]
-			\item $\frac{t^{*(1)}}{t^{*(2)}} = \frac{c_2}{c_1}$
+			\item $t^{*(1)} = \frac{c_2}{c_1} t^{*(2)}$
 			\item $x^{(1)}(t^{*(1)}) = x^{(2)}(t^{*(2)})$
 		\end{enumerate}
 	\end{lemma}
-	Nash Equilibrium always at the same flow.
+	\begin{proof}
+		\begin{enumerate}[$(i)$]
+			% https://tex.stackexchange.com/a/98399
+			\item
+			$\begin{aligned}[t]
+				t_i^{*(1)} &= B_i^{(1)}(t_{-i}^{*(1)}) \Leftrightarrow \cdots \Leftrightarrow \frac{c_1}{c_2} t_i^{*(1)} = B_i^{(2)}\left(\frac{c_1}{c_2} t_{-i}^{*(1)}\right)
+			\end{aligned}$
+			\item follows from previous lemma.
+			\vspace{-20pt}
+		\end{enumerate}
+	\end{proof}
+	Pricing Nash Equilibrium is always at the same flow.
 \end{frame}
 
 \section{Step distribution functions}
 
+\begin{frame}{Heterogeneous Pricing Games}
+	Zero money-sensitivity creates issues as it can be exploited.
+	\begin{lemma}
+		Let $(N, \ell, \alpha)$ where $\alpha(p) = 0$ for $p \in [0, \epsilon]$ for some $\epsilon > 0$.\\
+		Then $\exists i \in N$ where $B_i(t_{-i})$ is unbounded for all $t_{-i} \in \R_+^{n - 1}$.
+	\end{lemma}
+	\begin{proof}
+		Links with $\ell_i(0) = \min_{j \in N} \ell_i(0)$ can select $t_i > \max t_{-i}$ and become the lowest-latency link, with players $\alpha(p) = 0$.
+
+		Those players will never leave as $t_i \rightarrow +\infty$, making $x_i$ fixed and therefore $\lim_{t_i \rightarrow +\infty} \Pi_i(t_i, t_{-i}) = +\infty$.
+	\end{proof}
+\end{frame}
+
 \begin{frame}{Step distribution functions}
 	We will limit our model to instances with $2$ links.
 
-	In $2$-link games, $\as(t)^{(1, 2)} = \as(t)$.
-
-	There always exists an $\alpha$ value for which the two link costs are equal.
+	In $2$-link games:
+	\begin{itemize}
+		\item $\as^{(1, 2)}(t) = \as(t)$
+		\item There always exists an $\alpha$ for which all link costs are equal.
+	\end{itemize}
 \end{frame}
 
 \begin{frame}{Step distribution functions}
 	\begin{lemma}
-		Let $\Gm_1 = ([2], \ell, \alpha^{(1)})$ a heterogeneous game, $t \ne 0$ a given set of tolls and $x^{(1)}(t)$ the Nash equilibrium for $t$.
-		Now let $\Gm_2 = ([2], \ell, \as^{(1)}(t))$ a pseudo-heterogeneous game with latency functions the same as $\Gm_1$ and fixed distribution function $\alpha^{(2)}(p) = \as^{(1)}(t)$.
+		Let $\Gm_1 = ([2], \ell, \alpha^{(1)})$, fixed tolls $t \ne 0$ and $\Gm_2 = ([2], \ell, \alpha^{(2)})$ with fixed $\alpha^{(2)}(p) = \as^{(1)}(t)$.
 		Then
 		\begin{enumerate}[$(i)$]
 			\item $x^{(1)}(t) = x^{(2)}(t)$
@@ -596,21 +713,21 @@
 
 \begin{frame}{Step distribution functions}
 	\begin{example}
-		Let $([2], \ell, \alpha)$ a heterogeneous pricing game with latency functions $\ell_1(x) = 2x, \ell_2(x) = x + 1$ and distribution function $\alpha$ such that
-		\begin{align*}
+		Let $([2], \ell, \alpha)$ with
+		$
 			\alpha(p) =
 			\begin{cases}
 				1 & p \le \tfrac15 \\
 				3 & p \in \left(\tfrac15, \tfrac12\right) \\
 				4 & p \ge \tfrac12
-			\end{cases}&
-		\end{align*}
+			\end{cases}
+		$
 	\end{example}
 
 	\begin{center}
 		\begin{multicols}{2}
 			% Left Column: Network Graph
-			\begin{tikzpicture}[scale=1.4, every node/.style={font=\small}]
+			\begin{tikzpicture}[scale=1, baseline=50pt, every node/.style={font=\small}]
 				% Nodes
 				\node[circle, draw, fill=blue!20, minimum size=0.8cm] (s) at (0,0) {$s$};
 				\node[circle, draw, fill=blue!20, minimum size=0.8cm] (t) at (4,0) {$t$};
@@ -618,9 +735,6 @@
 				% Links
 				\draw[->, thick] (s) to[bend left=35] node[midway, above] {$2x$} (t);
 				\draw[->, thick] (s) to[bend right=35] node[midway, below] {$x + 1$} (t);
-
-				% Description
-				\node[align=center] at (2, -2) {Network of Example};
 			\end{tikzpicture}
 
 			% Right Column: Distribution function Graph
@@ -644,17 +758,14 @@
 				\draw[thick] (0.5,4) -- (1,4);
 
 				% Closed / Open dots
-				\fill[white] (0.2,1) ellipse (0.014 and 0.06);
+				\fill[black] (0.2,1) ellipse (0.014 and 0.06);
 				\draw[black] (0.2,1) ellipse (0.014 and 0.06);
-				\fill[black] (0.2,3) ellipse (0.014 and 0.06);
+				\fill[white] (0.2,3) ellipse (0.014 and 0.06);
 				\draw[black] (0.2,3) ellipse (0.014 and 0.06);
-				\fill[black] (0.5,3) ellipse (0.014 and 0.06);
+				\fill[white] (0.5,3) ellipse (0.014 and 0.06);
 				\draw[black] (0.5,3) ellipse (0.014 and 0.06);
-				\fill[white] (0.5,4) ellipse (0.014 and 0.06);
+				\fill[black] (0.5,4) ellipse (0.014 and 0.06);
 				\draw[black] (0.5,4) ellipse (0.014 and 0.06);
-
-				% Description
-				\node[align=center] at (0.7, -1.7) {Distribution function of Example};
 			\end{tikzpicture}
 		\end{multicols}
 	\end{center}
@@ -663,53 +774,7 @@
 \begin{frame}{Step distribution functions}
 	\begin{figure}
 		\centering
-		\begin{tikzpicture}[x=3.4cm, y=1cm, every node/.style={font=\small}]
-			% Axes
-			\draw[->] (0,0) -- (-1.1,0);
-			\draw[->] (0,0) -- (2.1,0) node[right] {$t_1 - t_2$};
-			\draw[->] (0,0) -- (0,4.4) node[above] {$\as(t)$};
-
-			% Tick marks
-			\draw (-1,0) -- (-1,-0.05) node[below] {$-1$};
-			\draw (-2/5,0) -- (-2/5,-0.05) node[below] {$-\frac25$};
-			\draw (-2/15,0) -- (-2/15,-0.05) node[below] {$-\frac{2}{15}$};
-			\draw (0,0) -- (0,-0.05) node[below] {$t_2$};
-			\draw (1/8,0) -- (1/8,-0.05) node[below] {$\frac18$};
-			\draw (1/6,0) -- (1/6,-0.05) node[below] {$\frac16$};
-			\draw (7/15,0) -- (7/15,-0.05) node[below] {$\frac{7}{15}$};
-			\draw (7/5,0) -- (7/5,-0.05) node[below] {$\frac75$};
-			\draw (2,0) -- (2,-0.05) node[below] {$2$};
-			\draw (0,1) -- (-0.05,1) node[left] {$1$};
-			\draw (0,3) -- (0.05,3) node[right] {$3$};
-			\draw (0,4) -- (-0.05,4) node[left] {$4$};
-
-			% Function graph
-			% Left side
-			\draw[thick] (-1,1) -- (-2/5,1);
-			\draw[thick] (-2/5,1) -- (-2/15,3);
-			\draw[thick] (-2/15,3) -- (0,3);
-			% Right side
-			\draw[thick] (0,4) -- (1/8,4);
-			\draw[thick] (1/8,4) -- (1/6,3);
-			\draw[thick] (1/6,3) -- (7/15,3);
-			\draw[thick] (7/15,3) -- (7/5,1);
-			\draw[thick] (7/5,1) -- (2,1);
-
-			% Dots
-			\fill[white] (0,3) ellipse (0.02 and 0.066);
-			\draw[black] (0,3) ellipse (0.02 and 0.066);
-			\fill[white] (0,4) ellipse (0.02 and 0.066);
-			\draw[black] (0,4) ellipse (0.02 and 0.066);
-		\end{tikzpicture}
-		\caption{Split function of Example}
-		\label{figure:alpha_step:split}
-	\end{figure}
-\end{frame}
-
-\begin{frame}{Step distribution functions}
-	\begin{figure}
-		\centering
-		\begin{tikzpicture}[x=3.4cm, y=3.4cm, every node/.style={font=\small}]
+		\begin{tikzpicture}[x=3cm, y=3cm, every node/.style={font=\small}]
 			% Axes
 			\draw[->] (0,0) -- (-1.1,0);
 			\draw[->] (0,0) -- (2.1,0) node[right] {$t_1 - t_2$};
@@ -754,15 +819,65 @@
 \end{frame}
 
 \begin{frame}{Step distribution functions}
+	\begin{figure}
+		\centering
+		\begin{tikzpicture}[x=3.4cm, y=1cm, scale=0.8, every node/.style={font=\small}]
+			% Axes
+			\draw[->] (0,0) -- (-1.1,0);
+			\draw[->] (0,0) -- (2.1,0) node[right] {$t_1 - t_2$};
+			\draw[->] (0,0) -- (0,4.4) node[above] {$\as(t)$};
+
+			% Tick marks
+			\draw (-1,0) -- (-1,-0.05) node[below] {$-1$};
+			\draw (-2/5,0) -- (-2/5,-0.05) node[below] {$-\frac25$};
+			\draw (-2/15,0) -- (-2/15,-0.05) node[below] {$-\frac{2}{15}$};
+			\draw (0,0) -- (0,-0.05) node[below] {$t_2$};
+			\draw (1/8,0) -- (1/8,-0.05) node[below] {$\frac18$};
+			\draw (1/6,0) -- (1/6,-0.05) node[below] {$\frac16$};
+			\draw (7/15,0) -- (7/15,-0.05) node[below] {$\frac{7}{15}$};
+			\draw (7/5,0) -- (7/5,-0.05) node[below] {$\frac75$};
+			\draw (2,0) -- (2,-0.05) node[below] {$2$};
+			\draw (0,1) -- (-0.05,1) node[left] {$1$};
+			\draw (0,3) -- (0.05,3) node[right] {$3$};
+			\draw (0,4) -- (-0.05,4) node[left] {$4$};
+
+			% Function graph
+			% Left side
+			\draw[thick] (-1,1) -- (-2/5,1);
+			\draw[thick] (-2/5,1) -- (-2/15,3);
+			\draw[thick] (-2/15,3) -- (0,3);
+			% Right side
+			\draw[thick] (0,4) -- (1/8,4);
+			\draw[thick] (1/8,4) -- (1/6,3);
+			\draw[thick] (1/6,3) -- (7/15,3);
+			\draw[thick] (7/15,3) -- (7/5,1);
+			\draw[thick] (7/5,1) -- (2,1);
+
+			% Dots
+			\fill[white] (0,3) ellipse (0.02 and 0.066);
+			\draw[black] (0,3) ellipse (0.02 and 0.066);
+			\fill[white] (0,4) ellipse (0.02 and 0.066);
+			\draw[black] (0,4) ellipse (0.02 and 0.066);
+		\end{tikzpicture}
+		\caption{Split function of Example}
+		\label{figure:alpha_step:split}
+	\end{figure}
+\end{frame}
+
+\begin{frame}<presentation:0>[noframenumbering]{Step distribution functions}
 	Notice that when $x_1$ is fixed then $\as$ isn't and vice-versa.\\
 	If the flow is moving, then it does so among players with the same sensitivity type, which is one of the finitely many values $\alpha$ can take.
 	If all players of each sensitivity type are using a single link, then $\as$ can take any value between the lowest and highest $\alpha$ value in the upper and lower split respectively.
 \end{frame}
 
 \begin{frame}{Step distribution functions}
+	Let $\Gm_1 = ([2], \ell, \alpha)$ where $\alpha = (\alpha_k)_{k \in [m]}$.
+	\begin{lemma}
+		Let $t \ne 0$ where all players with $\alpha(p) = \alpha_k$ are using the same link for all $k \in [m]$.
+		Then $t$ is not a Nash equilibrium for the pricing game.
+	\end{lemma}
 	\begin{theorem}
-		Let $\Gm_1 = ([2], \ell, \alpha)$ a heterogeneous pricing game where $\alpha$ is a step function with values $(\alpha_k)_{k \in [m]}$.
-		If $\Gm_1$ has a Nash equilibrium for the pricing game at toll $t^*$, let $\Gm_2 = ([2], \ell, \as(t^*))$ a pseudo-heterogeneous game with latency functions the same as the ones in $\Gm_1$ and fixed distribution function $\alpha^{(2)}(p) = \as(t^*)$.
+		If $\Gm_1$ has $t^*$, let $\Gm_2 = ([2], \ell, \as(t^*))$ with fixed $\alpha^{(2)}(p) = \as(t^*)$.
 		Then $t^*$ is a Nash equilibrium for the pricing game in $\Gm_2$.
 	\end{theorem}
 \end{frame}
@@ -777,14 +892,14 @@
 				4 & p > \tfrac14
 			\end{cases}&
 		\end{align*}
-		Then $\Gm$ has a Nash Equilibrium for the pricing game at $t^* = \left(\tfrac{5}{12}, \tfrac{4}{12}\right)$.
+		Then $\Gm$ has a N.E. for the pricing game at $t^* = \left(\tfrac{5}{12}, \tfrac{4}{12}\right)$.
 	\end{example}
 \end{frame}
 
 \begin{frame}{Step distribution functions}
 	\begin{figure}
 		\centering
-		\begin{tikzpicture}[x=8cm, y=10cm, every node/.style={font=\small}]
+		\begin{tikzpicture}[x=8cm, y=10cm, scale=0.7, every node/.style={font=\small}]
 			% Axes
 			\draw[->] (0,0) -- (-0.4,0);
 			\draw[->] (0,0) -- (0.7,0) node[right] {$t_1 - t_2$};
@@ -822,8 +937,7 @@
 			% Max point
 			\fill[red] (1/12, 25/108) ellipse (0.00625 and 0.005) node[below,black] {$\frac{25}{108}$};
 		\end{tikzpicture}
-		\\[15pt]
-		\begin{tikzpicture}[x=10cm, y=15cm, every node/.style={font=\small}]
+		\begin{tikzpicture}[x=10cm, y=15cm, scale=0.7, every node/.style={font=\small}]
 			% Axes
 			\draw[->] (0,0) -- (-0.55,0);
 			\draw[->] (0,0) -- (0.4,0) node[right] {$t_2 - t_1$};
@@ -874,14 +988,14 @@
 				4 & p > \tfrac14
 			\end{cases}&
 		\end{align*}
-		Then $\Gm$ has no Nash Equilibrium for the pricing game.
+		Then $\Gm$ has no N.E. for the pricing game.
 	\end{example}
 \end{frame}
 
 \begin{frame}{Step distribution functions}
 	\begin{figure}
 		\centering
-		\begin{tikzpicture}[x=6cm, y=10cm, every node/.style={font=\small}]
+		\begin{tikzpicture}[x=6cm, y=10cm, scale=0.7, every node/.style={font=\small}]
 			% Axes
 			\draw[->] (0,0) -- (-0.4,0);
 			\draw[->] (0,0) -- (1.1,0) node[right] {$t_1 - t_2$};
@@ -919,8 +1033,7 @@
 			% Max point
 			\fill[red] (1/12, 25/108) ellipse (0.008333 and 0.005) node[below,black] {$\frac{25}{108}$};
 		\end{tikzpicture}
-		\\[15pt]
-		\begin{tikzpicture}[x=8cm, y=15cm, every node/.style={font=\small}]
+		\begin{tikzpicture}[x=8cm, y=15cm, scale=0.7, every node/.style={font=\small}]
 			% Axes
 			\draw[->] (0,0) -- (-0.55,0);
 			\draw[->] (0,0) -- (0.6,0) node[right] {$t_2 - t_1$};
@@ -960,44 +1073,39 @@
 	\end{figure}
 \end{frame}
 
-\begin{frame}{Step distribution functions}
-	\begin{lemma}
-		Let $\Gm_1 = ([2], \ell, \alpha)$ a heterogeneous pricing game where $\alpha$ is a step function with values $(\alpha_k)_{k \in [m]}, \; m \in N$.
-		Also let $t \ne 0$ a set of tolls for which it holds for all $k \in [m]$ that all players $p$ with $\alpha(p) = \alpha_k$ are using the same link.
-		Then $t$ is not a Nash equilibrium for the pricing game.
-	\end{lemma}
-\end{frame}
+\subsection*{Pricing N.E. Algorithm}
 
-\begin{frame}{Step distribution functions}
-	\begin{theorem}
-		Let $\Gm_1 = ([2], \ell, \alpha)$ a heterogeneous pricing game where $\alpha$ is a step function with values $(\alpha_k)_{k \in [m]}$.
-		If $\Gm_1$ has a Nash equilibrium for the pricing game at toll $t^*$, let $\Gm_2 = ([2], \ell, \as(t^*))$ a pseudo-heterogeneous game with latency functions the same as the ones in $\Gm_1$ and fixed distribution function $\alpha^{(2)}(p) = \as(t^*)$.
-		Then $t^*$ is a Nash equilibrium for the pricing game in $\Gm_2$.
-	\end{theorem}
-\end{frame}
-
-\begin{frame}{Step distribution function}
-	Summary of Algorithm
-	For a given heterogeneous pricing game $\Gm = ([2], \ell, \alpha)$
+\begin{frame}{Step distribution functions | Pricing N.E. Algorithm}
+	\textbf{Summary:} Given $\Gm = ([2], \ell, \alpha), \alpha = (\alpha_k)_{k \in [m]}$
 	\begin{enumerate}
-		\item Consider $\Gm^\prime = ([2], \ell, 1)$ and calculate its pricing Nash equilibrium $t^{*\prime}$ and respective flow $x^\prime(t^{*\prime})$.
-		\item Calculate $\as(t^*)$ as the $\alpha$ value of the lower split flow in $x^\prime(t^{*\prime})$ (valid since $x(t^*) = x^\prime(t^{*\prime})$ from Theorem \ref{theorem:a_step_ne_equiv_fixed}, Lemma \ref{lemma:a_fixed_pricing_ne_relation})
-		\item Calculate the candidate pricing Nash Equilibrium $t^* = \tfrac{t^{*\prime}}{\as(t^*)}$ as well as the respective profits $\Pi_1(t^*), \Pi_2(t^*)$.
-		\item For each $\alpha_k$, value of $\alpha$ different than $\as(t^*)$, and for each link operator $i \in [2]$
+		\item Consider $\Gm^\prime = ([2], \ell, 1)$ and calculate $t^{*\prime}, x^\prime(t^{*\prime})$.
+		\item Calculate $\as(t^*)$ as the $\alpha$ value of the lower split flow in $x^\prime(t^{*\prime})$
+		\item Calculate the candidate $t^* = \tfrac{t^{*\prime}}{\as(t^*)}$ and $\Pi_1(t^*), \Pi_2(t^*)$.
+		\item For each $\alpha_k \ne \as(t^*)$, and for each $i \in [2]$
 		\begin{enumerate}[$4.1$]
-			\item Consider $\Gm_k = ([2], \ell, \alpha_k)$ and calculate $B_{i, k}(t_{-i}^*)$ as well as the tolls $t_{i, k}$ for which $\as(t_i, t_{-i}^*) = \alpha_k$, resulting in two toll ranges for $t_i$.
+			\item Consider $\Gm_k = ([2], \ell, \alpha_k)$ and calculate $B_{i, k}(t_{-i}^*)$ and tolls $t_{i, k}$ for which $\as(t_i, t_{-i}^*) = \alpha_k$, resulting in two toll ranges for $t_i$.
 			\item Search for $\Pi_{i, k}$, the max profit for $i$ within those $t_i$ ranges:
 			\begin{enumerate}[$4.2.1$]
-				\item If $B_{i, k}(t_{-i}^*)$ is within the $t_i$ ranges, then $\Pi_{i, k} = \Pi_i(B_{i, k}(t_{-i}^*), t_{-i}^*)$.
-				\item Otherwise, $\Pi_{i, k}$ is the highest profit value among the ($4$) tolls in the edges of the two $t_1$ ranges.
+				\item If $B_{i, k}(t_{-i}^*)$ is within the $t_i$ ranges, $\Pi_{i, k} = \Pi_i(B_{i, k}(t_{-i}^*), t_{-i}^*)$.
+				\item Otherwise, $\Pi_{i, k}$ is max profit among the ranges' edge tolls ($4$).
 			\end{enumerate}
 			\item If $\Pi_i < \Pi_{i, k}$, then $\Gm$ has no pricing Nash Equilibrium.
 		\end{enumerate}
-		\item If all of the above checks fail, then $t^*$ is the Nash Equilibrium for the pricing game in $\Gm$, so return it.
+		\item If all of the above checks fail, return $t^*$.
 	\end{enumerate}
+	\textbf{Complexity:} $\mathcal{O}(m)$
 \end{frame}
 
 \section{Future work}
+
+\begin{frame}{Conclusion}
+	In our work
+	\begin{itemize}
+		\item Investigated heterogeneity by defining and analysing $\as$
+		\item Developed a connection between different fixed distribution functions
+		\item Developed an algorithm for $2$-link step distribution functions
+	\end{itemize}
+\end{frame}
 
 \begin{frame}{Future work}
 	\begin{itemize}
