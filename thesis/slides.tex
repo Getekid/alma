@@ -1,4 +1,5 @@
 \documentclass{beamer}
+%\documentclass[handout]{beamer}
 \usepackage{tikz}
 \usepackage{multicol}
 \usepackage[style=authoryear,backend=bibtex]{biblatex}
@@ -70,23 +71,35 @@
 
 \begin{frame}{\insertsection}
 	Selfish routing can model and solve a variety of real-world problems in economics, transportation and more.
+	\pause
 	\\[20pt]
 	\begin{tikzpicture}[scale=0.9, every node/.style={font=\small,align=center}]
-		\draw (0,-0.15) node[below] {Pigou} -- (0,0.15) node[above] {$1920$};
-		\draw (0,0) -- (6,0);
-		\draw (6,-0.15) node[below] {Beckman\\et al.} -- (6,0.15) node[above] {$1956$};
-		\draw (6,0) -- (9,0);
-		\draw (9,-0.15) node[below] {Rosenthal} -- (9,0.15) node[above] {$1973$};
-		\draw (9,0) -- (10,0);
-
-		\draw (0,-2.65) node[below] {Cole\\et al.} -- (0,-2.35) node[above] {$2003$};
-		\draw (0,-2.5) -- (2,-2.5);
-		\draw (2,-2.65) node[below] {Acemoglu\\\& Ozdaglar} -- (2,-2.35) node[above] {$2007$};
-		\draw (2,-2.5) -- (7.5,-2.5);
-		\draw (7.5,-2.65) node[below] {Correa\\et al.} -- (7.5,-2.35) node[above] {$2018$};
-		\draw (7.5,-2.5) -- (9,-2.5);
-		\draw (9,-2.65) node[below] {Harks\\et al.} -- (9,-2.35) node[above] {$2019$};
-		\draw (9,-2.5) -- (10,-2.5);
+		\onslide<+->{
+			\draw (0,-0.15) node[below] {Pigou} -- (0,0.15) node[above] {$1920$};
+		}
+		\onslide<+->{
+			\draw (0,0) -- (6,0);
+			\draw (6,-0.15) node[below] {Beckman\\et al.} -- (6,0.15) node[above] {$1956$};
+		}
+		\onslide<+->{
+			\draw (6,0) -- (9,0);
+			\draw (9,-0.15) node[below] {Rosenthal} -- (9,0.15) node[above] {$1973$};
+			\draw[->] (9,0) -- (10,0);
+		}
+		\onslide<+->{
+			\draw (0,-2.65) node[below] {Cole\\et al.} -- (0,-2.35) node[above] {$2003$};
+		}
+		\onslide<+->{
+			\draw (0,-2.5) -- (2,-2.5);
+			\draw (2,-2.65) node[below] {Acemoglu\\\& Ozdaglar} -- (2,-2.35) node[above] {$2007$};
+		}
+		\onslide<+->{
+			\draw (2,-2.5) -- (7.5,-2.5);
+			\draw (7.5,-2.65) node[below] {Correa\\et al.} -- (7.5,-2.35) node[above] {$2018$};
+			\draw (7.5,-2.5) -- (9,-2.5);
+			\draw (9,-2.65) node[below] {Harks\\et al.} -- (9,-2.35) node[above] {$2019$};
+			\draw[->] (9,-2.5) -- (10,-2.5);
+		}
 	\end{tikzpicture}
 \end{frame}
 
@@ -119,7 +132,7 @@
 	\;
 	\begin{block}{Non-atomic $n$-link Parallel Network Game}
 		A \textbf{Parallel Network} is a directed graph $G = (\{s, t\}, N)$, where $N = \{1, \dots, n\}$ a set of $n$ parallel $s-t$ links.
-
+		
 		For a \textbf{non-atomic} game, a unit of traffic $[0, 1]$, endowed with Lebesque measure $\lambda$, wishes to travel from $s$ to $t$.
 
 		Traffic creates congestion on links and each \textit{player} $p \in [0, 1]$:
@@ -291,7 +304,7 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 		\item $N = \{1, 2, \cdots, n\}$ the links
 		\item $\ell = (\ell_i)_{i \in N}$ the latency functions
 		\item $\alpha$ the distribution function
-	\end{itemize}
+	\end{itemize}\pause
 	A homogeneous game can be described as $(N, \ell, 1)$.
 \end{frame}
 
@@ -300,7 +313,7 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 		Let $\Gm_1, \Gm_2$ be two $n$-link Network Congestion Games.
 		$\Gm_1$ and $\Gm_2$ are called \textbf{equivalent} if and only if for all tolls $t \in \R_+^{|N|}$ it holds that $x^{(1)}(t) = x^{(2)}(t)$, with $x^{(1)}(t), x^{(2)}(t)$ being the Nash Equilibria for $t$ in $\Gm_1, \Gm_2$ respectively.
 	\end{definition}
-	Equivalency means same tolls cause same flow.
+	Equivalency means same tolls cause same flow.\pause
 
 	The two pricing competition games played on two equivalent network congestion games are identical.
 \end{frame}
@@ -356,18 +369,15 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 }
 
 \begin{frame}{Sensitivity split | Heterogeneous networks}
-	Latencies are the same for all players.
+	Latencies are the same for all players.\pause
 
 	Toll ordering is the same for all players.
 
-	Toll differences are viewed with different scaling.
+	Toll differences are viewed with different scaling.\pause[1]
 	\\[15pt]
 	\begin{tikzpicture}
-		% Title
-		\node[above,fixed_height] at (3.7,3.3) {$\alpha(0) = 1$};
-
 		% Axes
-		\draw[->] (0,0) -- (7,0) node[right=5,fixed_height] {$c\left(0\right)$};
+		\draw[->] (0,0) -- (7,0) node[right=5,fixed_height] {$c$};
 		\draw[-] (0,0) -- (0,3.2);
 
 		% Y-bars: Latencies
@@ -378,10 +388,18 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 		\filldraw[fill=blue!20] (0,1.25) rectangle (14/11,1.75);
 		\filldraw[fill=blue!20] (0,0.25) rectangle (29/11,0.75);
 
-		% Y-bars: Tolls
-		\filldraw[fill=orange!20] (2/11,2.25) rectangle (35/11,2.75) node[below right] {$3$};
-		\filldraw[fill=orange!20] (14/11,1.25) rectangle (36/11,1.75) node[below right] {$2$};
-		\filldraw[fill=orange!20] (29/11,0.25) rectangle (40/11,0.75) node[below right] {$1$};
+		\onslide<2->{
+			% Title
+			\node[above,fixed_height] at (3.7,3.3) {$\alpha(0) = 1$};
+
+			% Y-axis label
+			\node[right=12,fixed_height] at (7,0) {$(0)$};
+
+			% Y-bars: Tolls
+			\filldraw[fill=orange!20] (2/11,2.25) rectangle (35/11,2.75) node[below right] {$3$};
+			\filldraw[fill=orange!20] (14/11,1.25) rectangle (36/11,1.75) node[below right] {$2$};
+			\filldraw[fill=orange!20] (29/11,0.25) rectangle (40/11,0.75) node[below right] {$1$};
+		}
 	\end{tikzpicture}
 \end{frame}
 
@@ -654,7 +672,7 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 
 \begin{frame}{Sensitivity split | Upper bound}
 	For the Example we have
-	\[\max\{x_1(0), x_2(0)\} = \max\left\{\tfrac23, \tfrac13\right\} = \tfrac23\]
+	\[\min\{x_1(0), x_2(0)\} = \max\left\{\tfrac23, \tfrac13\right\} = \tfrac13\]\pause
 	so if we used a distribution function such as
 	\[
 		\alpha(p) =
@@ -663,18 +681,18 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 			\mathrm{e}^p & p > \tfrac23
 		\end{cases}
 	\]
-	then $\as(t)$ would remain the same for all $t \in \R_+^n$
+	then $\as(t)$ would remain the same for all valid $t \in \R_+^n$.
 \end{frame}
 
 
 \section{Pseudo-heterogeneous Pricing Games}
 
 \begin{frame}{Pseudo-heterogeneous Pricing Games}
-	Consider distribution functions $\alpha(p) = c$ for some $c > 0$.
+	Consider distribution functions $\alpha(p) = c$ for some $c > 0$.\pause
 
 	Players again all view link costs the same.
 	\[c_i(p) = \ell_i(x_i) + c t_i\]
-	Behaviour should be homogeneous with tolls "mapped" to $t \rightarrow t/c$.
+	Behaviour should be homogeneous with tolls "mapped" to $t \rightarrow t/c$.\pause
 
 	Note that 
 	\[c_i(p) = c \left(\frac1c \ell_i(x_i) + t_i\right)\]
@@ -685,7 +703,7 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 	\begin{lemma}
 		Let $\Gm_1 = (N, \ell^{(1)}, \alpha)$ where $\forall p \in [0, 1] \; \alpha(p) = c$ for some $c \in \R_+$ and $\Gm_2 = (N, \ell^{(2)}, 1)$ where $\ell^{(2)} = \frac{\ell^{(1)}}{c}$ for the same $c$.
 		Then the two games are equivalent.
-	\end{lemma}
+	\end{lemma}\pause
 	\begin{proof}
 		For any $t \in \R_+^n$ and any flow $x_i$
 		\[
@@ -697,14 +715,14 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 \end{frame}
 
 \begin{frame}{Pseudo-heterogeneous Pricing Games}
-	We will call such games \textit{pseudo-heterogeneous}.
+	We will call such games \textit{pseudo-heterogeneous}.\pause
 
-	Uniform increase in money-sensitivity is equivalent to uniform decrease in latencies (lost for general $\alpha$ functions).
+	Uniform increase in money-sensitivity is equivalent to uniform decrease in latencies (lost for general $\alpha$ functions).\pause
 
 	\begin{lemma}
 		Let $\Gm_1 = \left(N, \frac{\ell}{c_1}, 1\right), \Gm_2 = \left(N, \frac{\ell}{c_2}, 1\right)$.
 		Then $x^{(1)}(c_2 t) = x^{(2)}(c_1 t)$.
-	\end{lemma}
+	\end{lemma}\pause
 	\begin{proof}
 		\[
 			\begin{aligned}[t]
@@ -796,17 +814,17 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 			\item $x^{(1)}(t^{*(1)}) = x^{(2)}(t^{*(2)})$
 		\end{enumerate}
 	\end{lemma}
-	\begin{proof}
-		\begin{enumerate}[$(i)$]
-			% https://tex.stackexchange.com/a/98399
-			\item
-			$\begin{aligned}[t]
-				t_i^{*(1)} &= B_i^{(1)}(t_{-i}^{*(1)}) \Leftrightarrow \cdots \Leftrightarrow \frac{c_1}{c_2} t_i^{*(1)} = B_i^{(2)}\left(\frac{c_1}{c_2} t_{-i}^{*(1)}\right)
-			\end{aligned}$
-			\item follows from previous lemma.
-			\vspace{-20pt}
-		\end{enumerate}
-	\end{proof}
+	%\begin{proof}
+	%	\begin{enumerate}[$(i)$]
+	%		% https://tex.stackexchange.com/a/98399
+	%		\item
+	%		$\begin{aligned}[t]
+	%			t_i^{*(1)} &= B_i^{(1)}(t_{-i}^{*(1)}) \Leftrightarrow \cdots \Leftrightarrow \frac{c_1}{c_2} t_i^{*(1)} = B_i^{(2)}\left(\frac{c_1}{c_2} t_{-i}^{*(1)}\right)
+	%		\end{aligned}$
+	%		\item follows from previous lemma.
+	%		\vspace{-20pt}
+	%	\end{enumerate}
+	%\end{proof}
 	Pricing Nash Equilibrium is always at the same flow.
 \end{frame}
 
@@ -817,7 +835,7 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 	\begin{lemma}
 		Let $(N, \ell, \alpha)$ where $\alpha(p) = 0$ for $p \in [0, \epsilon]$ for some $\epsilon > 0$.\\
 		Then $\exists i \in N$ where $B_i(t_{-i})$ is unbounded for all $t_{-i} \in \R_+^{n - 1}$.
-	\end{lemma}
+	\end{lemma}\pause
 	\begin{proof}
 		Links with $\ell_i(0) = \min_{j \in N} \ell_i(0)$ can select $t_i > \max t_{-i}$ and become the lowest-latency link, with players $\alpha(p) = 0$.
 
@@ -998,12 +1016,6 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 	\end{figure}
 \end{frame}
 
-\begin{frame}<presentation:0>[noframenumbering]{Step distribution functions}
-	Notice that when $x_1$ is fixed then $\as$ isn't and vice-versa.\\
-	If the flow is moving, then it does so among players with the same sensitivity type, which is one of the finitely many values $\alpha$ can take.
-	If all players of each sensitivity type are using a single link, then $\as$ can take any value between the lowest and highest $\alpha$ value in the upper and lower split respectively.
-\end{frame}
-
 \begin{frame}{Step distribution functions}
 	Let $\Gm_1 = ([2], \ell, \alpha)$ where $\alpha = (\alpha_k)_{k \in [m]}$.
 	\begin{lemma}
@@ -1069,14 +1081,14 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 \end{frame}
 
 \begin{frame}{Step distribution functions}
-	If $t^*$ exists, it needs to be at $\as(t^*) = 3$ or $4$.
+	If $t^*$ exists, it needs to be at $\as(t^*) = 3$ or $4$ (not between).\pause
 
-	Flow will be the same regardless.
+	Flow will be the same regardless.\pause
 
 	Assume $\Gm^\prime = (N, \ell, 1)$ and we calculate
-	\[t^{*\prime} = \left(\frac53, \frac43\right) \qquad x(t^*) = \left(\frac59, \frac49\right)\]
+	\[t^{*\prime} = \left(\frac53, \frac43\right) \qquad x(t^*) = \left(\frac59, \frac49\right)\]\pause
 
-	Since $t_1 > t_2$, link $1$ has the lower split, so the split is at $\alpha\left(\frac59\right) = 4$.
+	Since $t_1 > t_2$, link $1$ has the lower split, so the split is at $\alpha\left(\frac59\right) = 4$.\pause
 
 	Candidate Pricing N.E.:
 	\[t^* = \frac14 t^{*\prime} = \left(\frac{5}{12}, \frac{4}{12}\right)\]
@@ -1296,38 +1308,38 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 \begin{frame}{Step distribution functions | Pricing N.E. Algorithm}
 	\textbf{Summary:} Given $\Gm = ([2], \ell, \alpha), \alpha = (\alpha_k)_{k \in [m]}$
 	\begin{enumerate}
-		\item Consider $\Gm^\prime = ([2], \ell, 1)$ and calculate $t^{*\prime}, x^\prime(t^{*\prime})$.
-		\item Calculate $\as(t^*)$ as the $\alpha$ value of the lower split flow in $x^\prime(t^{*\prime})$
-		\item Calculate the candidate $t^* = \tfrac{t^{*\prime}}{\as(t^*)}$ and $\Pi_1(t^*), \Pi_2(t^*)$.
-		\item For each $\alpha_k \ne \as(t^*)$, and for each $i \in [2]$
+		\item Consider $\Gm^\prime = ([2], \ell, 1)$ and calculate $t^{*\prime}, x^\prime(t^{*\prime})$.\pause
+		\item Calculate $\as(t^*)$ as the $\alpha$ value of the lower split in $x^\prime(t^{*\prime})$.\pause
+		\item Calculate the candidate $t^* = \tfrac{t^{*\prime}}{\as(t^*)}$ and $\Pi_1(t^*), \Pi_2(t^*)$.\pause
+		\item For each $\alpha_k \ne \as(t^*)$, and for each $i \in [2]$:\pause
 		\begin{enumerate}[$4.1$]
-			\item Consider $\Gm_k = ([2], \ell, \alpha_k)$ and calculate $B_{i, k}(t_{-i}^*)$ and tolls $t_{i, k}$ for which $\as(t_i, t_{-i}^*) = \alpha_k$, resulting in two toll ranges for $t_i$.
-			\item Search for $\Pi_{i, k}$, the max profit for $i$ within those $t_i$ ranges:
+			\item Consider $\Gm_k = ([2], \ell, \alpha_k)$ and calculate $B_{i, k}(t_{-i}^*)$ and tolls $t_{i, k}$ for which $\as(t_i, t_{-i}^*) = \alpha_k$, resulting in two toll ranges for $t_i$.\pause
+			\item Search for $\Pi_{i, k}$, the max profit for $i$ within those $t_i$ ranges:\pause
 			\begin{enumerate}[$4.2.1$]
-				\item If $B_{i, k}(t_{-i}^*)$ is within the $t_i$ ranges, $\Pi_{i, k} = \Pi_i(B_{i, k}(t_{-i}^*), t_{-i}^*)$.
+				\item If $B_{i, k}(t_{-i}^*)$ is within the $t_i$ ranges, $\Pi_{i, k} = \Pi_i(B_{i, k}(t_{-i}^*), t_{-i}^*)$.\pause
 				\item Otherwise, $\Pi_{i, k}$ is max profit among the ranges' edge tolls ($4$).
-			\end{enumerate}
+			\end{enumerate}\pause
 			\item If $\Pi_i < \Pi_{i, k}$, then $\Gm$ has NO pricing Nash Equilibrium.
-		\end{enumerate}
+		\end{enumerate}\pause
 		\item If all of the above checks fail, return $t^*$.
-	\end{enumerate}
+	\end{enumerate}\pause
 	\textbf{Complexity:} $\mathcal{O}(m)$
 \end{frame}
 
 \section{Future work}
 
 \begin{frame}{Future work}
-	\textbf{Pseudo-heterogeneous games}
+	\textbf{Pseudo-heterogeneous games}\pause
 	\begin{itemize}
-		\item Connection between similar games with different fixed distribution functions
-		\item What happens to flow, tolls, profit when fixed $t_{-i}$?
+		\item Connection between similar games with different fixed distribution functions\pause
+		\item What happens to flow, tolls, profit when fixed $t_{-i}$?\pause
 		\item (Conjectures in the Appendix)
-	\end{itemize}
+	\end{itemize}\pause
 
-	\textbf{Step distribution functions}
+	\textbf{Step distribution functions}\pause
 	\begin{itemize}
-		\item Conditions for N.E. existence in $2$-link networks
-		\item $n$-link networks
+		\item Conditions for N.E. existence in $2$-link networks\pause
+		\item $n$-link networks\pause
 		\begin{itemize}
 			\item Complexity of calculating existence
 		\end{itemize}
@@ -1335,15 +1347,15 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 \end{frame}
 
 \begin{frame}{Future work}
-	\textbf{Continuous distribution functions}
+	\textbf{Continuous distribution functions}\pause
 	\begin{itemize}
-		\item No gaps!
-		\item Function series approximation ($m \rightarrow +\infty$)
-		\item Linear $\alpha$ maintains the linear system
+		\item No gaps!\pause
+		\item Function series approximation ($m \rightarrow +\infty$)\pause
+		\item Linear $\alpha$ maintains the linear system\pause
 		\item Strange behaviour when $0$ is an accumulation point in $\alpha$
-	\end{itemize}
+	\end{itemize}\pause
 
-	\textbf{Split function for series-parallel links}
+	\textbf{Split function for series-parallel links}\pause
 
 	We hope the tools and intuitions developed here can be useful in any similar future work.
 \end{frame}
