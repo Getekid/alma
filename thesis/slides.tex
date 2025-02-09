@@ -92,8 +92,6 @@
 
 \section{Preliminaries}
 
-\subsection{Our model}
-
 \begin{frame}{Preliminaries | Our model}
 	\begin{center}
 		Heterogeneous Non-atomic $n$-link Parallel Network\\
@@ -173,7 +171,7 @@
 	\end{center}
 \end{frame}
 
-\begin{frame}{Preliminaries | Selfish routing (1\textsuperscript{st} level) | Example}
+\begin{frame}{Preliminaries | Selfish routing (1\textsuperscript{st} level)}
 \begin{center}
 	\begin{tikzpicture}[scale=1.4, every node/.style={font=\small}]
 		% Nodes
@@ -215,7 +213,7 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 	\end{definition}
 	Links with $x_i > 0$ have $\ell_i(x_i) + t_i = K$ for some $K > 0$.
 
-	Equilibrium is indifferent to uniform variations of tolls ($t^\prime = t + c$).
+	%Equilibrium is indifferent to uniform variations of tolls ($t^\prime = t + c$).
 \end{frame}
 
 \begin{frame}{Preliminaries | Selfish routing (1\textsuperscript{st} level)}
@@ -236,22 +234,22 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 	We denote it by $x(t)$.
 \end{frame}
 
-\begin{frame}{Preliminaries | Selfish routing (1\textsuperscript{st} level) | Example}
-\begin{center}
-	\begin{tikzpicture}[scale=1.4, every node/.style={font=\small}]
-		% Nodes
-		\node[circle, draw, fill=blue!20, minimum size=0.8cm] (s) at (0,0) {$s$};
-		\node[circle, draw, fill=blue!20, minimum size=0.8cm] (t) at (4,0) {$t$};
+\begin{frame}{Preliminaries | Selfish routing (1\textsuperscript{st} level)}
+	\begin{center}
+		\begin{tikzpicture}[scale=1.4, every node/.style={font=\small}]
+			% Nodes
+			\node[circle, draw, fill=blue!20, minimum size=0.8cm] (s) at (0,0) {$s$};
+			\node[circle, draw, fill=blue!20, minimum size=0.8cm] (t) at (4,0) {$t$};
 
-		% Links
-		\draw[->, thick] (s) to[bend left=35] node[midway, above] {$2x$} (t);
-		\draw[->, thick] (s) to node[midway, above] {$x + 1$} (t);
-		\draw[->, thick] (s) to[bend right=35] node[midway, above] {$x + 2$} (t);
-	\end{tikzpicture}
-\end{center}
-For homogeneous players and tolls $t = (3, 2, 1)$
-\[x(t) = \left(\frac15, \frac25, \frac25\right)\]
-since $\ell_2(1/2) + t_2 = \ell_3(1/2) + t_3 = 7/2$ and $\ell_1(0) + t_1 = 4$.
+			% Links
+			\draw[->, thick] (s) to[bend left=35] node[midway, above] {$2x$} (t);
+			\draw[->, thick] (s) to node[midway, above] {$x + 1$} (t);
+			\draw[->, thick] (s) to[bend right=35] node[midway, above] {$x + 2$} (t);
+		\end{tikzpicture}
+	\end{center}
+	For homogeneous players and tolls $t = (3, 2, 1)$
+	\[x(t) = \left(\frac15, \frac25, \frac25\right)\]
+	since $\ell_1\left(\frac15\right) + 3 = \ell_2\left(\frac25\right) + 2 = \ell_3\left(\frac25\right) + 1 = \frac{17}{5}$.
 \end{frame}
 
 \begin{frame}{Preliminaries | Pricing competition (2\textsuperscript{nd} level)}
@@ -278,6 +276,15 @@ since $\ell_2(1/2) + t_2 = \ell_3(1/2) + t_3 = 7/2$ and $\ell_1(0) + t_1 = 4$.
 	\end{block}
 \end{frame}
 
+\begin{frame}{Preliminaries | Pricing competition (2\textsuperscript{nd} level)}
+	\begin{block}{Full Wardrop support assumption}
+		$x_i(0) > 0$ for all $i \in N$
+	\end{block}
+	\begin{block}{Pricing N.E. uniqueness\footcite{Harks_2019}}
+		If the \textit{full Wardrop support assumption} is satisfied then $t^*$ is unique, $x_i(t^*) > 0$ and $t_i^* > 0$ for all $i \in N$.
+	\end{block}
+\end{frame}
+
 \begin{frame}{Preliminaries | Our model}
 	We will describe a pricing game as the tuple $\Gm = (N, \ell, \alpha)$ where
 	\begin{itemize}
@@ -288,8 +295,6 @@ since $\ell_2(1/2) + t_2 = \ell_3(1/2) + t_3 = 7/2$ and $\ell_1(0) + t_1 = 4$.
 	A homogeneous game can be described as $(N, \ell, 1)$.
 \end{frame}
 
-\subsection{Game equivalence}
-
 \begin{frame}{Preliminaries | Game equivalence}
 	\begin{definition}[Game equivalence]
 		Let $\Gm_1, \Gm_2$ be two $n$-link Network Congestion Games.
@@ -299,37 +304,6 @@ since $\ell_2(1/2) + t_2 = \ell_3(1/2) + t_3 = 7/2$ and $\ell_1(0) + t_1 = 4$.
 
 	The two pricing competition games played on two equivalent network congestion games are identical.
 \end{frame}
-
-\subsection{Homogeneous networks}
-
-\begin{frame}{Preliminaries | Homogeneous networks}
-	\begin{block}{Flow formula\footcite{Harks_2019}}
-		Define $N(t) = \{i \in N | x_i(t) > 0\}$.
-		For affine latency functions $\ell_i(x) = a_i x + b_i$, $a_i > 0, b_i \ge 0$ and by solving $\ell_i(x_i) + t_i = K$ with $\sum_{i \in N} x_i = 1$, calculate $K$ and get for all $i \in N$
-		\begin{equation*}
-			x_i(t) = \frac{1 + \sum_{j \in N(t)}\frac{b_j + t_j - b_i - t_i}{a_j}}{\sum_{j \in N(t)}\frac{a_i}{a_j}}
-		\end{equation*}
-	\end{block}
-\end{frame}
-
-\begin{frame}{Preliminaries | Homogeneous networks}
-	\begin{block}{Full Wardrop support assumption}
-		$x_i(0) > 0$ for all $i \in N$
-	\end{block}
-	\begin{block}{Pricing N.E. properties\footcite{Harks_2019}}
-		$\Pi_i(t)$ is either linear or quadratic, therefore $|B_i(t_{-i})| = 1$.
-		If the \textit{full Wardrop support assumption} is satisfied then $t^*$ is unique, $x_i(t^*) > 0$ and $t_i^* > 0$ for all $i \in N$ and
-		\begin{equation*}
-			t_i^* = \left(a_i + \frac{1}{\sum_{j \ne i} \frac{1}{a_j}}\right) \cdot x_i(t^*)
-		\end{equation*}
-	\end{block}
-\end{frame}
-
-%\begin{frame}{Preliminaries | Homogeneous players | Example}
-%	\begin{example}
-%	\end{example}
-%	$x(0) = \left(\frac23, \frac13\right), \; x(3, 2) = \left(\frac14, \frac34\right)$
-%\end{frame}
 
 \section{Sensitivity split}
 
@@ -601,7 +575,7 @@ since $\ell_2(1/2) + t_2 = \ell_3(1/2) + t_3 = 7/2$ and $\ell_1(0) + t_1 = 4$.
 			\end{tikzpicture}
 		\end{multicols}
 	\end{center}
-	\[x(0) = \left(\tfrac23, \tfrac13\right) \qquad \alpha(x_1(0)) = \tfrac53 \quad \alpha(x_2(0)) = \tfrac43\]
+	\[x(0) = \left(\frac23, \frac13\right) \qquad \alpha(x_1(0)) = \frac53 \quad \alpha(x_2(0)) = \frac43\]
 \end{frame}
 
 \begin{frame}{Sensitivity split | Properties}
@@ -628,7 +602,7 @@ since $\ell_2(1/2) + t_2 = \ell_3(1/2) + t_3 = 7/2$ and $\ell_1(0) + t_1 = 4$.
 			\draw[black] (0,2/3) ellipse (0.03 and 0.03);
 			\node[below left] at (0,2/3) {$\frac23$};
 		\end{tikzpicture}
-		\caption{Flow function of link operator $1$ of Example}
+		\caption{Flow function of link $1$ of Example}
 		\label{figure:alpha_simple:flow_example}
 	\end{figure}
 \end{frame}
@@ -702,7 +676,7 @@ since $\ell_2(1/2) + t_2 = \ell_3(1/2) + t_3 = 7/2$ and $\ell_1(0) + t_1 = 4$.
 	\[c_i(p) = \ell_i(x_i) + c t_i\]
 	Behaviour should be homogeneous with tolls "mapped" to $t \rightarrow t/c$.
 
-	Also note that 
+	Note that 
 	\[c_i(p) = c \left(\frac1c \ell_i(x_i) + t_i\right)\]
 	where $\frac1c \ell_i(x_i) = \frac{a_i}{c} x_i + \frac{b_i}{c}$ affine.
 \end{frame}
@@ -838,7 +812,7 @@ since $\ell_2(1/2) + t_2 = \ell_3(1/2) + t_3 = 7/2$ and $\ell_1(0) + t_1 = 4$.
 
 \section{Step distribution functions}
 
-\begin{frame}{Heterogeneous Pricing Games}
+\begin{frame}{Zero money-sensitivity}
 	Zero money-sensitivity creates issues as it can be exploited.
 	\begin{lemma}
 		Let $(N, \ell, \alpha)$ where $\alpha(p) = 0$ for $p \in [0, \epsilon]$ for some $\epsilon > 0$.\\
@@ -884,7 +858,6 @@ since $\ell_2(1/2) + t_2 = \ell_3(1/2) + t_3 = 7/2$ and $\ell_1(0) + t_1 = 4$.
 			\end{cases}
 		$
 	\end{example}
-
 	\begin{center}
 		\begin{multicols}{2}
 			% Left Column: Network Graph
@@ -943,11 +916,11 @@ since $\ell_2(1/2) + t_2 = \ell_3(1/2) + t_3 = 7/2$ and $\ell_1(0) + t_1 = 4$.
 
 			% Tick marks
 			\draw (-1,0) -- (-1,-0.05) node[below] {$-1$};
-			\draw (-2/5,0) -- (-2/5,-0.05) node[below] {$-\frac25$};
-			\draw (-2/15,0) -- (-2/15,-0.05) node[below] {$-\frac{2}{15}$};
+			\draw (-2/5,0) -- (-2/5,-0.05) node[left=4,below] {$-\frac25$};
+			\draw (-2/15,0) -- (-2/15,-0.05) node[left=4,below] {$-\frac{2}{15}$};
 			\draw (0,0) -- (0,-0.05) node[below] {$t_2$};
-			\draw (1/8,0) -- (1/8,-0.05) node[below] {$\frac18$};
-			\draw (1/6,0) -- (1/6,-0.05) node[below] {$\frac16$};
+			\draw (1/8,0) -- (1/8,-0.05) node[left=1,below] {$\frac18$};
+			\draw (1/6,0) -- (1/6,-0.05) node[right=2,below] {$\frac16$};
 			\draw (7/15,0) -- (7/15,-0.05) node[below] {$\frac{7}{15}$};
 			\draw (7/5,0) -- (7/5,-0.05) node[below] {$\frac75$};
 			\draw (2,0) -- (2,-0.05) node[below] {$2$};
@@ -989,18 +962,18 @@ since $\ell_2(1/2) + t_2 = \ell_3(1/2) + t_3 = 7/2$ and $\ell_1(0) + t_1 = 4$.
 			\draw[->] (0,0) -- (0,4.4) node[above] {$\as(t)$};
 
 			% Tick marks
-			\draw (-1,0) -- (-1,-0.05) node[below] {$-1$};
-			\draw (-2/5,0) -- (-2/5,-0.05) node[below] {$-\frac25$};
-			\draw (-2/15,0) -- (-2/15,-0.05) node[below] {$-\frac{2}{15}$};
-			\draw (0,0) -- (0,-0.05) node[below] {$t_2$};
-			\draw (1/8,0) -- (1/8,-0.05) node[below] {$\frac18$};
-			\draw (1/6,0) -- (1/6,-0.05) node[below] {$\frac16$};
-			\draw (7/15,0) -- (7/15,-0.05) node[below] {$\frac{7}{15}$};
-			\draw (7/5,0) -- (7/5,-0.05) node[below] {$\frac75$};
-			\draw (2,0) -- (2,-0.05) node[below] {$2$};
-			\draw (0,1) -- (-0.05,1) node[left] {$1$};
-			\draw (0,3) -- (0.05,3) node[right] {$3$};
-			\draw (0,4) -- (-0.05,4) node[left] {$4$};
+			\draw (-1,0) -- (-1,-0.2) node[below] {$-1$};
+			\draw (-2/5,0) -- (-2/5,-0.2) node[left=4,below] {$-\frac25$};
+			\draw (-2/15,0) -- (-2/15,-0.2) node[left=4,below] {$-\frac{2}{15}$};
+			\draw (0,0) -- (0,-0.2) node[below] {$t_2$};
+			\draw (1/8,0) -- (1/8,-0.2) node[left=1,below] {$\frac18$};
+			\draw (1/6,0) -- (1/6,-0.2) node[right=2,below] {$\frac16$};
+			\draw (7/15,0) -- (7/15,-0.2) node[below] {$\frac{7}{15}$};
+			\draw (7/5,0) -- (7/5,-0.2) node[below] {$\frac75$};
+			\draw (2,0) -- (2,-0.2) node[below] {$2$};
+			\draw (0,1) -- (-0.08,1) node[left=1] {$1$};
+			\draw (0,3) node[right=1] {$3$} -- (0.05,3);
+			\draw (0,4) -- (-0.08,4) node[left=1] {$4$};
 
 			% Function graph
 			% Left side
@@ -1038,23 +1011,75 @@ since $\ell_2(1/2) + t_2 = \ell_3(1/2) + t_3 = 7/2$ and $\ell_1(0) + t_1 = 4$.
 		Then $t$ is not a Nash equilibrium for the pricing game.
 	\end{lemma}
 	\begin{theorem}
-		If $\Gm_1$ has $t^*$, let $\Gm_2 = ([2], \ell, \as(t^*))$ with fixed $\alpha^{(2)}(p) = \as(t^*)$.
+		If $\Gm_1$ has $t^*$, let $\Gm_2 = ([2], \ell, \alpha^{(2)})$ with fixed $\alpha^{(2)}(p) = \as(t^*)$.
 		Then $t^*$ is a Nash equilibrium for the pricing game in $\Gm_2$.
 	\end{theorem}
 \end{frame}
 
 \begin{frame}{Step distribution functions}
 	\begin{example}
-		Let $\Gm = ([2], \ell, \alpha)$ a heterogeneous pricing game with latency functions $\ell_1(x) = 2x, \ell_2(x) = x + 1$ and distribution function $\alpha$ such that
-		\begin{align*}
+		Let $\Gm = ([2], \ell, \alpha)$ where
+		$
 			\alpha(p) =
 			\begin{cases}
 				3 & p \le \tfrac14 \\
 				4 & p > \tfrac14
-			\end{cases}&
-		\end{align*}
+			\end{cases}
+		$.\\
 		Then $\Gm$ has a N.E. for the pricing game at $t^* = \left(\tfrac{5}{12}, \tfrac{4}{12}\right)$.
 	\end{example}
+	\begin{center}
+		\begin{multicols}{2}
+			% Left Column: Network Graph
+			\begin{tikzpicture}[scale=1, baseline=50pt, every node/.style={font=\small}]
+				% Nodes
+				\node[circle, draw, fill=blue!20, minimum size=0.8cm] (s) at (0,0) {$s$};
+				\node[circle, draw, fill=blue!20, minimum size=0.8cm] (t) at (4,0) {$t$};
+
+				% Links
+				\draw[->, thick] (s) to[bend left=35] node[midway, above] {$2x$} (t);
+				\draw[->, thick] (s) to[bend right=35] node[midway, below] {$x + 1$} (t);
+			\end{tikzpicture}
+
+			% Right Column: Distribution function Graph
+			\begin{tikzpicture}[x=3cm, y=0.7cm, every node/.style={font=\small}]
+				% Axes
+				\draw[->] (0,0) -- (1.2,0) node[right] {$p$};
+				\draw[->] (0,0) -- (0,4.2) node[above] {$\as(p)$};
+
+				% Tick marks
+				\draw (0,0) -- (0,-0.05) node[below] {$0$};
+				\draw (0.25,0) -- (0.25,-0.05) node[below] {$\frac14$};
+				\draw (1,0) -- (1,-0.05) node[below] {$1$};
+				\draw (0,3) -- (-0.05,3) node[left] {$3$};
+				\draw (0,4) -- (-0.05,4) node[left] {$4$};
+
+				% Function graph
+				\draw[thick] (0,3) -- (0.25,3);
+				\draw[thick] (0.25,4) -- (1,4);
+
+				% Closed / Open dots
+				\fill[black] (0.25,3) ellipse (0.014 and 0.06);
+				\draw[black] (0.25,3) ellipse (0.014 and 0.06);
+				\fill[white] (0.25,4) ellipse (0.014 and 0.06);
+				\draw[black] (0.25,4) ellipse (0.014 and 0.06);
+			\end{tikzpicture}
+		\end{multicols}
+	\end{center}
+\end{frame}
+
+\begin{frame}{Step distribution functions}
+	If $t^*$ exists, it needs to be at $\as(t^*) = 3$ or $4$.
+
+	Flow will be the same regardless.
+
+	Assume $\Gm^\prime = (N, \ell, 1)$ and we calculate
+	\[t^{*\prime} = \left(\frac53, \frac43\right) \qquad x(t^*) = \left(\frac59, \frac49\right)\]
+
+	Since $t_1 > t_2$, link $1$ has the lower split, so the split is at $\alpha\left(\frac59\right) = 4$.
+
+	Candidate Pricing N.E.:
+	\[t^* = \frac14 t^{*\prime} = \left(\frac{5}{12}, \frac{4}{12}\right)\]
 \end{frame}
 
 \begin{frame}{Step distribution functions}
@@ -1064,45 +1089,44 @@ since $\ell_2(1/2) + t_2 = \ell_3(1/2) + t_3 = 7/2$ and $\ell_1(0) + t_1 = 4$.
 			% Axes
 			\draw[->] (0,0) -- (-0.4,0);
 			\draw[->] (0,0) -- (0.7,0) node[right] {$t_1 - t_2$};
-			\draw[->] (0,0) -- (0,0.3) node[above] {$\Pi_1(t)$};
+			\draw[->] (0,0) -- (0,0.3) node[above] {$\Pi_1\left(t_1, \frac{4}{12}\right)$};
 
 			% Tick marks
-			\draw (-1/3,0) -- (-1/3,-0.01) node[below] {$-\frac13$};
-			\draw (-1/4,0) -- (-1/4,-0.01) node[below] {$-\frac14$};
-			\draw (-1/12,0) -- (-1/12,-0.01) node[left=9,below] {$-\frac{1}{12}$};
-			\draw (-1/16,0) -- (-1/16,-0.01) node[right=2,below] {$-\frac{1}{16}$};
-			\draw (0,0) -- (0,-0.01) node[below] {$0$} node[below=20] {$t_2^* = \frac{4}{12}$};
-			\draw (1/12,0) -- (1/12,-0.01) node[below] {$\frac{1}{12}$};
-			\draw (5/16,0) -- (5/16,-0.01) node[below] {$\frac{5}{16}$};
-			\draw (5/12,0) -- (5/12,-0.01) node[below] {$\frac{5}{12}$};
-			\draw (2/4,0) -- (2/4,-0.01) node[below] {$\frac24$};
-			\draw (2/3,0) -- (2/3,-0.01) node[below] {$\frac23$};
-			%\draw (0,2/9) -- (-0.02,2/9) node[left] {$\frac29$};
-			%\draw (0,1/12) -- (0.01,1/12) node[right] {$\frac{1}{12}$};
+			\draw (-1/3,0) -- (-1/3,-0.015) node[left=4,below] {$-\frac13$};
+			\draw (-1/4,0) -- (-1/4,-0.015) node[left=4,below] {$-\frac14$};
+			\draw (-1/12,0) -- (-1/12,-0.015) node[left=9,below] {$-\frac{1}{12}$};
+			\draw (-1/16,0) -- (-1/16,-0.015) node[right=4,below] {$-\frac{1}{16}$};
+			%\draw (0,0) -- (0,-0.015) node[below] {$0$};
+			\draw (1/12,0) -- (1/12,-0.015) node[below] {$\frac{1}{12}$};
+			\draw (5/16,0) -- (5/16,-0.015) node[below] {$\frac{5}{16}$};
+			\draw (5/12,0) -- (5/12,-0.015) node[below] {$\frac{5}{12}$};
+			\draw (2/4,0) -- (2/4,-0.015) node[below] {$\frac24$};
+			\draw (2/3,0) -- (2/3,-0.015) node[below] {$\frac23$};
 
 			% Pseudo-heterogeneous profits
-			\draw[gray,dashed,thick,domain=-1/3:2/3] plot (\x,{((2-3*\x)/3)*(1/3+\x)}) node[above=17,right=-7,black] {$c = 3$};
-			\draw[gray,dashed,thick,domain=-1/4:2/4] plot (\x,{((2-4*\x)/3)*(1/3+\x)}) node[above=10,right=-3,black] {$c = 4$};
+			\draw[gray,dashed,thick,domain=-1/3:2/3] plot (\x,{((2-3*\x)/3)*(1/3+\x)}) node[right=3,above=8,black] {$c = 3$};
+			\draw[gray,dashed,thick,domain=-1/4:2/4] plot (\x,{((2-4*\x)/3)*(1/3+\x)}) node[left=23,above=1,black] {$c = 4$};
 
 			% Profit function
 			\draw[thick,domain=-1/3:-1/12] plot (\x,{((2-3*\x)/3)*(4/12+\x)});
 			\draw[thick] (-1/12,3/16) -- (-1/16, 39/192);
-			\fill[black] (-1/12,3/16) ellipse (0.00625 and 0.005) node[below right] {$\frac{3}{16}$};
-			\fill[black] (-1/16,39/192) ellipse (0.00625 and 0.005) node[above left] {$\frac{39}{192}$};
+			\fill[black] (-1/12,3/16) ellipse (0.00625 and 0.005) node[right=2,below=-1] {$\frac{3}{16}$};
+			\fill[black] (-1/16,39/192) ellipse (0.00625 and 0.005) node[left=7,above=-1] {$\frac{39}{192}$};
 			\draw[thick,domain=-1/16:5/16] plot (\x,{((2-4*\x)/3)*(4/12+\x)});
 			\draw[thick] (5/16,31/192) -- (5/12,3/16);
-			\fill[black] (5/16,31/192) ellipse (0.00625 and 0.005) node[below left] {$\frac{31}{192}$};
-			\fill[black] (5/12,3/16) ellipse (0.00625 and 0.005) node[above right] {$\frac{3}{16}$};
+			\fill[black] (5/16,31/192) ellipse (0.00625 and 0.005) node[left=7,below=-3] {$\frac{31}{192}$};
+			\fill[black] (5/12,3/16) ellipse (0.00625 and 0.005) node[right=7,above=-1] {$\frac{3}{16}$};
 			\draw[thick,domain=5/12:2/3] plot (\x,{((2-3*\x)/3)*(4/12+\x)});
 
 			% Max point
 			\fill[red] (1/12, 25/108) ellipse (0.00625 and 0.005) node[below,black] {$\frac{25}{108}$};
 		\end{tikzpicture}
+		\\[6pt]
 		\begin{tikzpicture}[x=10cm, y=15cm, scale=0.7, every node/.style={font=\small}]
 			% Axes
 			\draw[->] (0,0) -- (-0.55,0);
 			\draw[->] (0,0) -- (0.4,0) node[right] {$t_2 - t_1$};
-			\draw[->] (0,0) -- (0,0.2) node[above] {$\Pi_2(t)$};
+			\draw[->] (0,0) -- (0,0.215) node[above] {$\Pi_2\left(\frac{5}{12}, t_2\right)$};
 
 			% Tick marks
 			%\draw (-2/3,0) -- (-2/3,-0.01) node[below] {$-\frac23$};
@@ -1110,7 +1134,7 @@ since $\ell_2(1/2) + t_2 = \ell_3(1/2) + t_3 = 7/2$ and $\ell_1(0) + t_1 = 4$.
 			\draw (-5/12,0) -- (-5/12,-0.01) node[below] {$-\frac{5}{12}$};
 			\draw (-5/16,0) -- (-5/16,-0.01) node[below] {$-\frac{5}{16}$};
 			\draw (-1/12,0) -- (-1/12,-0.01) node[below] {$-\frac{1}{12}$};
-			\draw (0,0) -- (0,-0.01) node[below] {$0$} node[below=20] {$t_1^* = \frac{5}{12}$};
+			\draw (0,0) -- (0,-0.01) node[below] {$0$};
 			\draw (1/16,0) -- (1/16,-0.01) node[left=3,below] {$\frac{1}{16}$};
 			\draw (1/12,0) -- (1/12,-0.01) node[right=3,below] {$\frac{1}{12}$};
 			\draw (1/4,0) -- (1/4,-0.01) node[below] {$\frac14$};
@@ -1118,39 +1142,77 @@ since $\ell_2(1/2) + t_2 = \ell_3(1/2) + t_3 = 7/2$ and $\ell_1(0) + t_1 = 4$.
 			%\draw (0,5/36) -- (-0.02,5/36) node[below=7,left] {$\frac{5}{36}$};
 
 			% Pseudo-heterogeneous profits
-			\draw[gray,dashed,thick,domain=-5/12:1/3] plot (\x,{((1-3*\x)/3)*(5/12+\x)}) node[above=15,right=-7,black] {$c = 3$};
-			\draw[gray,dashed,thick,domain=-5/12:1/4] plot (\x,{((1-4*\x)/3)*(5/12+\x)}) node[above=15,left=17,black] {$c = 4$};
+			\draw[gray,dashed,thick,domain=-5/12:1/3] plot (\x,{((1-3*\x)/3)*(5/12+\x)}) node[right=3,above=8,black] {$c = 3$};
+			\draw[gray,dashed,thick,domain=-5/12:1/4] plot (\x,{((1-4*\x)/3)*(5/12+\x)}) node[left=23,above=1,black] {$c = 4$};
 
 			% Profit function
 			\draw[thick] (-5/12,0) -- (-5/16,5/64);
-			\fill[black] (-5/12,0) ellipse (0.0045 and 0.003) node[above left] {$0$};
-			\fill[black] (-5/16,5/64) ellipse (0.0045 and 0.003) node[above left] {$\frac{5}{64}$};
+			\fill[black] (-5/12,0) ellipse (0.0045 and 0.003) node[left=4,above=-1] {$0$};
+			\fill[black] (-5/16,5/64) ellipse (0.0045 and 0.003) node[left=4,above=-1] {$\frac{5}{64}$};
 			\draw[thick,domain=-5/16:1/16] plot (\x,{((1-4*\x)/3)*(5/12+\x)});
 			\draw[thick] (1/16,23/192) -- (1/12,1/8);
-			\fill[black] (1/16,23/192) ellipse (0.0045 and 0.003) node[below left] {$\frac{23}{192}$};
-			\fill[black] (1/12,1/8) ellipse (0.0045 and 0.003) node[above right] {$\frac18$};
+			\fill[black] (1/16,23/192) ellipse (0.0045 and 0.003) node[left=4,below=-1] {$\frac{23}{192}$};
+			\fill[black] (1/12,1/8) ellipse (0.0045 and 0.003) node[right=4,above=-1] {$\frac18$};
 			\draw[thick,domain=1/12:1/3] plot (\x,{((1-3*\x)/3)*(5/12+\x)});
 
 			% Max point
 			\fill[red] (-1/12, 4/27) ellipse (0.0045 and 0.003) node[above,black] {$\frac{4}{27}$};
 		\end{tikzpicture}
-		\caption{Profit functions for link operators $1$ and $2$ of Example when opposed against the candidate Nash Equilibrium $t^* = \left(\tfrac{5}{12}, \tfrac{4}{12}\right)$. Red dot indicates the max profit at $t^*$. Black dots indicate tolls when relevant intervals start or end for the respective pseudo-heterogeneous profits (dashed lines) they correspond.}
-		\label{figure:alpha_step:profit_ne}
+		%\caption{Profit functions for link operators $1$ and $2$ of Example when opposed against the candidate Nash Equilibrium $t^* = \left(\tfrac{5}{12}, \tfrac{4}{12}\right)$. Red dot indicates the max profit at $t^*$. Black dots indicate tolls when relevant intervals start or end for the respective pseudo-heterogeneous profits (dashed lines) they correspond.}
+		%\label{figure:alpha_step:profit_ne}
 	\end{figure}
 \end{frame}
 
 \begin{frame}{Step distribution functions}
 	\begin{example}
-		Let $\Gm = ([2], \ell, \alpha)$ a heterogeneous pricing game with latency functions $\ell_1(x) = 2x, \ell_2(x) = x + 1$ and distribution function $\alpha$ such that
-		\begin{align*}
+		Let $\Gm = ([2], \ell, \alpha)$ where
+		$
 			\alpha(p) =
 			\begin{cases}
 				2 & p \le \tfrac14 \\
 				4 & p > \tfrac14
-			\end{cases}&
-		\end{align*}
+			\end{cases}
+		$.\\
 		Then $\Gm$ has no N.E. for the pricing game.
 	\end{example}
+	\begin{center}
+		\begin{multicols}{2}
+			% Left Column: Network Graph
+			\begin{tikzpicture}[scale=1, baseline=50pt, every node/.style={font=\small}]
+				% Nodes
+				\node[circle, draw, fill=blue!20, minimum size=0.8cm] (s) at (0,0) {$s$};
+				\node[circle, draw, fill=blue!20, minimum size=0.8cm] (t) at (4,0) {$t$};
+
+				% Links
+				\draw[->, thick] (s) to[bend left=35] node[midway, above] {$2x$} (t);
+				\draw[->, thick] (s) to[bend right=35] node[midway, below] {$x + 1$} (t);
+			\end{tikzpicture}
+
+			% Right Column: Distribution function Graph
+			\begin{tikzpicture}[x=3cm, y=0.7cm, every node/.style={font=\small}]
+				% Axes
+				\draw[->] (0,0) -- (1.2,0) node[right] {$p$};
+				\draw[->] (0,0) -- (0,4.2) node[above] {$\as(p)$};
+
+				% Tick marks
+				\draw (0,0) -- (0,-0.05) node[below] {$0$};
+				\draw (0.25,0) -- (0.25,-0.05) node[below] {$\frac14$};
+				\draw (1,0) -- (1,-0.05) node[below] {$1$};
+				\draw (0,2) -- (-0.05,2) node[left] {$2$};
+				\draw (0,4) -- (-0.05,4) node[left] {$4$};
+
+				% Function graph
+				\draw[thick] (0,2) -- (0.25,2);
+				\draw[thick] (0.25,4) -- (1,4);
+
+				% Closed / Open dots
+				\fill[black] (0.25,2) ellipse (0.014 and 0.06);
+				\draw[black] (0.25,2) ellipse (0.014 and 0.06);
+				\fill[white] (0.25,4) ellipse (0.014 and 0.06);
+				\draw[black] (0.25,4) ellipse (0.014 and 0.06);
+			\end{tikzpicture}
+		\end{multicols}
+	\end{center}
 \end{frame}
 
 \begin{frame}{Step distribution functions}
@@ -1160,81 +1222,76 @@ since $\ell_2(1/2) + t_2 = \ell_3(1/2) + t_3 = 7/2$ and $\ell_1(0) + t_1 = 4$.
 			% Axes
 			\draw[->] (0,0) -- (-0.4,0);
 			\draw[->] (0,0) -- (1.1,0) node[right] {$t_1 - t_2$};
-			\draw[->] (0,0) -- (0,0.3) node[above] {$\Pi_1(t)$};
+			\draw[->] (0,0) -- (0,0.3) node[above] {$\Pi_1\left(t_1, \frac{4}{12}\right)$};
 
 			% Tick marks
-			\draw (-1/3,0) -- (-1/3,-0.01) node[below] {$-\frac13$};
-			\draw (-1/4,0) -- (-1/4,-0.01) node[below] {$-\frac14$};
-			\draw (-1/8,0) -- (-1/8,-0.01) node[left=5,below] {$-\frac18$};
-			\draw (-1/16,0) -- (-1/16,-0.01) node[below] {$-\frac{1}{16}$};
-			\draw (0,0) -- (0,-0.01) node[below] {$0$} node[below=20] {$t_2^* = \frac{4}{12}$};
-			\draw (1/12,0) -- (1/12,-0.01) node[below] {$\frac{1}{12}$};
-			\draw (5/16,0) -- (5/16,-0.01) node[below] {$\frac{5}{16}$};
-			\draw (2/4,0) -- (2/4,-0.01) node[below] {$\frac24$};
-			\draw (5/8,0) -- (5/8,-0.01) node[below] {$\frac58$};
-			\draw (1,0) -- (1,-0.01) node[below] {$1$};
-			%\draw (0,2/9) -- (-0.02,2/9) node[left] {$\frac29$};
-			%\draw (0,1/12) -- (0.01,1/12) node[right] {$\frac{1}{12}$};
+			\draw (-1/3,0) -- (-1/3,-0.015) node[left=11,below] {$-\frac13$};
+			\draw (-1/4,0) -- (-1/4,-0.015) node[left=8,below] {$-\frac14$};
+			\draw (-1/8,0) -- (-1/8,-0.015) node[left=8,below] {$-\frac18$};
+			\draw (-1/16,0) -- (-1/16,-0.015) node[right=1,below] {$-\frac{1}{16}$};
+			%\draw (0,0) -- (0,-0.015) node[below] {$0$};
+			\draw (1/12,0) -- (1/12,-0.015) node[below] {$\frac{1}{12}$};
+			\draw (5/16,0) -- (5/16,-0.015) node[below] {$\frac{5}{16}$};
+			\draw (2/4,0) -- (2/4,-0.015) node[below] {$\frac24$};
+			\draw (5/8,0) -- (5/8,-0.015) node[below] {$\frac58$};
+			\draw (1,0) -- (1,-0.015) node[below] {$1$};
 
 			% Pseudo-heterogeneous profits
-			\draw[gray,dashed,thick,domain=-1/3:2/2] plot (\x,{((2-2*\x)/3)*(1/3+\x)}) node[above=20,right=-5,black] {$c = 2$};
-			\draw[gray,dashed,thick,domain=-1/4:2/4] plot (\x,{((2-4*\x)/3)*(1/3+\x)}) node[above=15,right,black] {$c = 4$};
+			\draw[gray,dashed,thick,domain=-1/3:2/2] plot (\x,{((2-2*\x)/3)*(1/3+\x)}) node[right=5,above=10,black] {$c = 2$};
+			\draw[gray,dashed,thick,domain=-1/4:2/4] plot (\x,{((2-4*\x)/3)*(1/3+\x)}) node[right=10,above=5,black] {$c = 4$};
 
 			% Profit function
 			\draw[thick,domain=-1/3:-1/8] plot (\x,{((2-2*\x)/3)*(4/12+\x)});
 			\draw[thick] (-1/8, 5/32) -- (-1/16, 39/192);
-			\fill[black] (-1/8, 5/32) ellipse (0.008333 and 0.005) node[below right] {$\frac{5}{32}$};
-			\fill[black] (-1/16,39/192) ellipse (0.008333 and 0.005) node[above left] {$\frac{39}{192}$};
+			\fill[black] (-1/8, 5/32) ellipse (0.008333 and 0.005) node[right=2,below=-1] {$\frac{5}{32}$};
+			\fill[black] (-1/16,39/192) ellipse (0.008333 and 0.005) node[left=7,above=-1] {$\frac{39}{192}$};
 			\draw[thick,domain=-1/16:5/16] plot (\x,{((2-4*\x)/3)*(4/12+\x)});
 			\draw[thick] (5/16,31/192) -- (5/8,23/96);
-			\fill[black] (5/16,31/192) ellipse (0.008333 and 0.005) node[below left] {$\frac{31}{192}$};
-			\fill[black] (5/8,23/96) ellipse (0.008333 and 0.005) node[above right] {$\frac{23}{96}$};
+			\fill[black] (5/16,31/192) ellipse (0.008333 and 0.005) node[left=7,below=-1] {$\frac{31}{192}$};
+			\fill[black] (5/8,23/96) ellipse (0.008333 and 0.005) node[right=7,above=-1] {$\frac{23}{96}$};
 			\draw[thick,domain=5/8:1] plot (\x,{((2-2*\x)/3)*(4/12+\x)});
 
 			% Max point
 			\fill[red] (1/12, 25/108) ellipse (0.008333 and 0.005) node[below,black] {$\frac{25}{108}$};
 		\end{tikzpicture}
+		\\[6pt]
 		\begin{tikzpicture}[x=8cm, y=15cm, scale=0.7, every node/.style={font=\small}]
 			% Axes
 			\draw[->] (0,0) -- (-0.55,0);
 			\draw[->] (0,0) -- (0.6,0) node[right] {$t_2 - t_1$};
-			\draw[->] (0,0) -- (0,0.2) node[above] {$\Pi_2(t)$};
+			\draw[->] (0,0) -- (0,0.215) node[above] {$\Pi_2\left(\frac{5}{12}, t_2\right)$};
 
 			% Tick marks
-			%\draw (-2/3,0) -- (-2/3,-0.01) node[below] {$-\frac23$};
-			\draw (-2/4,0) -- (-2/4,-0.01) node[below] {$-\frac24$};
-			\draw (-5/12,0) -- (-5/12,-0.01) node[below] {$-\frac{5}{12}$};
+			%\draw (-2/4,0) -- (-2/4,-0.01) node[below] {$-\frac24$};
+			\draw (-5/12,0) -- (-5/12,-0.01) node[left=3,below] {$-\frac{5}{12}$};
 			\draw (-5/16,0) -- (-5/16,-0.01) node[below] {$-\frac{5}{16}$};
-			\draw (-1/12,0) -- (-1/12,-0.01) node[below] {$-\frac{1}{12}$};
-			\draw (0,0) -- (0,-0.01) node[below] {$0$} node[below=20] {$t_1^* = \frac{5}{12}$};
-			\draw (1/16,0) -- (1/16,-0.01) node[left=3,below] {$\frac{1}{16}$};
-			\draw (1/12,0) -- (1/12,-0.01) node[right=3,below] {$\frac{1}{12}$};
+			\draw (-1/12,0) -- (-1/12,-0.01) node[left=5,below] {$-\frac{1}{12}$};
+			\draw (0,0) -- (0,-0.01) node[below] {$0$};
+			\draw (1/16,0) -- (1/16,-0.01) node[left=2,below] {$\frac{1}{16}$};
+			\draw (1/12,0) -- (1/12,-0.01) node[right=5,below] {$\frac{1}{12}$};
 			\draw (1/4,0) -- (1/4,-0.01) node[below] {$\frac14$};
 			\draw (1/2,0) -- (1/2,-0.01) node[below] {$\frac12$};
-			%\draw (0,5/36) -- (-0.02,5/36) node[below=7,left] {$\frac{5}{36}$};
 
 			% Pseudo-heterogeneous profits
-			\draw[gray,dashed,thick,domain=-5/12:1/2] plot (\x,{((1-2*\x)/3)*(5/12+\x)}) node[above=20,right=-5,black] {$c = 2$};
-			\draw[gray,dashed,thick,domain=-5/12:1/4] plot (\x,{((1-4*\x)/3)*(5/12+\x)}) node[above=15,right,black] {$c = 4$};
+			\draw[gray,dashed,thick,domain=-5/12:1/2] plot (\x,{((1-2*\x)/3)*(5/12+\x)}) node[right=4,above=8,black] {$c = 2$};
+			\draw[gray,dashed,thick,domain=-5/12:1/4] plot (\x,{((1-4*\x)/3)*(5/12+\x)}) node[right=8,above=4,black] {$c = 4$};
 
 			% Profit function
 			\draw[thick] (-5/12,0) -- (-5/16,5/64);
-			\fill[black] (-5/16,5/64) ellipse (0.008 and 0.004) node[above left] {$\frac{5}{64}$};
+			\fill[black] (-5/16,5/64) ellipse (0.008 and 0.004) node[left=4,above=-1] {$\frac{5}{64}$};
 			\draw[thick,domain=-5/16:1/16] plot (\x,{((1-4*\x)/3)*(5/12+\x)});
 			\draw[thick] (1/16,23/192) -- (1/8,13/96);
-			\fill[black] (1/16,23/192) ellipse (0.008 and 0.004) node[left=6,below] {$\frac{23}{192}$};
-			\fill[black] (1/8,13/96) ellipse (0.008 and 0.004) node[above right] {$\frac{13}{96}$};
+			\fill[black] (1/16,23/192) ellipse (0.008 and 0.004) node[left=4,below=-1] {$\frac{23}{192}$};
+			\fill[black] (1/8,13/96) ellipse (0.008 and 0.004) node[right=7,above=-1] {$\frac{13}{96}$};
 			\draw[thick,domain=1/8:1/2] plot (\x,{((1-2*\x)/3)*(5/12+\x)});
 
 			% Max point
 			\fill[red] (-1/12, 4/27) ellipse (0.008 and 0.004) node[above,black] {$\frac{4}{27}$};
 		\end{tikzpicture}
-		\caption{Profit functions for link operators $1$ and $2$ of Example when opposed against the candidate Nash Equilibrium $t^* = \left(\tfrac{5}{12}, \tfrac{4}{12}\right)$. Red dot indicates the max profit at $t^*$. Black dots indicate tolls when relevant intervals start or end for the respective pseudo-heterogeneous profits (dashed lines) they correspond.}
-		\label{figure:alpha_step:profit_no_ne}
+		%\caption{Profit functions for link operators $1$ and $2$ of Example when opposed against the candidate Nash Equilibrium $t^* = \left(\tfrac{5}{12}, \tfrac{4}{12}\right)$. Red dot indicates the max profit at $t^*$. Black dots indicate tolls when relevant intervals start or end for the respective pseudo-heterogeneous profits (dashed lines) they correspond.}
+		%\label{figure:alpha_step:profit_no_ne}
 	\end{figure}
 \end{frame}
-
-\subsection*{Pricing N.E. Algorithm}
 
 \begin{frame}{Step distribution functions | Pricing N.E. Algorithm}
 	\textbf{Summary:} Given $\Gm = ([2], \ell, \alpha), \alpha = (\alpha_k)_{k \in [m]}$
@@ -1250,7 +1307,7 @@ since $\ell_2(1/2) + t_2 = \ell_3(1/2) + t_3 = 7/2$ and $\ell_1(0) + t_1 = 4$.
 				\item If $B_{i, k}(t_{-i}^*)$ is within the $t_i$ ranges, $\Pi_{i, k} = \Pi_i(B_{i, k}(t_{-i}^*), t_{-i}^*)$.
 				\item Otherwise, $\Pi_{i, k}$ is max profit among the ranges' edge tolls ($4$).
 			\end{enumerate}
-			\item If $\Pi_i < \Pi_{i, k}$, then $\Gm$ has no pricing Nash Equilibrium.
+			\item If $\Pi_i < \Pi_{i, k}$, then $\Gm$ has NO pricing Nash Equilibrium.
 		\end{enumerate}
 		\item If all of the above checks fail, return $t^*$.
 	\end{enumerate}
@@ -1259,27 +1316,36 @@ since $\ell_2(1/2) + t_2 = \ell_3(1/2) + t_3 = 7/2$ and $\ell_1(0) + t_1 = 4$.
 
 \section{Future work}
 
-\begin{frame}{Conclusion}
-	In our work
+\begin{frame}{Future work}
+	\textbf{Pseudo-heterogeneous games}
 	\begin{itemize}
-		\item Investigated heterogeneity by defining and analysing $\as$
-		\item Developed a connection between different fixed distribution functions
-		\item Developed an algorithm for $2$-link step distribution functions
+		\item Connection between similar games with different fixed distribution functions
+		\item What happens to flow, tolls, profit when fixed $t_{-i}$?
+		\item (Conjectures in the Appendix)
+	\end{itemize}
+
+	\textbf{Step distribution functions}
+	\begin{itemize}
+		\item Conditions for N.E. existence in $2$-link networks
+		\item $n$-link networks
+		\begin{itemize}
+			\item Complexity of calculating existence
+		\end{itemize}
 	\end{itemize}
 \end{frame}
 
 \begin{frame}{Future work}
+	\textbf{Continuous distribution functions}
 	\begin{itemize}
-		\item Pseudo-heterogeneous games
-		\item Step distribution functions
-		\begin{itemize}
-			\item $2$-link networks
-			\item $n$-link networks
-		\end{itemize}
-		\item Continuous distribution functions
-		\item Function series approximation
-		\item Split function for series-parallel links
+		\item No gaps!
+		\item Function series approximation ($m \rightarrow +\infty$)
+		\item Linear $\alpha$ maintains the linear system
+		\item Strange behaviour when $0$ is an accumulation point in $\alpha$
 	\end{itemize}
+
+	\textbf{Split function for series-parallel links}
+
+	We hope the tools and intuitions developed here can be useful in any similar future work.
 \end{frame}
 
 \begin{frame}[noframenumbering,plain]{}
