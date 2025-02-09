@@ -190,7 +190,7 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 \end{frame}
 
 \begin{frame}{Preliminaries | Selfish routing (1\textsuperscript{st} level)}
-	Tolls $t \in \R_+^{|N|}$ can be assigned to links, affecting player cost.
+	Tolls $t \in \R_+^n$ can be assigned to links, affecting player cost.
 
 	In \textbf{homogeneous} networks, player $p$ on link $i$ experiences total cost $c_i(p) = \ell_i(x_i) + t_i$.
 
@@ -249,15 +249,15 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 		\draw[->, thick] (s) to[bend right=35] node[midway, above] {$x + 2$} (t);
 	\end{tikzpicture}
 \end{center}
-For homogeneous players and tolls $t = \left(4, 2, 1\right)$ we get
-\[x(t) = \left(0, \frac12, \frac12\right)\]
-since $\forall p \in [0, 1]$ it holds $c_2(p) = c_3(p) = 7/2$ and $c_1(p) = 4$.
+For homogeneous players and tolls $t = (3, 2, 1)$
+\[x(t) = \left(\frac15, \frac25, \frac25\right)\]
+since $\ell_2(1/2) + t_2 = \ell_3(1/2) + t_3 = 7/2$ and $\ell_1(0) + t_1 = 4$.
 \end{frame}
 
 \begin{frame}{Preliminaries | Pricing competition (2\textsuperscript{nd} level)}
 	Links are owned by agents who compete for profit.
 	\begin{block}{Profit}
-		For given set of tolls $t \in \R_+^{|N|}$, link operator $i$ gains profit
+		For given set of tolls $t \in \R_+^n$, link operator $i$ gains profit
 		\[\Pi_i(t) = x_i(t) \cdot t_i\]
 	\end{block}
 	\begin{block}{Best response}
@@ -331,28 +331,147 @@ since $\forall p \in [0, 1]$ it holds $c_2(p) = c_3(p) = 7/2$ and $c_1(p) = 4$.
 %	$x(0) = \left(\frac23, \frac13\right), \; x(3, 2) = \left(\frac14, \frac34\right)$
 %\end{frame}
 
-\subsection{Heterogeneous networks}
+\section{Sensitivity split}
 
-\begin{frame}{Preliminaries | Heterogeneous players}
-	\begin{lemma}
-		For $\Gm = (N, \ell, \alpha)$ with tolls $t$ and flow $x(t)$ the Nash equilibrium for $t$, it holds for all $i, j \in N$ with $x_i(t), x_j(t) > 0$ that
-		\begin{enumerate}[(i)]
-			\item $\ell_i(x_i(t)) < \ell_j(x_j(t))$ iff $t_i > t_j$
-			\item $\ell_i(x_i(t)) = \ell_j(x_j(t))$ iff $t_i = t_j$
-			\item $\ell_i(x_i(t)) > \ell_j(x_j(t))$ iff $t_i < t_j$
-		\end{enumerate}
-	\end{lemma}
-	\begin{proof}
-		Assume $\ell_i(x_i(t)) < \ell_j(x_j(t))$ and $t_i < t_j$ for some $i, j \in N$.
-		Then for \textbf{all} players $c_i(p) < c_j(p)$ so $x_j(t) > 0$ is a contradiction.
-	\end{proof}
+\begin{frame}{Sensitivity split | Heterogeneous networks}
+	\begin{center}
+		\begin{multicols}{2}
+			% Left Column: Network Graph
+			\begin{tikzpicture}[scale=1.2, baseline=40pt, every node/.style={font=\small}]
+				% Nodes
+				\node[circle, draw, fill=blue!20, minimum size=0.8cm] (s) at (0,0) {$s$};
+				\node[circle, draw, fill=blue!20, minimum size=0.8cm] (t) at (4,0) {$t$};
+
+				% Links
+				\draw[->, thick] (s) to[bend left=35] node[midway, above] {$2x$} (t);
+				\draw[->, thick] (s) to node[midway, above] {$x + 1$} (t);
+				\draw[->, thick] (s) to[bend right=35] node[midway, above] {$x + 2$} (t);
+			\end{tikzpicture}
+
+			% Right Column: Distribution function Graph
+			\begin{tikzpicture}[x=2.5cm, y=1.2cm, every node/.style={font=\small}]
+				% Axes
+				\draw[->] (0,0) -- (1.2,0) node[right] {$p$};
+				\draw[->] (0,0) -- (0,2.2) node[above] {$\as(p)$};
+
+				% Tick marks
+				\draw (0,0) -- (0,-0.05) node[below] {$0$};
+				\draw (1,0) -- (1,-0.05) node[below] {$1$};
+				\draw (0,1) -- (-0.05,1) node[left] {$1$};
+				\draw (0,2) -- (-0.05,2) node[left] {$2$};
+
+				% Function graph
+				\draw[thick] (0,1) -- (1,2);
+
+				% Description
+				\node[align=center] at (0.7, -0.8) {$\alpha(p) = p + 1$};
+			\end{tikzpicture}
+		\end{multicols}
+	\end{center}
+	For heterogeneous players with $\alpha(p) = p + 1$ and tolls $t = (3, 2, 1)$
+	\[x(t) = \left(\frac{1}{11}, \frac{3}{11}, \frac{7}{11}\right)\]
 \end{frame}
 
-\begin{frame}{Preliminaries | Heterogeneous players}
-	Latencies are viewed the same for all players.
+\tikzset{
+	fixed_height/.style={
+		inner sep=0,
+		outer sep=0,
+		minimum height=15pt,
+		align=center
+	}
+}
 
-	Toll order is the same for all players.
+\begin{frame}{Sensitivity split | Heterogeneous networks}
+	Latencies are the same for all players.
 
+	Toll ordering is the same for all players.
+
+	Toll differences are viewed with different scaling.
+	\\[15pt]
+	\begin{tikzpicture}
+		% Title
+		\node[above,fixed_height] at (3.7,3.3) {$\alpha(0) = 1$};
+
+		% Axes
+		\draw[->] (0,0) -- (7,0) node[right=5,fixed_height] {$c\left(0\right)$};
+		\draw[-] (0,0) -- (0,3.2);
+
+		% Y-bars: Latencies
+		\node[left] at (0,2.5) {$\frac{2}{11}$};
+		\node[left] at (0,1.5) {$\frac{14}{11}$};
+		\node[left] at (0,0.5) {$\frac{29}{11}$};
+		\filldraw[fill=blue!20] (0,2.25) rectangle (2/11,2.75);
+		\filldraw[fill=blue!20] (0,1.25) rectangle (14/11,1.75);
+		\filldraw[fill=blue!20] (0,0.25) rectangle (29/11,0.75);
+
+		% Y-bars: Tolls
+		\filldraw[fill=orange!20] (2/11,2.25) rectangle (35/11,2.75) node[below right] {$3$};
+		\filldraw[fill=orange!20] (14/11,1.25) rectangle (36/11,1.75) node[below right] {$2$};
+		\filldraw[fill=orange!20] (29/11,0.25) rectangle (40/11,0.75) node[below right] {$1$};
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Sensitivity split | Heterogeneous networks}
+	Latencies are the same for all players.
+
+	Toll ordering is the same for all players.
+
+	Toll differences are viewed with different scaling.
+	\\[15pt]
+	\begin{tikzpicture}
+		% Title
+		\node[above,fixed_height] at (3.7,3.3) {$\alpha\left(\frac{2}{11}\right) = \frac{13}{11}$};
+
+		% Axes
+		\draw[->] (0,0) -- (7,0) node[right=5,fixed_height] {$c\left(\frac{2}{11}\right)$};
+		\draw[-] (0,0) -- (0,3.2);
+
+		% Y-bars: Latencies
+		\node[left] at (0,2.5) {$\frac{2}{11}$};
+		\node[left] at (0,1.5) {$\frac{14}{11}$};
+		\node[left] at (0,0.5) {$\frac{29}{11}$};
+		\filldraw[fill=blue!20] (0,2.25) rectangle (2/11,2.75);
+		\filldraw[fill=blue!20] (0,1.25) rectangle (14/11,1.75);
+		\filldraw[fill=blue!20] (0,0.25) rectangle (29/11,0.75);
+
+		% Y-bars: Tolls
+		\filldraw[fill=orange!20] (2/11,2.25) rectangle (41/11,2.75) node[below right] {$\frac{39}{11}$};
+		\filldraw[fill=orange!20] (14/11,1.25) rectangle (40/11,1.75) node[below right] {$\frac{26}{11}$};
+		\filldraw[fill=orange!20] (29/11,0.25) rectangle (42/11,0.75) node[below right] {$\frac{13}{11}$};
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Sensitivity split | Heterogeneous networks}
+	Latencies are the same for all players.
+
+	Toll ordering is the same for all players.
+
+	Toll differences are viewed with different scaling.
+	\\[15pt]
+	\begin{tikzpicture}
+		% Title
+		\node[above,fixed_height] at (3.7,3.3) {$\alpha(1) = 2$};
+
+		% Axes
+		\draw[->] (0,0) -- (7,0) node[right=5,fixed_height] {$c\left(1\right)$};
+		\draw[-] (0,0) -- (0,3.2);
+
+		% Y-bars: Latencies
+		\node[left] at (0,2.5) {$\frac{2}{11}$};
+		\node[left] at (0,1.5) {$\frac{14}{11}$};
+		\node[left] at (0,0.5) {$\frac{29}{11}$};
+		\filldraw[fill=blue!20] (0,2.25) rectangle (2/11,2.75);
+		\filldraw[fill=blue!20] (0,1.25) rectangle (14/11,1.75);
+		\filldraw[fill=blue!20] (0,0.25) rectangle (29/11,0.75);
+
+		% Y-bars: Tolls
+		\filldraw[fill=orange!20] (2/11,2.25) rectangle (64/11,2.75) node[below right] {$6$};
+		\filldraw[fill=orange!20] (14/11,1.25) rectangle (58/11,1.75) node[below right] {$4$};
+		\filldraw[fill=orange!20] (29/11,0.25) rectangle (51/11,0.75) node[below right] {$2$};
+	\end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Sensitivity split | Heterogeneous networks}
 	Tolls define an ordering of the $N$ links where
 	\begin{itemize}
 		\item $t_1 \ge t_2 \ge \dots \ge t_n$
@@ -362,38 +481,25 @@ since $\forall p \in [0, 1]$ it holds $c_2(p) = c_3(p) = 7/2$ and $c_1(p) = 4$.
 	Ordering is unique only when the toll (and therefore also latency) inequalities are strict.
 \end{frame}
 
-%\begin{frame}{Preliminaries | Heterogeneous players}
-%	\begin{example}
-%		Let $([2], \ell, \alpha)$ with $\ell_1(x) = 2x, \ell_2(x) = x + 1$ and $\alpha(p) = p + 1$.
-%	\end{example}
-%	$x(0) = \left(\frac23, \frac13\right), \; x(3, 2) = \left(\frac14, \frac34\right)$
-%\end{frame}
-
-
-\section{Sensitivity split}
-
-\begin{frame}{Sensitivity split}
-	In a heterogeneous game, in practice, each flow user plays a different game.
-
-	In example the users are organised around the one for which $c_1(p) = c_2(p)$.
-
+\begin{frame}{Sensitivity split | Heterogeneous networks}
+	For any pair of links $i, j$
+	\begin{align*}
+		c_i(&p) \le c_j(p) & c_i(p) \ge c_i(p&) \\[10pt]
+		\alpha(p) \le &\frac{\ell_j(x_j) - \ell_i(x_i)}{t_i - t_j} & \frac{\ell_j(x_j) - \ell_i(x_i)}{t_i - t_j}& \le \alpha(p)
+	\end{align*}
 	We need the notion of the money-sensitivity value for which two link costs are equal.
 \end{frame}
 
 \begin{frame}{Sensitivity split}
 	\begin{definition}
-		Let $(N, \ell, \alpha)$ a heterogeneous parallel game, tolls $t$ where $t_i \ne t_j$ for links $i, j \in N$ and $x(t)$ the Nash equilibrium for $t$.
-		We define the \textit{money sensitivity split function} $\as^{(i, j)}: \{t \in \R_+^N|t_i \ne t_j\} \rightarrow (0, +\infty)$ as
+		Let $(N, \ell, \alpha)$, tolls $t$ where $t_i \ne t_j$ for links $i, j \in N$.
+		We define the \textit{money sensitivity split function} for $i, j$ $\as^{(i, j)}: \{t \in \R_+^n|t_i \ne t_j\} \rightarrow (0, +\infty)$ as
 		\[\as^{(i, j)}(t) = \frac{\ell_j(x_j(t)) - \ell_i(x_i(t))}{t_i - t_j}\]
 	\end{definition}
 	If $t_i = t_j \Leftrightarrow \ell_i(x_i) = \ell_j(x_j)$ then $c_i(p) = c_j(p)$ for \textbf{all} flow users.
 \end{frame}
 
 \begin{frame}{Sensitivity split}
-	If $t_i \ne t_j$ then assume w.l.o.g. $t_i > t_j \Leftrightarrow \ell_i(x_i) < \ell_j(x_j)$.\\
-	Low money-sensitive players will use link $i$.\\
-	High money-sensitive players will use link $j$.
-
 	\begin{table}[h!]
 		\centering
 		\caption{Summary of properties for the sensitivity split.}
@@ -410,31 +516,28 @@ since $\forall p \in [0, 1]$ it holds $c_2(p) = c_3(p) = 7/2$ and $c_1(p) = 4$.
 
 \begin{frame}{Sensitivity split}
 	\begin{definition}
-		\label{definition:alpha_flow_sets}
 		Let $(N, \ell, \alpha)$.
 		We define as $A_i(t), A_i: \R_+^n \rightarrow \mathcal{P}(\R_+)$ the set of all possible $\alpha(p)$ values of players $p$ using link $i$ in $x(t)$.
 		\[A_i(t) = \{\alpha(p) | f(p) = j \wedge t_j = t_i\}\]
 	\end{definition}
 \end{frame}
 
-\begin{frame}{Sensitivity split}
+\begin{frame}{Sensitivity split | Properties}
 	\begin{lemma}
-		Let $(N, \ell, \alpha)$ and tolls $t$ where $t_i \ne t_j$ and $x_i(t), x_j(t) > 0$ for some links $i, j \in N$.
-		Then:
+		Let $(N, \ell, \alpha)$ and tolls $t$ where for $i, j \in N$ $t_i \ne t_j$ and $x_i(t), x_j(t) > 0$.
 		\begin{enumerate}[(i)]
 			\item $\as^{(i, j)}(t) > 0$
 			\item $\as^{(i, j)}(t) \in [\alpha(0), \alpha(1)]$
-			%\item if $\as^{(i, j)}(t) < \alpha(0)$ (or $\as^{(i, j)}(t) > \alpha(1)$) then $x(t) = (0, 1)$ (or $(1, 0)$)
 			\item if $\ell_i(x_i(t)) < \ell_j(x_j(t))$ then
 			$\sup A_i(t) \le \as^{(i, j)}(t) \le \inf A_j(t)$
 		\end{enumerate}
 	\end{lemma}
 \end{frame}
 
-\begin{frame}{Sensitivity split | Monotonicity}
-	\begin{lemma}
-		Let $(N, \ell, \alpha)$ a heterogeneous parallel game and tolls $t, t^\prime$ such that for some links $i, j \in N$ it holds that $t_i \ne t_j, t_i^\prime \ne t_j^\prime$ and $t_k = t_k^\prime$ $\forall k \in N \setminus \{i, j\}$.
-		If $x_i(t), x_j(t), x_i(t^\prime), x_j(t^\prime) > 0$ and $\frac{t_i - t_j}{t_i^\prime - t_j^\prime} > 0$, then:
+\begin{frame}{Sensitivity split | Properties}
+	\begin{lemma}[Monotonicity]
+		Let $t, t^\prime$ different only for $i, j \in N$ with the same toll ordering and $x_i(t), x_j(t), x_i(t^\prime), x_j(t^\prime) > 0$.
+		Then
 		\begin{enumerate}[(i)]
 			\item if $\frac{t_i - t_j}{t_i^\prime - t_j^\prime} \le 1$ then $\as^{(i, j)}(t) \ge \as^{(i, j)}(t^\prime)$
 			\item if $\frac{t_i - t_j}{t_i^\prime - t_j^\prime} \ge 1$ then $\as^{(i, j)}(t) \le \as^{(i, j)}(t^\prime)$
@@ -442,35 +545,95 @@ since $\forall p \in [0, 1]$ it holds $c_2(p) = c_3(p) = 7/2$ and $c_1(p) = 4$.
 	\end{lemma}
 \end{frame}
 
-\begin{frame}{Sensitivity split | Monotonicity}
-	\begin{proof}
-		We prove $(i)$ and $(ii)$ follows symmetrically.\\
-		If $x(t) = x(t^\prime)$ then the property follows from the definition of $\as$.
-		If $x(t) \ne x(t^\prime)$ then assume w.l.o.g. that $x_i(t) > x_i(t^\prime)$, so a player $p$ moved from $i$ to $j$ between $t$ and $t^\prime$.
-		\[\inf A_j(t^\prime) \le \alpha(p) \le \sup A_i(t)\]
-		Applying the previous lemma gives us
-		\[\as^{(i, j)}(t^\prime) \le \inf A_j(t^\prime) \le \sup A_i(t) \le \as^{(i, j)}(t)\]
-	\end{proof}
-\end{frame}
-
-\begin{frame}{Sensitivity split | Limits}
-	\begin{lemma}
-		Let $(N, \ell, \alpha)$ a heterogeneous parallel game and tolls $t$ where $t_i \ne t_j$ and $x_i(t), x_j(t) > 0$ for some links $i, j \in N$.
+\begin{frame}{Sensitivity split | Properties}
+	\begin{lemma}[Limit values]
+		Let $(N, \ell, \alpha)$.
 		Then:
 		\begin{enumerate}[(i)]
 			\item
-			\begin{flalign*}
-				\lim_{|t_i - t_j| \rightarrow +\infty}\as^{(i, j)}(t) &= 0 &
-			\end{flalign*}
+			$\begin{aligned}[t]
+				\lim_{|t_i - t_j| \rightarrow +\infty}\as^{(i, j)}(t) = 0
+			\end{aligned}$
 			\item
-			\begin{flalign*}
-				\lim_{t_i - t_j \rightarrow 0^+} \as^{(i, j)}(t) &= \limsup_{t_i - t_j \rightarrow 0^+} A_i(t) &
-			\end{flalign*}
+			$\begin{aligned}[t]
+				\lim_{t_i - t_j \rightarrow 0^+} \as^{(i, j)}(t) = \limsup_{t_i - t_j \rightarrow 0^+} A_i(t)
+			\end{aligned}$
 		\end{enumerate}
 	\end{lemma}
+	\begin{corollary}
+		$\begin{aligned}[t]
+			\lim_{t_i - t_j \rightarrow 0^+} \as^{(i, j)}(t) = \alpha(x_i(0))
+		\end{aligned}$
+	\end{corollary}
 \end{frame}
 
-\begin{frame}{Sensitivity split}
+\begin{frame}{Sensitivity split | Properties}
+	\begin{center}
+		\begin{multicols}{2}
+			% Left Column: Network Graph
+			\begin{tikzpicture}[scale=1.2, baseline=40pt, every node/.style={font=\small}]
+				% Nodes
+				\node[circle, draw, fill=blue!20, minimum size=0.8cm] (s) at (0,0) {$s$};
+				\node[circle, draw, fill=blue!20, minimum size=0.8cm] (t) at (4,0) {$t$};
+
+				% Links
+				\draw[->, thick] (s) to[bend left=35] node[midway, above] {$2x$} (t);
+				\draw[->, thick] (s) to[bend right=35] node[midway, below] {$x + 1$} (t);
+			\end{tikzpicture}
+
+			% Right Column: Distribution function Graph
+			\begin{tikzpicture}[x=2.5cm, y=1.2cm, every node/.style={font=\small}]
+				% Axes
+				\draw[->] (0,0) -- (1.2,0) node[right] {$p$};
+				\draw[->] (0,0) -- (0,2.2) node[above] {$\as(p)$};
+
+				% Tick marks
+				\draw (0,0) -- (0,-0.05) node[below] {$0$};
+				\draw (1,0) -- (1,-0.05) node[below] {$1$};
+				\draw (0,1) -- (-0.05,1) node[left] {$1$};
+				\draw (0,2) -- (-0.05,2) node[left] {$2$};
+
+				% Function graph
+				\draw[thick] (0,1) -- (1,2);
+
+				% Description
+				\node[align=center] at (0.7, -0.8) {$\alpha(p) = p + 1$};
+			\end{tikzpicture}
+		\end{multicols}
+	\end{center}
+	\[x(0) = \left(\tfrac23, \tfrac13\right) \qquad \alpha(x_1(0)) = \tfrac53 \quad \alpha(x_2(0)) = \tfrac43\]
+\end{frame}
+
+\begin{frame}{Sensitivity split | Properties}
+	\begin{figure}
+		\centering
+		\begin{tikzpicture}[x=2cm, y=2cm, every node/.style={font=\small}]
+			% Axes
+			\draw[->] (0,0) -- (-1.1,0);
+			\draw[->] (0,0) -- (2.1,0) node[right] {$t_1 - t_2$};
+			\draw[->] (0,0) -- (0,1.2) node[above] {$x_1(t)$};
+
+			% Tick marks
+			\draw (-1,0) -- (-1,-0.05) node[below] {$-1$};
+			\draw (0,0) -- (0,-0.05) node[below] {$t_2$};
+			\draw (2,0) -- (2,-0.05) node[below] {$2$};
+			\draw (0,1) -- (-0.05, 1) node[left] {$1$};
+
+			% Function graph
+			\draw[thick,domain=-1:0] plot (\x,{(2-2*\x)/(3-\x)});
+			\draw[thick,domain=0:2] plot (\x,{(2-\x)/(3+\x)});
+
+			% Dots
+			\fill[black] (0,2/3) ellipse (0.03 and 0.03);
+			\draw[black] (0,2/3) ellipse (0.03 and 0.03);
+			\node[below left] at (0,2/3) {$\frac23$};
+		\end{tikzpicture}
+		\caption{Flow function of link operator $1$ of Example}
+		\label{figure:alpha_simple:flow_example}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Sensitivity split | Properties}
 	\begin{figure}
 		\centering
 		\begin{tikzpicture}[x=2cm, y=2cm, every node/.style={font=\small}]
@@ -484,13 +647,11 @@ since $\forall p \in [0, 1]$ it holds $c_2(p) = c_3(p) = 7/2$ and $c_1(p) = 4$.
 			\draw (0,0) -- (0,-0.05) node[below] {$t_2$};
 			\draw (2,0) -- (2,-0.05) node[below] {$2$};
 			\draw (0,2) -- (-0.05, 2) node[left] {$2$};
-			\draw (0,4/3) -- (0.05,4/3) node[right] {$4/3$};
-			\draw (0,5/3) -- (-0.05,5/3) node[left] {$5/3$};
+			\draw (0,4/3) -- (0.05,4/3) node[right] {$\frac43$};
+			\draw (0,5/3) -- (-0.05,5/3) node[left] {$\frac53$};
 			\draw (0,1) -- (-0.05,1) node[left] {$1$};
 
 			% Function graph
-			%\draw[thick] (-1,1) -- (0,4/3);
-			%\draw[thick] (0,5/3) -- (2,1);
 			\draw[thick,domain=-1:0] plot (\x,{4/(3-\x)});
 			\draw[thick,domain=0:2] plot (\x,{5/(3+\x)});
 
@@ -510,8 +671,8 @@ since $\forall p \in [0, 1]$ it holds $c_2(p) = c_3(p) = 7/2$ and $c_1(p) = 4$.
 	Are then those values relevant?
 
 	\begin{theorem}
-		Let $\Gm_1 = (N, \ell, \alpha^{(1)})$ and $\Gm_2 = (N, \ell, \alpha^{(2)})$ be two heterogeneous parallel games and $x(0) = x^{(1)}(0) = x^{(2)}(0)$ the (equal) flow on paths for $t = 0$.
-		If $\alpha^{(1)}$ and $\alpha^{(2)}$ are such that
+		Let $\Gm_1 = (N, \ell, \alpha^{(1)}), \Gm_2 = (N, \ell, \alpha^{(2)})$.\\
+		For $x(0) = x^{(1)}(0) = x^{(2)}(0)$, if
 		\[\alpha^{(1)}(p) = \alpha^{(2)}(p), \forall p: p < 1 - \min_{i \in N}\{x_i(0)\}\]
 		then $\Gm_1$ and $\Gm_2$ are equivalent.
 	\end{theorem}
@@ -519,13 +680,13 @@ since $\forall p \in [0, 1]$ it holds $c_2(p) = c_3(p) = 7/2$ and $c_1(p) = 4$.
 
 \begin{frame}{Sensitivity split | Upper bound}
 	For the Example we have
-	\[\max\{x_1(0), x_2(0)\} = \max\{2/3, 1/3\} = 2/3\]
+	\[\max\{x_1(0), x_2(0)\} = \max\left\{\tfrac23, \tfrac13\right\} = \tfrac23\]
 	so if we used a distribution function such as
 	\[
 		\alpha(p) =
 		\begin{cases}
-			p + 1 & p \le 2/3 \\
-			\mathrm{e}^p & p > 2/3
+			p + 1 & p \le \tfrac23 \\
+			\mathrm{e}^p & p > \tfrac23
 		\end{cases}
 	\]
 	then $\as(t)$ would remain the same for all $t \in \R_+^n$
