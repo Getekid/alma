@@ -242,7 +242,7 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 		\begin{equation*}
 			c_{f(p)}(p) \leq c_i(p)
 		\end{equation*}
-	\end{definition}
+	\end{definition}\pause
 	N.E. always exists and is unique w.r.t. costs for homogeneous\footcite{beckmann1956studies} and heterogeneous\footcites{1973JSP.....7..295S}{MILCHTAICH1996111} networks.
 	We denote it by $x(t)$.
 \end{frame}
@@ -311,7 +311,7 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 \begin{frame}{Preliminaries | Game equivalence}
 	\begin{definition}[Game equivalence]
 		Let $\Gm_1, \Gm_2$ be two $n$-link Network Congestion Games.
-		$\Gm_1$ and $\Gm_2$ are called \textbf{equivalent} if and only if for all tolls $t \in \R_+^{|N|}$ it holds that $x^{(1)}(t) = x^{(2)}(t)$, with $x^{(1)}(t), x^{(2)}(t)$ being the Nash Equilibria for $t$ in $\Gm_1, \Gm_2$ respectively.
+		$\Gm_1$ and $\Gm_2$ are called \textbf{equivalent} if and only if for all tolls $t \in \R_+^n$ it holds that $x^{(1)}(t) = x^{(2)}(t)$, with $x^{(1)}(t), x^{(2)}(t)$ being the Nash Equilibria for $t$ in $\Gm_1, \Gm_2$ respectively.
 	\end{definition}
 	Equivalency means same tolls cause same flow.\pause
 
@@ -559,7 +559,7 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 	\end{corollary}
 \end{frame}
 
-\begin{frame}{Sensitivity split | Properties}
+\begin{frame}{Sensitivity split | Example}
 	\begin{center}
 		\begin{multicols}{2}
 			% Left Column: Network Graph
@@ -593,10 +593,10 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 			\end{tikzpicture}
 		\end{multicols}
 	\end{center}
-	\[x(0) = \left(\frac23, \frac13\right) \qquad \alpha(x_1(0)) = \frac53 \quad \alpha(x_2(0)) = \frac43\]
+	\[x(0) = \left(\frac23, \frac13\right) \qquad \as(t) = \alpha(\text{lower split flow})\]
 \end{frame}
 
-\begin{frame}{Sensitivity split | Properties}
+\begin{frame}{Sensitivity split | Example}
 	\begin{figure}
 		\centering
 		\begin{tikzpicture}[x=2cm, y=2cm, every node/.style={font=\small}]
@@ -625,7 +625,7 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 	\end{figure}
 \end{frame}
 
-\begin{frame}{Sensitivity split | Properties}
+\begin{frame}{Sensitivity split | Example}
 	\begin{figure}
 		\centering
 		\begin{tikzpicture}[x=2cm, y=2cm, every node/.style={font=\small}]
@@ -1086,7 +1086,7 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 	Flow will be the same regardless.\pause
 
 	Assume $\Gm^\prime = (N, \ell, 1)$ and we calculate
-	\[t^{*\prime} = \left(\frac53, \frac43\right) \qquad x(t^*) = \left(\frac59, \frac49\right)\]\pause
+	\[t^{*\prime} = \left(\frac53, \frac43\right) \qquad x^\prime(t^{*\prime}) = \left(\frac59, \frac49\right)\]\pause
 
 	Since $t_1 > t_2$, link $1$ has the lower split, so the split is at $\alpha\left(\frac59\right) = 4$.\pause
 
@@ -1306,7 +1306,7 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 \end{frame}
 
 \begin{frame}{Step distribution functions | Pricing N.E. Algorithm}
-	\textbf{Summary:} Given $\Gm = ([2], \ell, \alpha), \alpha = (\alpha_k)_{k \in [m]}$
+	\textbf{Summary:} Given $\Gm = ([2], \ell, \alpha), \alpha = (\alpha_k)_{k \in [m]}$\pause
 	\begin{enumerate}
 		\item Consider $\Gm^\prime = ([2], \ell, 1)$ and calculate $t^{*\prime}, x^\prime(t^{*\prime})$.\pause
 		\item Calculate $\as(t^*)$ as the $\alpha$ value of the lower split in $x^\prime(t^{*\prime})$.\pause
@@ -1331,7 +1331,7 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 \begin{frame}{Future work}
 	\textbf{Pseudo-heterogeneous games}\pause
 	\begin{itemize}
-		\item Connection between similar games with different fixed distribution functions\pause
+		\item Insights in fixed distribution function variation\pause
 		\item What happens to flow, tolls, profit when fixed $t_{-i}$?\pause
 		\item (Conjectures in the Appendix)
 	\end{itemize}\pause
@@ -1351,7 +1351,6 @@ Flow $x = \left(\frac23, \frac13, 0\right)$ has all players on minimum latency l
 	\begin{itemize}
 		\item No gaps!\pause
 		\item Function series approximation ($m \rightarrow +\infty$)\pause
-		\item Linear $\alpha$ maintains the linear system\pause
 		\item Strange behaviour when $0$ is an accumulation point in $\alpha$
 	\end{itemize}\pause
 
